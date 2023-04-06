@@ -1,0 +1,18 @@
+.code-page .message-list{
+    flex:1;
+    position: absolute;
+    top:0;
+    bottom:200px;
+    left:0;
+    right:0;
+    overflow: auto;
+}
+.code-page .send-button{
+    flex:0 0 200px;
+    position: absolute;
+    bottom: 0;
+    left:0;
+    right:0;
+    padding: 6px 6px 2px 6px;
+    box-sizing: border-box;
+}

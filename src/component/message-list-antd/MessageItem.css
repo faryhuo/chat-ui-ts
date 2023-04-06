@@ -1,0 +1,22 @@
+.message-item-list-antd .chat-row{
+    max-width: none;
+    width: 100%;
+}
+
+.message-item-list-antd .message-item-content-antd{
+    width: 100%;
+}
+
+.message-item-list-antd .message-item-sys-icon{
+    padding: 5px 10px;
+}
+.message-item-list-antd .message-item-sys-antd{
+    background:#f0f0f0;
+}
+.message-item-list-antd .message-item-sys-antd .markdown-body{
+    background:#f0f0f0;
+}
+
+.message-item-list-antd .ant-list-item{
+    border-radius: 10px;
+}

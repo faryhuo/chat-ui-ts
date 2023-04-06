@@ -1,0 +1,42 @@
+.chat-row{
+    max-width: 700px;
+    position: relative;
+}
+.message-list-wrapper .ant-card-head{
+    border-bottom: 1px solid #f0fffc;
+}
+
+.cursor {
+    content:'';
+    width:10px;
+    height:16px;
+    background-color:#18191a;
+    opacity:0;
+    animation:blink 0.6s infinite;
+    transform: translateY(3px);
+    display: inline-block;
+  }  
+
+.blink-span {
+    animation: blink 2s infinite;
+}
+
+@keyframes blink {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.element-show{
+    display:inline-block;
+}
+
+.element-hide{
+    display:none;
+}

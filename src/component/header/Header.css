@@ -1,0 +1,16 @@
+.menu-header{
+    display: flex;
+    overflow: auto;
+}
+.menu-header .action-list{
+    flex: 0 0 32px;
+    margin-top: 6px;
+}
+.menu-header .menu-list{
+    flex: 1;
+}
+
+.menu-header .login-user{
+    flex: 0 0 40px;
+    margin-right: 6px;
+}
