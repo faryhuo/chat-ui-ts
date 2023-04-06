@@ -233,7 +233,7 @@ class MessageData implements  IMessage{
 
     clear(chatId: string) {
         if(this.currentSession.length===1 || !chatId){
-            this.data.clear();
+            //this.data=[];
         }else{
             for(let i=0;i<this.session.length;i++){
                 let item=this.session[i];

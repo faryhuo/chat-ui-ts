@@ -4,7 +4,7 @@ import icon from './favicon-32x32.png';
 import {EditOutlined} from '@ant-design/icons';
 import { observer } from "mobx-react-lite";
 import React, { useEffect,useRef } from 'react';
-import ScrollToBottom from '@types/react-scroll-to-bottom';
+import ScrollToBottom from 'react-scroll-to-bottom';
 import ActionBtnList from '../session-atcion-list/SessionAtcionList' 
 import {IAppConfig} from '../../store/AppConfig';
 import {IMessage,ISessiondata} from '../../store/MessageData';
