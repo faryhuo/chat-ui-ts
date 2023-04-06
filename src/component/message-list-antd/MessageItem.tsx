@@ -4,15 +4,22 @@ import icon from './favicon-32x32.png';
 import {EditOutlined} from '@ant-design/icons';
 import { observer } from "mobx-react-lite";
 import React, { useEffect,useRef } from 'react';
-import ScrollToBottom from 'react-scroll-to-bottom';
+import ScrollToBottom from '@types/react-scroll-to-bottom';
 import ActionBtnList from '../session-atcion-list/SessionAtcionList' 
+import {IAppConfig} from '../../store/AppConfig';
+import {IMessage,ISessiondata} from '../../store/MessageData';
+type IProps={
+  config:IAppConfig;
+  store:IMessage;
+  renderMessage:(item:ISessiondata,type:string,key:number)=> JSX.Element;
+}
 
-const messageItem2 = observer(({store,config,renderMessage}) => {
+const messageItem2: React.FC<IProps> = observer(({store,config,renderMessage}) => {
 
-  const messagesEndRef =useRef(null);
+  const messagesEndRef:any =useRef(null);
 
   useEffect(()=>{
-    if(messagesEndRef && messagesEndRef.current){
+    if(messagesEndRef && messagesEndRef.current ){
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   })

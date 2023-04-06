@@ -1,12 +1,15 @@
 import React  from 'react';
 import { observer } from "mobx-react"
-import { Card,Divider,Collapse} from 'antd';
+import { Card,Collapse} from 'antd';
 import {BaseConfigForm,ChatConfigForm,CodeEditConfigForm} from '../../component';
 import { useTranslation } from 'react-i18next';
 import "./Config.css";
+import {IAppConfig} from '../../store/AppConfig';
 
-
-const ConfigPage = observer(({config})=>{
+type IProps={
+  config:IAppConfig;
+}
+const ConfigPage:React.FC<IProps> = observer(({config})=>{
 
   const { Panel } = Collapse;
   const { t } = useTranslation();

@@ -5,7 +5,12 @@ import ImageEdit from '../image-edit/ImageEdit';
 import Frame from '../iframe/Iframe';
 import { Routes, Route,useLocation  } from 'react-router-dom';
 import React, { useEffect } from 'react';
-
+import {IAppConfig} from '../../store/AppConfig';
+import {IMessage} from '../../store/MessageData';
+type IProps={
+    appConfig:IAppConfig;
+  messageData:IMessage;
+}
 const pageList=[{
     path:"/chat",
     component:Chat
@@ -33,7 +38,7 @@ const pageList=[{
     exact:true
 }]
 
-const AppRoutes = ({messageData,appConfig})=>{
+const AppRoutes:React.FC<IProps> = ({messageData,appConfig})=>{
 
     const location = useLocation();
 
@@ -45,8 +50,8 @@ const AppRoutes = ({messageData,appConfig})=>{
   return (<Routes>
     {
         pageList.map((item)=>{
-            const AppComponent=item.component;
-            return (<Route key={item.path} exact={item.exact?item.exact:false} path={item.path} Component={(props)=><AppComponent {...item.props}{...props} store={messageData} config={appConfig}></AppComponent>} >
+            const AppComponent:any=item.component;
+            return (<Route key={item.path}  path={item.path} Component={(props)=><AppComponent {...item.props}{...props} store={messageData} config={appConfig}></AppComponent>} >
                 </Route>)
         })
     }

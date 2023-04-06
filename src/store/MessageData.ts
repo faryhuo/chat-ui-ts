@@ -57,6 +57,7 @@ export interface IMessage{
     currentChatName:string;
     hideMenuTypeList:string[];
     latestText:string;
+    roles:any[]
 }
 
 class MessageData implements  IMessage{
@@ -172,7 +173,7 @@ class MessageData implements  IMessage{
             chatName:"Chat "+(this.session.length+1),
             data:data,
             isType:true,
-            edit:true,
+            edit:false,
             updateDate: new Date()
         };
         this.session.push(sessionData);
@@ -232,12 +233,13 @@ class MessageData implements  IMessage{
 
     clear(chatId: string) {
         if(this.currentSession.length===1 || !chatId){
-            //this.data.clear();
+            this.data.clear();
         }else{
             for(let i=0;i<this.session.length;i++){
                 let item=this.session[i];
                 if(item.type===this.type && item.chatId===chatId){
-                    //remove<ISession>(this.session,i)
+                    //remove(this.session,i)
+                    this.session.splice(i,1);
                     break;
                 }
             }

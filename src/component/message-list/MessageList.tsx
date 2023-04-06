@@ -135,7 +135,7 @@ class MessageList extends Component<IProps,IStates> {
       }
 
 
-    renderMessage(item:ISessiondata,type:string,key:string){
+    renderMessage(item:ISessiondata,type:string,key:number){
         if(item.text){
             return <div className="chat-row"><span>{item.text}</span>
             </div>

@@ -59,7 +59,7 @@ class AppConfig implements IAppConfig{
     style="chat";
     localConfigName=`config_${this.version}`;
 
-    isSlowLeftMenu:boolean=true;
+    isSlowLeftMenu=true;
 
     host="https://faryhuo.online:8080"
     chatUrl=`${this.host}/chat/v2/info`;
@@ -77,9 +77,9 @@ class AppConfig implements IAppConfig{
     language="zh_cn";
     accent="mandarin";
 
-    isSlowMsg4AddChat:boolean=true;
+    isSlowMsg4AddChat=true;
 
-    iatRecorder =new IatRecorder(<any>{language:this.language,accent:this.language});
+    iatRecorder =new IatRecorder({language:this.language,accent:this.language} as any);
     get isSlowLeftMenuFlag(){
         return this.isSlowLeftMenu;
     }
