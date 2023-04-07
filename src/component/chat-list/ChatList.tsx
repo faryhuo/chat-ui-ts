@@ -56,8 +56,8 @@ const ChatList: React.FC<IProps>  =({store}) => {
     e.stopPropagation();
   }
 
-  return  (<div>
-        <List
+  return  (<div className="session-list-wrapper">
+        <List 
           dataSource={store.sessionList}
           renderItem={(item:any) => (
             <List.Item key={item.key} className={item.select?"selected":""} style={item.select?{}:{}}
