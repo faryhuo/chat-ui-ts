@@ -11,6 +11,8 @@ import CodeEditConfigForm from './code-edit-config-form/CodeEditConfigForm';
 import Upload from './upload/Upload';
 import SendInput from './mutli-input-send/SendInput'
 import ImageSend from './image-input-send/ImageSend';
+import ConfigActionBtn from './config-action-btn/ConfigActionBtn';
+
 export {
     ChatList,
     CodeStyleInput,
@@ -24,5 +26,6 @@ export {
     Upload,
     SendInput,
     ImageSend,
-    CodeEditConfigForm
+    CodeEditConfigForm,
+    ConfigActionBtn
 }

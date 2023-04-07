@@ -1,34 +1,34 @@
-#scrollableDiv{
+.session-list-wrapper{
     padding: 0 5px;
 }
-#scrollableDiv .ant-list-item.selected{
+.session-list-wrapper .ant-list-item.selected{
     color: #fff;
     background-color: var(--color-primary);
     box-shadow:0 2px 0 rgba(5, 145, 255, 0.1);
 }
-#scrollableDiv .ant-list-item.selected h4{
+.session-list-wrapper .ant-list-item.selected h4{
     color: #fff;
 }
-#scrollableDiv .ant-list-item.selected .ant-list-item-meta-description{
+.session-list-wrapper .ant-list-item.selected .ant-list-item-meta-description{
     color: #fff;
 }
 
-#scrollableDiv .ant-list-item:hover{
+.session-list-wrapper .ant-list-item:hover{
     color: #fff;
     background-color: var(--color-primary);
     box-shadow:0 2px 0 rgba(5, 145, 255, 0.1);
 }
 
-#scrollableDiv .ant-list-item-meta-avatar{
+.session-list-wrapper .ant-list-item-meta-avatar{
     padding-left: 7px;
     padding-top: 7px;
 }
 
-#scrollableDiv button{
+.session-list-wrapper button{
     margin-right: 2px;
 }
 
-#scrollableDiv .ant-list-item{
+.session-list-wrapper .ant-list-item{
     border: 1px solid #ccc;
     margin: 2px;
     box-shadow: none !important; 

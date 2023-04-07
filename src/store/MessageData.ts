@@ -2,6 +2,7 @@ import { makeObservable, observable, computed, action, remove} from "mobx";
 import i18n from '../utils/i18n';
 import config from './AppConfig';
 import axios from 'axios';
+import { saveAs } from 'file-saver'
 
 export interface  ISessiondata{
     isSys?:boolean;
@@ -57,7 +58,9 @@ export interface IMessage{
     currentChatName:string;
     hideMenuTypeList:string[];
     latestText:string;
-    roles:any[]
+    roles:any[];
+    saveDataToFile:()=>void;
+    loadDataFromFile:(file:Blob)=>void;
 }
 
 class MessageData implements  IMessage{
@@ -141,6 +144,7 @@ class MessageData implements  IMessage{
             appendData: action,
             changeRole: action,
             fetchData: action.bound,
+            loadDataFromFile: action.bound
         })
         if(localStorage[this.localSessionName]){
             this.session=JSON.parse(localStorage[this.localSessionName]);
@@ -451,6 +455,46 @@ class MessageData implements  IMessage{
         });
         return chatName;
     }
+
+    setSession(session: ISession[]){
+        this.session=session;
+    }
+
+    loadDataFromFile(file: Blob){
+        const reader= new FileReader();
+        reader.readAsText(file);
+        reader.onload = ()=>{
+            const fileContent= reader.result?.toString();
+            try{
+                if(fileContent){
+                    const configJson=JSON.parse(fileContent);    
+                    console.log(configJson)
+                    if(configJson[this.localSessionName]){
+                        this.setSession(configJson[this.localSessionName]);
+                        localStorage[this.localSessionName]=JSON.stringify(this.sessionData);
+                    }
+                    if(configJson[config.localConfigName]){
+                        config.setConfigData(configJson[config.localConfigName]);
+                        localStorage[config.localConfigName]=JSON.stringify(config.getConfigJson());
+                    }
+                }
+            }catch(e){
+                
+            }
+        }
+    }
+
+    saveDataToFile(){
+        const configData:any={
+        }
+        configData[this.localSessionName]=this.sessionData
+        configData[config.localConfigName]=config.getConfigJson();
+        const blob = new Blob([JSON.stringify(configData)]);
+        saveAs(blob, 'export_data.json')
+    
+    }
+
+
 
 }
 const messageData=new MessageData();

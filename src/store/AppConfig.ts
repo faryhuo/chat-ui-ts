@@ -117,15 +117,21 @@ class AppConfig implements IAppConfig{
         });
         if(localStorage[this.localConfigName]){
             try{
-                const configJson:IAppConfig=JSON.parse(localStorage[this.localConfigName]);
-                let item:keyof IAppConfig;
-                for (item in configJson) {
-                    if(Object.keys(this).includes(item)){
-                         (this as any)[item] = configJson[item]
-                    }
-                  }
+                const configJson=JSON.parse(localStorage[this.localConfigName]);
+                this.setConfigData(configJson)
             }catch(e){
-                
+                console.log(e);
+            }
+        }else{
+            document.documentElement.style.setProperty('--color-primary', this.colorPrimary);
+        }
+    }
+
+    setConfigData(configJson:IAppConfig){
+        let item:keyof IAppConfig;
+        for (item in configJson) {
+            if(Object.keys(this).includes(item)){
+                (this as any)[item] = configJson[item]
             }
         }
         document.documentElement.style.setProperty('--color-primary', this.colorPrimary);
