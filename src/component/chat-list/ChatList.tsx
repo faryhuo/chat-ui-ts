@@ -3,10 +3,12 @@ import './ChatList.css';
 import { observer } from "mobx-react-lite";
 import moment from 'moment';
 import icon from './favicon-32x32.png';
-import { CloseOutlined,ExclamationCircleOutlined,EditOutlined,SaveOutlined } from '@ant-design/icons';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { Input } from 'antd';
 import { useTranslation } from 'react-i18next';
 import {IMessage} from '../../store/MessageData';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPaintbrush, faTrashCan,faCheck } from '@fortawesome/free-solid-svg-icons'
 
 
 type IProps ={
@@ -67,16 +69,16 @@ const ChatList: React.FC<IProps>  =({store}) => {
                 title={<span>{item.name}</span>}
                 description={!item.edit && formatDate(item.date)}
               />):<Input defaultValue={item.name} onChange={(e)=>updateChatName(e,item.key)}
-              addonAfter={<SaveOutlined onClick={(e)=>{showChatNameEditor(item.edit,item.key,e)}}/>}
+              addonAfter={<FontAwesomeIcon icon={faCheck}  onClick={(e)=>{showChatNameEditor(item.edit,item.key,e)}}/>}
               />}
               <div>
               {!item.edit && <span>
               <Button
-                icon={<EditOutlined />} size ="small"
+                icon={<FontAwesomeIcon icon={faPaintbrush} />} size ="small"
                 onClick={(e)=>{showChatNameEditor(item.edit,item.key,e)}}
               />
               <Button
-                icon={<CloseOutlined />} size ="small" 
+                icon={<FontAwesomeIcon icon={faTrashCan} />} size ="small" 
                 onClick={(e)=>{clear(item.key,e)}}
               /></span>}
               </div>

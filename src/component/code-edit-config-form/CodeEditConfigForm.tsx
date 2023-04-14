@@ -5,11 +5,12 @@ import { Select } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { InputNumber } from 'antd';
 import {IAppConfig} from '../../store/AppConfig';
-
 import './CodeEditConfigForm.css'
+
 type IProps={
   config:IAppConfig;
 }
+
 const CodeEditConfigForm : React.FC<IProps> = ({config})=>{
 
     const [form] = Form.useForm();
