@@ -1,19 +1,38 @@
-import React from 'react';
+import {useRef,useEffect} from 'react';
 import axios from 'axios';
 import { observer } from "mobx-react-lite";
 import { useState } from 'react';
-import { Input } from 'antd';
-import { AudioOutlined,PauseCircleOutlined } from '@ant-design/icons';
+import { Input,Space,Button} from 'antd';
+import { AudioOutlined,PauseCircleOutlined,SendOutlined,PushpinOutlined } from '@ant-design/icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPaperPlane } from '@fortawesome/free-solid-svg-icons'
+
 import {Upload} from '../index'
 import { useTranslation } from 'react-i18next';
+import './SendButton.css'
+const { TextArea } = Input;
 
-
-const SendButton = observer(({store,config})=>{
+const SendButton = observer(({store,config,setBtnHeight})=>{
     const [message, setMessage] = useState("");
+    const [minRow, setMinRow] = useState(2);
+
     const [isStart, setStart] = useState(false);
     const {iatRecorder}=config;
-    const { Search } = Input;
     const {t} = useTranslation();
+    const btnRef=useRef(null);
+    const resizeHeight=()=>{
+      setBtnHeight(btnRef.current.getBoundingClientRect().height+5);
+    }
+
+    // useEffect(()=>{
+    //   if(btnRef.current){
+    //     setTimeout(()=>{
+    //       resizeHeight();
+    //     })
+    //   }
+    // },[message])
+
+
 
     let timeObj;
     const convertMsg=()=>{
@@ -215,18 +234,31 @@ const SendButton = observer(({store,config})=>{
     const typeMsg= (e)=>{
       setMessage(e.target.value)  
     }
-    return (<div>
-      <Search
-      value={message}
-        placeholder={t("Type here...")}
-        enterButton={t("Sent")}
-      size="large"
-      disabled={store.isType===false}
-      onChange={(e) => typeMsg(e)}
-      suffix={suffix}
-      onSearch={() => sendMsg()
-      }
-    />
+
+
+    const resizeInput= (e)=>{
+      setMinRow(minRow===2?9:2)
+    }
+
+    return (<div ref={btnRef}>
+      <Space.Compact style={{ width: '100%' }}>
+          <TextArea
+          value={message}
+          placeholder={t("Type here...")}
+          size="large"
+          onChange={(e) => typeMsg(e)}
+          suffix={suffix}
+          autoSize={{ minRows: minRow, maxRows: 8 }}
+          onPressEnter={sendMsg}
+          maxLength={2000}
+          onResize={resizeHeight}
+        />
+        <div className="sent-btn-actions"  >
+        <Button disabled={store.isType===false}  type="primary" shape="circle" onClick={sendMsg}
+         icon={<FontAwesomeIcon icon={faPaperPlane }/>}/>
+        <Button className="resize-btn"  shape="circle" onClick={resizeInput} icon={<PushpinOutlined />}/>
+        </div>
+      </Space.Compact>
     </div>);
 });
 

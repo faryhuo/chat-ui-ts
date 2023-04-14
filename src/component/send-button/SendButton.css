@@ -1,0 +1,14 @@
+.sent-btn-actions{
+    width: 45px;
+    position: relative;
+}
+
+.sent-btn-actions button{
+    margin-left: 5px;
+}
+
+.sent-btn-actions .resize-btn{
+   position:absolute;
+   left:0;
+   bottom: 0;
+}

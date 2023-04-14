@@ -1,4 +1,4 @@
-import { AppstoreOutlined, MailOutlined, SettingOutlined,MenuFoldOutlined,MenuUnfoldOutlined} from '@ant-design/icons';
+import { AppstoreOutlined, SettingOutlined,MenuFoldOutlined,MenuUnfoldOutlined} from '@ant-design/icons';
 import { Menu,Button,Avatar,Modal } from 'antd';
 import { observer } from "mobx-react-lite";
 import './Header.css';
@@ -9,6 +9,10 @@ import LoginForm from '../login-form/LoginForm';
 import { Link } from 'react-router-dom';
 import {IAppConfig} from '../../store/AppConfig';
 import {IMessage} from '../../store/MessageData';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faComments,faLaptopCode } from '@fortawesome/free-solid-svg-icons'
+
 type IProps={
   config:IAppConfig;
   store:IMessage;
@@ -23,17 +27,17 @@ const Header: React.FC<IProps> = observer(({store,config}) => {
     {
       label: <Link to="/chat">{t('Chat')}</Link>,
       key: 'chat',
-      icon: <MailOutlined />,
+      icon: <FontAwesomeIcon icon={faComments} />
     },
     {
       label: <Link to="/image">{t('Image')}</Link>,
       key: 'image',
-      icon: <AppstoreOutlined />,
+      icon: <FontAwesomeIcon icon={faLaptopCode} />
     },
     {
       label: <Link to="/code">{t('Code')}</Link>,
       key: 'code',
-      icon: <AppstoreOutlined />,
+      icon: <FontAwesomeIcon icon={faLaptopCode} />,
     },
     {
       label: <Link to="/image_edit">{t('Image Edit')}</Link>,

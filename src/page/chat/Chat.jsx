@@ -1,4 +1,4 @@
-import React from 'react';
+import {useState} from 'react';
 import {
 
     MessageList,
@@ -8,13 +8,17 @@ import {
 
 const Chat = ({store,config})=>{
 
+    const [btnHeight,setBtnHeight]=useState(48);
+
+
+
     return (
     <div className="message-page">
-    <div className="message-list">                
+    <div className="message-list" style={{bottom:btnHeight}}>                
         <MessageList  config={config} store={store}></MessageList>
     </div>
-    <div className="send-button">
-        <SendButton store={store}  config={config}></SendButton>
+    <div className="send-button" >
+        <SendButton store={store}  config={config} setBtnHeight={setBtnHeight}></SendButton>
     </div>
 </div>)
 }

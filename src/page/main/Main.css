@@ -1,6 +1,6 @@
 
 .chat-body {
-    position:absolute;
+    position:fixed;
     top:0;
     bottom:0;
     right:0;
@@ -41,7 +41,7 @@
 
 .chat-wrapper .chat-left-content{
     position: relative;
-    flex:0 0 220px;
+    flex:0 0 250px;
     overflow: auto;
 }
 .chat-wrapper .chat-right-content{
@@ -54,7 +54,6 @@
     margin-top: 0;
 }
 .chat-right-content .message-page .message-list{
-    flex:1;
     position: absolute;
     top:0;
     bottom:48px;
@@ -63,7 +62,6 @@
     overflow: auto;
 }
 .chat-right-content .message-page .send-button{
-    flex:0 0 48px;
     position: absolute;
     bottom: 0;
     left:0;
