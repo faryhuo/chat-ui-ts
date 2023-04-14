@@ -1,4 +1,4 @@
-import { AppstoreOutlined, SettingOutlined,MenuFoldOutlined,MenuUnfoldOutlined} from '@ant-design/icons';
+import { MenuFoldOutlined,MenuUnfoldOutlined} from '@ant-design/icons';
 import { Menu,Button,Avatar,Modal } from 'antd';
 import { observer } from "mobx-react-lite";
 import './Header.css';
@@ -11,7 +11,7 @@ import {IAppConfig} from '../../store/AppConfig';
 import {IMessage} from '../../store/MessageData';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faComments,faLaptopCode } from '@fortawesome/free-solid-svg-icons'
+import { faComments,faLaptopCode,faGear, faLinesLeaning,faImages,faPhotoFilm } from '@fortawesome/free-solid-svg-icons'
 
 type IProps={
   config:IAppConfig;
@@ -32,7 +32,7 @@ const Header: React.FC<IProps> = observer(({store,config}) => {
     {
       label: <Link to="/image">{t('Image')}</Link>,
       key: 'image',
-      icon: <FontAwesomeIcon icon={faLaptopCode} />
+      icon: <FontAwesomeIcon icon={faImages} />
     },
     {
       label: <Link to="/code">{t('Code')}</Link>,
@@ -42,17 +42,17 @@ const Header: React.FC<IProps> = observer(({store,config}) => {
     {
       label: <Link to="/image_edit">{t('Image Edit')}</Link>,
       key: 'image_edit',
-      icon: <AppstoreOutlined />,
+      icon: <FontAwesomeIcon icon={faPhotoFilm} />,
     },
     {
       label: <Link to="/tips">{t('Tips')}</Link>,
       key: 'tips',
-      icon: <AppstoreOutlined />,
+      icon: <FontAwesomeIcon icon={faLinesLeaning} />
     },
     {
       label: <Link to="/config">{t('Config')}</Link>,
       key: 'config',
-      icon: <SettingOutlined />,
+      icon: <FontAwesomeIcon icon={faGear} />
     }
   ];
 
