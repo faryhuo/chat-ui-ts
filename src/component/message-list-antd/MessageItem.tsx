@@ -3,11 +3,13 @@ import './MessageItem.css';
 import icon from './favicon-32x32.png';
 import {EditOutlined} from '@ant-design/icons';
 import { observer } from "mobx-react-lite";
-import React, { useEffect,useRef } from 'react';
+import React, { useEffect,useRef,useState } from 'react';
 import ScrollToBottom from 'react-scroll-to-bottom';
 import ActionBtnList from '../session-atcion-list/SessionAtcionList' 
 import {IAppConfig} from '../../store/AppConfig';
 import {IMessage,ISessiondata} from '../../store/MessageData';
+import ChatConfigList from '../chat-config-list/ChatConfigList'
+
 type IProps={
   config:IAppConfig;
   store:IMessage;
@@ -17,6 +19,7 @@ type IProps={
 const messageItem2: React.FC<IProps> = observer(({store,config,renderMessage}) => {
 
   const messagesEndRef:any =useRef(null);
+  const [open, setOpen] = useState(false);
 
   useEffect(()=>{
     if(messagesEndRef && messagesEndRef.current ){
@@ -24,12 +27,17 @@ const messageItem2: React.FC<IProps> = observer(({store,config,renderMessage}) =
     }
   })
 
+  const onOpen = () => {
+    setOpen(true);
+  };
 
-
+  const onClose = () => {
+    setOpen(false);
+  };
 
   return (<div className="message-list-wrapper-antd">
             <Card title={store.currentChatName} extra={
-            <ActionBtnList store={store} config={config}></ActionBtnList>} style={{ width: '100%'}}>
+            <ActionBtnList onOpen={onOpen} store={store} config={config}></ActionBtnList>} style={{ width: '100%',height:'100%'}}>
           <ScrollToBottom>
           <List
             className="message-item-list-antd"
@@ -51,6 +59,7 @@ const messageItem2: React.FC<IProps> = observer(({store,config,renderMessage}) =
             </List>
             <div ref={messagesEndRef}/>
             </ScrollToBottom>
+            <ChatConfigList config={config} open={open} onClose={onClose}></ChatConfigList>
       </Card>
     </div>
   );

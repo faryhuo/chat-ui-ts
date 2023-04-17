@@ -40,11 +40,11 @@ export interface IAppConfig{
 export interface IChatAPIConfig{
     model:string;
     temperature:number;
-    top_p : number;
+    top_p ?: number;
     presence_penalty:number;
     frequency_penalty:number;
     max_tokens:number;
-    stream:boolean;
+    stream?:boolean;
 }
 
 export interface ICodeEditsAPIConfig{
@@ -61,7 +61,7 @@ class AppConfig implements IAppConfig{
 
     isSlowLeftMenu=true;
 
-    host="https://faryhuo.online:8080"
+    host="https://fary.chat:8080"
     chatUrl=`${this.host}/chat/v2/info`;
     chatStreamUrl=`${this.host}/chat/v2/stream`;
     imageUrl=`${this.host}/image/v2/info`;
@@ -69,7 +69,7 @@ class AppConfig implements IAppConfig{
     imageEditUrl=`${this.host}/image/v2/edit`;
     variationsImageUrl=`${this.host}/image/v2/variations`;
     imageUploadUrl=`${this.host}/upload/v2/image`
-    chatRoleUrl=`https://faryhuo.online:8401/config/chat-roles`
+    chatRoleUrl=`https://fary.chat:8401/config/chat-roles`
 
     colorPrimary='#87e8de'
     textLanguage="zh";

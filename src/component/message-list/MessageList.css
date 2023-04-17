@@ -6,6 +6,10 @@
     border-bottom: 1px solid #f0fffc;
 }
 
+.message-list-wrapper .ant-card-body{
+    background-color: #f0f0f0;
+}
+
 .cursor {
     content:'';
     width:10px;

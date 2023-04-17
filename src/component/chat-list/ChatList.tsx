@@ -1,9 +1,8 @@
-import { Avatar, List,Button,Modal} from 'antd';
+import { Avatar, List,Button,Popconfirm} from 'antd';
 import './ChatList.css';
 import { observer } from "mobx-react-lite";
 import moment from 'moment';
 import icon from './favicon-32x32.png';
-import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { Input } from 'antd';
 import { useTranslation } from 'react-i18next';
 import {IMessage} from '../../store/MessageData';
@@ -17,23 +16,14 @@ type IProps ={
 
 
 const ChatList: React.FC<IProps>  =({store}) => {
-  const [modal,contextHolder] = Modal.useModal();
 
   const {t} = useTranslation();
 
   const clear= (key: any,e: any) =>{
-    modal.confirm({
-      title: 'Confirm',
-      icon: <ExclamationCircleOutlined />,
-      content: t('Are you want to delete the chat.'),
-      okText: t('Yes'),
-      cancelText: t('No'),
-      onOk() {
-        store.clear(key);
-      }
-    });
+    store.clear(key);
     e.stopPropagation();
   }
+
 
   const formatDate=(date: moment.MomentInput)=>{
     const dateFormat="MM-DD";
@@ -77,15 +67,23 @@ const ChatList: React.FC<IProps>  =({store}) => {
                 icon={<FontAwesomeIcon icon={faPaintbrush} />} size ="small"
                 onClick={(e)=>{showChatNameEditor(item.edit,item.key,e)}}
               />
-              <Button
-                icon={<FontAwesomeIcon icon={faTrashCan} />} size ="small" 
-                onClick={(e)=>{clear(item.key,e)}}
-              /></span>}
+             <Popconfirm
+                placement="right"
+                title={t('Message')}
+                description={t('Are you want to delete the chat.')}
+                onConfirm={(e)=>clear(item.key,e)}
+                onCancel={(e)=>e?.stopPropagation()}
+                okText={t("Yes")}
+                cancelText={t("No")}
+              >
+                 <Button onClick={(e)=>e.stopPropagation()}
+                icon={<FontAwesomeIcon icon={faTrashCan} />} size ="small"/>
+              </Popconfirm>
+             </span>}
               </div>
             </List.Item>
           )}
         />
-        {contextHolder}
     </div>);
 };
 export default observer(ChatList);

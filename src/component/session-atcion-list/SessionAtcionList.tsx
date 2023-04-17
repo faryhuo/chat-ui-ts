@@ -1,5 +1,5 @@
-import React from 'react';
-import { Switch,Select } from 'antd';
+import React, { Dispatch, SetStateAction } from 'react';
+import { Switch,Select,Button } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { DeleteOutlined } from '@ant-design/icons';
 import { observer } from "mobx-react-lite";
@@ -8,8 +8,9 @@ import {IMessage} from '../../store/MessageData';
 type IProps={
   config:IAppConfig;
   store:IMessage;
+  onOpen?:()=>void;
 }
-const SessionAtcionList : React.FC<IProps> = observer(({store,config})=>{
+const SessionAtcionList : React.FC<IProps> = observer(({store,config,onOpen})=>{
 
     const {t} =useTranslation();
 
@@ -23,21 +24,31 @@ const SessionAtcionList : React.FC<IProps> = observer(({store,config})=>{
     })
 
 
-    
-    return (<div>
-        {store.type==='chat' && <Select style={{minWidth:80,marginRight:10}}
-                value={store.role} onChange={(value)=>{
-                    store.changeRole(store.activeSession,value)
-                }}
-                options={roleList.map((item) => ({ label: item.label, value: item.value }))}
-              />}
-        {store.type==='chat' && <Switch style={{marginRight:10}}
+    const getActionButtonList=()=>{
+      const list=[];
+      if(store.type==='chat'){
+        list.push(<Button key={list.length}  onClick={onOpen}>More</Button>);
+        list.push(<Select key={list.length} style={{minWidth:80,marginRight:10}}
+          value={store.role} onChange={(value)=>{
+              store.changeRole(store.activeSession,value)
+          }}
+          options={roleList.map((item) => ({ label: item.label, value: item.value }))}
+        />);
+        list.push(<Switch key={list.length}  style={{marginRight:10}}
             onClick={()=>{config.switchStream()}}
           checkedChildren={t("Stream")}
           unCheckedChildren={t("Full")}
           defaultChecked={config.chatConfig.stream}
-        />}
-          <DeleteOutlined onClick={()=>{store.clear(store.activeSession)}}/>
+        />);
+      }
+      list.push(<DeleteOutlined key={list.length} onClick={()=>{store.clear(store.activeSession)}}/>)
+      return list;
+    }
+
+
+    
+    return (<div>
+          {getActionButtonList()}
         </div>)
 })
 

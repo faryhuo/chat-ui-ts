@@ -219,7 +219,7 @@ class MessageList extends Component<IProps,IStates> {
     
 
     render(){        
-        return (<div className='message-list-wrapper' style={{ width: '100%',padding:5,boxSizing:'border-box' }} ref="messages">
+        return (<div className='message-list-wrapper' style={{ width: '100%',height:'100%',padding:5,boxSizing:'border-box' }} ref="messages">
             {this.getMessageItem()}
         </div>)
     }
