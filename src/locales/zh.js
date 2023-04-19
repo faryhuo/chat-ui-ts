@@ -34,5 +34,8 @@ export default {
     "Type the code and your requirement":"请输入要优化的代码还有你的需求",
     "Are you want to delete the chat.":"你确定要删除这个会话吗",
     "Yes":"是",
-    "No":"否"
+    "No":"否",
+    "More Precise":"更准确",
+    "More Balanced":"更平衡",
+    "More Creative":"更创新"
 }

@@ -23,7 +23,7 @@ const ChatConfigForm: React.FC<IProps> = ({config})=>{
     let max_tokens = Form.useWatch('max_tokens', form);
 
     const marks: SliderMarks = {
-      0: t('More Exact'),
+      0: t('More Precise'),
       1: t('More Balanced'),
       2: t('More Creative'),
     };

@@ -1,6 +1,7 @@
 import { makeObservable, observable, computed, action} from "mobx";
 import IatRecorder from '../utils/IatRecorder';
 import i18n from '../utils/i18n';
+import {isMobile} from 'react-device-detect';
 
 
 export interface IAppConfig{
@@ -55,11 +56,11 @@ export interface ICodeEditsAPIConfig{
 
 class AppConfig implements IAppConfig{
 
-    version="2.0"
+    version="3.0"
     style="chat";
     localConfigName=`config_${this.version}`;
 
-    isSlowLeftMenu=true;
+    isSlowLeftMenu=isMobile?false:true;
 
     host="https://fary.chat:8080"
     chatUrl=`${this.host}/chat/v2/info`;
@@ -135,6 +136,11 @@ class AppConfig implements IAppConfig{
             }
         }
         document.documentElement.style.setProperty('--color-primary', this.colorPrimary);
+    }
+
+    clearHistory(){
+        localStorage.clear();
+        window.location.reload();
     }
 
 

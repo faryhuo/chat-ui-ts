@@ -35,7 +35,7 @@ const MessageItemChat = observer(({store,config,renderMessage}) => {
       <ScrollToBottom>
           {store.data.map((item,key)=>{
           return item.isSys?(<MessageItem type={item.isUser?"user":"system"} key={key} content={renderMessage(item,store.type,key)}></MessageItem>):
-          (<MessageItem type={"user"} key={key} content={renderMessage(item,store.type,key)}></MessageItem>)
+          (<MessageItem store={store} type={"user"} key={key} index={key}  text={item.text} content={renderMessage(item,store.type,key)}></MessageItem>)
           })}
           <div ref={messagesEndRef}/>
       </ScrollToBottom>

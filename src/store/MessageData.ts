@@ -1,6 +1,6 @@
 import { makeObservable, observable, computed, action, remove} from "mobx";
 import i18n from '../utils/i18n';
-import config from './AppConfig';
+import config, { IAppConfig } from './AppConfig';
 import axios from 'axios';
 import { saveAs } from 'file-saver'
 
@@ -61,6 +61,8 @@ export interface IMessage{
     roles:any[];
     saveDataToFile:()=>void;
     loadDataFromFile:(file:Blob)=>void;
+    reSentMsg:(index:number,msg:string)=>void;
+    callChatAPI:(chatId: string)=>void;
 }
 
 class MessageData implements  IMessage{
@@ -144,10 +146,15 @@ class MessageData implements  IMessage{
             appendData: action,
             changeRole: action,
             fetchData: action.bound,
-            loadDataFromFile: action.bound
+            loadDataFromFile: action.bound,
+            reSentMsg:action.bound,
+            callChatAPI:action.bound
         })
         if(localStorage[this.localSessionName]){
             this.session=JSON.parse(localStorage[this.localSessionName]);
+            this.session.forEach((item)=>{
+                item.isType=true;
+            })
             this.activeSession=this.session[0].chatId;
         }
         this.fetchData();
@@ -339,6 +346,124 @@ class MessageData implements  IMessage{
         return arr;
     }
 
+    reSentMsg(index:number,msg:string){
+        this.data[index].text=msg;
+        this.data.splice(index+1,this.data.length-index-1);
+        let chatId=this.activeSession+"";
+        this.disableType(chatId);
+        try{
+            this.callChatAPI(chatId);
+        }catch(e){
+            this.enableType(chatId);
+        }
+        localStorage[this.localSessionName]=JSON.stringify(this.sessionData);
+    }
+
+    handleAPIError(err: { message: string; },chatId: string){
+        this.enableType(chatId);
+        let msg="Error";
+        if(err.message){
+          msg=err.message;
+        }
+        this.addData({
+          isSys:true,
+          title:"Error",
+          text:msg
+        },chatId);
+    }
+
+    callChatAPI(chatId: string){
+        if(config.getChatConfig().stream){
+          return this.callChatAPIByStream(chatId)
+        }else{
+          return this.callChatAPIByHttp(chatId)
+        }
+      }
+
+    callChatAPIByStream=(chatId:string)=>{
+        const params=this.getChatParams();
+        const queryString = new URLSearchParams(params as any).toString();
+        const queryUrl =`${config.chatStreamUrl}?${queryString}`;
+  
+        let eventSource = new EventSource(queryUrl,{
+          withCredentials:false
+        });
+        let self=this;
+        eventSource.onmessage = function(event) {
+            try{
+              let data=event.data.replace("data:","").trim();
+              if(!data){
+                return true;
+              }
+              if(data==="[DONE]"){
+                eventSource.close();
+                self.enableType(chatId);
+              }else {
+                self.appendData(JSON.parse(data).choices[0].delta.content,chatId);
+              }
+            }catch(e){
+              eventSource.close();
+              self.enableType(chatId);
+            }
+        };
+      
+        eventSource.onerror = function(event) {
+          eventSource.close();
+          self.enableType(chatId);
+        };
+        let msgItem={
+          isSys:true,
+          choices:[{message:{content:""}}]
+        }
+        self.addData(msgItem,chatId);   
+      } 
+
+    callChatAPIByHttp(chatId: string){
+       const params=this.getChatParams();
+       const queryUrl = config.chatUrl;
+       return axios({
+            method: "post",
+            url: queryUrl,
+            headers: {
+              'Content-Type': 'application/json;charset=UTF-8'
+            },
+            data : JSON.stringify(params)
+          }
+        ).then((response)=>{
+            this.enableType(chatId);
+            if(response.data.data.error){
+              this.handleAPIError(response.data.data.error,chatId);
+              return;
+            }
+            const choices = response.data.data.choices;
+            let msg={
+                isSys:true,
+                choices:choices
+            }
+            this.addData(msg,chatId);      
+          }
+          ,(err)=>{
+            this.handleAPIError(err,chatId);
+          });
+    }
+
+
+    getChatParams(){
+        const chatConfig=config.getChatConfig();
+        let params={ 
+          messages:JSON.stringify(this.getMessageListData()),
+          uuid: this.activeSession,
+          model: chatConfig.model,
+          temperature:chatConfig.temperature,
+          top_p:chatConfig.top_p,
+          presence_penalty:chatConfig.presence_penalty,
+          frequency_penalty:chatConfig.frequency_penalty,
+          max_tokens:chatConfig.max_tokens?chatConfig.max_tokens:1024,
+          stream:chatConfig.stream
+        }
+        return params;
+      }
+
 
     getContentByRole(role: string){
         for(let i=0;i<this.roles.length;i++){
@@ -407,6 +532,8 @@ class MessageData implements  IMessage{
         return messages;
     }
 
+
+    
 
     enableType(chatId: string){
         this.sessionData.forEach((item)=>{

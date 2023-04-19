@@ -28,30 +28,28 @@ const AppUpload = ({store,config,callChatAPI,callImageAPI})=>{
         }
         if (info.file.status === 'done') {
         // Get this url from response in real world.
-        getBase64(info.file.originFileObj, (url) => {
-            let fileName=info.file.response.data;
-            store.addData({
-                type:"image",
-                image:{
-                    uri:url,
-                    width:256,
-                    height:256
-                },
-                isUser:true,
-                isSys:true
-              });
-              let chatId=store.activeSession+"";
-              if(store.type==="chat"){
-                callChatAPI(chatId,`${config.imageUploadUrl}/${fileName}`);  
-              }else if(store.type==="image"){
-                const queryUrl = `${config.variationsImageUrl}?image=${fileName}&uuid=${store.activeSession}&size=${config.imageSize}`;  
-                callImageAPI(chatId,queryUrl);  
-              }
-        });
+          let fileName=info.file.response.data;
+          console.log(fileName);
+          store.addData({
+              type:"image",
+              image:{
+                  uri:`${config.imageUploadUrl}/${fileName}`,
+                  width:256,
+                  height:256
+              },
+              isUser:true
+            });
+            let chatId=store.activeSession+"";
+            if(store.type==="chat"){
+              callChatAPI(chatId);  
+            }else if(store.type==="image"){
+              const queryUrl = `${config.variationsImageUrl}?image=${fileName}&uuid=${store.activeSession}&size=${config.imageSize}`;  
+              callImageAPI(chatId,queryUrl);  
+            }
         }
     };
 
-    return (<div style={{display:"inline-block",marginRight:10}}>           
+    return (<div style={{display:"inline-block"}}>           
           <Upload
           method="post"
         showUploadList={false}
