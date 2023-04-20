@@ -22,6 +22,7 @@ export interface  ISession{
     data:Array<ISessiondata>;
     role?:string;
     updateDate?:Date;
+    usage?:any;
 }
 
 export interface  IRole{
@@ -35,7 +36,6 @@ export interface IMessage{
     session:Array<ISession>;
     localSessionName:string;
     activeSession:string;
-    preIsSlowLeftMenu?:boolean | null;
     addChat:()=>void;
     appendData:(text:any,chatId:string)=>void;
     addData:(newChat: any,chatId: string) =>void;
@@ -56,7 +56,6 @@ export interface IMessage{
     updateChatName:(name: string | undefined,chatId: string)=>void;
     updateChatStatus:(status: boolean,chatId: string)=>void;
     currentChatName:string;
-    hideMenuTypeList:string[];
     latestText:string;
     roles:any[];
     saveDataToFile:()=>void;
@@ -73,8 +72,6 @@ class MessageData implements  IMessage{
     type="chat"
     roles:IRole[]=[];
     activeSession="chat_"+new Date().getTime()
-    preIsSlowLeftMenu:boolean | null=false;
-    hideMenuTypeList=["tips","config"]
     session:Array<ISession>=[{
         chatId:this.activeSession+"",
         type:"chat",
@@ -88,6 +85,11 @@ class MessageData implements  IMessage{
             text:i18n.t("Type something to search on ChatGPT")
             }
         ],
+        usage:{
+            completion_tokens:0,
+            prompt_tokens:0,
+            total_tokens:0
+        },
         role:"",
         updateDate:new Date()
     },{
@@ -265,15 +267,7 @@ class MessageData implements  IMessage{
             return;
         }
         this.type=type;
-        if(this.hideMenuTypeList.includes(type)){
-            this.preIsSlowLeftMenu=config.isSlowLeftMenu;
-            config.isSlowLeftMenu=false;
-        }else{
-            if(this.preIsSlowLeftMenu!=null){
-                config.isSlowLeftMenu=this.preIsSlowLeftMenu;
-                this.preIsSlowLeftMenu=null;
-            }
-        }
+        config.type=type;
         if(this.sessionList.length){
             this.activeSession=this.sessionList[0].key;
         }
@@ -436,6 +430,14 @@ class MessageData implements  IMessage{
               return;
             }
             const choices = response.data.data.choices;
+            const usage = response.data.data.usage;
+            for(let i=0;i<this.session.length;i++){
+                let item=this.session[i];
+                if(item.chatId===chatId){
+                    item.usage=usage;
+                    break;
+                }
+            }
             let msg={
                 isSys:true,
                 choices:choices
@@ -595,7 +597,6 @@ class MessageData implements  IMessage{
             try{
                 if(fileContent){
                     const configJson=JSON.parse(fileContent);    
-                    console.log(configJson)
                     if(configJson[this.localSessionName]){
                         this.setSession(configJson[this.localSessionName]);
                         localStorage[this.localSessionName]=JSON.stringify(this.sessionData);

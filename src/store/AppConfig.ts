@@ -36,6 +36,7 @@ export interface IAppConfig{
     getCodeEditConfig:()=>ICodeEditsAPIConfig;
     save:(config:any)=>void;
     triggerMenu:()=>void;
+    hideMenuTypeList:String[];
 }
 
 export interface IChatAPIConfig{
@@ -59,7 +60,8 @@ class AppConfig implements IAppConfig{
     version="3.0"
     style="chat";
     localConfigName=`config_${this.version}`;
-
+    type="";
+    hideMenuTypeList=["tips","config"]
     isSlowLeftMenu=isMobile?false:true;
 
     host="https://fary.chat:8080"
@@ -82,7 +84,7 @@ class AppConfig implements IAppConfig{
 
     iatRecorder =new IatRecorder({language:this.language,accent:this.language} as any);
     get isSlowLeftMenuFlag(){
-        return this.isSlowLeftMenu;
+        return !this.hideMenuTypeList.includes(this.type) && this.isSlowLeftMenu;
     }
 
     codeStyle="a11yDark";
@@ -107,8 +109,10 @@ class AppConfig implements IAppConfig{
     constructor() {
         makeObservable(this, {
             isSlowLeftMenu: observable,
+            type:  observable,
             textLanguage: observable,
             style:observable,
+            chatConfig:observable,
             colorPrimary: observable,
             isSlowLeftMenuFlag: computed,
             triggerMenu: action,

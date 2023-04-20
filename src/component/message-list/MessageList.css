@@ -4,11 +4,19 @@
 }
 .message-list-wrapper .ant-card-head{
     border-bottom: 1px solid #f0fffc;
+    background: #fff;
+}
+
+.message-list-wrapper .ant-card-head .ant-segmented-item-selected{
+    color: #fff;
+    background-color: var(--color-primary);
 }
 
 .message-list-wrapper .ant-card-body{
     background-color: #f0f0f0;
+    border-top: 2px solid #ffffff;
 }
+
 
 .cursor {
     content:'';

@@ -55,7 +55,6 @@ class MessageItem extends Component<IProps, IStats> {
     }
 
     userInput(content: any){
-        console.log(content);
         return (<div className="rce-container-mbox message-item-user">
         <div className="rce-mbox rce-mbox-right" style={{background:config.colorPrimary}}>
             <div className="rce-mbox-body">
@@ -64,6 +63,7 @@ class MessageItem extends Component<IProps, IStats> {
                 </div><div className="rce-mbox-text right">{this.state.isEdit?<TextArea
           value={this.state.content}
           size="large"
+          style={{maxWidth:700}}
           onChange={(e)=>{this.changeContent(e)}}
           autoSize={{ minRows: 2, maxRows: 8 }}
         //   onPressEnter={()=>this.editAndResent()}

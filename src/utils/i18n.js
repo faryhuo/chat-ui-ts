@@ -14,6 +14,7 @@ i18next .use(LanguageDetector).use(initReactI18next).init({
     }
   },
   debug: false,
+  localStorage:'zh',
   interpolation: {
     escapeValue: false
   }

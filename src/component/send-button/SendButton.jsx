@@ -139,7 +139,6 @@ const SendButton = observer(({store,config,setBtnHeight})=>{
           onChange={(e) => typeMsg(e)}
           autoSize={{ minRows: minRow, maxRows: 8 }}
           onPressEnter={sendMsg}
-          maxLength={2000}
           onResize={resizeHeight}
         />
         <div className="sent-btn-actions"  >

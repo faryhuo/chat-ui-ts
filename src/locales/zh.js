@@ -35,7 +35,7 @@ export default {
     "Are you want to delete the chat.":"你确定要删除这个会话吗",
     "Yes":"是",
     "No":"否",
-    "More Precise":"更准确",
-    "More Balanced":"更平衡",
-    "More Creative":"更创新"
+    "Precise":"准确",
+    "Balanced":"平衡",
+    "Creative":"创新"
 }

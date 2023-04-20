@@ -91,7 +91,7 @@ const Header: React.FC<IProps> = observer(({store,config}) => {
   return (
   <div className="menu-header">
     <div className="action-list">
-      {!store.hideMenuTypeList.includes(store.type) &&
+      {!config.hideMenuTypeList.includes(store.type) &&
       <Button
           icon={config.isSlowLeftMenu?<MenuFoldOutlined />:<MenuUnfoldOutlined />}
           onClick={()=>{config.triggerMenu()}}

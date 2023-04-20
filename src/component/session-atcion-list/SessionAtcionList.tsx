@@ -1,10 +1,11 @@
-import React, { Dispatch, SetStateAction } from 'react';
-import { Switch,Select,Button } from 'antd';
+import React,{useState} from 'react';
+import { Switch,Select,Button, Segmented ,Popconfirm} from 'antd';
 import { useTranslation } from 'react-i18next';
-import { DeleteOutlined } from '@ant-design/icons';
 import { observer } from "mobx-react-lite";
 import {IAppConfig} from '../../store/AppConfig';
 import {IMessage} from '../../store/MessageData';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTrashCan } from '@fortawesome/free-solid-svg-icons'
 type IProps={
   config:IAppConfig;
   store:IMessage;
@@ -13,6 +14,11 @@ type IProps={
 const SessionAtcionList : React.FC<IProps> = observer(({store,config,onOpen})=>{
 
     const {t} =useTranslation();
+    const options = [
+      t('Precise'),
+      t('Balanced'),
+      t('Creative')
+    ];
 
 
     const roleList:any[]=[];
@@ -22,12 +28,34 @@ const SessionAtcionList : React.FC<IProps> = observer(({store,config,onOpen})=>{
             value: item.roleId
         });
     })
+    const clear= (e: any) =>{
+      store.clear(store.activeSession);
+      e.stopPropagation();
+    }
+  
 
+    const getSelectedItem=()=>{
+      if(config.chatConfig.temperature>=1.5){
+        return options[2];
+      }else if(config.chatConfig.temperature<=0.5){
+        return options[0];
+      }else {
+        return options[1];
+      }
+    }
+
+    const changeType=(e:any)=>{
+      const index=options.indexOf(e);
+      if(index>=0){
+        config.chatConfig.temperature=index;
+      }
+    }
 
     const getActionButtonList=()=>{
       const list=[];
       if(store.type==='chat'){
-        list.push(<Button key={list.length}  onClick={onOpen}>More</Button>);
+        list.push(<Button  style={{marginRight:10}} key={list.length}  onClick={onOpen}>More</Button>);
+        list.push(<Segmented value={getSelectedItem()} onChange={changeType} key={list.length}  style={{marginRight:10}}  options={options} />);
         list.push(<Select key={list.length} style={{minWidth:80,marginRight:10}}
           value={store.role} onChange={(value)=>{
               store.changeRole(store.activeSession,value)
@@ -41,7 +69,18 @@ const SessionAtcionList : React.FC<IProps> = observer(({store,config,onOpen})=>{
           defaultChecked={config.chatConfig.stream}
         />);
       }
-      list.push(<DeleteOutlined key={list.length} onClick={()=>{store.clear(store.activeSession)}}/>)
+      list.push(<Popconfirm
+        placement="bottom"
+        title={t('Message')}
+        description={t('Are you want to delete the chat.')}
+        onConfirm={(e)=>clear(e)}
+        okText={t("Yes")}
+        cancelText={t("No")}
+      >
+         <Button 
+        icon={<FontAwesomeIcon icon={faTrashCan} />} size ="small"/>
+      </Popconfirm>
+      )
       return list;
     }
 

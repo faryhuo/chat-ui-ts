@@ -137,7 +137,7 @@ class MessageList extends Component<IProps,IStates> {
 
     renderMessage(item:ISessiondata,type:string,key:number){
         if(item.text){
-            return <div className="chat-row"><span>{item.text}</span>
+            return <div className="chat-row"><pre style={{maxWidth:700,margin:0,whiteSpace:'break-spaces'}}>{item.text}</pre>
             </div>
         }else if(item.code){
             return <div className="chat-row">
