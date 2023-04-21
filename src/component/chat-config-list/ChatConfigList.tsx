@@ -22,7 +22,7 @@ const ChatConfigList:React.FC<IProps> = observer(({config,open,onClose})=>{
         open={open}
         getContainer={false}
       >
-        <ChatConfigSimpleForm config={config}></ChatConfigSimpleForm>
+        <ChatConfigSimpleForm config={config} onClose={onClose}></ChatConfigSimpleForm>
       </Drawer></div>)
 })
 

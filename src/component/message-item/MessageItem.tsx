@@ -10,9 +10,9 @@ type IProps={
     content: any;
     title?:string;
     type?:string;
-    text:string;
-    index:number;
-    store:IMessage;
+    text?:string;
+    index?:number;
+    store?:IMessage;
 }
 type IStats={
     isEdit: boolean;
@@ -47,7 +47,9 @@ class MessageItem extends Component<IProps, IStats> {
         this.setState({
             isEdit:false
         })
-        this.props.store.reSentMsg(this.props.index,this.state.content);
+        if(this.props.store && this.props.index){
+            this.props.store.reSentMsg(this.props.index,this.state.content);
+        }
     }
 
     changeContent(e: { target: { value: any; }; }){

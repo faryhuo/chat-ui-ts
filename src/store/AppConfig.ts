@@ -37,6 +37,10 @@ export interface IAppConfig{
     save:(config:any)=>void;
     triggerMenu:()=>void;
     hideMenuTypeList:String[];
+    isMobile:boolean;
+    clearConfig:()=>void;
+    clearHistory:()=>void;
+    iatRecorder:any;
 }
 
 export interface IChatAPIConfig{
@@ -63,7 +67,7 @@ class AppConfig implements IAppConfig{
     type="";
     hideMenuTypeList=["tips","config"]
     isSlowLeftMenu=isMobile?false:true;
-
+    isMobile=isMobile;
     host="https://fary.chat:8080"
     chatUrl=`${this.host}/chat/v2/info`;
     chatStreamUrl=`${this.host}/chat/v2/stream`;
@@ -142,12 +146,15 @@ class AppConfig implements IAppConfig{
         document.documentElement.style.setProperty('--color-primary', this.colorPrimary);
     }
 
+    clearConfig(){
+        localStorage[this.localConfigName]='';
+        window.location.reload();
+    }
+
     clearHistory(){
         localStorage.clear();
         window.location.reload();
     }
-
-
 
     switchStream(){
         this.chatConfig.stream=!this.chatConfig.stream;

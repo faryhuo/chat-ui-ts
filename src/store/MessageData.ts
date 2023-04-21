@@ -31,6 +31,7 @@ export interface  IRole{
 }
 
 export interface IMessage{
+    handleAPIError:(error:any,chatId:string)=>void;
     version:string
     type:string;
     session:Array<ISession>;
@@ -244,9 +245,10 @@ class MessageData implements  IMessage{
         localStorage[this.localSessionName]=JSON.stringify(this.sessionData);
     }
 
+
     clear(chatId: string) {
         if(this.currentSession.length===1 || !chatId){
-            //this.data=[];
+            this.clearCurrentData();
         }else{
             for(let i=0;i<this.session.length;i++){
                 let item=this.session[i];
@@ -299,6 +301,16 @@ class MessageData implements  IMessage{
             }
         }
         return role;
+    }
+
+    clearCurrentData(){
+        let {type,activeSession,session}=this;
+        for(let i=0;i<session.length;i++){
+            let item=session[i];
+            if(item.type===type && item.chatId===activeSession){
+                item.data=[]
+            }
+        }
     }
 
     get data():Array<ISessiondata>{

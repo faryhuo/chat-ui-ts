@@ -1,5 +1,5 @@
 import React  from 'react';
-import {  Form,Slider } from 'antd';
+import {  Form,Slider,Button } from 'antd';
 import { observer } from "mobx-react"
 import { Select } from 'antd';
 import { useTranslation } from 'react-i18next';
@@ -7,11 +7,14 @@ import { InputNumber } from 'antd';
 import {IAppConfig} from '../../store/AppConfig';
 import './ChatConfigSimpleForm.css'
 import type { SliderMarks } from 'antd/es/slider';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faClose } from '@fortawesome/free-solid-svg-icons'
 
 type IProps={
   config:IAppConfig;
+  onClose:()=>void;
 }
-const ChatConfigForm: React.FC<IProps> = ({config})=>{
+const ChatConfigForm: React.FC<IProps> = ({config,onClose})=>{
 
     const [form] = Form.useForm();
     const { t } = useTranslation();
@@ -43,6 +46,10 @@ const ChatConfigForm: React.FC<IProps> = ({config})=>{
     
     return (
       <div>
+     <Button shape="circle" icon={<FontAwesomeIcon icon={faClose}  />} style={{position:'absolute',
+    right: 5,
+    top:10}}
+    onClick={onClose}></Button>
       <Form
         form={form}
         layout="vertical"

@@ -10,9 +10,19 @@ import { faPaperPlane,faBroom } from '@fortawesome/free-solid-svg-icons'
 //import {Upload} from '../index'
 import { useTranslation } from 'react-i18next';
 import './SendButton.css'
+import {IAppConfig} from '../../store/AppConfig';
+import {IMessage} from '../../store/MessageData';
+
+type IProps={
+  config:IAppConfig;
+  store:IMessage;
+  setBtnHeight:(height:number)=>void;
+}
+
+
 const { TextArea } = Input;
 
-const SendButton = observer(({store,config,setBtnHeight})=>{
+const SendButton:React.FC<IProps> = observer(({store,config,setBtnHeight})=>{
     const [message, setMessage] = useState("");
     const [minRow, setMinRow] = useState(2);
 
@@ -21,7 +31,8 @@ const SendButton = observer(({store,config,setBtnHeight})=>{
     const {t} = useTranslation();
     const btnRef=useRef(null);
     const resizeHeight=()=>{
-      setBtnHeight(btnRef.current.getBoundingClientRect().height+5);
+      setBtnHeight((btnRef?.current as any)?.getBoundingClientRect()?.height+5);
+
     }
 
     // useEffect(()=>{
@@ -34,7 +45,7 @@ const SendButton = observer(({store,config,setBtnHeight})=>{
 
 
 
-    let timeObj;
+    let timeObj: string | number | NodeJS.Timeout | undefined;
     const convertMsg=()=>{
       if(isStart){
         clearTimeout(timeObj);
@@ -51,18 +62,18 @@ const SendButton = observer(({store,config,setBtnHeight})=>{
     }
 
 
-    iatRecorder.onTextChange = (text)=>{
+    iatRecorder.onTextChange = (text:string)=>{
       if(store.isType){
         setMessage(text);
       } 
     }
 
     
-    const callChatAPI=(chatId)=>{
+    const callChatAPI=(chatId: string)=>{
       store.callChatAPI(chatId);
     }
 
-    const callImageAPI=(chatId,queryUrl)=>{
+    const callImageAPI=(chatId: string,queryUrl: string | null)=>{
       if(!queryUrl){
         queryUrl = `${config.imageUrl}?message=${message}&uuid=${store.activeSession}&size=${config.imageSize}`;  
       }
@@ -111,22 +122,22 @@ const SendButton = observer(({store,config,setBtnHeight})=>{
         let chatId=store.activeSession+"";
         store.addData({
           text:message
-        })
+        },chatId)
         if(store.type==="image"){
-          callImageAPI(chatId);
+          callImageAPI(chatId,null);
         }else {
-          callChatAPI(chatId,message);
+          callChatAPI(chatId);
         }
         store.disableType(chatId);
         setMessage("");
     }
 
-    const typeMsg= (e)=>{
+    const typeMsg= (e:any)=>{
       setMessage(e.target.value)  
     }
 
 
-    const resizeInput= (e)=>{
+    const resizeInput= ()=>{
       setMinRow(minRow===2?9:2)
     }
 
@@ -134,7 +145,7 @@ const SendButton = observer(({store,config,setBtnHeight})=>{
       <Space.Compact style={{ width: '100%' }}>
           <TextArea
           value={message}
-          placeholder={t("Type here...")}
+          placeholder={t("Type here...")as any}
           size="large"
           onChange={(e) => typeMsg(e)}
           autoSize={{ minRows: minRow, maxRows: 8 }}

@@ -12,11 +12,10 @@
     background-color: var(--color-primary);
 }
 
-.message-list-wrapper .ant-card-body{
-    background-color: #f0f0f0;
+.message-list-wrapper .ant-card-body,.message-list-wrapper .antd-card-wrapper{
+    background-color: #f0fffc;
     border-top: 2px solid #ffffff;
 }
-
 
 .cursor {
     content:'';
