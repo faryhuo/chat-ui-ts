@@ -4,9 +4,14 @@ import {
     MessageList,
     SendButton
 } from '../../component';
+import {IAppConfig} from '../../store/AppConfig';
+import {IMessage} from '../../store/MessageData';
+type IProps={
+  config:IAppConfig;
+  store:IMessage;
+}
 
-
-const Chat = ({store,config})=>{
+const Chat: React.FC<IProps> = ({store,config})=>{
 
     const [btnHeight,setBtnHeight]=useState(48);
 

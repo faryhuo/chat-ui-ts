@@ -4,9 +4,15 @@ import {
     SendInput
 } from '../../component';
 import './Code.css'
+import {IAppConfig} from '../../store/AppConfig';
+import {IMessage} from '../../store/MessageData';
+type IProps={
+  config:IAppConfig;
+  store:IMessage;
+}
 
 
-const Code = ({store,config})=>{
+const Code: React.FC<IProps>  = ({store,config})=>{
 
     return (
     <div className="code-page">

@@ -43,7 +43,6 @@ class MessageList extends Component<IProps,IStates> {
         showCursor:false,
         latestText:""
       };
-      this.messagesEndRef = null
       this.textNode=document.createElement('span');
       this.textNode.className="cursor"
     }
@@ -118,21 +117,6 @@ class MessageList extends Component<IProps,IStates> {
     }
 
     
-
-    componentDidUpdate(){
-        if(this.messagesEndRef){
-            this.messagesEndRef.scrollIntoView({ behavior: 'smooth' });
-        }
-        this.updateCursor();        
-    }
-
-    setCallbackRef(instKey: string ) {
-        return (ref: any) => {
-          // 将函数赋予 ref 属性时，对应的 DOM 节点、类组件实例作为函数参数返回。
-          // 作用于函数组件，将不符合任何参数，即 ref 为 undefined。
-          (this as any)[instKey] = ref
-        }
-      }
 
 
     renderMessage(item:ISessiondata,type:string,key:number){

@@ -1,13 +1,15 @@
 import React from 'react';
 import './iframe.css'
 import Iframe from 'react-iframe';
+type IProps={
+  src:string
+}
 
-
-const Frame = ({src})=>{
+const Frame:React.FC<IProps> = ({src})=>{
   let height=window.innerHeight-48
     return (
     <div className="iframe-container">
-            <Iframe src={src} width="100%" height={height} frameBorder="0"></Iframe>
+            <Iframe src={src} url={src} width="100%" height={height as any} frameBorder={0}></Iframe>
     </div>)
 }
 

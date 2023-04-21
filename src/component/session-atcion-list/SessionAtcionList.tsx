@@ -5,7 +5,8 @@ import { observer } from "mobx-react-lite";
 import {IAppConfig} from '../../store/AppConfig';
 import {IMessage} from '../../store/MessageData';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrashCan } from '@fortawesome/free-solid-svg-icons'
+import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import './SessionActionList.css';
 type IProps={
   config:IAppConfig;
   store:IMessage;
@@ -54,15 +55,17 @@ const SessionAtcionList : React.FC<IProps> = observer(({store,config,onOpen})=>{
     const getActionButtonList=()=>{
       const list=[];
       if(store.type==='chat'){
-        list.push(<Button  style={{marginRight:10}} key={list.length}  onClick={onOpen}>More</Button>);
+        list.push(<Button className="option-btn" key={list.length}  onClick={onOpen}>More</Button>);
         !config.isMobile && list.push(<Segmented value={getSelectedItem()} onChange={changeType} key={list.length}  style={{marginRight:10}}  options={options} />);
-        list.push(<Select key={list.length} style={{minWidth:80,marginRight:10}}
+        list.push(<Select key={list.length} style={{minWidth:80}}
+          placement="bottomLeft"
+          className="option-btn" 
           value={store.role} onChange={(value)=>{
               store.changeRole(store.activeSession,value)
           }}
           options={roleList.map((item) => ({ label: item.label, value: item.value }))}
         />);
-        list.push(<Switch key={list.length}  style={{marginRight:10}}
+        list.push(<Switch key={list.length}  className="option-btn" 
             onClick={()=>{config.switchStream()}}
           checkedChildren={t("Stream")}
           unCheckedChildren={t("Full")}
@@ -86,7 +89,7 @@ const SessionAtcionList : React.FC<IProps> = observer(({store,config,onOpen})=>{
 
 
     
-    return (<div>
+    return (<div className="session-action-list-wrapper">
           {getActionButtonList()}
         </div>)
 })

@@ -3,8 +3,14 @@ import {Input } from 'antd';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import { observer } from "mobx-react-lite";
+import {IAppConfig} from '../../store/AppConfig';
+import {IMessage} from '../../store/MessageData';
 
-const SendInput = observer(({store,config})=>{
+type IProps={
+  config:IAppConfig;
+  store:IMessage;
+}
+const SendInput : React.FC<IProps> = observer(({store,config})=>{
     const { Search,TextArea } = Input;
     const {t} =useTranslation();
 
@@ -12,30 +18,30 @@ const SendInput = observer(({store,config})=>{
     const [message,setMessage] = useState("");
 
 
-    const typeMsg=(e)=>{
+    const typeMsg=(e:any)=>{
         setMessage(e.target.value);
     }
 
     
-    const typeInput=(e)=>{
+    const typeInput=(e:any)=>{
         setInput(e.target.value)
     }
-    const sendMsg=(e)=>{
+    const sendMsg=()=>{
         if(input && message){
             let chatId=store.activeSession+"";
             store.addData({
               code:input
-            });
+            },chatId);
             store.addData({
                 text:message
-            });
+            },chatId);
             callEditAPI(chatId,input,message);
             setMessage("");
             setInput("");
         }
     }
 
-    const handleAPIError = (err,chatId) =>{
+    const handleAPIError = (err: { message: string; },chatId: string) =>{
         store.enableType(chatId);
         let msg="Error";
         if(err.message){
@@ -49,7 +55,7 @@ const SendInput = observer(({store,config})=>{
       }
   
 
-    const callEditAPI=(chatId,input,instruction)=>{
+    const callEditAPI=(chatId: string,input: string,instruction: string)=>{
         const params= Object.assign({},{
           input: input,
           instruction:instruction
@@ -88,11 +94,11 @@ const SendInput = observer(({store,config})=>{
       style={{ height: 120, marginBottom: 24 }}
       onChange={(e) => typeInput(e)}
       value={input}
-      placeholder={t("Type your code here")}
+      placeholder={t("Type your code here") as string}
     />
           <Search
       value={message}
-        placeholder={t("Instructions")}
+        placeholder={t("Instructions") as string}
         enterButton={t("Sent")}
       size="large"
       disabled={store.isType===false}
