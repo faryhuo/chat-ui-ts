@@ -139,6 +139,9 @@ class AppConfig implements IAppConfig{
     setConfigData(configJson:IAppConfig){
         let item:keyof IAppConfig;
         for (item in configJson) {
+            if(item==="isMobile"){
+                continue;
+            }
             if(Object.keys(this).includes(item)){
                 (this as any)[item] = configJson[item]
             }

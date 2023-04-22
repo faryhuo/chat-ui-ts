@@ -1,7 +1,8 @@
-import { Avatar, List,Card} from 'antd';
+import { Avatar, List,Card,Button,Input} from 'antd';
 import './MessageItem.css';
 import icon from './favicon-32x32.png';
-import {EditOutlined} from '@ant-design/icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPaintbrush, faClose,faCheck } from '@fortawesome/free-solid-svg-icons';
 import { observer } from "mobx-react-lite";
 import React, { useEffect,useRef,useState } from 'react';
 import ScrollToBottom from 'react-scroll-to-bottom';
@@ -15,14 +16,16 @@ type IProps={
   store:IMessage;
   renderMessage:(item:ISessiondata,type:string,key:number)=> JSX.Element;
 }
+const { TextArea } = Input;
 
 const messageItem2: React.FC<IProps> = observer(({store,config,renderMessage}) => {
 
   const messagesEndRef:any =useRef(null);
   const [open, setOpen] = useState(false);
+  const [edit, setEdit] = useState(false);
 
   useEffect(()=>{
-    if(messagesEndRef && messagesEndRef.current ){
+    if(messagesEndRef && messagesEndRef.current && open===false && edit===false){
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   })
@@ -35,6 +38,36 @@ const messageItem2: React.FC<IProps> = observer(({store,config,renderMessage}) =
     setOpen(false);
   };
 
+  const editInput=(item: ISessiondata)=>{
+    item.isEdit=true;
+    setEdit(true);
+  }
+
+
+  const cancel=(item: ISessiondata)=>{
+    item.isEdit=false;
+    setEdit(false);
+  }
+
+  const editAndResent=(index: number,item: ISessiondata)=>{
+    item.isEdit=false;
+    setEdit(false);
+    if(store && index){
+        store.reSentMsg(index,item.text);
+    }
+  }
+  const changeContent=(e: { target: { value: any; }; },item: ISessiondata)=>{
+    item.text=e.target.value;
+  }
+
+  const actionBtnList=(item: ISessiondata,key: number)=>{
+    const list=[];
+    list.push(<Button style={(item.isSys || item.isEdit)?{display:"none"}:{}} onClick={()=>{editInput(item)}}  shape="round" icon={<FontAwesomeIcon icon={faPaintbrush}  />}  ></Button>);
+    list.push(<Button style={(item.isSys || !item.isEdit)?{display:"none"}:{}} onClick={()=>{editAndResent(key,item)}} shape="round" icon={<FontAwesomeIcon icon={faCheck}  />}  ></Button>);
+    list.push(<Button style={(item.isSys || !item.isEdit)?{display:"none"}:{}} onClick={()=>{cancel(item)}}  shape="round" icon={<FontAwesomeIcon icon={faClose}  />}  ></Button>);
+    return list;
+  }
+
   return (<div className="message-list-wrapper-antd">
             <Card title={store.currentChatName} extra={
             <ActionBtnList onOpen={onOpen} store={store} config={config}></ActionBtnList>} style={{ width: '100%',height:'100%'}}>
@@ -45,7 +78,7 @@ const messageItem2: React.FC<IProps> = observer(({store,config,renderMessage}) =
             >
               {store.data.map((item,key)=>{
             return <List.Item key={key} className={item.isSys?"message-item-sys-antd":"message-item-user-antd"}
-                actions={[<EditOutlined style={item.isSys?{display:'none'}:{}}/>]}
+                actions={actionBtnList(item,key)}
               >
                 <span className="message-item-sys-icon">{item.isSys?(<Avatar src={icon} size="large"/>):(<Avatar           
                 style={{
@@ -53,7 +86,15 @@ const messageItem2: React.FC<IProps> = observer(({store,config,renderMessage}) =
                   verticalAlign: 'middle',
                 }}
                 size="large" >User</Avatar>)}</span>
-                <div className="message-item-content-antd">{renderMessage(item,store.type,key)}</div>
+                <div className="message-item-content-antd">{item.isEdit?<TextArea
+                  value={item.text}
+                  size="large"
+                  style={{maxWidth:700}}
+                  onChange={(e: { target: { value: any; }; })=>{changeContent(e,item)}}
+                  autoSize={{ minRows: 2, maxRows: 8 }}
+                  maxLength={2000}
+                />               
+                :renderMessage(item,store.type,key)}</div>
               </List.Item>
               })}
             </List>

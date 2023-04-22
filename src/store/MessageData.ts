@@ -7,6 +7,7 @@ import { saveAs } from 'file-saver'
 export interface  ISessiondata{
     isSys?:boolean;
     isDefault?:boolean;
+    isEdit?:boolean;
     text?:any;
     choices?:any;
     code?:any;
@@ -158,7 +159,7 @@ class MessageData implements  IMessage{
             this.session.forEach((item)=>{
                 item.isType=true;
             })
-            this.activeSession=this.session[0].chatId;
+            this.activeSession=this.currentSession[this.currentSession.length-1].chatId;
         }
         this.fetchData();
     }

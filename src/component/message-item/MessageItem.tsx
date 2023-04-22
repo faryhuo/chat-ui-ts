@@ -58,7 +58,7 @@ class MessageItem extends Component<IProps, IStats> {
 
     userInput(content: any){
         return (<div className="rce-container-mbox message-item-user">
-        <div className="rce-mbox rce-mbox-right" style={{background:config.colorPrimary}}>
+        <div className="rce-mbox rce-mbox-right" style={{background:config.colorPrimary+"a3"}}>
             <div className="rce-mbox-body">
             <div className="rce-mbox-title rce-mbox-title--clear">
                 <span>{this.props.title?this.props.title:"User"}</span>
@@ -73,7 +73,7 @@ class MessageItem extends Component<IProps, IStats> {
         />:<div className="chat-row"><pre style={{margin:0}}>{this.props.content}</pre>
         </div>}</div>
                 <div  className="rce-mbox-time non-copiable"></div></div>
-                <svg  className="rce-mbox-right-notch" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" ><path style={{fill:config.colorPrimary}} d="M0 0v20L20 0"></path></svg></div>
+                <svg  className="rce-mbox-right-notch" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" ><path style={{fill:config.colorPrimary+"a3",fillOpacity: 0.3}} d="M0 0v20L20 0"></path></svg></div>
                 <div style={{float:'right'}}>
                 {!this.state.isEdit && <Button onClick={()=>{this.editInput()}}  shape="round" icon={<FontAwesomeIcon icon={faPaintbrush}  />}  ></Button>}
                 {this.state.isEdit && <Button style={{display:'block',marginBottom:5}} onClick={()=>{this.editAndResent()}} shape="round" icon={<FontAwesomeIcon icon={faCheck}  />}  ></Button>}

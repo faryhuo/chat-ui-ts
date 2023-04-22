@@ -50,7 +50,7 @@ const ChatList: React.FC<IProps>  =({store}) => {
 
   return  (<div className="session-list-wrapper">
         <List 
-          dataSource={store.sessionList}
+          dataSource={store.sessionList.reverse()}
           renderItem={(item:any) => (
             <List.Item key={item.key} className={item.select?"selected":""} style={item.select?{}:{}}
             onClick={()=>{store.selectChat(item.key)}}>

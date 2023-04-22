@@ -3,7 +3,7 @@
     position: relative;
 }
 .message-list-wrapper .ant-card-head{
-    border-bottom: 1px solid #f0fffc;
+    border: 1px solid #f0f0f0;
     background: #fff;
 }
 
@@ -14,7 +14,7 @@
 
 .message-list-wrapper .ant-card-body,.message-list-wrapper .antd-card-wrapper{
     background-color: #f0fffc;
-    border-top: 2px solid #ffffff;
+    border-top: 1px solid #f0f0f0;
 }
 
 .cursor {
