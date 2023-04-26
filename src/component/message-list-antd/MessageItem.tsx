@@ -24,11 +24,21 @@ const messageItem2: React.FC<IProps> = observer(({store,config,renderMessage}) =
   const [open, setOpen] = useState(false);
   const [edit, setEdit] = useState(false);
 
-  useEffect(()=>{
+
+  let scrollMessageTimeout: string | number | NodeJS.Timeout | null=null;
+  const scrollMessage=()=>{
+    scrollMessageTimeout=null;
     if(messagesEndRef && messagesEndRef.current && open===false && edit===false){
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
-  })
+  }
+
+  useEffect(()=>{
+    if(!scrollMessageTimeout){
+      scrollMessageTimeout=setTimeout(scrollMessage,200);
+    }
+
+  },[store.data,store.latestText])
 
   const onOpen = () => {
     setOpen(true);
@@ -93,6 +103,8 @@ const messageItem2: React.FC<IProps> = observer(({store,config,renderMessage}) =
                   onChange={(e: { target: { value: any; }; })=>{changeContent(e,item)}}
                   autoSize={{ minRows: 2, maxRows: 8 }}
                   maxLength={2000}
+                  spellCheck={true}
+                  allowClear
                 />               
                 :renderMessage(item,store.type,key)}</div>
               </List.Item>

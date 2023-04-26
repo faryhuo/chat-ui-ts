@@ -110,26 +110,31 @@ const SendButton:React.FC<IProps> = observer(({store,config,setBtnHeight})=>{
     }
 
 
-    const sendMsg= ()=>{
-        if(!message){
-          return;
-        }
-        if(isStart){
-          clearTimeout(timeObj);
-          iatRecorder.stop();
-          setStart(false);
-        }
-        let chatId=store.activeSession+"";
-        store.addData({
-          text:message
-        },chatId)
-        if(store.type==="image"){
-          callImageAPI(chatId,null);
-        }else {
-          callChatAPI(chatId);
-        }
-        store.disableType(chatId);
+    const sendMsg= (event: any)=>{
+      if (event.shiftKey && event.keyCode === 13) {
+        return;
+      }
+      if(!message){
+        return;
+      }
+      if(isStart){
+        clearTimeout(timeObj);
+        iatRecorder.stop();
+        setStart(false);
+      }
+      let chatId=store.activeSession+"";
+      store.addData({
+        text:message
+      },chatId)
+      if(store.type==="image"){
+        callImageAPI(chatId,null);
+      }else {
+        callChatAPI(chatId);
+      }
+      store.disableType(chatId);
+      setTimeout(()=>{
         setMessage("");
+      })
     }
 
     const typeMsg= (e:any)=>{
@@ -145,12 +150,14 @@ const SendButton:React.FC<IProps> = observer(({store,config,setBtnHeight})=>{
       <Space.Compact style={{ width: '100%' }}>
           <TextArea
           value={message}
-          placeholder={t("Type here...")as string}
+          placeholder={t("Type here... (Shift + Enter = Line break)")as string}
           size="large"
           onChange={(e) => typeMsg(e)}
           autoSize={{ minRows: minRow, maxRows: 8 }}
           onPressEnter={sendMsg}
           onResize={resizeHeight}
+          spellCheck={true}
+          allowClear
         />
         <div className="sent-btn-actions"  >
         <Button disabled={store.isType===false} shape="circle"onClick={convertMsg}

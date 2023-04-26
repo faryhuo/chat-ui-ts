@@ -68,6 +68,8 @@ class MessageItem extends Component<IProps, IStats> {
           style={{maxWidth:700}}
           onChange={(e)=>{this.changeContent(e)}}
           autoSize={{ minRows: 2, maxRows: 8 }}
+          spellCheck={true}
+          allowClear
         //   onPressEnter={()=>this.editAndResent()}
           maxLength={2000}
         />:<div className="chat-row"><pre style={{margin:0}}>{this.props.content}</pre>

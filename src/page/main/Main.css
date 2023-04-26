@@ -82,12 +82,12 @@
         padding: 15px;
     }
     .chat-body {
-        border-radius: 20px;
         top: 15px;
         bottom: 15px;
         right: 15px;
         left: 15px;
-        border: 1px solid #0003;
-        box-shadow: 1px 1px 1px 1px #0003;
+        box-shadow: 0 4px 6px -1px #ccc, 0 2px 4px -2px #ccc;
+        border: 1px solid #e5e7eb;
+        border-radius: 6px;
     }
  }

@@ -12,6 +12,8 @@ export interface  ISessiondata{
     choices?:any;
     code?:any;
     image?:any;
+    stream?:boolean;
+    end?:boolean;
 }
 
 export interface  ISession{
@@ -29,6 +31,8 @@ export interface  ISession{
 export interface  IRole{
     roleId:string;
     description:string;
+    roleNameCN:string;
+    roleName:string;
 }
 
 export interface IMessage{
@@ -39,6 +43,7 @@ export interface IMessage{
     localSessionName:string;
     activeSession:string;
     addChat:()=>void;
+    endStream:(chatId:string)=>void;
     appendData:(text:any,chatId:string)=>void;
     addData:(newChat: any,chatId: string) =>void;
     clear:(chatId: string) =>void;
@@ -54,12 +59,13 @@ export interface IMessage{
     getContentByRole:(role: string)=>string;
     getMessageListData:()=>any;
     enableType:(chatId: string)=>void;
+    needStream:boolean;
     disableType:(chatId: string)=>void;
     updateChatName:(name: string | undefined,chatId: string)=>void;
     updateChatStatus:(status: boolean,chatId: string)=>void;
     currentChatName:string;
     latestText:string;
-    roles:any[];
+    roles:IRole[];
     saveDataToFile:()=>void;
     loadDataFromFile:(file:Blob)=>void;
     reSentMsg:(index:number,msg:string)=>void;
@@ -139,6 +145,7 @@ class MessageData implements  IMessage{
             role: computed,
             sessionList: computed,
             isType: computed,
+            needStream: computed,
             addData: action,
             changeType: action,
             clear: action,
@@ -148,6 +155,7 @@ class MessageData implements  IMessage{
             enableType: action,
             disableType: action,
             appendData: action,
+            endStream: action,
             changeRole: action,
             fetchData: action.bound,
             loadDataFromFile: action.bound,
@@ -205,6 +213,48 @@ class MessageData implements  IMessage{
             }
         });
         return isType;
+    }
+
+    get needStream(){
+        return this.isNeedStream(this.activeSession);
+    }
+
+    isNeedStream(chatId: string):boolean {
+        let {type,session}=this;
+        let data:Array<ISessiondata>=[];
+        for(let i=0;i<session.length;i++){
+            let item=session[i];
+            if(item.type===type && item.chatId===chatId){
+                data=item.data;
+                break;
+            }
+        }
+        if(data){
+            if(data[data.length-1].stream===true){
+                return !data[data.length-1].end;
+            }else{
+                return false;
+            }
+        }
+        return false;
+    }
+
+    endStream(chatId: string) {
+        if(!chatId){
+            chatId=this.activeSession;
+        }
+        let {type,session}=this;
+        let data:Array<ISessiondata>=[];
+        for(let i=0;i<session.length;i++){
+            let item=session[i];
+            if(item.type===type && item.chatId===chatId){
+                data=item.data;
+                break;
+            }
+        }
+        if(data){
+            data[data.length-1].end=true;
+        }
     }
 
     appendData(text: any,chatId: string) {
@@ -285,7 +335,17 @@ class MessageData implements  IMessage{
         for(let i=0;i<session.length;i++){
             let item=session[i];
             if(item.type===type && item.chatId===chatId){
-                item.role=role
+                item.role=role;
+                if(!role){
+                    item.chatName="New Chat";
+                }
+                let chatName;
+                this.roles.forEach((sItem)=>{
+                    if(role===sItem.roleId){
+                        chatName=config.textLanguage==="zh"?sItem.roleNameCN:sItem.roleName
+                    }
+                })
+                item.chatName=chatName;
                 break;
             }
         }
@@ -396,34 +456,43 @@ class MessageData implements  IMessage{
           withCredentials:false
         });
         let self=this;
+        let msgItem:ISessiondata={
+            isSys:true,
+            stream:true,
+            end:false,
+            choices:[{message:{content:""}}]
+        }
         eventSource.onmessage = function(event) {
             try{
               let data=event.data.replace("data:","").trim();
               if(!data){
                 return true;
               }
+              if(!self.isNeedStream(chatId)){
+                self._closeEventSource(eventSource, chatId);
+                return;
+              }
               if(data==="[DONE]"){
-                eventSource.close();
-                self.enableType(chatId);
+                self._closeEventSource(eventSource, chatId);
               }else {
                 self.appendData(JSON.parse(data).choices[0].delta.content,chatId);
               }
             }catch(e){
-              eventSource.close();
-              self.enableType(chatId);
+                self._closeEventSource(eventSource, chatId);
             }
         };
       
         eventSource.onerror = function(event) {
-          eventSource.close();
-          self.enableType(chatId);
+            self._closeEventSource(eventSource, chatId);
         };
-        let msgItem={
-          isSys:true,
-          choices:[{message:{content:""}}]
-        }
         self.addData(msgItem,chatId);   
       } 
+
+    _closeEventSource(eventSource: EventSource, chatId: string) {
+        eventSource.close();
+        this.endStream(chatId);
+        this.enableType(chatId);
+    }
 
     callChatAPIByHttp(chatId: string){
        const params=this.getChatParams();

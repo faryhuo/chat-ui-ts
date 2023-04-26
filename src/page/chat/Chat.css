@@ -1,0 +1,5 @@
+.message-page .message-stop-btn{
+    position: fixed;
+    left: 50%;
+    z-index: 10;
+}

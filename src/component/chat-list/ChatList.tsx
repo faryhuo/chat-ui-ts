@@ -59,7 +59,12 @@ const ChatList: React.FC<IProps>  =({store}) => {
                 title={<span>{item.name}</span>}
                 description={!item.edit && formatDate(item.date)}
               />):<Input defaultValue={item.name} onChange={(e)=>updateChatName(e,item.key)}
-              addonAfter={<FontAwesomeIcon icon={faCheck}  onClick={(e)=>{showChatNameEditor(item.edit,item.key,e)}}/>}
+              addonAfter={
+                <Button
+                icon={<FontAwesomeIcon icon={faCheck}  />} size ="small"
+                onClick={(e)=>{showChatNameEditor(item.edit,item.key,e)}}
+              />
+              }
               />}
               <div>
               {!item.edit && <span>

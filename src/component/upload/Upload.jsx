@@ -29,7 +29,6 @@ const AppUpload = ({store,config,callChatAPI,callImageAPI})=>{
         if (info.file.status === 'done') {
         // Get this url from response in real world.
           let fileName=info.file.response.data;
-          console.log(fileName);
           store.addData({
               type:"image",
               image:{

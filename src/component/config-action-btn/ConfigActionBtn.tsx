@@ -53,7 +53,7 @@ const ConfigActionBtn:React.FC<IProps> = observer(({store})=>{
             className="config-action-btn"
          
     onClick={clear}>{t('Reset')}</Button>   
-    <input style={{display:'none'}} ref={fileRef} type="file" name="export" onChange={(e)=>{importData(e)}}></input>
+    <input style={{display:'none'}} ref={fileRef} type="file" accept="application/json" name="export" onChange={(e)=>{importData(e)}}></input>
     </div>)
 })
 

@@ -20,7 +20,7 @@ export default {
     "which models work with the Chat API.":"使用哪个模型工作",
     "This is a required field":"这个字段不能为空",
     "Sent":"发送",
-    "Type here...":"输入...",
+    "Type here... (Shift + Enter = Line break)":"输入... (按照Shift + Enter键换行)",
     "Type something to search on ChatGPT":"请输入想要搜索的内容",
     "Type something to generate a image":"输入文本将会生成相应的图片，如果上传一张图片，会生成一张类似的图片",
     "Login":"登录",

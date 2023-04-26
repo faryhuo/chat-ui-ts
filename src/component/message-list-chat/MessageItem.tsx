@@ -28,11 +28,20 @@ const MessageItemChat : React.FC<IProps> = observer(({store,config,renderMessage
     setOpen(false);
   };
 
-  useEffect(()=>{
+  let scrollMessageTimeout: string | number | NodeJS.Timeout | null=null;
+  const scrollMessage=()=>{
+    scrollMessageTimeout=null;
     if(messagesEndRef && messagesEndRef.current && open===false){
-      (messagesEndRef?.current as any)?.scrollIntoView({ behavior: 'smooth' });
+      (messagesEndRef as any).current.scrollIntoView({ behavior: 'smooth' });
     }
-  })
+  }
+
+  useEffect(()=>{
+    if(!scrollMessageTimeout){
+      scrollMessageTimeout=setTimeout(scrollMessage,200);
+    }
+
+  },[store.data,store.latestText])
 
 
 
