@@ -65,7 +65,7 @@ class AppConfig implements IAppConfig{
     style="chat";
     localConfigName=`config_${this.version}`;
     type="";
-    hideMenuTypeList=["tips","config"]
+    hideMenuTypeList=["tips","config","sd"]
     isSlowLeftMenu=isMobile?false:true;
     isMobile=isMobile;
     host="https://fary.chat:8080"

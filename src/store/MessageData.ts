@@ -166,6 +166,11 @@ class MessageData implements  IMessage{
             this.session=JSON.parse(localStorage[this.localSessionName]);
             this.session.forEach((item)=>{
                 item.isType=true;
+                if(item.data && item.data.length){
+                    if(item.data[item.data.length-1].end===false){
+                        item.data[item.data.length-1].end=true;
+                    }
+                }
             })
             this.activeSession=this.currentSession[this.currentSession.length-1].chatId;
         }

@@ -33,6 +33,12 @@ const pageList=[{
         src:"https://newzone.top/chatgpt/"
     },
 },{
+    path:"/sd",
+    component:Frame,
+    props:{
+        src:"https://e152ddfadd87f15ffb.gradio.live"
+    },
+},{
     path:"/",
     component:Chat,
     exact:true

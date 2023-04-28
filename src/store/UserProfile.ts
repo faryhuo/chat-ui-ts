@@ -35,7 +35,7 @@ class UserProflie implements IUserProflie{
         }
     }
 
-    premission=["chat","code","config","tips"];
+    premission=["chat","code","config","tips","sd"];
 
     
     constructor() {
