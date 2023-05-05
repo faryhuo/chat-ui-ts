@@ -2,6 +2,7 @@ import { makeObservable, observable, computed, action} from "mobx";
 import IatRecorder from '../utils/IatRecorder';
 import i18n from '../utils/i18n';
 import {isMobile} from 'react-device-detect';
+import axios from 'axios';
 
 
 export interface IAppConfig{
@@ -59,6 +60,7 @@ export interface ICodeEditsAPIConfig{
     top_p : number;
 }
 
+
 class AppConfig implements IAppConfig{
 
     version="3.0"
@@ -77,6 +79,7 @@ class AppConfig implements IAppConfig{
     variationsImageUrl=`${this.host}/image/v2/variations`;
     imageUploadUrl=`${this.host}/upload/v2/image`
     chatRoleUrl=`https://fary.chat:8401/config/chat-roles`
+    moduleUrl=`https://fary.chat:8401/config/modules`
 
     colorPrimary='#87e8de'
     textLanguage="zh";
@@ -135,6 +138,7 @@ class AppConfig implements IAppConfig{
             document.documentElement.style.setProperty('--color-primary', this.colorPrimary);
         }
     }
+
 
     setConfigData(configJson:IAppConfig){
         let item:keyof IAppConfig;

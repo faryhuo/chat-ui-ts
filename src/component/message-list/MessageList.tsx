@@ -156,8 +156,9 @@ class MessageList extends Component<IProps,IStates> {
             return <div></div>
         }
         let list=this.getMessage(choices);
-        return <div className="chat-row">{list.map((item,key)=>{
-            return (<div key={key}>{item}
+        let i=0;
+        return <div className="chat-row">{list.map((item)=>{
+            return (<div key={i}>{item}
             </div>);
         })}</div>;
     }
@@ -178,7 +179,7 @@ class MessageList extends Component<IProps,IStates> {
         if (choices && repList.length > 0) {
             for(let i=0;i<repList.length;i++){
                 let msg=repList[i].message.content;
-                list.push(<Markdown content={msg}></Markdown>)
+                list.push(<Markdown key={i} content={msg}></Markdown>)
             }
         }
         return list;

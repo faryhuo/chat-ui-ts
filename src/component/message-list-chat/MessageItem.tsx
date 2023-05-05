@@ -51,7 +51,7 @@ const MessageItemChat : React.FC<IProps> = observer(({store,config,renderMessage
       extra={<ActionBtnList onOpen={onOpen} store={store} config={config}></ActionBtnList>} style={{ width: '100%',height:'100%'}}>
       <ScrollToBottom>
           {store.data.map((item,key)=>{
-          return item.isSys?(<MessageItem type={"system"} key={key} content={renderMessage(item,store.type,key)}></MessageItem>):
+          return item.isSys?(<MessageItem store={store} item={item} type={"system"} key={key} content={renderMessage(item,store.type,key)}></MessageItem>):
           (<MessageItem store={store} type={"user"} key={key} index={key}  text={item.text} content={renderMessage(item,store.type,key)}></MessageItem>)
           })}
           <div ref={messagesEndRef}/>

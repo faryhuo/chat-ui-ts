@@ -4,8 +4,8 @@ import config from '../../store/AppConfig';
 import './MessageItem.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPaintbrush, faTrashCan,faCheck } from '@fortawesome/free-solid-svg-icons';
-import {IMessage} from '../../store/MessageData';
-
+import {IMessage, ISessiondata} from '../../store/MessageData';
+import MsgActionBtn from '../msg-action-btn/MsgActionBtn';
 type IProps={
     content: any;
     title?:string;
@@ -13,6 +13,7 @@ type IProps={
     text?:string;
     index?:number;
     store?:IMessage;
+    item?:ISessiondata;
 }
 type IStats={
     isEdit: boolean;
@@ -89,10 +90,13 @@ class MessageItem extends Component<IProps, IStats> {
         if(type==="user"){
             return this.userInput(this.props.content);
         }
+        const {item,store} = this.props;
         return (
-            <div className="rce-container-mbox"><div className="rce-mbox"><div className="rce-mbox-body">
+            <div className="rce-container-mbox message-item-system"><div className="rce-mbox"><div className="rce-mbox-body">
             <div className="rce-mbox-title rce-mbox-title--clear"><span>{this.props.title?this.props.title:"AI"}</span></div>
-            <div className="rce-mbox-text left">{this.props.content}</div>
+            <div className="rce-mbox-text left">{this.props.content}
+            {store && item && <MsgActionBtn store={store} item={item}></MsgActionBtn>}
+            </div>
             <div className="rce-mbox-time non-copiable"></div></div>
             <div><svg className="rce-mbox-left-notch" xmlns="http://www.w3.org/2000/svg"
              viewBox="0 0 20 20"><defs><filter id="filter1" x="0" y="0">

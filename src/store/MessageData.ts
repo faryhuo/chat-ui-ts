@@ -14,6 +14,8 @@ export interface  ISessiondata{
     image?:any;
     stream?:boolean;
     end?:boolean;
+    history?:any;
+    currentIndex?:number;
 }
 
 export interface  ISession{
@@ -70,6 +72,9 @@ export interface IMessage{
     loadDataFromFile:(file:Blob)=>void;
     reSentMsg:(index:number,msg:string)=>void;
     callChatAPI:(chatId: string)=>void;
+    hasHistory:(history:any)=>boolean;
+    changeMessage:(rowIndex:  number,msgIndex:number)=>void;
+    regenerateResponse:()=>void;
 }
 
 class MessageData implements  IMessage{
@@ -157,10 +162,13 @@ class MessageData implements  IMessage{
             appendData: action,
             endStream: action,
             changeRole: action,
+            hasHistory: action,
+            changeMessage: action,
             fetchData: action.bound,
             loadDataFromFile: action.bound,
             reSentMsg:action.bound,
-            callChatAPI:action.bound
+            callChatAPI:action.bound,
+            regenerateResponse:action.bound
         })
         if(localStorage[this.localSessionName]){
             this.session=JSON.parse(localStorage[this.localSessionName]);
@@ -175,6 +183,42 @@ class MessageData implements  IMessage{
             this.activeSession=this.currentSession[this.currentSession.length-1].chatId;
         }
         this.fetchData();
+    }
+
+    hasHistory(history:any){
+        return !!history && history.length>0;
+    }
+
+    changeMessage(rowIndex:  number,msgIndex:number){
+        this.data[rowIndex].choices=this.data[rowIndex].history[msgIndex];
+        this.data[rowIndex].currentIndex=msgIndex;
+    }
+
+    regenerateResponse(){
+        const oldMsg= this.data.pop();
+        let chatId=this.activeSession+"";
+        this.disableType(chatId);
+        try{
+            this.callChatAPI(chatId).then(()=>{
+                console.log("done")
+                this.sessionData.forEach((item)=>{
+                    if(item.chatId===chatId){
+                        const lastData=item.data[item.data.length-1];
+                        if(oldMsg && !oldMsg.history){
+                            lastData.history=[oldMsg?.choices];
+                        }else{
+                            lastData.history=oldMsg?.history;
+                        }
+                        lastData.history.push(lastData.choices);
+                        lastData.currentIndex=lastData.history.length-1;
+                        localStorage[this.localSessionName]=JSON.stringify(this.sessionData);
+                    }
+                });
+            });
+        }catch(e){
+            this.enableType(chatId);
+        }
+        localStorage[this.localSessionName]=JSON.stringify(this.sessionData);
     }
 
     addChat(){
@@ -456,7 +500,6 @@ class MessageData implements  IMessage{
         const params=this.getChatParams();
         const queryString = new URLSearchParams(params as any).toString();
         const queryUrl =`${config.chatStreamUrl}?${queryString}`;
-  
         let eventSource = new EventSource(queryUrl,{
           withCredentials:false
         });
@@ -467,30 +510,37 @@ class MessageData implements  IMessage{
             end:false,
             choices:[{message:{content:""}}]
         }
-        eventSource.onmessage = function(event) {
-            try{
-              let data=event.data.replace("data:","").trim();
-              if(!data){
-                return true;
-              }
-              if(!self.isNeedStream(chatId)){
+        const promise=new Promise((resolve, reject)=>{
+            eventSource.onmessage = function(event) {
+                try{
+                let data=event.data.replace("data:","").trim();
+                if(!data){
+                    return true;
+                }
+                if(!self.isNeedStream(chatId)){
+                    resolve(true);
+                    self._closeEventSource(eventSource, chatId);
+                    return;
+                }
+                if(data==="[DONE]"){
+                    resolve(true);
+                    self._closeEventSource(eventSource, chatId);
+                }else {
+                    self.appendData(JSON.parse(data).choices[0].delta.content,chatId);
+                }
+                }catch(e){
+                    reject(e);
+                    self._closeEventSource(eventSource, chatId);
+                }
+            };
+        
+            eventSource.onerror = function(event) {
+                reject(event);
                 self._closeEventSource(eventSource, chatId);
-                return;
-              }
-              if(data==="[DONE]"){
-                self._closeEventSource(eventSource, chatId);
-              }else {
-                self.appendData(JSON.parse(data).choices[0].delta.content,chatId);
-              }
-            }catch(e){
-                self._closeEventSource(eventSource, chatId);
-            }
-        };
-      
-        eventSource.onerror = function(event) {
-            self._closeEventSource(eventSource, chatId);
-        };
-        self.addData(msgItem,chatId);   
+            };
+            self.addData(msgItem,chatId);   
+        });
+        return promise;
       } 
 
     _closeEventSource(eventSource: EventSource, chatId: string) {

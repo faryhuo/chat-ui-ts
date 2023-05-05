@@ -1,0 +1,16 @@
+.message-item-system .msg-action-btn {
+    text-align: center;
+    margin-top: 10px;
+}
+
+@media only screen and (min-width: 768px) {
+    .message-item-system .msg-action-btn {
+        display: flex;
+    }
+    .message-item-system .msg-action-btn .msg-page-btn{
+        flex:1;
+    }
+    .message-item-system .msg-action-btn .msg-sent-btn{
+        flex:0 0 120px;
+    }
+}

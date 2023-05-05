@@ -42,7 +42,8 @@ const pageList=[{
     path:"/",
     component:Chat,
     exact:true
-}]
+}];
+
 
 const AppRoutes:React.FC<IProps> = ({messageData,appConfig})=>{
 
@@ -55,9 +56,9 @@ const AppRoutes:React.FC<IProps> = ({messageData,appConfig})=>{
 
   return (<Routes>
     {
-        pageList.map((item)=>{
+        pageList.map((item,index)=>{
             const AppComponent:any=item.component;
-            return (<Route key={item.path}  path={item.path} Component={(props)=><AppComponent {...item.props}{...props} store={messageData} config={appConfig}></AppComponent>} >
+            return (<Route key={index}  path={item.path} Component={(props)=><AppComponent key={index} {...item.props}{...props} store={messageData} config={appConfig}></AppComponent>} >
                 </Route>)
         })
     }
