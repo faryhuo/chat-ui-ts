@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React from 'react';
 import { Switch,Select,Button, Segmented ,Popconfirm} from 'antd';
 import { useTranslation } from 'react-i18next';
 import { observer } from "mobx-react-lite";
@@ -36,9 +36,9 @@ const SessionAtcionList : React.FC<IProps> = observer(({store,config,onOpen})=>{
   
 
     const getSelectedItem=()=>{
-      if(config.chatConfig.temperature>=1.5){
+      if(config.chatConfig.temperature>0.7){
         return options[2];
-      }else if(config.chatConfig.temperature<=0.5){
+      }else if(config.chatConfig.temperature<0.5){
         return options[0];
       }else {
         return options[1];
@@ -47,8 +47,9 @@ const SessionAtcionList : React.FC<IProps> = observer(({store,config,onOpen})=>{
 
     const changeType=(e:any)=>{
       const index=options.indexOf(e);
+      const temperatureList=[0,0.6,1];
       if(index>=0){
-        config.chatConfig.temperature=index;
+        config.chatConfig.temperature=temperatureList[index];
       }
     }
 

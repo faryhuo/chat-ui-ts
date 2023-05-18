@@ -3,6 +3,7 @@ import i18n from '../utils/i18n';
 import config, { IAppConfig } from './AppConfig';
 import axios from 'axios';
 import { saveAs } from 'file-saver'
+import { fetchEventSource } from "@microsoft/fetch-event-source";
 
 export interface  ISessiondata{
     isSys?:boolean;
@@ -200,7 +201,6 @@ class MessageData implements  IMessage{
         this.disableType(chatId);
         try{
             this.callChatAPI(chatId).then(()=>{
-                console.log("done")
                 this.sessionData.forEach((item)=>{
                     if(item.chatId===chatId){
                         const lastData=item.data[item.data.length-1];
@@ -490,7 +490,7 @@ class MessageData implements  IMessage{
 
     callChatAPI(chatId: string){
         if(config.getChatConfig().stream){
-          return this.callChatAPIByStream(chatId)
+          return this.callChatAPIByStreamByPost(chatId)
         }else{
           return this.callChatAPIByHttp(chatId)
         }
@@ -541,7 +541,78 @@ class MessageData implements  IMessage{
             self.addData(msgItem,chatId);   
         });
         return promise;
-      } 
+    } 
+
+    callChatAPIByStreamByPost=(chatId:string)=>{
+        const params=this.getChatParams();
+        const queryUrl =`${config.chatStreamUrl}`;
+        let self=this;
+        let msgItem:ISessiondata={
+            isSys:true,
+            stream:true,
+            end:false,
+            choices:[{message:{content:""}}]
+        }
+        const promise=new Promise((resolve, reject)=>{
+            let errorMsg="";
+            fetchEventSource(queryUrl, {
+                method: "POST",
+                headers: {
+                  "content-type": "application/json",
+                },
+                body:JSON.stringify(params),
+                onmessage(msg) {
+                  console.log("message", msg.data); // this works - data is here!
+                  let data = msg.data; 
+                  try{
+                    if(!data){
+                        return true;
+                    }
+                    if(data.indexOf("data: ")===0){
+                        data=data.replace("data: ","")
+                    }else{
+                        errorMsg=errorMsg+data;
+                        return true;
+                    }
+                    if(!self.isNeedStream(chatId)){
+                        resolve(true);
+                        self.endStream(chatId);
+                        self.enableType(chatId);
+                        return;
+                    }
+                    if(data==="[DONE]"){
+                        resolve(true);
+                        if(errorMsg){
+                            try{
+                                let errorObj=JSON.parse(errorMsg);
+                                self.appendData(errorObj?.error?.message,chatId);
+                            }catch(e){
+                                self.appendData(errorMsg,chatId);
+                            }
+                            errorMsg="";
+                        }
+                        self.endStream(chatId);
+                        self.enableType(chatId);
+                        return;
+                    }else {
+                        self.appendData(JSON.parse(data).choices[0].delta.content,chatId);
+                    }
+                    }catch(e){
+                        reject(e);
+                        self.endStream(chatId);
+                        self.enableType(chatId);
+                    }
+                },onerror(e){
+                    reject(e);
+                    self.endStream(chatId);
+                    self.enableType(chatId);
+                }
+              });
+        
+            self.addData(msgItem,chatId);   
+        });
+        return promise;
+    } 
 
     _closeEventSource(eventSource: EventSource, chatId: string) {
         eventSource.close();

@@ -73,7 +73,7 @@ const Header: React.FC<IProps> = observer(({store,config}) => {
   };
 
   const login = (userId: string,password: string) => {
-    userProfile.login(userId,password);
+    return userProfile.login(userId,password)
   };
 
   const handleCancel=()=>{

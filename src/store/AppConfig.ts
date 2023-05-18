@@ -2,7 +2,6 @@ import { makeObservable, observable, computed, action} from "mobx";
 import IatRecorder from '../utils/IatRecorder';
 import i18n from '../utils/i18n';
 import {isMobile} from 'react-device-detect';
-import axios from 'axios';
 
 
 export interface IAppConfig{
@@ -70,16 +69,23 @@ class AppConfig implements IAppConfig{
     hideMenuTypeList=["tips","config","sd"]
     isSlowLeftMenu=isMobile?false:true;
     isMobile=isMobile;
-    host="https://fary.chat:8080"
-    chatUrl=`${this.host}/chat/v2/info`;
-    chatStreamUrl=`${this.host}/chat/v2/stream`;
-    imageUrl=`${this.host}/image/v2/info`;
-    editsUrl=`${this.host}/edits/v2/info`;
-    imageEditUrl=`${this.host}/image/v2/edit`;
-    variationsImageUrl=`${this.host}/image/v2/variations`;
-    imageUploadUrl=`${this.host}/upload/v2/image`
-    chatRoleUrl=`https://fary.chat:8401/config/chat-roles`
-    moduleUrl=`https://fary.chat:8401/config/modules`
+    host="https://fary.chat:8555"
+    chatServiceName="chat-service"
+    chatConfigServiceName="chat-config-service"
+    userServiceName="chat-user-service"
+    chatUrl=`${this.host}/${this.chatServiceName}/chat/v2/info`;
+    chatStreamUrl=`${this.host}/${this.chatServiceName}/chat/v2/stream`;
+    imageUrl=`${this.host}/${this.chatServiceName}/image/v2/info`;
+    editsUrl=`${this.host}/${this.chatServiceName}/edits/v2/info`;
+    imageEditUrl=`${this.host}/${this.chatServiceName}/image/v2/edit`;
+    variationsImageUrl=`${this.host}/${this.chatServiceName}/image/v2/variations`;
+    imageUploadUrl=`${this.host}/${this.chatServiceName}/upload/v2/image`
+    chatRoleUrl=`${this.host}/${this.chatConfigServiceName}/config/chat-roles`
+    moduleUrl=`${this.host}/${this.chatConfigServiceName}/config/modules`
+    loginUrl=`${this.host}/${this.userServiceName}/user/user-tokens`
+    publicKeyUrl=`${this.host}/${this.userServiceName}/user/rsapubkey`
+    userInfoUrl=`${this.host}/${this.userServiceName}/user/user-info`
+
 
     colorPrimary='#87e8de'
     textLanguage="zh";
@@ -97,7 +103,7 @@ class AppConfig implements IAppConfig{
     codeStyle="a11yDark";
 
     chatConfig={
-        model:"gpt-3.5-turbo-0301",
+        model:"gpt-3.5-turbo",
         temperature:1,
         top_p : 1,
         presence_penalty:0,

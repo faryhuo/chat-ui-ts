@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { observer } from "mobx-react-lite";
 
 type IProps={
-  login:(userId:string,pwd:string)=>void;
+  login:(userId:string,pwd:string)=>Promise<any>;
   handleCancel:()=>void;
 }
 
@@ -25,10 +25,20 @@ const LoginForm : React.FC<IProps>= observer(({login,handleCancel})=>{
       });
     };
 
+    const fail = (msg:string) => {
+      messageApi.open({
+        type: 'error',
+        content: msg,
+      });
+    };
+
     const onLogin = () => {
-      login(userId,password);
-      handleCancel();
-      success();
+      login(userId,password).then(()=>{
+        handleCancel();
+        success();
+      },(msg)=>{
+        fail(msg);
+      })
     };
 
 
