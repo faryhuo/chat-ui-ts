@@ -71,13 +71,13 @@ const BaseConfigForm: React.FC<IProps>  = ({config})=>{
             <Radio.Button value="zh">中文</Radio.Button>
           </Radio.Group>
         </Form.Item>
-        <Form.Item label={t("Image Size")} name="imageSize">
+        {/* <Form.Item label={t("Image Size")} name="imageSize">
           <Radio.Group>
             <Radio.Button value="1024x1024">1024x1024</Radio.Button>
             <Radio.Button value="512x512">512x512</Radio.Button>
             <Radio.Button value="256x256">256x256</Radio.Button>
           </Radio.Group>
-        </Form.Item>
+        </Form.Item> */}
         <Form.Item label={t("Color Primary")} valuePropName="color"
           name="colorPrimary">
           <HexColorPicker />

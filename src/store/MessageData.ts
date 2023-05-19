@@ -279,7 +279,7 @@ class MessageData implements  IMessage{
             }
         }
         if(data){
-            if(data[data.length-1].stream===true){
+            if(data[data.length-1]?.stream===true){
                 return !data[data.length-1].end;
             }else{
                 return false;
