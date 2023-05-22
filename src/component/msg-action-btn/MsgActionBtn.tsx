@@ -9,8 +9,9 @@ import './MsgActionBtn.css';
 type IProps={
   store:IMessage;
   item:ISessiondata;
+  index:number;
 }
-const MsgActionBtn:React.FC<IProps> = observer(({store,item})=>{
+const MsgActionBtn:React.FC<IProps> = observer(({store,item,index})=>{
 
     const {t} =useTranslation();
 
@@ -26,7 +27,7 @@ const MsgActionBtn:React.FC<IProps> = observer(({store,item})=>{
       hideOnSinglePage
       size="small" total={item?.history?.length} pageSize={1} 
       style={{marginBottom:5}}
-      current={(item.currentIndex?item.currentIndex:0)+1} onChange={(page)=>{store.changeMessage(store.data.length-1,page-1)}}/>
+      current={(item.currentIndex?item.currentIndex:0)+1} onChange={(page)=>{store.changeMessage(index,page-1)}}/>
       :<></>}</div><div className="msg-sent-btn">
       <Button onClick={store.regenerateResponse}
       style={isSlowRegenerateBtn()?{}:{display:'none'}} icon={<FontAwesomeIcon icon={faRefresh} style={{marginRight:5}}></FontAwesomeIcon>}>

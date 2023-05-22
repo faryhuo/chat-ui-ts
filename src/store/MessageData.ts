@@ -76,6 +76,7 @@ export interface IMessage{
     hasHistory:(history:any)=>boolean;
     changeMessage:(rowIndex:  number,msgIndex:number)=>void;
     regenerateResponse:()=>void;
+    callImageAPI:(chatId: string,message: string)=>Promise<void>;
 }
 
 class MessageData implements  IMessage{
@@ -191,8 +192,13 @@ class MessageData implements  IMessage{
     }
 
     changeMessage(rowIndex:  number,msgIndex:number){
-        this.data[rowIndex].choices=this.data[rowIndex].history[msgIndex];
-        this.data[rowIndex].currentIndex=msgIndex;
+        if(this.type==="image"){
+            this.data[rowIndex].image=this.data[rowIndex].history[msgIndex];
+            this.data[rowIndex].currentIndex=msgIndex;
+        }else{
+            this.data[rowIndex].choices=this.data[rowIndex].history[msgIndex];
+            this.data[rowIndex].currentIndex=msgIndex;
+        }
     }
 
     regenerateResponse(){
@@ -200,21 +206,39 @@ class MessageData implements  IMessage{
         let chatId=this.activeSession+"";
         this.disableType(chatId);
         try{
-            this.callChatAPI(chatId).then(()=>{
-                this.sessionData.forEach((item)=>{
-                    if(item.chatId===chatId){
-                        const lastData=item.data[item.data.length-1];
-                        if(oldMsg && !oldMsg.history){
-                            lastData.history=[oldMsg?.choices];
-                        }else{
-                            lastData.history=oldMsg?.history;
+            if(this.type==="image"){
+                this.callImageAPI(chatId,this.data[this.data.length-1].text).then(()=>{
+                    this.sessionData.forEach((item)=>{
+                        if(item.chatId===chatId){
+                            const lastData=item.data[item.data.length-1];
+                            if(oldMsg && !oldMsg.history){
+                                lastData.history=[oldMsg?.image];
+                            }else{
+                                lastData.history=oldMsg?.history;
+                            }
+                            lastData.history.push(lastData.image);
+                            lastData.currentIndex=lastData.history.length-1;
+                            localStorage[this.localSessionName]=JSON.stringify(this.sessionData);
                         }
-                        lastData.history.push(lastData.choices);
-                        lastData.currentIndex=lastData.history.length-1;
-                        localStorage[this.localSessionName]=JSON.stringify(this.sessionData);
-                    }
-                });
+                    });
+                })
+            }else{
+                this.callChatAPI(chatId).then(()=>{
+                    this.sessionData.forEach((item)=>{
+                        if(item.chatId===chatId){
+                            const lastData=item.data[item.data.length-1];
+                            if(oldMsg && !oldMsg.history){
+                                lastData.history=[oldMsg?.choices];
+                            }else{
+                                lastData.history=oldMsg?.history;
+                            }
+                            lastData.history.push(lastData.choices);
+                            lastData.currentIndex=lastData.history.length-1;
+                            localStorage[this.localSessionName]=JSON.stringify(this.sessionData);
+                        }
+                    });
             });
+        }
         }catch(e){
             this.enableType(chatId);
         }
@@ -487,6 +511,46 @@ class MessageData implements  IMessage{
           text:msg
         },chatId);
     }
+
+    callImageAPI(chatId: string,message: string):Promise<void>{
+        const params={
+            message:message,
+            uuid:chatId,
+            size:config.imageSize?config.imageSize:"256x256"
+        }
+        const queryString = new URLSearchParams(params as any).toString();
+        const queryUrl =`${config.imageUrl}?${queryString}`;
+        return axios({
+          method: "post",
+          url: queryUrl,
+          headers: {
+            'Content-Type': 'application/json;charset=UTF-8'
+          }
+        }
+        ).then((response)=>{
+          this.enableType(chatId);
+          if(response.data.data.error){
+            this.handleAPIError(response.data.data.error,chatId);
+            return;
+          }
+          const images = response.data.data.data;
+          for(let index in images){
+            let msg={
+                isSys:true,
+                type:"image",
+                image:{
+                  uri: images[index].url?images[index].url:"data:image/png;base64,"+images[index].b64_json,
+                  width:256,
+                  height:256
+                }               
+            }
+            this.addData(msg,chatId);              
+           }   
+          }
+        ,(err)=>{
+            this.handleAPIError(err,chatId);
+        });
+      }
 
     callChatAPI(chatId: string){
         if(config.getChatConfig().stream){

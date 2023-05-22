@@ -21,6 +21,12 @@ const SessionAtcionList : React.FC<IProps> = observer(({store,config,onOpen})=>{
       t('Creative')
     ];
 
+    const imageSizeList = [
+      t('256x256'),
+      t('512x512'),
+      t('1024x1024')
+    ];
+
 
     const roleList:any[]=[];
     store.roles.map(item => {
@@ -71,6 +77,15 @@ const SessionAtcionList : React.FC<IProps> = observer(({store,config,onOpen})=>{
           checkedChildren={t("Stream")}
           unCheckedChildren={t("Full")}
           defaultChecked={config.chatConfig.stream}
+        />);
+      }else if(store.type==='image'){
+        list.push(<Select key={list.length} style={{minWidth:80}}
+          placement="bottomLeft"
+          className="option-btn" 
+          value={config.imageSize} onChange={(value)=>{
+            config.changeImageSize(value);
+          }}
+          options={imageSizeList.map((item,index) => ({ label: item, value: item }))}
         />);
       }
       list.push(<Popconfirm

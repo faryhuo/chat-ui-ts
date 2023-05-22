@@ -130,7 +130,7 @@ class UserProflie implements IUserProflie{
                    this.userName=data.data.name;
                    this.userId=data.data.userId
                    this.premission.push("image");
-                   this.premission.push("image_edit");
+                   //this.premission.push("image_edit");
                }else{
                    this.token="";
                }

@@ -41,6 +41,7 @@ export interface IAppConfig{
     clearConfig:()=>void;
     clearHistory:()=>void;
     iatRecorder:any;
+    changeImageSize:(size:string)=>void;
 }
 
 export interface IChatAPIConfig{
@@ -118,12 +119,14 @@ class AppConfig implements IAppConfig{
         top_p:1
     }
     
+    
 
     constructor() {
         makeObservable(this, {
             isSlowLeftMenu: observable,
             type:  observable,
             textLanguage: observable,
+            imageSize: observable,
             style:observable,
             chatConfig:observable,
             colorPrimary: observable,
@@ -131,7 +134,8 @@ class AppConfig implements IAppConfig{
             triggerMenu: action,
             save: action,
             saveChatConfig: action,
-            switchStream: action
+            switchStream: action,
+            changeImageSize: action
         });
         if(localStorage[this.localConfigName]){
             try{
@@ -143,6 +147,10 @@ class AppConfig implements IAppConfig{
         }else{
             document.documentElement.style.setProperty('--color-primary', this.colorPrimary);
         }
+    }
+
+    changeImageSize(size:string){
+        this.imageSize=size;
     }
 
 

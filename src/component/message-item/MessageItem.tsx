@@ -11,7 +11,7 @@ type IProps={
     title?:string;
     type?:string;
     text?:string;
-    index?:number;
+    index:number;
     store?:IMessage;
     item?:ISessiondata;
 }
@@ -48,7 +48,7 @@ class MessageItem extends Component<IProps, IStats> {
         this.setState({
             isEdit:false
         })
-        if(this.props.store && this.props.index){
+        if(this.props.store && this.props.index>=0){
             this.props.store.reSentMsg(this.props.index,this.state.content);
         }
     }
@@ -90,12 +90,12 @@ class MessageItem extends Component<IProps, IStats> {
         if(type==="user"){
             return this.userInput(this.props.content);
         }
-        const {item,store} = this.props;
+        const {item,store,index} = this.props;
         return (
             <div className="rce-container-mbox message-item-system"><div className="rce-mbox"><div className="rce-mbox-body">
             <div className="rce-mbox-title rce-mbox-title--clear"><span>{this.props.title?this.props.title:"AI"}</span></div>
             <div className="rce-mbox-text left">{this.props.content}
-            {store && item && <MsgActionBtn store={store} item={item}></MsgActionBtn>}
+            {store && item && <MsgActionBtn store={store} index={index} item={item}></MsgActionBtn>}
             </div>
             <div className="rce-mbox-time non-copiable"></div></div>
             <div><svg className="rce-mbox-left-notch" xmlns="http://www.w3.org/2000/svg"
