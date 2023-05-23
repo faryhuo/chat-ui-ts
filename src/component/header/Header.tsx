@@ -122,7 +122,7 @@ const Header: React.FC<IProps> = observer(({store,config}) => {
         onCancel={handleCancel}
         footer={false}
       >
-        <LoginForm  login={login} handleCancel={handleCancel}></LoginForm>
+        <LoginForm store={store} userProfile={userProfile}  login={login} handleCancel={handleCancel}></LoginForm>
       </Modal>
     </div>
   </div>

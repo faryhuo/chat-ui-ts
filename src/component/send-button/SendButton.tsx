@@ -114,7 +114,7 @@ const SendButton:React.FC<IProps> = observer(({store,config,setBtnHeight})=>{
       if (event.shiftKey && event.keyCode === 13) {
         return;
       }
-      if(!store.isType){
+      if(store.isType===false){
         return
       }
       if(!message){

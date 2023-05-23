@@ -12,6 +12,7 @@ export interface IUserProflie{
     login:(userId:string,password:string)=>void;
     currentUser:string;
     token:string;
+    logout:()=>void;
 }
 export interface IModules{
     id:string;
@@ -72,6 +73,13 @@ class UserProflie implements IUserProflie{
         return promise;
     }
 
+    logout(){
+        this.token="";
+        this.isLogin=false;
+        this.userId="";
+        this.userName="";
+    }
+
     get currentUser(){
         if(this.userName){
             return this.userName;
@@ -90,6 +98,7 @@ class UserProflie implements IUserProflie{
             premission: observable,
             currentUser:computed,
             login: action,
+            logout: action,
             fetchModulesData: action.bound,
             loginByToken: action.bound
         })
@@ -127,6 +136,7 @@ class UserProflie implements IUserProflie{
                 this.premission.push("image");
                 //this.premission.push("image_edit");
             }else{
+                alert('The login token is expired. Please login it again if need.')
                 this.token="";
             }
         });

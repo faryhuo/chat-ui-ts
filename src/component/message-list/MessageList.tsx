@@ -25,12 +25,11 @@ type IStates={
         y:number;
     }
     showCursor:boolean;
-    latestText:string;
 }
 
 class MessageList extends Component<IProps,IStates> {
     messagesEndRef: any;
-    textNode: HTMLSpanElement;
+    // textNode: HTMLSpanElement;
     constructor(props:IProps) {
       super(props);
   
@@ -40,81 +39,80 @@ class MessageList extends Component<IProps,IStates> {
             x:0,
             y:0
         },
-        showCursor:false,
-        latestText:""
+        showCursor:false
       };
-      this.textNode=document.createElement('span');
-      this.textNode.className="cursor"
+    //   this.textNode=document.createElement('span');
+    //   this.textNode.className="cursor"
     }
 
 
-    getLastTextNode(dom: Element | undefined):any  {
-        if(!dom){
-            return;
-        }
+    // getLastTextNode(dom: Element | undefined):any  {
+    //     if(!dom){
+    //         return;
+    //     }
 
-        const childNodes=dom.childNodes;
-        if(!childNodes){
-            return;
-        }
-        for(let i= childNodes.length -1;i>=0; i--){
-            const node = childNodes[i];
-            if(node.nodeType === Node.TEXT_NODE && 
-                node.nodeValue && node.nodeValue.trim() && /\s/.test(node.nodeValue)){
-                node.nodeValue = node.nodeValue.replace(/\s+$/,'');
-                return node;
-            }else if(node.nodeType === Node.ELEMENT_NODE){
-                let last= this.getLastTextNode(node as Element);
-                if(last){
-                    return last;
-                }
-            }
-        }
-        return null;
-    }
+    //     const childNodes=dom.childNodes;
+    //     if(!childNodes){
+    //         return;
+    //     }
+    //     for(let i= childNodes.length -1;i>=0; i--){
+    //         const node = childNodes[i];
+    //         if(node.nodeType === Node.TEXT_NODE && 
+    //             node.nodeValue && node.nodeValue.trim() && /\s/.test(node.nodeValue)){
+    //             node.nodeValue = node.nodeValue.replace(/\s+$/,'');
+    //             return node;
+    //         }else if(node.nodeType === Node.ELEMENT_NODE){
+    //             let last= this.getLastTextNode(node as Element);
+    //             if(last){
+    //                 return last;
+    //             }
+    //         }
+    //     }
+    //     return null;
+    // }
 
 
     componentDidMount(){
-        autorun(() => {
-            const { store } = this.props;
-            this.setState({latestText:store.latestText})
-        });
+        // autorun(() => {
+        //     const { store } = this.props;
+        //     this.setState({latestText:store.latestText})
+        // });
     }
 
-    getLatestRow(){
-        let domlist=document.getElementsByClassName("markdown-body");
-        if(domlist && domlist.length){
-            let latestDom = domlist[domlist.length-1];
-            return latestDom;
-        }
-    }
+    // getLatestRow(){
+    //     let domlist=document.getElementsByClassName("markdown-body");
+    //     if(domlist && domlist.length){
+    //         let latestDom = domlist[domlist.length-1];
+    //         return latestDom;
+    //     }
+    // }
 
-    updateCursor(){
-        const {store}=this.props;
-        let latestDom=null;
-        let timer=null;
-        if(!store.isType){
-            this.textNode.className="element-show";
-            if(latestDom===null){
-                latestDom=this.getLatestRow()
-            }
-            let lastNode=this.getLastTextNode(latestDom);
-            if(lastNode){
-                lastNode.parentElement.appendChild(this.textNode);
-            }
-            timer && clearTimeout(timer);
-            timer=setTimeout(()=>{
-                if(store.isType){
-                    this.textNode.className="element-hide";
-                    latestDom=null;
-                }
-            },1000)
-        }else{
-            timer && clearTimeout(timer);
-            this.textNode.className="element-hide";
-            latestDom=null;
-        }
-    }
+    // updateCursor(){
+    //     const {store}=this.props;
+    //     let latestDom=null;
+    //     let timer=null;
+    //     if(!store.isType){
+    //         this.textNode.className="element-show";
+    //         if(latestDom===null){
+    //             latestDom=this.getLatestRow()
+    //         }
+    //         let lastNode=this.getLastTextNode(latestDom);
+    //         if(lastNode){
+    //             lastNode.parentElement.appendChild(this.textNode);
+    //         }
+    //         timer && clearTimeout(timer);
+    //         timer=setTimeout(()=>{
+    //             if(store.isType){
+    //                 this.textNode.className="element-hide";
+    //                 latestDom=null;
+    //             }
+    //         },1000)
+    //     }else{
+    //         timer && clearTimeout(timer);
+    //         this.textNode.className="element-hide";
+    //         latestDom=null;
+    //     }
+    // }
 
     
 
@@ -194,9 +192,9 @@ class MessageList extends Component<IProps,IStates> {
             
         }
         if(this.props.config.style==="chat"){
-            return <MessageItemChat {...props}></MessageItemChat>
+            return <MessageItemChat {...props} key={1}></MessageItemChat>
         }else if(this.props.config.style==="antd"){
-            return <MessageItem2 {...props}></MessageItem2>
+            return <MessageItem2 {...props} key={2}></MessageItem2>
         }
     }
 

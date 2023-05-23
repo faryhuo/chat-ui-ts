@@ -62,9 +62,9 @@ const SessionAtcionList : React.FC<IProps> = observer(({store,config,onOpen})=>{
     const getActionButtonList=()=>{
       const list=[];
       if(store.type==='chat'){
-        list.push(<Button className="option-btn" key={list.length}  onClick={onOpen}>More</Button>);
-        !config.isMobile && list.push(<Segmented value={getSelectedItem()} onChange={changeType} key={list.length}  style={{marginRight:10}}  options={options} />);
-        list.push(<Select key={list.length} style={{minWidth:80}}
+        list.push(<Button className="option-btn" key={1}  onClick={onOpen}>More</Button>);
+        !config.isMobile && list.push(<Segmented key={2}  value={getSelectedItem()} onChange={changeType}  style={{marginRight:10}}  options={options} />);
+        list.push(<Select key={3} style={{minWidth:80}}
           placement="bottomLeft"
           className="option-btn" 
           value={store.role} onChange={(value)=>{
@@ -72,14 +72,14 @@ const SessionAtcionList : React.FC<IProps> = observer(({store,config,onOpen})=>{
           }}
           options={roleList.map((item) => ({ label: item.label, value: item.value }))}
         />);
-        list.push(<Switch key={list.length}  className="option-btn" 
+        list.push(<Switch key={4}  className="option-btn" 
             onClick={()=>{config.switchStream()}}
           checkedChildren={t("Stream")}
           unCheckedChildren={t("Full")}
           defaultChecked={config.chatConfig.stream}
         />);
       }else if(store.type==='image'){
-        list.push(<Select key={list.length} style={{minWidth:80}}
+        list.push(<Select key={5} style={{minWidth:80}}
           placement="bottomLeft"
           className="option-btn" 
           value={config.imageSize} onChange={(value)=>{
@@ -89,6 +89,7 @@ const SessionAtcionList : React.FC<IProps> = observer(({store,config,onOpen})=>{
         />);
       }
       list.push(<Popconfirm
+        key={6}
         placement="bottom"
         title={t('Message')}
         description={t('Are you want to delete the chat.')}

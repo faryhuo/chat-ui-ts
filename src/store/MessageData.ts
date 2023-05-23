@@ -78,6 +78,8 @@ export interface IMessage{
     changeMessage:(rowIndex:  number,msgIndex:number)=>void;
     regenerateResponse:()=>void;
     callImageAPI:(chatId: string,message: string)=>Promise<void>;
+    getChatHistory:()=>void;
+    loadDataFromlocalStore:()=>void;
 }
 
 class MessageData implements  IMessage{
@@ -181,18 +183,23 @@ class MessageData implements  IMessage{
                 this.getChatHistory();
             })
         }else{
-            if(localStorage[this.localSessionName]){
-                this.session=JSON.parse(localStorage[this.localSessionName]);
-                this.session.forEach((item)=>{
-                    item.isType=true;
-                    if(item.data && item.data.length){
-                        if(item.data[item.data.length-1].end===false){
-                            item.data[item.data.length-1].end=true;
-                        }
+            this.loadDataFromlocalStore();
+        }
+        console.log(this.session)
+    }
+
+    loadDataFromlocalStore(){
+        if(localStorage[this.localSessionName]){
+            this.session=JSON.parse(localStorage[this.localSessionName]);
+            this.session.forEach((item)=>{
+                item.isType=true;
+                if(item.data && item.data.length){
+                    if(item.data[item.data.length-1].end===false){
+                        item.data[item.data.length-1].end=true;
                     }
-                })
-                this.activeSession=this.currentSession[this.currentSession.length-1].chatId;
-            }
+                }
+            })
+            this.activeSession=this.currentSession[this.currentSession.length-1].chatId;
         }
     }
 
@@ -234,7 +241,7 @@ class MessageData implements  IMessage{
                     });
                 })
             }else{
-                this.callChatAPI(chatId).then(()=>{
+                this.callChatAPINotSave(chatId).then(()=>{
                     this.sessionData.forEach((item)=>{
                         if(item.chatId===chatId){
                             const lastData=item.data[item.data.length-1];
@@ -246,6 +253,9 @@ class MessageData implements  IMessage{
                             lastData.history.push(lastData.choices);
                             lastData.currentIndex=lastData.history.length-1;
                             this.saveSessionToLocal();
+                            if(userProflie.isLogin && userProflie.token){
+                                this.saveChatHistory(chatId);      
+                            }
                         }
                     });
             });
@@ -571,7 +581,23 @@ class MessageData implements  IMessage{
 
     callChatAPI(chatId: string){
         if(config.getChatConfig().stream){
-          return this.callChatAPIByStreamByPost(chatId)
+          return this.callChatAPIByStreamByPost(chatId).then(()=>{
+            if(userProflie.isLogin && userProflie.token){
+                this.saveChatHistory(chatId);      
+            }
+          })
+        }else{
+          return this.callChatAPIByHttp(chatId).then(()=>{
+            if(userProflie.isLogin && userProflie.token){
+                this.saveChatHistory(chatId);      
+            }
+          })
+        }
+      }
+
+    callChatAPINotSave(chatId: string){
+        if(config.getChatConfig().stream){
+          return this.callChatAPIByStreamByPost(chatId);
         }else{
           return this.callChatAPIByHttp(chatId)
         }
@@ -657,9 +683,6 @@ class MessageData implements  IMessage{
                     }
                     if(!self.isNeedStream(chatId)){
                         resolve(true);
-                        if(userProflie.isLogin && userProflie.token){
-                            self.saveChatHistory(chatId);      
-                        }
                         self.endStream(chatId);
                         self.enableType(chatId);
                         return;
@@ -674,9 +697,6 @@ class MessageData implements  IMessage{
                                 self.appendData(errorMsg,chatId);
                             }
                             errorMsg="";
-                        }
-                        if(userProflie.isLogin && userProflie.token){
-                            self.saveChatHistory(chatId);      
                         }
                         self.endStream(chatId);
                         self.enableType(chatId);
@@ -788,6 +808,8 @@ class MessageData implements  IMessage{
                 }
             })
             this.session=data;
+            this.type="chat";
+            this.activeSession=this.currentSession[this.currentSession.length-1].chatId;
         });
     }
 

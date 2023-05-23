@@ -2,13 +2,17 @@ import React from 'react';
 import { Button,Input,Form,message } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { observer } from "mobx-react-lite";
+import {IMessage} from '../../store/MessageData';
+import {IUserProflie} from '../../store/UserProfile';
 
 type IProps={
   login:(userId:string,pwd:string)=>Promise<any>;
   handleCancel:()=>void;
+  store:IMessage;
+  userProfile:IUserProflie;
 }
 
-const LoginForm : React.FC<IProps>= observer(({login,handleCancel})=>{
+const LoginForm : React.FC<IProps>= observer(({login,handleCancel,store,userProfile})=>{
 
     const [form] = Form.useForm();
     const [messageApi, contextHolder] = message.useMessage();
@@ -25,6 +29,14 @@ const LoginForm : React.FC<IProps>= observer(({login,handleCancel})=>{
       });
     };
 
+
+    const successLogout = () => {
+      messageApi.open({
+        type: 'success',
+        content: 'Logout success',
+      });
+    };
+
     const fail = (msg:string) => {
       messageApi.open({
         type: 'error',
@@ -34,12 +46,20 @@ const LoginForm : React.FC<IProps>= observer(({login,handleCancel})=>{
 
     const onLogin = () => {
       login(userId,password).then(()=>{
+        store.getChatHistory()
         handleCancel();
         success();
       },(msg)=>{
         fail(msg);
       })
     };
+
+    const onLogout= () =>{
+      userProfile.logout();
+      store.loadDataFromlocalStore();
+      handleCancel();
+      successLogout()
+    }
 
 
     const ruleMessage={
@@ -72,7 +92,9 @@ const LoginForm : React.FC<IProps>= observer(({login,handleCancel})=>{
         
         <Form.Item>
           <Button type="primary" htmlType="submit" style={{marginRight:10}}>{t("Login")}</Button>
-          <Button  onClick={handleCancel}>{t("Cancel")}</Button>
+          <Button  onClick={handleCancel} style={{marginRight:10}}>{t("Cancel")}</Button>
+          {userProfile.isLogin && <Button  onClick={onLogout}>{t("Logout")}</Button>}
+
         </Form.Item>
       </Form>
       </div>
