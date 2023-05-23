@@ -74,6 +74,7 @@ class AppConfig implements IAppConfig{
     chatServiceName="chat-service"
     chatConfigServiceName="chat-config-service"
     userServiceName="chat-user-service"
+    historyServiceName="chat-history-service"
     chatUrl=`${this.host}/${this.chatServiceName}/chat/v2/info`;
     chatStreamUrl=`${this.host}/${this.chatServiceName}/chat/v2/stream`;
     imageUrl=`${this.host}/${this.chatServiceName}/image/v2/info`;
@@ -86,6 +87,7 @@ class AppConfig implements IAppConfig{
     loginUrl=`${this.host}/${this.userServiceName}/user/user-tokens`
     publicKeyUrl=`${this.host}/${this.userServiceName}/user/rsapubkey`
     userInfoUrl=`${this.host}/${this.userServiceName}/user/user-info`
+    historyUrl=`${this.host}/${this.historyServiceName}/history`
 
 
     colorPrimary='#87e8de'

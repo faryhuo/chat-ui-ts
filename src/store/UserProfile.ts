@@ -106,36 +106,30 @@ class UserProflie implements IUserProflie{
                 }
             }))
         })
-        if(localStorage["user-token"]){
-            this.token=localStorage["user-token"];
-            this.loginByToken();
-        }
     }
 
     loginByToken(){
-        if(this.token){
-            const queryUrl=config.userInfoUrl
-            axios({
-                method: "get",
-                url: queryUrl,
-                headers: {
-                  'Content-Type': 'application/json;charset=UTF-8',
-                  'token':this.token
-                }
-              }
-            ).then((response)=>{
-               const data=response.data;
-               if(data.statusCode===0){
-                   this.isLogin=true;
-                   this.userName=data.data.name;
-                   this.userId=data.data.userId
-                   this.premission.push("image");
-                   //this.premission.push("image_edit");
-               }else{
-                   this.token="";
-               }
-           });
-        }
+        const queryUrl=config.userInfoUrl
+        return axios({
+            method: "get",
+            url: queryUrl,
+            headers: {
+                'Content-Type': 'application/json;charset=UTF-8',
+                'token':this.token
+            }
+            }
+        ).then((response)=>{
+            const data=response.data;
+            if(data.statusCode===0){
+                this.isLogin=true;
+                this.userName=data.data.name;
+                this.userId=data.data.userId
+                this.premission.push("image");
+                //this.premission.push("image_edit");
+            }else{
+                this.token="";
+            }
+        });
     }
 
     getPulicKey(){
