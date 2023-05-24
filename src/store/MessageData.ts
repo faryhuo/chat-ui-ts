@@ -185,7 +185,6 @@ class MessageData implements  IMessage{
         }else{
             this.loadDataFromlocalStore();
         }
-        console.log(this.session)
     }
 
     loadDataFromlocalStore(){
@@ -252,10 +251,7 @@ class MessageData implements  IMessage{
                             }
                             lastData.history.push(lastData.choices);
                             lastData.currentIndex=lastData.history.length-1;
-                            this.saveSessionToLocal();
-                            if(userProflie.isLogin && userProflie.token){
-                                this.saveChatHistory(chatId);      
-                            }
+                            this.save(chatId);
                         }
                     });
             });
@@ -266,11 +262,22 @@ class MessageData implements  IMessage{
         this.saveSessionToLocal();
     }
 
+    
     saveSessionToLocal(){
         if(!userProflie.isLogin){
             localStorage[this.localSessionName]=JSON.stringify(this.sessionData);
         }
     }
+    saveSessionToDB(chatId: string){
+        if(userProflie.isLogin && userProflie.token){
+            this.saveChatHistory(chatId);      
+        }
+    }
+    save(chatId: string){
+        this.saveSessionToLocal();
+        this.saveSessionToDB(chatId)
+    }
+
 
     addChat(){
         const data:Array<ISessiondata>=[];
@@ -301,7 +308,7 @@ class MessageData implements  IMessage{
         };
         this.session.push(sessionData);
         this.activeSession=chatId;
-        this.saveSessionToLocal();
+        this.save(chatId);
     }
 
     get isType(){
@@ -412,7 +419,24 @@ class MessageData implements  IMessage{
             this.activeSession=this.currentSession[0].chatId;
             //this.session.splice(deletedItem,1)
         }
+        console.log(chatId);
         this.saveSessionToLocal();
+        this.deleteSessionById(chatId);
+    }
+
+    deleteSessionById(chatId: string){
+        const queryUrl = config.historyUrl+`/${chatId}`;
+        return axios({
+            method: "delete",
+            url: queryUrl,
+            headers: {
+              'token':userProflie.token,
+              'Content-Type': 'application/json;charset=UTF-8'
+            }
+          }
+        ).then((response)=>{
+
+        });
     }
 
     changeType(type: string) {
@@ -422,7 +446,7 @@ class MessageData implements  IMessage{
         this.type=type;
         config.type=type;
         if(this.sessionList.length){
-            this.activeSession=this.sessionList[0].key;
+            this.activeSession=this.sessionList[this.sessionList.length-1].key;
         }
     }
 
@@ -523,7 +547,6 @@ class MessageData implements  IMessage{
         }catch(e){
             this.enableType(chatId);
         }
-        this.saveSessionToLocal();
     }
 
     handleAPIError(err: { message: string; },chatId: string){
@@ -582,18 +605,14 @@ class MessageData implements  IMessage{
     callChatAPI(chatId: string){
         if(config.getChatConfig().stream){
           return this.callChatAPIByStreamByPost(chatId).then(()=>{
-            if(userProflie.isLogin && userProflie.token){
-                this.saveChatHistory(chatId);      
-            }
+            this.save(chatId);
           })
         }else{
           return this.callChatAPIByHttp(chatId).then(()=>{
-            if(userProflie.isLogin && userProflie.token){
-                this.saveChatHistory(chatId);      
-            }
+            this.save(chatId);
           })
         }
-      }
+    }
 
     callChatAPINotSave(chatId: string){
         if(config.getChatConfig().stream){
@@ -758,9 +777,6 @@ class MessageData implements  IMessage{
                 choices:choices
             }
             this.addData(msg,chatId);
-            if(userProflie.isLogin && userProflie.token){
-                this.saveChatHistory(chatId);      
-            }
           }
           ,(err)=>{
             this.handleAPIError(err,chatId);
@@ -807,9 +823,8 @@ class MessageData implements  IMessage{
                     data.push(item);
                 }
             })
-            this.session=data;
-            this.type="chat";
-            this.activeSession=this.currentSession[this.currentSession.length-1].chatId;
+            this.setSession(data);
+            this.changeType("chat");
         });
     }
 
@@ -925,7 +940,6 @@ class MessageData implements  IMessage{
                 return false;
             }
         });
-        this.saveSessionToLocal();
     }
     updateChatStatus(status: boolean,chatId: string){
         this.session.forEach((item)=>{
@@ -935,6 +949,9 @@ class MessageData implements  IMessage{
                 item.edit=false;
             }
         });
+        if(status===false){
+            this.save(chatId);
+        }
     }
 
     get currentChatName(){

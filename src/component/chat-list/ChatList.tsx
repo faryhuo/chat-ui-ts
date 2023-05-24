@@ -19,7 +19,7 @@ const ChatList: React.FC<IProps>  =({store}) => {
 
   const {t} = useTranslation();
 
-  const clear= (key: any,e: any) =>{
+  const clear= (key: string,e: any) =>{
     store.clear(key);
     e.stopPropagation();
   }
