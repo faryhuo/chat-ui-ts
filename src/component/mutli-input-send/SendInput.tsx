@@ -29,6 +29,7 @@ const SendInput : React.FC<IProps> = observer(({store,config})=>{
     const sendMsg=()=>{
         if(input && message){
             let chatId=store.activeSession+"";
+            chatId=store.checkChatId(chatId);
             store.addData({
               code:input
             },chatId);

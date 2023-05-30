@@ -12,6 +12,7 @@ import { useTranslation } from 'react-i18next';
 import './SendButton.css'
 import {IAppConfig} from '../../store/AppConfig';
 import {IMessage} from '../../store/MessageData';
+//import AuditUtils from '../../utils/AudioUtils';
 
 type IProps={
   config:IAppConfig;
@@ -35,31 +36,39 @@ const SendButton:React.FC<IProps> = observer(({store,config,setBtnHeight})=>{
 
     }
 
-    // useEffect(()=>{
-    //   if(btnRef.current){
-    //     setTimeout(()=>{
-    //       resizeHeight();
-    //     })
-    //   }
-    // },[message])
-
-
-
     let timeObj: string | number | NodeJS.Timeout | undefined;
     const convertMsg=()=>{
       if(isStart){
         clearTimeout(timeObj);
         iatRecorder.stop();
+        //AuditUtils.stop();
         setStart(false);
       }else{
         setStart(true);
         iatRecorder.start();
+        //AuditUtils.start();
         timeObj= setTimeout(()=>{
           iatRecorder.stop();
+          //AuditUtils.stop();
           setStart(false);
         },60000);
       }
     }
+
+    // const convertMsg2=()=>{
+    //   if(isStart){
+    //     clearTimeout(timeObj);
+    //     iatRecorder.stop();
+    //     setStart(false);
+    //   }else{
+    //     setStart(true);
+    //     iatRecorder.start();
+    //     timeObj= setTimeout(()=>{
+    //       iatRecorder.stop();
+    //       setStart(false);
+    //     },60000);
+    //   }
+    // }
 
 
     iatRecorder.onTextChange = (text:string)=>{
@@ -126,6 +135,7 @@ const SendButton:React.FC<IProps> = observer(({store,config,setBtnHeight})=>{
         setStart(false);
       }
       let chatId=store.activeSession+"";
+      chatId=store.checkChatId(chatId);
       store.addData({
         text:message
       },chatId)

@@ -4,7 +4,7 @@ import translationEN from '../locales/en.js';
 import translationZH from '../locales/zh.js';
 import LanguageDetector from 'i18next-browser-languagedetector';
 
-i18next .use(LanguageDetector).use(initReactI18next).init({
+i18next.use(LanguageDetector).use(initReactI18next).init({
   resources: {
     en: {
       translation: translationEN

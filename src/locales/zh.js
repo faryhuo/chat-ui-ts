@@ -1,4 +1,4 @@
-export default {
+const config = {
     "Chat":"会话",
     "Image":"AI 绘画",
     "Config":"配置",
@@ -40,3 +40,4 @@ export default {
     "Creative":"创新",
     "Regenerate":"重新生成"
 }
+export default config;

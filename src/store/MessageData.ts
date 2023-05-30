@@ -1,6 +1,6 @@
-import { makeObservable, observable, computed, action, remove} from "mobx";
+import { makeObservable, observable, computed, action} from "mobx";
 import i18n from '../utils/i18n';
-import config, { IAppConfig } from './AppConfig';
+import config  from './AppConfig';
 import axios from 'axios';
 import { saveAs } from 'file-saver'
 import { fetchEventSource } from "@microsoft/fetch-event-source";
@@ -46,7 +46,7 @@ export interface IMessage{
     session:Array<ISession>;
     localSessionName:string;
     activeSession:string;
-    addChat:()=>void;
+    addChat:()=>string;
     endStream:(chatId:string)=>void;
     appendData:(text:any,chatId:string)=>void;
     addData:(newChat: any,chatId: string) =>void;
@@ -80,6 +80,8 @@ export interface IMessage{
     callImageAPI:(chatId: string,message: string)=>Promise<void>;
     getChatHistory:()=>void;
     loadDataFromlocalStore:()=>void;
+    checkChatId:(chatId: string)=>string;
+    latestMessage:any;
 }
 
 class MessageData implements  IMessage{
@@ -156,6 +158,7 @@ class MessageData implements  IMessage{
             sessionList: computed,
             isType: computed,
             needStream: computed,
+            latestMessage: computed,
             addData: action,
             changeType: action,
             clear: action,
@@ -169,6 +172,7 @@ class MessageData implements  IMessage{
             changeRole: action,
             hasHistory: action,
             changeMessage: action,
+            checkChatId:action,
             fetchData: action.bound,
             loadDataFromFile: action.bound,
             reSentMsg:action.bound,
@@ -198,7 +202,11 @@ class MessageData implements  IMessage{
                     }
                 }
             })
-            this.activeSession=this.currentSession[this.currentSession.length-1].chatId;
+            if(this.currentSession.length){
+                this.activeSession=this.currentSession[this.currentSession.length-1].chatId;
+            }else{
+                this.activeSession="";
+            }
         }
     }
 
@@ -309,6 +317,7 @@ class MessageData implements  IMessage{
         this.session.push(sessionData);
         this.activeSession=chatId;
         this.save(chatId);
+        return chatId;
     }
 
     get isType(){
@@ -405,38 +414,39 @@ class MessageData implements  IMessage{
 
 
     clear(chatId: string) {
-        if(this.currentSession.length===1 || !chatId){
-            this.clearCurrentData();
-        }else{
-            for(let i=0;i<this.session.length;i++){
-                let item=this.session[i];
-                if(item.type===this.type && item.chatId===chatId){
-                    //remove(this.session,i)
-                    this.session.splice(i,1);
-                    break;
-                }
+        for(let i=0;i<this.session.length;i++){
+            let item=this.session[i];
+            if(item.type===this.type && item.chatId===chatId){
+                //remove(this.session,i)
+                this.session.splice(i,1);
+                break;
             }
-            this.activeSession=this.currentSession[0].chatId;
-            //this.session.splice(deletedItem,1)
         }
-        console.log(chatId);
+        if(this.currentSession.length){
+            this.activeSession=this.currentSession[this.currentSession.length-1].chatId;
+        }else{
+            this.activeSession="";
+        }
+        //this.session.splice(deletedItem,1)
         this.saveSessionToLocal();
         this.deleteSessionById(chatId);
     }
 
     deleteSessionById(chatId: string){
-        const queryUrl = config.historyUrl+`/${chatId}`;
-        return axios({
-            method: "delete",
-            url: queryUrl,
-            headers: {
-              'token':userProflie.token,
-              'Content-Type': 'application/json;charset=UTF-8'
+        if(userProflie.isLogin){
+            const queryUrl = config.historyUrl+`/${chatId}`;
+            return axios({
+                method: "delete",
+                url: queryUrl,
+                headers: {
+                'token':userProflie.token,
+                'Content-Type': 'application/json;charset=UTF-8'
+                }
             }
-          }
-        ).then((response)=>{
+            ).then((response)=>{
 
-        });
+            });
+        }
     }
 
     changeType(type: string) {
@@ -601,6 +611,25 @@ class MessageData implements  IMessage{
             this.handleAPIError(err,chatId);
         });
       }
+
+    checkChatId(chatId: string){
+        if(chatId){
+            let ret=false;
+            this.session.forEach((item)=>{
+                if(item.chatId===chatId){
+                    ret=true;
+                }
+                return false;
+            })
+            if(ret){
+                return chatId;
+            }else{
+                return this.addChat();
+            }
+        }else{
+           return this.addChat();
+        }
+    }
 
     callChatAPI(chatId: string){
         if(config.getChatConfig().stream){
@@ -867,12 +896,28 @@ class MessageData implements  IMessage{
             if (response.data) {
                 const data = response.data;
                 if(data.data){
-                    self.roles=data.data;
+                    const empty={
+                        roleId:"",
+                        description:"",
+                        roleNameCN:"",
+                        roleName:""
+                    }
+                    self.roles=[empty].concat(data.data);
                 }
               }
           });
       }
 
+    get latestMessage(){
+        if(this.data.length<=1){
+            return this.data;
+        }
+        if(this.data[this.data.length-1].choices){
+            return this.data[this.data.length-1].choices[0].message.content;
+        }else{
+            return this.data[this.data.length-1].text;
+        }
+    }  
 
     getMessageListData(){
         const messages=[];
@@ -885,7 +930,7 @@ class MessageData implements  IMessage{
                 })
             }
         }
-        this.data.map((item)=>{
+        this.data.forEach((item)=>{
             if(item.isDefault){
                 return true;
             }

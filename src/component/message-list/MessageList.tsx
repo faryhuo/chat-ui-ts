@@ -11,7 +11,6 @@ import 'github-markdown-css';
 import Markdown from '../markdown/Markdown'
 import MessageItem2 from '../message-list-antd/MessageItem';
 import MessageItemChat from '../message-list-chat/MessageItem';
-import { autorun } from 'mobx';
 import {IAppConfig} from '../../store/AppConfig';
 import {IMessage,ISessiondata} from '../../store/MessageData';
 type IProps={

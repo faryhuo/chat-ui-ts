@@ -1,13 +1,8 @@
-import React from 'react';
 import { PlusOutlined, } from '@ant-design/icons';
 import { Upload, message } from 'antd';
 
 const AppUpload = ({store,config,callChatAPI,callImageAPI})=>{
-    const getBase64 = (img, callback) => {
-        const reader = new FileReader();
-        reader.addEventListener('load', () => callback(reader.result));
-        reader.readAsDataURL(img);
-      };
+
     const beforeUpload = (file) => {
     const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
     if (!isJpgOrPng) {

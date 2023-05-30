@@ -1,7 +1,7 @@
 import React  from 'react';
-import { Button, Form, Input,Switch, Radio,message } from 'antd';
+import { Button, Form,Switch, Radio,message } from 'antd';
 import { observer } from "mobx-react"
-import { InfoCircleOutlined,CheckOutlined, CloseOutlined } from '@ant-design/icons';
+import {CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import {CodeStyleInput} from '../../component'
 import { useTranslation } from 'react-i18next';
 import { HexColorPicker } from "react-colorful";

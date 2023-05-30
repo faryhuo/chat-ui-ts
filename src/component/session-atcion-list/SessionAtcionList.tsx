@@ -29,7 +29,7 @@ const SessionAtcionList : React.FC<IProps> = observer(({store,config,onOpen})=>{
 
 
     const roleList:any[]=[];
-    store.roles.map(item => {
+    store.roles.forEach(item => {
         roleList.push({
             label:config.textLanguage==="zh"?item.roleNameCN:item.roleName,
             value: item.roleId
@@ -64,12 +64,17 @@ const SessionAtcionList : React.FC<IProps> = observer(({store,config,onOpen})=>{
       if(store.type==='chat'){
         list.push(<Button className="option-btn" key={1}  onClick={onOpen}>More</Button>);
         !config.isMobile && list.push(<Segmented key={2}  value={getSelectedItem()} onChange={changeType}  style={{marginRight:10}}  options={options} />);
-        list.push(<Select key={3} style={{minWidth:80}}
+        list.push(<Select key={3} style={{minWidth:150}}
           placement="bottomLeft"
           className="option-btn" 
           value={store.role} onChange={(value)=>{
               store.changeRole(store.activeSession,value)
           }}
+          placeholder="Select a role"
+          showSearch
+          filterOption={(input, option) =>
+            (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+          }
           options={roleList.map((item) => ({ label: item.label, value: item.value }))}
         />);
         list.push(<Switch key={4}  className="option-btn" 
