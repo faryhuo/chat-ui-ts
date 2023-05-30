@@ -104,7 +104,7 @@ const CodeStyleInput = (props:any)=>{
     let options:any = [
     ];
 
-    styleList.map(item=>{
+    styleList.forEach(item=>{
         options.push({value:item,label:item})
     })
 

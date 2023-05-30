@@ -19,7 +19,7 @@ const MessageItemChat : React.FC<IProps> = observer(({store,config,renderMessage
 
   const messagesEndRef =useRef(null);
   const [open, setOpen] = useState(false);
-  const scrollMessageTimeout = useRef<NodeJS.Timeout | null>(null);
+
   const onOpen = () => {
     setOpen(true);
   };
@@ -28,19 +28,21 @@ const MessageItemChat : React.FC<IProps> = observer(({store,config,renderMessage
     setOpen(false);
   };
 
-  const scrollMessage=()=>{
-    scrollMessageTimeout.current = null; 
-    if(messagesEndRef && messagesEndRef.current && open===false){
-      (messagesEndRef as any).current.scrollIntoView({ behavior: 'smooth' });
-    }
-  }
+  const scrollMessageTimeout = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(()=>{
+    const scrollMessage=()=>{
+      scrollMessageTimeout.current = null; 
+      if(messagesEndRef && messagesEndRef.current && open===false){
+        (messagesEndRef as any).current.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  
     if(!scrollMessageTimeout.current){
       scrollMessageTimeout.current = setTimeout(scrollMessage,200);
     }
 
-  },[store.latestMessage])
+  },[store.latestMessage,open])
 
 
 

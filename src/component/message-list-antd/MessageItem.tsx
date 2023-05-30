@@ -22,23 +22,24 @@ const messageItem2: React.FC<IProps> = observer(({store,config,renderMessage}) =
 
   const messagesEndRef:any =useRef(null);
   const [open, setOpen] = useState(false);
-  const [edit, setEdit] = useState(false);
 
 
-  let scrollMessageTimeout: string | number | NodeJS.Timeout | null=null;
-  const scrollMessage=()=>{
-    scrollMessageTimeout=null;
-    if(messagesEndRef && messagesEndRef.current && open===false && edit===false){
-      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
-  }
+  const scrollMessageTimeout = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(()=>{
-    if(!scrollMessageTimeout){
-      scrollMessageTimeout=setTimeout(scrollMessage,200);
+    const scrollMessage=()=>{
+      scrollMessageTimeout.current = null; 
+      if(messagesEndRef && messagesEndRef.current && open===false){
+        (messagesEndRef as any).current.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  
+    if(!scrollMessageTimeout.current){
+      scrollMessageTimeout.current = setTimeout(scrollMessage,200);
     }
 
-  },[store.data,store.latestText])
+  },[store.latestMessage,open])
+
 
   const onOpen = () => {
     setOpen(true);
@@ -50,18 +51,15 @@ const messageItem2: React.FC<IProps> = observer(({store,config,renderMessage}) =
 
   const editInput=(item: ISessiondata)=>{
     item.isEdit=true;
-    setEdit(true);
   }
 
 
   const cancel=(item: ISessiondata)=>{
     item.isEdit=false;
-    setEdit(false);
   }
 
   const editAndResent=(index: number,item: ISessiondata)=>{
     item.isEdit=false;
-    setEdit(false);
     if(store && index){
         store.reSentMsg(index,item.text);
     }
