@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { observer } from "mobx-react-lite";
 import {IMessage} from '../../store/MessageData';
 import {IUserProflie} from '../../store/UserProfile';
-
+import './LoginForm.css'
 type IProps={
   login:(userId:string,pwd:string)=>Promise<any>;
   handleCancel:()=>void;
@@ -61,6 +61,12 @@ const LoginForm : React.FC<IProps>= observer(({login,handleCancel,store,userProf
       successLogout()
     }
 
+    const onSignUp= () =>{
+      userProfile.logout();
+      store.loadDataFromlocalStore();
+      handleCancel();
+      successLogout()
+    }
 
     const ruleMessage={
       "required":t('This is a required field')
@@ -89,12 +95,22 @@ const LoginForm : React.FC<IProps>= observer(({login,handleCancel,store,userProf
           visibilityToggle={{ visible: passwordVisible, onVisibleChange: setPasswordVisible }}
         />
         </Form.Item>
-        
-        <Form.Item>
-          <Button type="primary" htmlType="submit" style={{marginRight:10}}>{t("Login")}</Button>
-          <Button  onClick={handleCancel} style={{marginRight:10}}>{t("Cancel")}</Button>
-          {userProfile.isLogin && <Button  onClick={onLogout}>{t("Logout")}</Button>}
 
+        <Form.Item label={t("SMS Code")} name="code" 
+        rules={[{ required: true }]}
+        tooltip={ruleMessage.required}>
+         <Input ></Input><Button  htmlType="submit">{t("Sent SMS code")}</Button>
+        </Form.Item>
+
+
+
+        
+        <Form.Item className="login-form-btn-list">
+          <Button type="primary" htmlType="submit">{t("Login")}</Button>
+          <Button  onClick={handleCancel}>{t("Cancel")}</Button>
+          {userProfile.isLogin && <Button  onClick={onSignUp}>{t("Forget password")}</Button>}
+          {!userProfile.isLogin && <Button  onClick={onSignUp}>{t("Sign up")}</Button>}
+          {userProfile.isLogin && <Button  onClick={onLogout}>{t("Logout")}</Button>}
         </Form.Item>
       </Form>
       </div>

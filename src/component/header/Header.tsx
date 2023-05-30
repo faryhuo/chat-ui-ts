@@ -5,7 +5,7 @@ import './Header.css';
 import { useTranslation } from 'react-i18next';
 import React, { useState } from 'react';
 import userProfile from '../../store/UserProfile';
-import LoginForm from '../login-form/LoginForm';
+import LoginForm from '../../page/login-form/LoginForm';
 import { Link } from 'react-router-dom';
 import {IAppConfig} from '../../store/AppConfig';
 import {IMessage} from '../../store/MessageData';
