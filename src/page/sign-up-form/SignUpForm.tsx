@@ -1,13 +1,13 @@
 import React from 'react';
-import { Button,Input,Form,message,Space,Checkbox} from 'antd';
+import { Button,Input,Form,message,Space,Select} from 'antd';
 import { useTranslation } from 'react-i18next';
 import { observer } from "mobx-react-lite";
 import {IMessage} from '../../store/MessageData';
 import {IUserProflie} from '../../store/UserProfile';
 import {IAppConfig} from '../../store/AppConfig';
-import { UserOutlined,LockOutlined } from '@ant-design/icons';
+import {LockOutlined } from '@ant-design/icons';
+import './SignUpForm.css'
 
-import './LoginForm.css'
 type IProps={
   login:(userId:string,pwd:string)=>Promise<any>;
   handleCancel:()=>void;
@@ -16,24 +16,16 @@ type IProps={
   config:IAppConfig;
 }
 
-const LoginForm : React.FC<IProps>= observer(({login,handleCancel,config,store,userProfile})=>{
+const SignUpForm : React.FC<IProps>= observer(({login,handleCancel,config,store,userProfile})=>{
 
     const [form] = Form.useForm();
     const [messageApi, contextHolder] = message.useMessage();
     const { t } = useTranslation();
     const [passwordVisible, setPasswordVisible] = React.useState(false);
+    const [passwordVisible2, setPasswordVisible2] = React.useState(false);
+
     const [codeSend, setCodeSend] = React.useState(false);
-    const [enableSMSCode, setEnableSMSCode] = React.useState(false);
-    const [loginBtnTitle, setLoginBtnTitle] = React.useState("Login");
     const [sentSmsTitle, setSentSmsTitle] = React.useState("Sent SMS code");
-    const [forgetFlag, setForgetFlag] = React.useState(false);
-
-
-    
-
-    let userId = Form.useWatch('userId', form);
-    let password = Form.useWatch('password', form);
-    let code = Form.useWatch('code', form);
 
     const success = () => {
       messageApi.open({
@@ -41,12 +33,20 @@ const LoginForm : React.FC<IProps>= observer(({login,handleCancel,config,store,u
         content: 'Login success',
       });
     };
+    
 
+    let userId = Form.useWatch('userId', form);
+    let password = Form.useWatch('password', form);
+    let password2 = Form.useWatch('password2', form);
+    let code = Form.useWatch('code', form);
 
-    const successLogout = () => {
-      messageApi.open({
-        type: 'success',
-        content: 'Logout success',
+    const onLogin = () => {
+      userProfile.signup(userId,password,code).then(()=>{
+        store.getChatHistory()
+        handleCancel();
+        success();
+      },(msg)=>{
+        fail(msg);
       });
     };
 
@@ -56,31 +56,6 @@ const LoginForm : React.FC<IProps>= observer(({login,handleCancel,config,store,u
         content: msg,
       });
     };
-
-    const onLogin = () => {
-      login(userId,password).then(()=>{
-        store.getChatHistory()
-        handleCancel();
-        success();
-      },(msg)=>{
-        fail(msg);
-      })
-    };
-
-    const onLogout= () =>{
-      userProfile.logout();
-      store.loadDataFromlocalStore();
-      handleCancel();
-      successLogout()
-    }
-
-
-
-    const onForgetPwd= () =>{
-      setForgetFlag(true);
-      setLoginBtnTitle("Reset")
-      setEnableSMSCode(true);
-    }
 
 
     const onSentSMSCode=(e:any)=>{
@@ -110,6 +85,26 @@ const LoginForm : React.FC<IProps>= observer(({login,handleCancel,config,store,u
     const ruleMessage={
       "required":t('This is a required field')
     }
+
+    const prefixSelector = (
+      <Form.Item name="prefix" noStyle>
+        <Select style={{ width: 70 }} defaultValue="86">
+          <Select.Option  value="86">+86</Select.Option>
+          <Select.Option value="87">+87</Select.Option>
+        </Select>
+      </Form.Item>
+    );
+
+    const checkPassword={
+        validator: (_: any, value: string) =>{
+          if(value===password){
+            Promise.resolve() }
+          else{
+            Promise.reject(new Error('Should same with first password'))
+          }
+        }   
+    }
+  
     
     return (
       <div>
@@ -120,12 +115,13 @@ const LoginForm : React.FC<IProps>= observer(({login,handleCancel,config,store,u
         onFinish={onLogin}
         style={{padding:"10px"}}
       >
-        <Form.Item label={t("User name / Phone number")} name="userId"
+        <Form.Item label={t("Phone number")} name="userId"
         rules={[{ required: true }]}
         tooltip={ruleMessage.required}>
-          <Input       prefix={<UserOutlined className="site-form-item-icon" />}
+          <Input       addonBefore={prefixSelector}
           ></Input>
         </Form.Item>
+
 
         <Form.Item label={t("Password")} name="password" 
         rules={[{ required: true }]}
@@ -135,29 +131,35 @@ const LoginForm : React.FC<IProps>= observer(({login,handleCancel,config,store,u
           visibilityToggle={{ visible: passwordVisible, onVisibleChange: setPasswordVisible }}
         />
         </Form.Item>
+
+        <Form.Item label={t("Re-Password")} name="password2" 
+        rules={[{ required: true },({ getFieldValue }) => ({
+          validator(_, value) {
+            if (!value || getFieldValue('password') === value) {
+              return Promise.resolve();
+            }
+            return Promise.reject(new Error('The two passwords that you entered do not match!'));
+          },
+        })]}
+        tooltip={ruleMessage.required}>
+        <Input.Password  prefix={<LockOutlined></LockOutlined>}
+          placeholder="re-input password"
+          visibilityToggle={{ visible: passwordVisible2, onVisibleChange: setPasswordVisible2 }}
+        />
+        </Form.Item>
+
         
-        {enableSMSCode && <Form.Item label={t("SMS Code")} name="code" 
+        <Form.Item label={t("SMS Code")} name="code" 
         rules={[{ required: true }]}
         tooltip={ruleMessage.required}>
         <Space.Compact>
             <Input style={{marginRight:20}}></Input>
             <Button style={{width:120,float:"right"}} onClick={onSentSMSCode} disabled={codeSend}>{t(sentSmsTitle)}</Button>
          </Space.Compact>
-        </Form.Item>}
-        {!forgetFlag && <Form.Item>
-
-        <Form.Item name="remember" valuePropName="checked" noStyle>
-          <Checkbox>Remember me</Checkbox>
         </Form.Item>
-
-        <a className="login-form-forgot" href="#" onClick={onForgetPwd}>
-          Forgot password
-        </a>
-      </Form.Item>}
-
+        
         <Form.Item className="login-form-btn-list">
-          <Button type="primary" htmlType="submit">{t(loginBtnTitle)}</Button>
-          {userProfile.isLogin && !forgetFlag &&<Button  onClick={onLogout}>{t("Logout")}</Button>}
+          <Button type="primary" htmlType="submit">{t('Sign Up')}</Button>
           <Button  onClick={handleCancel}>{t("Cancel")}</Button>
         </Form.Item>
       </Form>
@@ -165,4 +167,4 @@ const LoginForm : React.FC<IProps>= observer(({login,handleCancel,config,store,u
     );
 })
 
-export default LoginForm;
+export default SignUpForm;

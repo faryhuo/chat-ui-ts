@@ -39,10 +39,6 @@ class UserProflie implements IUserProflie{
     login(userId: string,password: string){
         this.userId=userId;
         this.password=password;
-        if(userId==="admin"){
-            this.premission.push("image");
-            this.premission.push("image_edit");
-        }
         const promise=new Promise((resolve,reject)=>{
         this.getPulicKey().then(()=>{
             const queryUrl = config.loginUrl;
@@ -81,8 +77,8 @@ class UserProflie implements IUserProflie{
         this.getPulicKey().then(()=>{
             const queryUrl = config.signUpUrl;
             const params={
-                "phone":this.userId,
-                "password":this.encrypt(this.password),
+                "phone":userId,
+                "password":this.encrypt(password),
                 "smsCode":code
             };
             axios({
