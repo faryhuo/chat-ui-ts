@@ -13,6 +13,9 @@ export interface IUserProflie{
     currentUser:string;
     token:string;
     logout:()=>void;
+    sentSMSCode :(phone:string)=>Promise<any>;
+    signup: (userId: string,password: string,code:string)=>Promise<any>;
+
 }
 export interface IModules{
     id:string;
@@ -73,11 +76,44 @@ class UserProflie implements IUserProflie{
         return promise;
     }
 
+    signup(userId: string,password: string,code:string){
+        const promise=new Promise((resolve,reject)=>{
+        this.getPulicKey().then(()=>{
+            const queryUrl = config.signUpUrl;
+            const params={
+                "phone":this.userId,
+                "password":this.encrypt(this.password),
+                "smsCode":code
+            };
+            axios({
+                 method: "post",
+                 url: queryUrl,
+                 headers: {
+                   'Content-Type': 'application/json;charset=UTF-8'
+                 },
+                 data : JSON.stringify(params)
+               }
+             ).then((response)=>{
+                if(response.data.statusCode===0 && response.data.data){
+                    this.login(userId,password);
+                    resolve(response.data.data)
+                }else if(response.data.errors.message){
+                    reject(response.data.errors.message)
+                }else{
+                    reject("Fail to signup");
+                }
+            });
+            })
+        })
+        return promise;
+    }
+
     logout(){
         this.token="";
         this.isLogin=false;
         this.userId="";
         this.userName="";
+        localStorage["user-token"]="";
     }
 
     get currentUser(){
@@ -163,6 +199,18 @@ class UserProflie implements IUserProflie{
             });
         });
         return promise;
+    }
+
+    sentSMSCode(phone:string){
+        return axios({
+            method: "get",
+            url: config.sentSmsCodeUrl+phone,
+            headers: {
+                'Content-Type': 'application/json;charset=UTF-8',
+                'token':this.token
+            }
+            }
+        );
     }
 
 

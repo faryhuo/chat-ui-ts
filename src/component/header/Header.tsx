@@ -118,11 +118,12 @@ const Header: React.FC<IProps> = observer(({store,config}) => {
         >{getUserName()}</Avatar>
               <Modal
         open={open}
-        title={t("Login")}
+        title={false}
         onCancel={handleCancel}
         footer={false}
+        destroyOnClose={true}
       >
-        <LoginForm store={store} userProfile={userProfile}  login={login} handleCancel={handleCancel}></LoginForm>
+        <LoginForm config={config} store={store} userProfile={userProfile}  login={login} handleCancel={handleCancel}></LoginForm>
       </Modal>
     </div>
   </div>
