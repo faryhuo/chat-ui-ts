@@ -1,9 +1,7 @@
-import React, { ReactNode } from 'react';
+import React from 'react';
 import type { TabsProps } from 'antd';
 import { Tabs } from 'antd';
 import { useTranslation } from 'react-i18next';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBroom } from '@fortawesome/free-solid-svg-icons'
 import { observer } from "mobx-react-lite";
 
 type IProps={

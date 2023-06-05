@@ -37,7 +37,6 @@ const SignUpForm : React.FC<IProps>= observer(({login,handleCancel,config,store,
 
     let userId = Form.useWatch('userId', form);
     let password = Form.useWatch('password', form);
-    let password2 = Form.useWatch('password2', form);
     let code = Form.useWatch('code', form);
 
     const onLogin = () => {
@@ -95,17 +94,7 @@ const SignUpForm : React.FC<IProps>= observer(({login,handleCancel,config,store,
       </Form.Item>
     );
 
-    const checkPassword={
-        validator: (_: any, value: string) =>{
-          if(value===password){
-            Promise.resolve() }
-          else{
-            Promise.reject(new Error('Should same with first password'))
-          }
-        }   
-    }
-  
-    
+
     return (
       <div>
         {contextHolder}      
@@ -160,7 +149,6 @@ const SignUpForm : React.FC<IProps>= observer(({login,handleCancel,config,store,
         
         <Form.Item className="login-form-btn-list">
           <Button type="primary" htmlType="submit">{t('Sign Up')}</Button>
-          <Button  onClick={handleCancel}>{t("Cancel")}</Button>
         </Form.Item>
       </Form>
       </div>

@@ -5,7 +5,10 @@ import axios from 'axios';
 import { saveAs } from 'file-saver'
 import { fetchEventSource } from "@microsoft/fetch-event-source";
 import userProflie from "./UserProfile";
-
+import {
+    encode
+} from 'gpt-tokenizer'
+  
 export interface  ISessiondata{
     isSys?:boolean;
     isDefault?:boolean;
@@ -859,8 +862,19 @@ class MessageData implements  IMessage{
 
     getChatParams(){
         const chatConfig=config.getChatConfig();
+        let messageListData= this.getMessageListData();
+        let chatTokens = encode(JSON.stringify(messageListData))
+        while(chatTokens.length+chatConfig.max_tokens>=4096){
+            if(messageListData[0].role==="system"){
+                messageListData.splice(1,1);
+            }else{
+                messageListData.splice(0,1);
+            }
+            chatTokens = encode(JSON.stringify(messageListData));
+        }
+        console.log(chatTokens);
         let params={ 
-          messages:JSON.stringify(this.getMessageListData()),
+          messages:JSON.stringify(messageListData),
           uuid: this.activeSession,
           model: chatConfig.model,
           temperature:chatConfig.temperature,

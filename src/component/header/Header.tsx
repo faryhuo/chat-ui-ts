@@ -121,6 +121,7 @@ const Header: React.FC<IProps> = observer(({store,config}) => {
         title={false}
         onCancel={handleCancel}
         footer={false}
+        width={400}
         destroyOnClose={true}
       >
         <Account config={config} store={store} userProfile={userProfile}  login={login} handleCancel={handleCancel}></Account>

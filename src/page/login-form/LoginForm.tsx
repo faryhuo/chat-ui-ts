@@ -158,7 +158,6 @@ const LoginForm : React.FC<IProps>= observer(({login,handleCancel,config,store,u
         <Form.Item className="login-form-btn-list">
           <Button type="primary" htmlType="submit">{t(loginBtnTitle)}</Button>
           {userProfile.isLogin && !forgetFlag &&<Button  onClick={onLogout}>{t("Logout")}</Button>}
-          <Button  onClick={handleCancel}>{t("Cancel")}</Button>
         </Form.Item>
       </Form>
       </div>
