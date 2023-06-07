@@ -23,6 +23,7 @@ export interface IAppConfig{
     imageSize:string;
     language:string;
     accent:string;
+    weChatQRCode: string;
     isSlowMsg4AddChat:boolean;
     chatConfig:IChatAPIConfig;
     codeStyle:string;
@@ -94,6 +95,14 @@ class AppConfig implements IAppConfig{
     historyUrl=`${this.host}/${this.historyServiceName}/history`
     sentSmsCodeUrl=`${this.host}/${this.smsServiceName}/sms/send/`
 
+    get weChatQRCode() {
+        const redirectUri = encodeURIComponent(window.location.href);
+        const scope = 'snsapi_login'; // 或者snsapi_base
+        const state = 'wechat_login_state';
+        const appId="wxb4e93c99797a1111";
+        const url = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appId}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}&state=${state}#wechat_redirect`;
+        return url;
+    }
 
     colorPrimary='#87e8de'
     textLanguage="zh";

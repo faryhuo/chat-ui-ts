@@ -35,6 +35,12 @@ export interface  ISession{
     usage?:any;
 }
 
+export interface IMessageListData{
+    role:string;
+    content:string;
+    name?:string;
+}
+
 export interface  IRole{
     roleId:string;
     description:string;
@@ -863,14 +869,14 @@ class MessageData implements  IMessage{
     getChatParams(){
         const chatConfig=config.getChatConfig();
         let messageListData= this.getMessageListData();
-        let chatTokens = encode(JSON.stringify(messageListData))
-        while(chatTokens.length+chatConfig.max_tokens>=4096){
+        let chatTokens = this.encodeChat(messageListData)
+        while(chatTokens+chatConfig.max_tokens>=4096){
             if(messageListData[0].role==="system"){
                 messageListData.splice(1,1);
             }else{
                 messageListData.splice(0,1);
             }
-            chatTokens = encode(JSON.stringify(messageListData));
+            chatTokens = this.encodeChat(messageListData);
         }
         console.log(chatTokens);
         let params={ 
@@ -933,7 +939,18 @@ class MessageData implements  IMessage{
         }
     }  
 
-    getMessageListData(){
+    encodeChat(messageListData:IMessageListData[]){
+        let tokenNum=0;
+        messageListData.map(item=>{
+            tokenNum += 4; 
+            tokenNum += encode(item.content).length;
+            tokenNum += encode(item.role).length;
+        });
+        tokenNum +=2;
+        return tokenNum;
+    }
+
+    getMessageListData():IMessageListData[]{
         const messages=[];
         if(this.role){
             const contentSys=this.getContentByRole(this.role);
