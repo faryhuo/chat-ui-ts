@@ -32,7 +32,6 @@ export interface  ISession{
     data:Array<ISessiondata>;
     role?:string;
     updateDate?:Date;
-    usage?:any;
 }
 
 export interface IMessageListData{
@@ -114,11 +113,6 @@ class MessageData implements  IMessage{
             text:i18n.t("Type something to search on ChatGPT")
             }
         ],
-        usage:{
-            completion_tokens:0,
-            prompt_tokens:0,
-            total_tokens:0
-        },
         role:"",
         updateDate:new Date()
     },{
@@ -802,14 +796,6 @@ class MessageData implements  IMessage{
               return;
             }
             const choices = response.data.data.choices;
-            const usage = response.data.data.usage;
-            for(let i=0;i<this.session.length;i++){
-                let item=this.session[i];
-                if(item.chatId===chatId){
-                    item.usage=usage;
-                    break;
-                }
-            }
             let msg={
                 isSys:true,
                 choices:choices
