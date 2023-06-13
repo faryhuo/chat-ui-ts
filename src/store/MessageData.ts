@@ -875,7 +875,7 @@ class MessageData implements  IMessage{
 
     encodeChat(messageListData:IMessageListData[]){
         let tokenNum=0;
-        messageListData.map(item=>{
+        messageListData.forEach(item=>{
             tokenNum += 4; 
             tokenNum += encode(item.content).length;
             tokenNum += encode(item.role).length;
