@@ -437,7 +437,7 @@ class MessageData implements  IMessage{
 
     deleteSessionById(chatId: string){
         if(userProflie.isLogin){
-            const queryUrl = config.historyUrl+`/${chatId}`;
+            const queryUrl = config.api.historyUrl+`/${chatId}`;
             return axios({
                 method: "delete",
                 url: queryUrl,
@@ -582,7 +582,7 @@ class MessageData implements  IMessage{
             size:config.imageSize?config.imageSize:"256x256"
         }
         const queryString = new URLSearchParams(params as any).toString();
-        const queryUrl =`${config.imageUrl}?${queryString}`;
+        const queryUrl =`${config.api.imageUrl}?${queryString}`;
         return axios({
           method: "post",
           url: queryUrl,
@@ -657,7 +657,7 @@ class MessageData implements  IMessage{
     callChatAPIByStream=(chatId:string)=>{
         const params=this.getChatParams();
         const queryString = new URLSearchParams(params as any).toString();
-        const queryUrl =`${config.chatStreamUrl}?${queryString}`;
+        const queryUrl =`${config.api.chatStreamUrl}?${queryString}`;
         let eventSource = new EventSource(queryUrl,{
           withCredentials:false
         });
@@ -703,7 +703,7 @@ class MessageData implements  IMessage{
 
     callChatAPIByStreamByPost=(chatId:string)=>{
         const params=this.getChatParams();
-        const queryUrl =`${config.chatStreamUrl}`;
+        const queryUrl =`${config.api.chatStreamUrl}`;
         let self=this;
         let msgItem:ISessiondata={
             isSys:true,
@@ -780,7 +780,7 @@ class MessageData implements  IMessage{
 
     callChatAPIByHttp(chatId: string){
        const params=this.getChatParams();
-       const queryUrl = config.chatUrl;
+       const queryUrl = config.api.chatUrl;
        return axios({
             method: "post",
             url: queryUrl,
@@ -808,7 +808,7 @@ class MessageData implements  IMessage{
     }
 
     saveChatHistory(chatId:string){
-        const queryUrl = config.historyUrl;
+        const queryUrl = config.api.historyUrl;
         this.session.forEach((item)=>{
             if(item.chatId===chatId){
                 const data=item;
@@ -830,7 +830,7 @@ class MessageData implements  IMessage{
     }
 
     getChatHistory(){
-        const queryUrl = config.historyUrl;
+        const queryUrl = config.api.historyUrl;
         return axios({
             method: "get",
             url: queryUrl,
@@ -893,7 +893,7 @@ class MessageData implements  IMessage{
         const self=this;
         axios({
             method: "get",
-            url: config.chatRoleUrl+"?uuid="+new Date().getTime(),
+            url: config.api.chatRoleUrl+"?uuid="+new Date().getTime(),
             headers: {
               'Content-Type': 'application/json;charset=UTF-8'
             }

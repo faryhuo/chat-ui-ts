@@ -61,7 +61,7 @@ const SendInput : React.FC<IProps> = observer(({store,config})=>{
           input: input,
           instruction:instruction
         },config.codeEditConfig);
-        const queryUrl = config.editsUrl;
+        const queryUrl = config.api.editsUrl;
         axios({
           method: "post",
           url: queryUrl,

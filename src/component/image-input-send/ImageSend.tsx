@@ -128,7 +128,7 @@ const ImageSend  : React.FC<IProps> = observer(({store,config})=>{
         if(mask){
           params.mask=mask;
         }
-        const queryUrl = config.imageEditUrl;
+        const queryUrl = config.api.imageEditUrl;
         axios({
           method: "post",
           url: queryUrl,
@@ -170,7 +170,7 @@ const ImageSend  : React.FC<IProps> = observer(({store,config})=>{
         listType="picture-card"
         className="avatar-uploader"
         showUploadList={false}
-        action={config.imageUploadUrl}
+        action={config.api.imageUploadUrl}
         beforeUpload={beforeUpload}
         onChange={(e)=>handleChange(e,"image")}
       >
@@ -190,7 +190,7 @@ const ImageSend  : React.FC<IProps> = observer(({store,config})=>{
         listType="picture-card"
         className="avatar-uploader"
         showUploadList={false}
-        action={config.imageUploadUrl}
+        action={config.api.imageUploadUrl}
         beforeUpload={beforeUpload}
         onChange={(e)=>handleChange(e,"mask")}
       >

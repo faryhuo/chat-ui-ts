@@ -55,7 +55,7 @@ const Header: React.FC<IProps> = observer(({store,config}) => {
       icon: <FontAwesomeIcon icon={faLinesLeaning} />
     },
     {
-      label: <Link to="/config">{t('Config')}</Link>,
+      label: <Link to="/config/1">{t('Config')}</Link>,
       key: 'config',
       icon: <FontAwesomeIcon icon={faGear} />
     }

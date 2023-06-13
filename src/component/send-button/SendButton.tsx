@@ -84,7 +84,7 @@ const SendButton:React.FC<IProps> = observer(({store,config,setBtnHeight})=>{
 
     const callImageAPI=(chatId: string,queryUrl: string | null)=>{
       if(!queryUrl){
-        queryUrl = `${config.imageUrl}?message=${message}&uuid=${store.activeSession}&size=${config.imageSize}`;  
+        queryUrl = `${config.api.imageUrl}?message=${message}&uuid=${store.activeSession}&size=${config.imageSize}`;  
       }
       axios({
         method: "post",

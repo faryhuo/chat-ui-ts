@@ -2,6 +2,7 @@ import { makeObservable, observable, computed, action} from "mobx";
 import IatRecorder from '../utils/IatRecorder';
 import i18n from '../utils/i18n';
 import {isMobile} from 'react-device-detect';
+import apiSetting,{IAPISetting} from "./APISetting";
 
 
 export interface IAppConfig{
@@ -9,17 +10,9 @@ export interface IAppConfig{
     style:string;
     localConfigName:string;
     isSlowLeftMenu:boolean;
-    host:string;
-    chatUrl:string;
-    chatStreamUrl:string;
-    imageUrl:string;
-    editsUrl:string;
-    imageEditUrl:string;
-    variationsImageUrl:string;
-    imageUploadUrl:string;
-    chatRoleUrl:string;
     colorPrimary:string;
     textLanguage:string;
+    api:IAPISetting;
     imageSize:string;
     language:string;
     accent:string;
@@ -71,29 +64,7 @@ class AppConfig implements IAppConfig{
     hideMenuTypeList=["tips","config","sd"]
     isSlowLeftMenu=isMobile?false:true;
     isMobile=isMobile;
-    host="https://fary.chat:8555"
-    chatServiceName="chat-service"
-    chatConfigServiceName="chat-config-service"
-    userServiceName="chat-user-service"
-    smsServiceName="chat-sms-service"
-
-    historyServiceName="chat-history-service"
-    chatUrl=`${this.host}/${this.chatServiceName}/chat/v2/info`;
-    chatStreamUrl=`${this.host}/${this.chatServiceName}/chat/v2/stream`;
-    imageUrl=`${this.host}/${this.chatServiceName}/image/v2/info`;
-    editsUrl=`${this.host}/${this.chatServiceName}/edits/v2/info`;
-    imageEditUrl=`${this.host}/${this.chatServiceName}/image/v2/edit`;
-    variationsImageUrl=`${this.host}/${this.chatServiceName}/image/v2/variations`;
-    imageUploadUrl=`${this.host}/${this.chatServiceName}/upload/v2/image`
-    chatRoleUrl=`${this.host}/${this.chatConfigServiceName}/config/chat-roles`
-    moduleUrl=`${this.host}/${this.chatConfigServiceName}/config/modules`
-    loginUrl=`${this.host}/${this.userServiceName}/user/user-tokens`
-    signUpUrl=`${this.host}/${this.userServiceName}/user/user`
-
-    publicKeyUrl=`${this.host}/${this.userServiceName}/user/rsapubkey`
-    userInfoUrl=`${this.host}/${this.userServiceName}/user/user-info`
-    historyUrl=`${this.host}/${this.historyServiceName}/history`
-    sentSmsCodeUrl=`${this.host}/${this.smsServiceName}/sms/send/`
+    api=apiSetting
 
     get weChatQRCode() {
         const redirectUri = encodeURIComponent(window.location.href);
@@ -198,8 +169,8 @@ class AppConfig implements IAppConfig{
     }
 
     getConfigJson(){
-        const {chatUrl,imageSize,imageUrl,language,accent,codeStyle,textLanguage,chatConfig,isSlowMsg4AddChat,colorPrimary,style} = this;
-        return {chatUrl,imageSize,imageUrl,language,accent,codeStyle,textLanguage,chatConfig,isSlowMsg4AddChat,colorPrimary,style};
+        const {imageSize,language,accent,codeStyle,textLanguage,chatConfig,isSlowMsg4AddChat,colorPrimary,style} = this;
+        return {imageSize,language,accent,codeStyle,textLanguage,chatConfig,isSlowMsg4AddChat,colorPrimary,style};
     }
     saveChatConfig(config:IChatAPIConfig){
         let item:keyof IChatAPIConfig;

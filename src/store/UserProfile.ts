@@ -41,7 +41,7 @@ class UserProflie implements IUserProflie{
         this.password=password;
         const promise=new Promise((resolve,reject)=>{
         this.getPulicKey().then(()=>{
-            const queryUrl = config.loginUrl;
+            const queryUrl = config.api.loginUrl;
             const params={
                 "phone":this.userId,
                 "password":this.encrypt(this.password)
@@ -75,7 +75,7 @@ class UserProflie implements IUserProflie{
     signup(userId: string,password: string,code:string){
         const promise=new Promise((resolve,reject)=>{
         this.getPulicKey().then(()=>{
-            const queryUrl = config.signUpUrl;
+            const queryUrl = config.api.signUpUrl;
             const params={
                 "phone":userId,
                 "password":this.encrypt(password),
@@ -150,7 +150,7 @@ class UserProflie implements IUserProflie{
     }
 
     loginByToken(){
-        const queryUrl=config.userInfoUrl
+        const queryUrl=config.api.userInfoUrl
         return axios({
             method: "get",
             url: queryUrl,
@@ -175,7 +175,7 @@ class UserProflie implements IUserProflie{
     }
 
     getPulicKey(){
-        const queryUrl=config.publicKeyUrl;
+        const queryUrl=config.api.publicKeyUrl;
         const promise=new Promise((resolve,reject)=>{
             if(this.publicKey){
                 resolve(this.publicKey);
@@ -200,7 +200,7 @@ class UserProflie implements IUserProflie{
     sentSMSCode(phone:string){
         return axios({
             method: "get",
-            url: config.sentSmsCodeUrl+phone,
+            url: config.api.sentSmsCodeUrl+phone,
             headers: {
                 'Content-Type': 'application/json;charset=UTF-8',
                 'token':this.token
@@ -222,7 +222,7 @@ class UserProflie implements IUserProflie{
         const self=this;
         return axios({
             method: "get",
-            url: config.moduleUrl+"?uuid="+new Date().getTime(),
+            url: config.api.moduleUrl+"?uuid="+new Date().getTime(),
             headers: {
               'Content-Type': 'application/json;charset=UTF-8'
             }

@@ -24,7 +24,7 @@ const pageList=[{
     path:"/image_edit",
     component:ImageEdit
 },{
-    path:"/config",
+    path:"/config/:id",
     component:ConfigPage
 },{
     path:"/tips",
@@ -51,14 +51,18 @@ const AppRoutes:React.FC<IProps> = ({messageData,appConfig})=>{
 
 
     useEffect(()=>{
-        messageData.changeType(location.pathname.replace("/",""))
+        if(location.pathname.startsWith("/config")){
+            messageData.changeType("config")
+        }else{
+            messageData.changeType(location.pathname.replace("/",""))
+        }
     },[location,messageData])
 
   return (<Routes>
     {
         pageList.map((item,index)=>{
             const AppComponent:any=item.component;
-            return (<Route key={index}  path={item.path} Component={(props)=><AppComponent key={index} {...item.props}{...props} store={messageData} config={appConfig}></AppComponent>} >
+            return (<Route  key={index} path={item.path} Component={(props)=><AppComponent key={index} {...item.props}{...props} store={messageData} config={appConfig}></AppComponent>} >
                 </Route>)
         })
     }
