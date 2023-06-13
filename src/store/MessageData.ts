@@ -5,6 +5,8 @@ import axios from 'axios';
 import { saveAs } from 'file-saver'
 import { fetchEventSource } from "@microsoft/fetch-event-source";
 import userProflie from "./UserProfile";
+import roleData,{IRoleData} from "./RoleData";
+import imageData from "./ImageData";
 import {
     encode
 } from 'gpt-tokenizer'
@@ -68,7 +70,6 @@ export interface IMessage{
     sessionData:Array<ISession>;
     currentSession:Array<ISession>;
     sessionList:any;
-    getContentByRole:(role: string)=>string;
     getMessageListData:()=>any;
     enableType:(chatId: string)=>void;
     needStream:boolean;
@@ -77,7 +78,6 @@ export interface IMessage{
     updateChatStatus:(status: boolean,chatId: string)=>void;
     currentChatName:string;
     latestText:string;
-    roles:IRole[];
     saveDataToFile:()=>void;
     loadDataFromFile:(file:Blob)=>void;
     reSentMsg:(index:number,msg:string)=>void;
@@ -90,15 +90,15 @@ export interface IMessage{
     loadDataFromlocalStore:()=>void;
     checkChatId:(chatId: string)=>string;
     latestMessage:any;
+    roleData:IRoleData;
 }
 
 class MessageData implements  IMessage{
     
     version="2.0"
     localSessionName=`session_${this.version}`
-
+    roleData=roleData;
     type="chat"
-    roles:IRole[]=[];
     activeSession="chat_"+new Date().getTime()
     session:Array<ISession>=[{
         chatId:this.activeSession+"",
@@ -155,7 +155,6 @@ class MessageData implements  IMessage{
             session: observable,
             activeSession: observable,
             latestText:observable,
-            roles: observable,
             data: computed,
             role: computed,
             sessionList: computed,
@@ -176,14 +175,12 @@ class MessageData implements  IMessage{
             hasHistory: action,
             changeMessage: action,
             checkChatId:action,
-            fetchData: action.bound,
             loadDataFromFile: action.bound,
             reSentMsg:action.bound,
             callChatAPI:action.bound,
             regenerateResponse:action.bound,
             getChatHistory:action.bound
         })
-        this.fetchData();
         if(localStorage["user-token"]){
             userProflie.token=localStorage["user-token"];
             userProflie.loginByToken().then(()=>{
@@ -477,7 +474,7 @@ class MessageData implements  IMessage{
                     item.chatName="New Chat";
                 }
                 let chatName;
-                this.roles.forEach((sItem)=>{
+                roleData.roles.forEach((sItem)=>{
                     if(role===sItem.roleId){
                         chatName=config.textLanguage==="zh"?sItem.roleNameCN:sItem.roleName
                     }
@@ -576,21 +573,7 @@ class MessageData implements  IMessage{
     }
 
     callImageAPI(chatId: string,message: string):Promise<void>{
-        const params={
-            message:message,
-            uuid:chatId,
-            size:config.imageSize?config.imageSize:"256x256"
-        }
-        const queryString = new URLSearchParams(params as any).toString();
-        const queryUrl =`${config.api.imageUrl}?${queryString}`;
-        return axios({
-          method: "post",
-          url: queryUrl,
-          headers: {
-            'Content-Type': 'application/json;charset=UTF-8'
-          }
-        }
-        ).then((response)=>{
+        return imageData.callImageAPI(chatId,message).then((response)=>{
           this.enableType(chatId);
           if(response.data.data.error){
             this.handleAPIError(response.data.data.error,chatId);
@@ -613,7 +596,7 @@ class MessageData implements  IMessage{
         ,(err)=>{
             this.handleAPIError(err,chatId);
         });
-      }
+    }
 
     checkChatId(chatId: string){
         if(chatId){
@@ -652,7 +635,7 @@ class MessageData implements  IMessage{
         }else{
           return this.callChatAPIByHttp(chatId)
         }
-      }
+    }
 
     callChatAPIByStream=(chatId:string)=>{
         const params=this.getChatParams();
@@ -877,42 +860,7 @@ class MessageData implements  IMessage{
           stream:chatConfig.stream
         }
         return params;
-      }
-
-
-    getContentByRole(role: string){
-        for(let i=0;i<this.roles.length;i++){
-            if(this.roles[i].roleId===role){
-                return this.roles[i]?.description;
-            }
-        }
-        return "";
     }
-
-    fetchData() {
-        const self=this;
-        axios({
-            method: "get",
-            url: config.api.chatRoleUrl+"?uuid="+new Date().getTime(),
-            headers: {
-              'Content-Type': 'application/json;charset=UTF-8'
-            }
-          }
-          ).then((response)=>{
-            if (response.data) {
-                const data = response.data;
-                if(data.data){
-                    const empty={
-                        roleId:"",
-                        description:"",
-                        roleNameCN:"",
-                        roleName:""
-                    }
-                    self.roles=[empty].concat(data.data);
-                }
-              }
-          });
-      }
 
     get latestMessage(){
         if(this.data.length<=1){
@@ -939,7 +887,7 @@ class MessageData implements  IMessage{
     getMessageListData():IMessageListData[]{
         const messages=[];
         if(this.role){
-            const contentSys=this.getContentByRole(this.role);
+            const contentSys=roleData.getContentByRole(this.role);
             if(contentSys){
                 messages.push({
                     role:"system",

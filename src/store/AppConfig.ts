@@ -3,11 +3,13 @@ import IatRecorder from '../utils/IatRecorder';
 import i18n from '../utils/i18n';
 import {isMobile} from 'react-device-detect';
 import apiSetting,{IAPISetting} from "./APISetting";
+import imageData,{IImageData} from "./ImageData";
 
 
 export interface IAppConfig{
     version:string;
     style:string;
+    image:IImageData;
     localConfigName:string;
     isSlowLeftMenu:boolean;
     colorPrimary:string;
@@ -35,7 +37,6 @@ export interface IAppConfig{
     clearConfig:()=>void;
     clearHistory:()=>void;
     iatRecorder:any;
-    changeImageSize:(size:string)=>void;
 }
 
 export interface IChatAPIConfig{
@@ -65,7 +66,7 @@ class AppConfig implements IAppConfig{
     isSlowLeftMenu=isMobile?false:true;
     isMobile=isMobile;
     api=apiSetting
-
+    image=imageData;
     get weChatQRCode() {
         const redirectUri = encodeURIComponent(window.location.href);
         const scope = 'snsapi_login'; // 或者snsapi_base
@@ -121,8 +122,7 @@ class AppConfig implements IAppConfig{
             triggerMenu: action,
             save: action,
             saveChatConfig: action,
-            switchStream: action,
-            changeImageSize: action
+            switchStream: action
         });
         if(localStorage[this.localConfigName]){
             try{
@@ -134,10 +134,6 @@ class AppConfig implements IAppConfig{
         }else{
             document.documentElement.style.setProperty('--color-primary', this.colorPrimary);
         }
-    }
-
-    changeImageSize(size:string){
-        this.imageSize=size;
     }
 
 

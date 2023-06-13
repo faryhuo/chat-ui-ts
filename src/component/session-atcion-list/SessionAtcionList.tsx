@@ -29,7 +29,7 @@ const SessionAtcionList : React.FC<IProps> = observer(({store,config,onOpen})=>{
 
 
     const roleList:any[]=[];
-    store.roles.forEach(item => {
+    store.roleData.roles.forEach(item => {
         roleList.push({
             label:config.textLanguage==="zh"?item.roleNameCN:item.roleName,
             value: item.roleId
@@ -88,7 +88,7 @@ const SessionAtcionList : React.FC<IProps> = observer(({store,config,onOpen})=>{
           placement="bottomLeft"
           className="option-btn" 
           value={config.imageSize} onChange={(value)=>{
-            config.changeImageSize(value);
+            config.image.changeImageSize(value);
           }}
           options={imageSizeList.map((item,index) => ({ label: item, value: item }))}
         />);
