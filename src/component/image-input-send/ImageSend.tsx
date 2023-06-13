@@ -123,7 +123,7 @@ const ImageSend  : React.FC<IProps> = observer(({store,config})=>{
       let params:IParam={ 
           image: image,
           prompt: message,
-          size:config.imageSize
+          size:config.image.imageSize
         }
         if(mask){
           params.mask=mask;

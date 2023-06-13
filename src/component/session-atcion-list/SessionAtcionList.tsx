@@ -87,7 +87,7 @@ const SessionAtcionList : React.FC<IProps> = observer(({store,config,onOpen})=>{
         list.push(<Select key={5} style={{minWidth:80}}
           placement="bottomLeft"
           className="option-btn" 
-          value={config.imageSize} onChange={(value)=>{
+          value={config.image.imageSize} onChange={(value)=>{
             config.image.changeImageSize(value);
           }}
           options={imageSizeList.map((item,index) => ({ label: item, value: item }))}

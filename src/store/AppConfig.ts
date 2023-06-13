@@ -15,7 +15,6 @@ export interface IAppConfig{
     colorPrimary:string;
     textLanguage:string;
     api:IAPISetting;
-    imageSize:string;
     language:string;
     accent:string;
     weChatQRCode: string;
@@ -78,7 +77,6 @@ class AppConfig implements IAppConfig{
 
     colorPrimary='#87e8de'
     textLanguage="zh";
-    imageSize="256x256";
     language="zh_cn";
     accent="mandarin";
 
@@ -114,7 +112,6 @@ class AppConfig implements IAppConfig{
             isSlowLeftMenu: observable,
             type:  observable,
             textLanguage: observable,
-            imageSize: observable,
             style:observable,
             chatConfig:observable,
             colorPrimary: observable,
@@ -165,8 +162,8 @@ class AppConfig implements IAppConfig{
     }
 
     getConfigJson(){
-        const {imageSize,language,accent,codeStyle,textLanguage,chatConfig,isSlowMsg4AddChat,colorPrimary,style} = this;
-        return {imageSize,language,accent,codeStyle,textLanguage,chatConfig,isSlowMsg4AddChat,colorPrimary,style};
+        const {language,accent,codeStyle,textLanguage,chatConfig,isSlowMsg4AddChat,colorPrimary,style} = this;
+        return {language,accent,codeStyle,textLanguage,chatConfig,isSlowMsg4AddChat,colorPrimary,style};
     }
     saveChatConfig(config:IChatAPIConfig){
         let item:keyof IChatAPIConfig;
