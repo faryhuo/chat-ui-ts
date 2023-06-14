@@ -25,7 +25,7 @@ const ConfigPage:React.FC<IProps> = observer(({config,store,match})=>{
           
           </div>
           <div className="config-right-content">
-          <Collapse activeKey={id}>
+          <Collapse defaultActiveKey={id}>
             <Panel header={t("Base Configuration")} key="1">
             <Card>
               <BaseConfigForm config={config}></BaseConfigForm>

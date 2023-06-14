@@ -618,7 +618,7 @@ class MessageData implements  IMessage{
     }
 
     callChatAPI(chatId: string){
-        if(config.getChatConfig().stream){
+        if(config.chatConfig.getAPIConfig().stream){
           return this.callChatAPIByStreamByPost(chatId).then(()=>{
             this.save(chatId);
           })
@@ -630,7 +630,7 @@ class MessageData implements  IMessage{
     }
 
     callChatAPINotSave(chatId: string){
-        if(config.getChatConfig().stream){
+        if(config.chatConfig.getAPIConfig().stream){
           return this.callChatAPIByStreamByPost(chatId);
         }else{
           return this.callChatAPIByHttp(chatId)
@@ -836,7 +836,7 @@ class MessageData implements  IMessage{
     }
 
     getChatParams(){
-        const chatConfig=config.getChatConfig();
+        const chatConfig=config.chatConfig.getAPIConfig();
         let messageListData= this.getMessageListData();
         let chatTokens = this.encodeChat(messageListData)
         while(chatTokens+chatConfig.max_tokens>=4096){

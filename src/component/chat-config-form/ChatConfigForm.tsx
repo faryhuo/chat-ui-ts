@@ -32,7 +32,7 @@ const ChatConfigForm: React.FC<IProps> = ({config})=>{
     };
 
     const save = () => {
-      config.saveChatConfig({
+      config.chatConfig.saveAPIConfig({
         model:model,
         temperature:temperature,
         top_p:top_p,
@@ -44,8 +44,6 @@ const ChatConfigForm: React.FC<IProps> = ({config})=>{
       success();
     };
 
-    const chatModelList = ["gpt-3.5-turbo","gpt-3.5-turbo-0301"
-    ,"gpt-4"]
     
     return (
       <div>
@@ -53,12 +51,12 @@ const ChatConfigForm: React.FC<IProps> = ({config})=>{
       <Form
         form={form}
         layout="vertical"
-        initialValues={config.getChatConfig()}
+        initialValues={config.chatConfig.getAPIConfig()}
         style={{padding:"10px"}}
       >
         <Form.Item label={t("Model")} name="model" tooltip={t("which models work with the Chat API.")}>
               <Select
-                options={chatModelList.map((item) => ({ label: item, value: item }))}
+                options={config.chatConfig.chatModelList.map((item) => ({ label: item, value: item }))}
               />
         </Form.Item>
         <Form.Item label={t("max_tokens")} name="max_tokens" tooltip={t("max length of GPT return")}>

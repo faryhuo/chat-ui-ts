@@ -4,7 +4,7 @@ import i18n from '../utils/i18n';
 import {isMobile} from 'react-device-detect';
 import apiSetting,{IAPISetting} from "./APISetting";
 import imageData,{IImageData} from "./ImageData";
-
+import chatConfig,{IChatConfig} from "./ChatConfig";
 
 export interface IAppConfig{
     version:string;
@@ -19,14 +19,10 @@ export interface IAppConfig{
     accent:string;
     weChatQRCode: string;
     isSlowMsg4AddChat:boolean;
-    chatConfig:IChatAPIConfig;
     codeStyle:string;
     codeEditConfig:ICodeEditsAPIConfig;
     isSlowLeftMenuFlag:boolean;
-    switchStream:()=>void;
     getConfigJson:()=>Object;
-    saveChatConfig:(config:IChatAPIConfig)=>void;
-    getChatConfig:()=>IChatAPIConfig;
     saveCodeEditConfig:(config:ICodeEditsAPIConfig)=>void;
     getCodeEditConfig:()=>ICodeEditsAPIConfig;
     save:(config:any)=>void;
@@ -36,17 +32,9 @@ export interface IAppConfig{
     clearConfig:()=>void;
     clearHistory:()=>void;
     iatRecorder:any;
+    chatConfig:IChatConfig;
 }
 
-export interface IChatAPIConfig{
-    model:string;
-    temperature:number;
-    top_p ?: number;
-    presence_penalty:number;
-    frequency_penalty:number;
-    max_tokens:number;
-    stream?:boolean;
-}
 
 export interface ICodeEditsAPIConfig{
     model:string;
@@ -57,7 +45,7 @@ export interface ICodeEditsAPIConfig{
 
 class AppConfig implements IAppConfig{
 
-    version="3.0"
+    version="4.0"
     style="chat";
     localConfigName=`config_${this.version}`;
     type="";
@@ -66,6 +54,7 @@ class AppConfig implements IAppConfig{
     isMobile=isMobile;
     api=apiSetting
     image=imageData;
+    chatConfig=chatConfig;
     get weChatQRCode() {
         const redirectUri = encodeURIComponent(window.location.href);
         const scope = 'snsapi_login'; // 或者snsapi_base
@@ -89,16 +78,6 @@ class AppConfig implements IAppConfig{
 
     codeStyle="a11yDark";
 
-    chatConfig={
-        model:"gpt-3.5-turbo",
-        temperature:1,
-        top_p : 1,
-        presence_penalty:0,
-        frequency_penalty:0,
-        max_tokens:1024,
-        stream:false
-    }
-
     codeEditConfig={
         model:"code-davinci-edit-001",
         temperature:1,
@@ -113,13 +92,10 @@ class AppConfig implements IAppConfig{
             type:  observable,
             textLanguage: observable,
             style:observable,
-            chatConfig:observable,
             colorPrimary: observable,
             isSlowLeftMenuFlag: computed,
             triggerMenu: action,
-            save: action,
-            saveChatConfig: action,
-            switchStream: action
+            save: action
         });
         if(localStorage[this.localConfigName]){
             try{
@@ -157,23 +133,10 @@ class AppConfig implements IAppConfig{
         window.location.reload();
     }
 
-    switchStream(){
-        this.chatConfig.stream=!this.chatConfig.stream;
-    }
 
     getConfigJson(){
         const {language,accent,codeStyle,textLanguage,chatConfig,isSlowMsg4AddChat,colorPrimary,style} = this;
         return {language,accent,codeStyle,textLanguage,chatConfig,isSlowMsg4AddChat,colorPrimary,style};
-    }
-    saveChatConfig(config:IChatAPIConfig){
-        let item:keyof IChatAPIConfig;
-        for(item in config){
-            (this.chatConfig as any)[item]=config[item];
-        }
-        localStorage[this.localConfigName]=JSON.stringify(this.getConfigJson());
-    }
-    getChatConfig(){
-        return this.chatConfig;
     }
 
     saveCodeEditConfig(config:ICodeEditsAPIConfig){

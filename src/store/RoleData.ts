@@ -1,6 +1,6 @@
 import { makeObservable, observable, action} from "mobx";
 import axios from 'axios';
-import config  from './AppConfig';
+import api  from './APISetting';
 
 export interface IRoleData{
     roles:IRole[];
@@ -38,7 +38,7 @@ class RoleData implements IRoleData{
         const self=this;
         axios({
             method: "get",
-            url: config.api.chatRoleUrl+"?uuid="+new Date().getTime(),
+            url: api.chatRoleUrl+"?uuid="+new Date().getTime(),
             headers: {
               'Content-Type': 'application/json;charset=UTF-8'
             }

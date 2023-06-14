@@ -42,9 +42,9 @@ const SessionAtcionList : React.FC<IProps> = observer(({store,config,onOpen})=>{
   
 
     const getSelectedItem=()=>{
-      if(config.chatConfig.temperature>0.7){
+      if(config.chatConfig.apiConfig.temperature>0.7){
         return options[2];
-      }else if(config.chatConfig.temperature<0.5){
+      }else if(config.chatConfig.apiConfig.temperature<0.5){
         return options[0];
       }else {
         return options[1];
@@ -55,7 +55,7 @@ const SessionAtcionList : React.FC<IProps> = observer(({store,config,onOpen})=>{
       const index=options.indexOf(e);
       const temperatureList=[0,0.6,1];
       if(index>=0){
-        config.chatConfig.temperature=temperatureList[index];
+        config.chatConfig.apiConfig.temperature=temperatureList[index];
       }
     }
 
@@ -78,10 +78,10 @@ const SessionAtcionList : React.FC<IProps> = observer(({store,config,onOpen})=>{
           options={roleList.map((item) => ({ label: item.label, value: item.value }))}
         />);
         list.push(<Switch key={4}  className="option-btn" 
-            onClick={()=>{config.switchStream()}}
+            onClick={()=>{config.chatConfig.switchStream()}}
           checkedChildren={t("Stream")}
           unCheckedChildren={t("Full")}
-          defaultChecked={config.chatConfig.stream}
+          defaultChecked={config.chatConfig.getAPIConfig().stream}
         />);
       }else if(store.type==='image'){
         list.push(<Select key={5} style={{minWidth:80}}

@@ -29,11 +29,8 @@ const ChatConfigForm: React.FC<IProps> = ({config,onClose})=>{
     const save = (value:any,field:string) => {
       let params:any={};
       params[field]=value;
-      config.saveChatConfig(params);
+      config.chatConfig.saveAPIConfig(params);
     };
-
-    const chatModelList = ["gpt-3.5-turbo","gpt-3.5-turbo-0301"
-    ,"gpt-4"]
     
     return (
       <div>
@@ -44,12 +41,12 @@ const ChatConfigForm: React.FC<IProps> = ({config,onClose})=>{
       <Form
         form={form}
         layout="vertical"
-        initialValues={config.getChatConfig()}
+        initialValues={config.chatConfig.getAPIConfig()}
         style={{padding:"10px"}}
       >
         <Form.Item label={t("Model")} name="model" tooltip={t("which models work with the Chat API.")}>
               <Select onChange={(e)=>save(e,"model")}
-                options={chatModelList.map((item) => ({ label: item, value: item }))}
+                options={config.chatConfig.chatModelList.map((item) => ({ label: item, value: item }))}
               />
         </Form.Item>
         <Form.Item label={t("Choose a conversation style")} name="temperature" 

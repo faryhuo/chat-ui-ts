@@ -19,8 +19,6 @@ const BaseConfigForm: React.FC<IProps>  = ({config})=>{
     const { t } = useTranslation();
 
     let imageSize = Form.useWatch('imageSize', form);
-    // let chatUrl = Form.useWatch('chatUrl', form);
-    // let imageUrl = Form.useWatch('imageUrl', form);
     let codeStyle = Form.useWatch('codeStyle', form);
     let textLanguage = Form.useWatch('textLanguage', form);
     let isSlowMsg4AddChat = Form.useWatch('isSlowMsg4AddChat', form);
@@ -37,8 +35,6 @@ const BaseConfigForm: React.FC<IProps>  = ({config})=>{
     const save = () => {
       config.save({
         imageSize:imageSize,
-        // chatUrl:chatUrl,
-        // imageUrl:imageUrl,
         codeStyle:codeStyle,
         textLanguage:textLanguage,
         isSlowMsg4AddChat:isSlowMsg4AddChat,
@@ -75,21 +71,6 @@ const BaseConfigForm: React.FC<IProps>  = ({config})=>{
           name="colorPrimary">
           <HexColorPicker />
         </Form.Item>
-        {/* <Form.Item label="Chat API Url"
-         rules={[{ required: true }, { type: 'url', warningOnly: true }, { type: 'string', min: 6 }]}
-        tooltip={ruleMessage.required}  name="chatUrl">
-          <Input placeholder="input placeholder"/>
-        </Form.Item>
-        <Form.Item  rules={[{ required: true }, { type: 'url', warningOnly: true }, { type: 'string', min: 6 }]}
-        name="imageUrl"
-          label="Image API Url"
-          tooltip={{
-            title: ruleMessage.required,
-            icon: <InfoCircleOutlined />,
-          }}
-        >
-          <Input placeholder="input placeholder"  />
-        </Form.Item> */}
         <Form.Item label={t("Code Style")}
          rules={[{ required: true }]}
         tooltip={ruleMessage.required}  name="codeStyle">
