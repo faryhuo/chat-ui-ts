@@ -24,7 +24,7 @@ class Main extends Component {
 
     render(){        
         return (
-            <ConfigProvider locale={appConfig.textLanguage==="zh"?zhCN:enUS} 
+            <ConfigProvider locale={appConfig.isChinese?zhCN:enUS} 
                 theme={
                     this.theme
                 }>

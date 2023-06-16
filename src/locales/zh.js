@@ -41,6 +41,7 @@ const config = {
     "Regenerate":"重新生成",
     "presence_penalty":"话题新鲜度 (presence_penalty)",
     "temperature":"随机性 (temperature)",
-    "max_tokens":"单次回复限制 (max_tokens)"
+    "max_tokens":"单次回复限制 (max_tokens)",
+    "tag_":""
 }
 export default config;

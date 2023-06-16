@@ -8,7 +8,7 @@ const NewChat:React.FC<IProps> = ({})=>{
     return (
     <div className="new-chat-page">
 
-        <h1>Choose a Role</h1>
+        <h1></h1>
 
     </div>)
 }

@@ -1,8 +1,8 @@
 import React from 'react';
-import { Button,List,Card } from 'antd';
+import { Button,List,Card,Radio,Divider } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faAdd,faEdit,faChartLine } from '@fortawesome/free-solid-svg-icons'
+import { faEdit,faChartLine } from '@fortawesome/free-solid-svg-icons'
 import { observer } from "mobx-react-lite";
 import roleData,{IRole} from "../../store/RoleData";
 import {IAppConfig} from '../../store/AppConfig';
@@ -15,15 +15,14 @@ type IProps={
 const RoleList:React.FC<IProps> = observer(({config,store})=>{
 
     const {t} =useTranslation();
-    const data = roleData.currentRoles;
-
+    const data = roleData.currentRolesByTag;
     const useRole=(role:IRole)=>{
       store.addChatWithRole(role);
       window.location.hash="/chat";
     }
 
-    const addRole=()=>{
-    }
+
+
 
     const buttonStyle={
       width:"100%",
@@ -31,6 +30,20 @@ const RoleList:React.FC<IProps> = observer(({config,store})=>{
     }
 
     return (<div className="role-list-wrapper">           
+      <Radio.Group defaultValue="favorite" buttonStyle="solid" 
+      onChange={(e)=>{roleData.changeTag(e.target.value)}}>
+        {
+          roleData.currentTags.map((tag)=>(
+            <Radio.Button  value={tag}>{tag}</Radio.Button>)
+          )
+        }
+      </Radio.Group>
+
+      <div style={{height:20}}>
+        <Divider />
+      </div>
+
+
       <List
       grid={{
         gutter: 16,
@@ -58,11 +71,6 @@ const RoleList:React.FC<IProps> = observer(({config,store})=>{
         </List.Item>
       )}/>
       
-      <div>
-            <Button onClick={addRole}  icon={<FontAwesomeIcon icon={faAdd} />} type="primary">
-              &nbsp;{t("Add Role")}
-            </Button>
-      </div>
       </div>)
 })
 

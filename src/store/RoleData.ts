@@ -14,21 +14,18 @@ export interface  IRole{
     descriptionCN:string;
     roleNameCN:string;
     roleName:string;
+    tags:string[];
 }
 
 class RoleData implements IRoleData{
-    roles:IRole[]=[{
-        roleId:"",
-        description:"",
-        roleNameCN:"",
-        descriptionCN:"",
-        roleName:""
-    }];
+    roles:IRole[]=[];
+    currentTag="favorite";
 
 
     constructor() {
         makeObservable(this, {
             roles: observable,
+            currentTag: observable,
             fetchData:action.bound
         })
         this.loadRolesInLocal();
@@ -42,6 +39,37 @@ class RoleData implements IRoleData{
           });
     }
 
+    changeTag(tag:string){
+        this.currentTag=tag;
+    }
+
+    get currentRolesByTag(){
+        return this.roles.filter((role)=>{
+            return !!(config.isChinese?role.roleNameCN:role.roleName) && 
+            !!(config.isChinese?role.descriptionCN:role.description) &&
+            role.tags.includes(this.currentTag)
+          });
+    }
+
+    
+    get currentTags(){
+        const tags:string[]=[];
+
+        this.roles.forEach((role)=>{
+            if(!!(config.isChinese?role.roleNameCN:role.roleName) && 
+            !!(config.isChinese?role.descriptionCN:role.description)){
+                if(role.tags && role.tags.length){
+                    role.tags.forEach(tag=>{
+                        if(!tags.includes(tag)){
+                            tags.push(tag);
+                        }
+                    })
+                }
+            }
+          });
+        return tags;
+    }
+
     loadRolesInLocal(){
         prompts.forEach((item)=>{
             let role:IRole={
@@ -49,13 +77,15 @@ class RoleData implements IRoleData{
                 description:"",
                 descriptionCN:"",
                 roleNameCN:"",
-                roleName:""
+                roleName:"",
+                tags:[]
             };
             role.roleId=item.id+"";
             role.description=item.desc_en;
             role.descriptionCN=item.desc_cn;
             role.roleName=item.title_en;
             role.roleNameCN=item.title;
+            role.tags=item.tags;
             this.roles.push(role);
         })
     }

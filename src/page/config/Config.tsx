@@ -1,12 +1,13 @@
 import React from 'react';
 import { observer } from "mobx-react"
 import { Card,Collapse} from 'antd';
-import {BaseConfigForm,ChatConfigForm,CodeEditConfigForm,ConfigActionBtn,RoleList} from '../../component';
+import {BaseConfigForm,ChatConfigForm,CodeEditConfigForm,ConfigActionBtn} from '../../component';
 import { useTranslation } from 'react-i18next';
 import "./Config.css";
 import {IAppConfig} from '../../store/AppConfig';
 import {IMessage} from '../../store/MessageData';
 import { useParams } from 'react-router-dom';
+import RoleConfigPage from '../role-config/RoleConfig';
 type IProps={
   config:IAppConfig;
   store:IMessage;
@@ -40,7 +41,7 @@ const ConfigPage:React.FC<IProps> = observer(({config,store})=>{
               </Card>
             </Panel>
             <Panel header={t("Roles Detil")} key="4">
-              <RoleList config={config} store={store}></RoleList>
+              <RoleConfigPage config={config} store={store}></RoleConfigPage>
             </Panel>
             <div>
               <ConfigActionBtn store={store}></ConfigActionBtn>
