@@ -50,7 +50,9 @@ const ChatConfigForm: React.FC<IProps> = ({config})=>{
         {contextHolder}      
       <Form
         form={form}
-        layout="vertical"
+        layout={config.formLayout as any}
+        labelCol={{ span: 4 }}
+        wrapperCol={{ span: 14 }}
         initialValues={config.chatConfig.getAPIConfig()}
         style={{padding:"10px"}}
       >
@@ -88,7 +90,7 @@ const ChatConfigForm: React.FC<IProps> = ({config})=>{
             />
 
         </Form.Item>
-        <Form.Item>
+        <Form.Item wrapperCol= { {offset: 4, span: 12 }}>
           <Button type="primary" onClick={save}>Save</Button>
         </Form.Item>
       </Form>

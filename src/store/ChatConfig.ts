@@ -50,8 +50,28 @@ class ChatConfig implements IChatConfig{
         "gpt-4":8192 
     }
 
+    modelMap = {
+        "gpt-3.5-turbo":"gpt-3.5-turbo-16k",
+        "gpt-3.5-turbo-16k":"gpt-3.5-turbo-16k",
+        "gpt-3.5-turbo-0613":"gpt-3.5-turbo-16k-0613",
+        "gpt-3.5-turbo-16k-0613":"gpt-3.5-turbo-16k-0613",
+        "gpt-4":"gpt-4" 
+    }
+
     getMaxTokenByModel(model:Model){
         return this.modelMaxTokenMap[model]
+    }
+
+    isMaxTokenModel(model:Model){
+        if(this.modelMap[model]===model){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    getMaxTokenModel(model:Model):Model{
+        return this.modelMap[model] as Model;
     }
 
 

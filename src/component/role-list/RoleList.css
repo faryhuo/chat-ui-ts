@@ -1,0 +1,8 @@
+.role-list-wrapper{
+    background-color: #f0f2f5;
+    padding: 30px;
+}
+.role-list-wrapper .ant-card-body{
+    max-height:350px;
+    overflow: auto;
+}

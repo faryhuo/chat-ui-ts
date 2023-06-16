@@ -35,21 +35,23 @@ class APISetting implements IAPISetting{
     smsServiceName="chat-sms-service"
 
     historyServiceName="chat-history-service"
-    chatUrl=`${this.host}/${this.chatServiceName}/chat/v2/info`;
-    chatStreamUrl=`${this.host}/${this.chatServiceName}/chat/v2/stream`;
+    
+    chatUrl=`https://8.219.183.208:8080/chat/v2/info`;
+    chatStreamUrl=`https://8.219.183.208:8080/chat/v2/stream`;
+
     imageUrl=`${this.host}/${this.chatServiceName}/image/v2/info`;
     editsUrl=`${this.host}/${this.chatServiceName}/edits/v2/info`;
     imageEditUrl=`${this.host}/${this.chatServiceName}/image/v2/edit`;
     variationsImageUrl=`${this.host}/${this.chatServiceName}/image/v2/variations`;
     imageUploadUrl=`${this.host}/${this.chatServiceName}/upload/v2/image`
-    chatRoleUrl=`${this.host}/${this.chatConfigServiceName}/config/chat-roles`
-    moduleUrl=`${this.host}/${this.chatConfigServiceName}/config/modules`
-    loginUrl=`${this.host}/${this.userServiceName}/user/user-tokens`
-    signUpUrl=`${this.host}/${this.userServiceName}/user/user`
+    chatRoleUrl=`http://121.37.10.131:8401/config/chat-roles`
+    moduleUrl=`https://121.37.10.131:8401/config/modules`
+    loginUrl=`https://121.37.10.131:8402/user/user-tokens`
+    signUpUrl=`https://121.37.10.131:8402/user/user`
 
-    publicKeyUrl=`${this.host}/${this.userServiceName}/user/rsapubkey`
-    userInfoUrl=`${this.host}/${this.userServiceName}/user/user-info`
-    historyUrl=`${this.host}/${this.historyServiceName}/history`
+    publicKeyUrl=`https://121.37.10.131:8402/user/rsapubkey`
+    userInfoUrl=`https://121.37.10.131:8402/user/user-info`
+    historyUrl=`https://121.37.10.131:8403/history`
     sentSmsCodeUrl=`${this.host}/${this.smsServiceName}/sms/send/`    
   
 }

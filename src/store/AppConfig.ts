@@ -33,6 +33,9 @@ export interface IAppConfig{
     clearHistory:()=>void;
     iatRecorder:any;
     chatConfig:IChatConfig;
+    formLayout:string;
+    isChinese:boolean;
+    isEnglish:boolean;
 }
 
 
@@ -64,10 +67,22 @@ class AppConfig implements IAppConfig{
         return url;
     }
 
+    get formLayout(){
+        return isMobile?"vertical":"horizontal"
+    }
+
     colorPrimary='#87e8de'
     textLanguage="zh";
     language="zh_cn";
     accent="mandarin";
+
+    get isChinese(){
+        return this.textLanguage==="zh";
+    }
+
+    get isEnglish(){
+        return this.textLanguage==="en";
+    }
 
     isSlowMsg4AddChat=true;
 

@@ -1,20 +1,18 @@
 import React from 'react';
 import { observer } from "mobx-react"
 import { Card,Collapse} from 'antd';
-import {BaseConfigForm,ChatConfigForm,CodeEditConfigForm,ConfigActionBtn} from '../../component';
+import {BaseConfigForm,ChatConfigForm,CodeEditConfigForm,ConfigActionBtn,RoleList} from '../../component';
 import { useTranslation } from 'react-i18next';
 import "./Config.css";
 import {IAppConfig} from '../../store/AppConfig';
 import {IMessage} from '../../store/MessageData';
 import { useParams } from 'react-router-dom';
-
 type IProps={
   config:IAppConfig;
   store:IMessage;
-  match:any;
 }
 
-const ConfigPage:React.FC<IProps> = observer(({config,store,match})=>{
+const ConfigPage:React.FC<IProps> = observer(({config,store})=>{
 
   const { Panel } = Collapse;
   const { t } = useTranslation();
@@ -40,6 +38,9 @@ const ConfigPage:React.FC<IProps> = observer(({config,store,match})=>{
               <Card>
               <CodeEditConfigForm config={config}></CodeEditConfigForm>
               </Card>
+            </Panel>
+            <Panel header={t("Roles Detil")} key="4">
+              <RoleList config={config} store={store}></RoleList>
             </Panel>
             <div>
               <ConfigActionBtn store={store}></ConfigActionBtn>

@@ -51,7 +51,9 @@ const BaseConfigForm: React.FC<IProps>  = ({config})=>{
     return (
       <Form
         form={form}
-        layout="vertical"
+        layout={config.formLayout as any}
+        labelCol={{ span: 4 }}
+        wrapperCol={{ span: 12 }}
         initialValues={config.getConfigJson()}
         style={{padding:"10px"}}
       >
@@ -84,7 +86,7 @@ const BaseConfigForm: React.FC<IProps>  = ({config})=>{
             />
 
         </Form.Item>
-        <Form.Item>
+        <Form.Item wrapperCol={ { offset: 4, span: 12 }}>
           <Button type="primary" onClick={save}>Save</Button>
         </Form.Item>
         {contextHolder}

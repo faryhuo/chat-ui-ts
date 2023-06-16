@@ -5,7 +5,7 @@ import axios from 'axios';
 import { saveAs } from 'file-saver'
 import { fetchEventSource } from "@microsoft/fetch-event-source";
 import userProflie from "./UserProfile";
-import roleData,{IRoleData} from "./RoleData";
+import roleData,{IRoleData,IRole} from "./RoleData";
 import imageData from "./ImageData";
 import {
     encode
@@ -42,12 +42,6 @@ export interface IMessageListData{
     name?:string;
 }
 
-export interface  IRole{
-    roleId:string;
-    description:string;
-    roleNameCN:string;
-    roleName:string;
-}
 
 export interface IMessage{
     handleAPIError:(error:any,chatId:string)=>void;
@@ -57,6 +51,7 @@ export interface IMessage{
     localSessionName:string;
     activeSession:string;
     addChat:()=>string;
+    addChatWithRole:(role:IRole)=>string;
     endStream:(chatId:string)=>void;
     appendData:(text:any,chatId:string)=>void;
     addData:(newChat: any,chatId: string) =>void;
@@ -162,6 +157,7 @@ class MessageData implements  IMessage{
             needStream: computed,
             latestMessage: computed,
             addData: action,
+            addChatWithRole:action,
             changeType: action,
             clear: action,
             selectChat: action,
@@ -312,6 +308,34 @@ class MessageData implements  IMessage{
             data:data,
             isType:true,
             edit:false,
+            updateDate: new Date()
+        };
+        this.session.push(sessionData);
+        this.activeSession=chatId;
+        this.save(chatId);
+        return chatId;
+    }
+
+    addChatWithRole(role:IRole){
+        const data:Array<ISessiondata>=[];
+        
+        let chatId="chat"+new Date().getTime();
+        if(config.isSlowMsg4AddChat){
+            let tmp:ISessiondata={
+                isSys:true,
+                isDefault:true
+            };
+            tmp.text=config.isChinese?role.descriptionCN:role.description;
+            data.push(tmp)
+        }
+        const sessionData:ISession={
+            type:"chat",
+            chatId:chatId,
+            chatName:config.isChinese?role.roleNameCN:role.roleName,
+            data:data,
+            isType:true,
+            edit:false,
+            role:role.roleId,
             updateDate: new Date()
         };
         this.session.push(sessionData);
@@ -476,7 +500,10 @@ class MessageData implements  IMessage{
                 let chatName;
                 roleData.roles.forEach((sItem)=>{
                     if(role===sItem.roleId){
-                        chatName=config.textLanguage==="zh"?sItem.roleNameCN:sItem.roleName
+                        chatName=config.isChinese?sItem.roleNameCN:sItem.roleName;
+                        if(this.data && this.data.length && config.isSlowMsg4AddChat){
+                            this.data[0].text=this.systemText;
+                        }
                     }
                 })
                 item.chatName=chatName;
@@ -835,13 +862,22 @@ class MessageData implements  IMessage{
         });
     }
 
+    get systemText(){
+        return this.role?roleData.getContentByRole(this.role):i18n.t("Type something to search on ChatGPT")
+    }
+
     getChatParams(){
         const chatConfig=config.chatConfig.getAPIConfig();
         let messageListData= this.getMessageListData();
         let chatTokens = this.encodeChat(messageListData)
-        while(chatTokens+chatConfig.max_tokens>=4096){
+        let model=chatConfig.model;
+        if(chatTokens+chatConfig.max_tokens>=config.chatConfig.getMaxTokenByModel(model) 
+        && !config.chatConfig.isMaxTokenModel(model)){
+            model=config.chatConfig.getMaxTokenModel(model);
+        }
+        while(chatTokens+chatConfig.max_tokens>=config.chatConfig.getMaxTokenByModel(model)){
             if(messageListData[0].role==="system"){
-                messageListData.splice(1,1);
+                messageListData.splice(2,1);
             }else{
                 messageListData.splice(0,1);
             }
@@ -851,7 +887,7 @@ class MessageData implements  IMessage{
         let params={ 
           messages:JSON.stringify(messageListData),
           uuid: this.activeSession,
-          model: chatConfig.model,
+          model: model,
           temperature:chatConfig.temperature,
           top_p:chatConfig.top_p,
           presence_penalty:chatConfig.presence_penalty,
