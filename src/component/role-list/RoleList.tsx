@@ -34,7 +34,7 @@ const RoleList:React.FC<IProps> = observer(({config,store})=>{
       onChange={(e)=>{roleData.changeTag(e.target.value)}}>
         {
           roleData.currentTags.map((tag)=>(
-            <Radio.Button  value={tag}>{tag}</Radio.Button>)
+            <Radio.Button  value={tag}>{t("tags."+tag)}</Radio.Button>)
           )
         }
       </Radio.Group>

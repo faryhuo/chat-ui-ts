@@ -1,4 +1,35 @@
 const config = {
+    "tags":{
+        "favorite":"常用",
+        "language":"语言/翻译",
+        "mind":"发散思维",
+        "write":"写作辅助",
+        "article":"文章/报告",
+        "text":"文本/词语",
+        "seo":"SEO",
+        "comments":"点评/评鉴",
+        "code":"IT/编程",
+        "ai":"AI",
+        "life":"自助百科",
+        "living":"生活质量",
+        "interesting":"趣味知识",
+        "speech":"辩论/演讲",
+        "social":"心理/社交",
+        "philosophy":"哲学/宗教",
+        "games":"游戏",
+        "tool":"工具",
+        "interpreter":"终端/解释器",
+        "company":"企业职位",
+        "doctor":"医生",
+        "finance":"金融顾问",
+        "music":"音乐",
+        "professional":"行业顾问",
+        "contribute":"投稿",
+        "latest":"最新的",
+        "personal":"个人的",
+        "pedagogy":"教育/学生",
+        "academic":"学术/教师"
+    },
     "Chat":"会话",
     "Image":"AI 绘画",
     "Config":"配置",
@@ -41,7 +72,6 @@ const config = {
     "Regenerate":"重新生成",
     "presence_penalty":"话题新鲜度 (presence_penalty)",
     "temperature":"随机性 (temperature)",
-    "max_tokens":"单次回复限制 (max_tokens)",
-    "tag_":""
+    "max_tokens":"单次回复限制 (max_tokens)"
 }
 export default config;
