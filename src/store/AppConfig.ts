@@ -48,7 +48,7 @@ export interface ICodeEditsAPIConfig{
 
 class AppConfig implements IAppConfig{
 
-    version="4.0"
+    version="2.1"
     style="chat";
     localConfigName=`config_${this.version}`;
     type="";

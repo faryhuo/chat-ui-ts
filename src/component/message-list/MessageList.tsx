@@ -7,7 +7,6 @@ import './MessageList.css';
 import { Button } from 'antd';
 import {CopyOutlined} from '@ant-design/icons'
 import * as CodeStyle  from 'react-syntax-highlighter/dist/esm/styles/hljs';
-import 'github-markdown-css';
 import Markdown from '../markdown/Markdown'
 import MessageItem2 from '../message-list-antd/MessageItem';
 import MessageItemChat from '../message-list-chat/MessageItem';

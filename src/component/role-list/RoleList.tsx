@@ -1,13 +1,15 @@
 import React from 'react';
-import { Button,List,Card,Radio,Divider } from 'antd';
+import { Button,List,Card,Radio,Divider,Modal,Input,Space } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEdit,faChartLine } from '@fortawesome/free-solid-svg-icons'
+import { faEdit,faTrash,faLightbulb} from '@fortawesome/free-solid-svg-icons'
 import { observer } from "mobx-react-lite";
 import roleData,{IRole} from "../../store/RoleData";
 import {IAppConfig} from '../../store/AppConfig';
 import {IMessage} from '../../store/MessageData';
+import RoleDetails from '../role-details/RoleDetails';
 import './RoleList.css'
+import { useState } from 'react';
 type IProps={
   config:IAppConfig;
   store:IMessage;
@@ -15,6 +17,9 @@ type IProps={
 const RoleList:React.FC<IProps> = observer(({config,store})=>{
 
     const {t} =useTranslation();
+    const [open,setOpen]=useState(false);
+    const [roleDetails,setRoleDetails]=useState<IRole | undefined>(undefined);
+
     const data = roleData.currentRolesByTag;
     const useRole=(role:IRole)=>{
       store.addChatWithRole(role);
@@ -22,7 +27,27 @@ const RoleList:React.FC<IProps> = observer(({config,store})=>{
     }
 
 
+    const handleCancel=()=>{
+      setOpen(false);
+    }
 
+    const edit=(role:IRole)=>{
+      setRoleDetails(role)
+      setOpen(true);
+    }
+
+    const addRole=()=>{
+      setRoleDetails(undefined)
+      setOpen(true);
+    }
+
+    const onSearch=()=>{
+      
+    }
+
+    const onDelete=(roleId: string)=>{
+      roleData.deleteRole(roleId);
+    }
 
     const buttonStyle={
       width:"100%",
@@ -33,8 +58,8 @@ const RoleList:React.FC<IProps> = observer(({config,store})=>{
       <Radio.Group defaultValue="favorite" buttonStyle="solid" 
       onChange={(e)=>{roleData.changeTag(e.target.value)}}>
         {
-          roleData.currentTags.map((tag)=>(
-            <Radio.Button  value={tag}>{t("tags."+tag)}</Radio.Button>)
+          roleData.currentTags.map((tag,index)=>(
+            <Radio.Button  key={index} value={tag}>{t("tags."+tag)}</Radio.Button>)
           )
         }
       </Radio.Group>
@@ -42,8 +67,15 @@ const RoleList:React.FC<IProps> = observer(({config,store})=>{
       <div style={{height:20}}>
         <Divider />
       </div>
-
-
+      <div>
+         <Space direction="horizontal">
+          <Button type="primary" onClick={addRole}>{t('Add Role')}</Button>
+          <Input.Search width={300} placeholder="input search text" onSearch={onSearch} enterButton  />
+        </Space>
+      </div>
+      <div style={{height:20}}>
+        <Divider />
+      </div>
       <List
       grid={{
         gutter: 16,
@@ -58,19 +90,31 @@ const RoleList:React.FC<IProps> = observer(({config,store})=>{
       renderItem={(item) => (
         <List.Item>
           <Card title={config.isChinese?item.roleNameCN:item.roleName}
+          extra={<Button shape="circle" onClick={()=>{onDelete(item.roleId)}} icon={<FontAwesomeIcon icon={faTrash} />}></Button>}
               actions={[
-                 <Button icon={<FontAwesomeIcon icon={faChartLine} />} 
+                 <Button icon={<FontAwesomeIcon icon={faLightbulb} />} 
                  style={buttonStyle} type="link" onClick={()=>{useRole(item)}}>
                    &nbsp;{t('Use')}</Button>,
                  <Button icon={<FontAwesomeIcon icon={faEdit} />} 
+                 onClick={()=>{edit(item)}}
                  style={buttonStyle} type="link">&nbsp;{t('Edit')}</Button>,
               ]}
           >
             {config.isChinese?item.descriptionCN:item.description}
-            </Card>
+          </Card>
+            
         </List.Item>
       )}/>
-      
+       <Modal
+        open={open}
+        title={false}
+        onCancel={handleCancel}
+        footer={false}
+        width={700}
+        destroyOnClose={true}
+      >
+        <RoleDetails handleCancel={handleCancel} role={roleDetails} config={config} store={store}></RoleDetails>
+      </Modal>
       </div>)
 })
 

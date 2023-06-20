@@ -25,7 +25,7 @@ type Model="gpt-3.5-turbo" | "gpt-3.5-turbo-16k"|
 
 class ChatConfig implements IChatConfig{
     
-    version="1.0"
+    version="2.0"
     localConfigName=`chat_config_${this.version}`;
 
     apiConfig:IChatAPIConfig={

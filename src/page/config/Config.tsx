@@ -40,7 +40,7 @@ const ConfigPage:React.FC<IProps> = observer(({config,store})=>{
               <CodeEditConfigForm config={config}></CodeEditConfigForm>
               </Card>
             </Panel>
-            <Panel header={t("Roles Detil")} key="4">
+            <Panel header={t("Roles management")} key="4">
               <RoleConfigPage config={config} store={store}></RoleConfigPage>
             </Panel>
             <div>

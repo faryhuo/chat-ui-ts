@@ -1,5 +1,6 @@
 const config = {
     "tags":{
+        "all":"全部",
         "favorite":"常用",
         "language":"语言/翻译",
         "mind":"发散思维",
@@ -30,12 +31,17 @@ const config = {
         "pedagogy":"教育/学生",
         "academic":"学术/教师"
     },
+    "Code edits API Configuration":"Code API 配置",
+    "More":"更多",
+    "Roles management":"角色管理",
+    "Tags":"标签",
+    "Description":"详细描述",
     "Chat":"会话",
     "Image":"AI 绘画",
     "Config":"配置",
     "Text Language": "文本语言",
     "Base Configuration": "基础配置",
-    "Chat API Configuration": "ChatGPT API配置",
+    "Chat API Configuration": "ChatGPT API 配置",
     "Model":"训练模型",
     "Image Size":"图片大小",
     "Code Style":"代码风格",

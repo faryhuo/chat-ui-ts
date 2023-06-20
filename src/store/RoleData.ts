@@ -6,6 +6,7 @@ export interface IRoleData{
     roles:IRole[];
     currentRoles:IRole[];
     getContentByRole:(role: string)=>string;
+    checkRoleIsExisting:(name:string)=>boolean;
 
 }
 export interface  IRole{
@@ -47,14 +48,14 @@ class RoleData implements IRoleData{
         return this.roles.filter((role)=>{
             return !!(config.isChinese?role.roleNameCN:role.roleName) && 
             !!(config.isChinese?role.descriptionCN:role.description) &&
-            role.tags.includes(this.currentTag)
+            role.tags && role.tags.includes(this.currentTag)
           });
     }
 
     
     get currentTags(){
         const tags:string[]=[];
-
+        tags.push("all");
         this.roles.forEach((role)=>{
             if(!!(config.isChinese?role.roleNameCN:role.roleName) && 
             !!(config.isChinese?role.descriptionCN:role.description)){
@@ -89,6 +90,18 @@ class RoleData implements IRoleData{
             this.roles.push(role);
         })
     }
+
+    checkRoleIsExisting(name:string){
+        let result=false;
+        for(let i=0;i<this.currentRoles.length;i++){
+            const currentRoleName=config.isChinese?this.currentRoles[i].roleNameCN:this.currentRoles[i].roleName;
+            if(name===currentRoleName){
+                result=true;
+                break;
+            }
+        }
+        return result;
+    }
     
 
     getContentByRole(role: string){
@@ -101,7 +114,6 @@ class RoleData implements IRoleData{
     }
 
     fetchData() {
-        const self=this;
         axios({
             method: "get",
             url: config.api.chatRoleUrl+"?uuid="+new Date().getTime(),
@@ -113,11 +125,66 @@ class RoleData implements IRoleData{
             if (response.data) {
                 const data = response.data;
                 if(data.data){
-                    self.roles=self.roles.concat(data.data);
+                    (data.data as IRole[]).forEach(item => {
+                        let hasKey=false;
+                        for(let i=0;i<this.roles.length;i++){
+                            if(this.roles[i].roleId==item.roleId){
+                                hasKey=true;
+                                this.roles[i]=item;
+                                break;
+                            }
+                        }
+                        if(!hasKey){
+                            this.roles.push(item);
+                        }
+                    });
                 }
               }
-          });
+        });
     }
+
+
+    addRole(role:IRole){
+       return new Promise((resolve,reject)=>{
+        axios({
+                method: "post",
+                url: config.api.chatRoleUrl,
+                headers: {
+                'Content-Type': 'application/json;charset=UTF-8'
+                },
+                data:JSON.stringify(role)
+            }).then((response)=>{
+                const data=response.data;
+                if(data && data.data){
+                    this.fetchData();
+                    resolve(true);
+                }else{
+                    reject(data);
+                }
+            })
+        });
+    }
+
+
+    deleteRole(roleId: string){
+        return new Promise((resolve,reject)=>{
+         axios({
+                 method: "delete",
+                 url: `${config.api.chatRoleUrl}/${roleId}`,
+                 headers: {
+                 'Content-Type': 'application/json;charset=UTF-8'
+                 }
+             }).then((response)=>{
+                 const data=response.data;
+                 if(data && data.data){
+                     this.fetchData();
+                     resolve(true);
+                 }else{
+                     reject(data);
+                 }
+             })
+         });
+     }
 }
 const roleData = new RoleData()
 export default roleData;

@@ -1,5 +1,6 @@
 const config= {
     "tags":{
+        "all":"All",
         "favorite":"Favorite",
         "language":"Language",
         "mind":"Mind",
