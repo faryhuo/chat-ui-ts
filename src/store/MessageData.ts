@@ -7,6 +7,9 @@ import { fetchEventSource } from "@microsoft/fetch-event-source";
 import userProflie from "./UserProfile";
 import roleData,{IRoleData,IRole} from "./RoleData";
 import imageData from "./ImageData";
+import {
+    encode
+} from 'gpt-tokenizer'
 
 export interface  ISessiondata{
     isSys?:boolean;
@@ -182,29 +185,6 @@ class MessageData implements  IMessage{
         }else{
             this.loadDataFromlocalStore();
         }
-    }
-
-    estimateTokenLength(input: string): number {
-        let tokenLength = 0;
-      
-        for (let i = 0; i < input.length; i++) {
-          const charCode = input.charCodeAt(i);
-      
-          if (charCode < 128) {
-            // ASCII character
-            if (charCode <= 122 && charCode >= 65) {
-              // a-Z
-              tokenLength += 0.25;
-            } else {
-              tokenLength += 0.5;
-            }
-          } else {
-            // Unicode character
-            tokenLength += 1.5;
-          }
-        }
-      
-        return tokenLength;
     }
 
     loadDataFromlocalStore(){
@@ -933,8 +913,8 @@ class MessageData implements  IMessage{
         let tokenNum=0;
         messageListData.forEach(item=>{
             tokenNum += 4; 
-            tokenNum += this.estimateTokenLength(item.content);
-            tokenNum += this.estimateTokenLength(item.role);
+            tokenNum += encode(item.content).length;
+            tokenNum += encode(item.role).length;
         });
         tokenNum +=2;
         return tokenNum;

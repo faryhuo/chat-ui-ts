@@ -26,31 +26,57 @@ class RoleData implements IRoleData{
     constructor() {
         makeObservable(this, {
             roles: observable,
+            filterBy:observable,
             currentTag: observable,
+            search:action,
             fetchData:action.bound
         })
         this.loadRolesInLocal();
         this.fetchData();
     }
 
-    get currentRoles(){
-        return this.roles.filter((role)=>{
-            return !!(config.isChinese?role.roleNameCN:role.roleName) && 
-            !!(config.isChinese?role.descriptionCN:role.description)
-          });
+    filterBy="";
+
+    search(name:string){
+        this.filterBy=name;
+        this.currentTag="all";
     }
+
 
     changeTag(tag:string){
         this.currentTag=tag;
     }
 
-    get currentRolesByTag(){
-        return this.roles.filter((role)=>{
-            return !!(config.isChinese?role.roleNameCN:role.roleName) && 
-            !!(config.isChinese?role.descriptionCN:role.description) &&
-            role.tags && role.tags.includes(this.currentTag)
-          });
-    }
+    get currentRoles() {
+        const filteredRoles = this.roles.filter((role) => {
+          const roleName = this.getRoleName(role);
+          const description = this.getDescription(role);
+          const hasMatchingTag = this.hasMatchingTag(role);
+          const keywordMatches = this.keywordMatchesFilter(role);
+      
+          return roleName && description && (hasMatchingTag || this.currentTag === 'all') && keywordMatches;
+        });
+      
+        return filteredRoles;
+      }
+      
+      getRoleName(role: IRole) {
+        return config.isChinese ? role.roleNameCN : role.roleName;
+      }
+      
+      getDescription(role: IRole) {
+        return config.isChinese ? role.descriptionCN : role.description;
+      }
+      
+      hasMatchingTag(role: IRole) {
+        return role.tags && role.tags.includes(this.currentTag);
+      }
+      
+      keywordMatchesFilter(role:  IRole) {
+        const filterBy = this.filterBy && this.filterBy.toLowerCase();
+      
+        return !filterBy || this.getRoleName(role).toLowerCase().includes(filterBy);
+      }
 
     
     get currentTags(){

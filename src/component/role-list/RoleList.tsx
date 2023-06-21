@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button,List,Card,Radio,Divider,Modal,Input,Space } from 'antd';
+import { Button,List,Card,Radio,Divider,Modal,Input,Space,Popconfirm } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit,faTrash,faLightbulb} from '@fortawesome/free-solid-svg-icons'
@@ -20,7 +20,7 @@ const RoleList:React.FC<IProps> = observer(({config,store})=>{
     const [open,setOpen]=useState(false);
     const [roleDetails,setRoleDetails]=useState<IRole | undefined>(undefined);
 
-    const data = roleData.currentRolesByTag;
+    const data = roleData.currentRoles;
     const useRole=(role:IRole)=>{
       store.addChatWithRole(role);
       window.location.hash="/chat";
@@ -41,8 +41,8 @@ const RoleList:React.FC<IProps> = observer(({config,store})=>{
       setOpen(true);
     }
 
-    const onSearch=()=>{
-      
+    const onSearch=(name:string)=>{
+      roleData.search(name);
     }
 
     const onDelete=(roleId: string)=>{
@@ -70,7 +70,7 @@ const RoleList:React.FC<IProps> = observer(({config,store})=>{
       <div>
          <Space direction="horizontal">
           <Button type="primary" onClick={addRole}>{t('Add Role')}</Button>
-          <Input.Search width={300} placeholder="input search text" onSearch={onSearch} enterButton  />
+          <Input.Search width={300} placeholder="input search text" onSearch={(e)=>{onSearch(e)}} enterButton  />
         </Space>
       </div>
       <div style={{height:20}}>
@@ -90,7 +90,19 @@ const RoleList:React.FC<IProps> = observer(({config,store})=>{
       renderItem={(item) => (
         <List.Item>
           <Card title={config.isChinese?item.roleNameCN:item.roleName}
-          extra={<Button shape="circle" onClick={()=>{onDelete(item.roleId)}} icon={<FontAwesomeIcon icon={faTrash} />}></Button>}
+          extra={
+            <Popconfirm
+            placement="bottom"
+            title={t('Message')}
+            description={t('Are you want to delete the role.')}
+            onConfirm={(e)=>onDelete(item.roleId)}
+            onCancel={(e)=>e?.stopPropagation()}
+            okText={t("Yes")}
+            cancelText={t("No")}
+          >
+          <Button shape="circle" icon={<FontAwesomeIcon icon={faTrash} />}/>
+          </Popconfirm>
+         }
               actions={[
                  <Button icon={<FontAwesomeIcon icon={faLightbulb} />} 
                  style={buttonStyle} type="link" onClick={()=>{useRole(item)}}>

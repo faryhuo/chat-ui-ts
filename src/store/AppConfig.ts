@@ -128,7 +128,8 @@ class AppConfig implements IAppConfig{
     setConfigData(configJson:IAppConfig){
         let item:keyof IAppConfig;
         for (item in configJson) {
-            if(item==="isMobile"){
+            const skipList=["isMobile","api","chatConfig","image","isSlowLeftMenu"]
+            if(skipList.includes(item)){
                 continue;
             }
             if(Object.keys(this).includes(item)){
