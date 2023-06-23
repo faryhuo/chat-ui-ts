@@ -30,7 +30,7 @@ const SessionAtcionList : React.FC<IProps> = observer(({store,config,onOpen})=>{
 
 
     const roleList:any[]=[{label:"",value:""}];
-    store.roleData.currentRoles.forEach(item => {
+    store.roleData.allRoles.forEach(item => {
         roleList.push({
             label:config.isChinese?item.roleNameCN:item.roleName,
             value: item.roleId

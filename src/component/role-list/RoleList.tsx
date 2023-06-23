@@ -55,7 +55,7 @@ const RoleList:React.FC<IProps> = observer(({config,store})=>{
     }
 
     return (<div className="role-list-wrapper">           
-      <Radio.Group defaultValue="favorite" buttonStyle="solid" 
+      <Radio.Group value={roleData.currentTag} buttonStyle="solid" 
       onChange={(e)=>{roleData.changeTag(e.target.value)}}>
         {
           roleData.currentTags.map((tag,index)=>(

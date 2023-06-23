@@ -1,10 +1,10 @@
 import { makeObservable, observable, action} from "mobx";
 import axios from 'axios';
 import config  from './AppConfig';
-import prompts from '../data/prompt';
+//import prompts from '../data/prompt';
 export interface IRoleData{
-    roles:IRole[];
     currentRoles:IRole[];
+    allRoles:IRole[];
     getContentByRole:(role: string)=>string;
     checkRoleIsExisting:(name:string)=>boolean;
 
@@ -31,7 +31,7 @@ class RoleData implements IRoleData{
             search:action,
             fetchData:action.bound
         })
-        this.loadRolesInLocal();
+        //this.loadRolesInLocal();
         this.fetchData();
     }
 
@@ -46,6 +46,16 @@ class RoleData implements IRoleData{
     changeTag(tag:string){
         this.currentTag=tag;
     }
+
+    get allRoles() {
+        const filteredRoles = this.roles.filter((role) => {
+          const roleName = this.getRoleName(role);
+          const description = this.getDescription(role);
+          return roleName && description 
+        });
+      
+        return filteredRoles;
+      }
 
     get currentRoles() {
         const filteredRoles = this.roles.filter((role) => {
@@ -97,25 +107,25 @@ class RoleData implements IRoleData{
         return tags;
     }
 
-    loadRolesInLocal(){
-        prompts.forEach((item)=>{
-            let role:IRole={
-                roleId:"",
-                description:"",
-                descriptionCN:"",
-                roleNameCN:"",
-                roleName:"",
-                tags:[]
-            };
-            role.roleId=item.id+"";
-            role.description=item.desc_en;
-            role.descriptionCN=item.desc_cn;
-            role.roleName=item.title_en;
-            role.roleNameCN=item.title;
-            role.tags=item.tags;
-            this.roles.push(role);
-        })
-    }
+    // loadRolesInLocal(){
+    //     prompts.forEach((item)=>{
+    //         let role:IRole={
+    //             roleId:"",
+    //             description:"",
+    //             descriptionCN:"",
+    //             roleNameCN:"",
+    //             roleName:"",
+    //             tags:[]
+    //         };
+    //         role.roleId=item.id+"";
+    //         role.description=item.desc_en;
+    //         role.descriptionCN=item.desc_cn;
+    //         role.roleName=item.title_en;
+    //         role.roleNameCN=item.title;
+    //         role.tags=item.tags;
+    //         this.roles.push(role);
+    //     })
+    // }
 
     checkRoleIsExisting(name:string){
         let result=false;
@@ -151,19 +161,7 @@ class RoleData implements IRoleData{
             if (response.data) {
                 const data = response.data;
                 if(data.data){
-                    (data.data as IRole[]).forEach(item => {
-                        let hasKey=false;
-                        for(let i=0;i<this.roles.length;i++){
-                            if(this.roles[i].roleId==item.roleId){
-                                hasKey=true;
-                                this.roles[i]=item;
-                                break;
-                            }
-                        }
-                        if(!hasKey){
-                            this.roles.push(item);
-                        }
-                    });
+                    this.roles=data.data;
                 }
               }
         });
