@@ -32,7 +32,7 @@ export interface  ISession{
     edit:boolean;
     isType:boolean;
     data:Array<ISessiondata>;
-    role?:string;
+    role?:number;
     updateDate?:Date;
 }
 
@@ -59,8 +59,8 @@ export interface IMessage{
     isType:boolean;
     changeType:(type: string)=>void;
     selectChat:(chatId: string)=>void;
-    changeRole:(chatId: string,role: string | undefined)=>void;
-    role:string | undefined;
+    changeRole:(chatId: string,role: number | undefined)=>void;
+    role:number | undefined;
     data:Array<ISessiondata>;
     sessionData:Array<ISession>;
     currentSession:Array<ISession>;
@@ -108,7 +108,6 @@ class MessageData implements  IMessage{
             text:i18n.t("Type something to search on ChatGPT")
             }
         ],
-        role:"",
         updateDate:new Date()
     },{
         chatId:"image",
@@ -488,7 +487,7 @@ class MessageData implements  IMessage{
         this.activeSession=chatId;
     }
 
-    changeRole(chatId: string,role: string | undefined){
+    changeRole(chatId: string,role: number | undefined){
         let {type,session}=this;
         for(let i=0;i<session.length;i++){
             let item=session[i];

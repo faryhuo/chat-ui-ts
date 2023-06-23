@@ -58,26 +58,32 @@ const SignUpForm : React.FC<IProps>= observer(({login,handleCancel,config,store,
 
 
     const onSentSMSCode=(e:any)=>{
-      setCodeSend(true);
-      userProfile.sentSMSCode(userId).then((response)=>{
-        const data=response.data.data;
-        console.log(data);
-        if(data.success){
-          let sec= 60;
-          const timer= setInterval(()=>{
-            sec--;
-            setSentSmsTitle(`resent after ${sec}s`);
-            if(sec===0){
-              setCodeSend(false);
-              setSentSmsTitle("Sent SMS code");
-              clearInterval(timer);
-            }
-          },1000);
-        }else if(data.message){
-          setCodeSend(false);
-          fail(data.message);
+      userProfile.checkUserIfExisting(userId).then((result)=>{
+        if(result===false){
+          fail("The phone no. is exsiting, please go to login.")
+          return;
         }
-      });
+        setCodeSend(true);
+        userProfile.sentSMSCode(userId).then((response)=>{
+          const data=response.data.data;
+          console.log(data);
+          if(data.success){
+            let sec= 60;
+            const timer= setInterval(()=>{
+              sec--;
+              setSentSmsTitle(`resent after ${sec}s`);
+              if(sec===0){
+                setCodeSend(false);
+                setSentSmsTitle("Sent SMS code");
+                clearInterval(timer);
+              }
+            },1000);
+          }else if(data.message){
+            setCodeSend(false);
+            fail(data.message);
+          }
+        });
+      })
       e.preventDefault();
     }
 

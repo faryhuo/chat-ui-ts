@@ -45,7 +45,7 @@ const RoleList:React.FC<IProps> = observer(({config,store})=>{
       roleData.search(name);
     }
 
-    const onDelete=(roleId: string)=>{
+    const onDelete=(roleId: number)=>{
       roleData.deleteRole(roleId);
     }
 

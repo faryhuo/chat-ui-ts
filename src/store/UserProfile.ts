@@ -10,12 +10,13 @@ export interface IUserProflie{
     password:string;
     isLogin:boolean;
     login:(userId:string,password:string)=>void;
+    resetPwd:(userId: string,password: string,code:string)=>Promise<any>;
     currentUser:string;
     token:string;
     logout:()=>void;
     sentSMSCode :(phone:string)=>Promise<any>;
     signup: (userId: string,password: string,code:string)=>Promise<any>;
-
+    checkUserIfExisting:(userId: string)=>Promise<any>;
 }
 export interface IModules{
     id:string;
@@ -70,6 +71,38 @@ class UserProflie implements IUserProflie{
             })
         });
         return promise;
+    }
+
+    resetPwd(userId: string,password: string,code:string){
+        const promise=new Promise((resolve,reject)=>{
+            this.getPulicKey().then(()=>{
+                const queryUrl = config.api.signUpUrl;
+                const params={
+                    "phone":userId,
+                    "password":this.encrypt(password),
+                    "smsCode":code
+                };
+                axios({
+                     method: "put",
+                     url: queryUrl,
+                     headers: {
+                       'Content-Type': 'application/json;charset=UTF-8'
+                     },
+                     data : JSON.stringify(params)
+                   }
+                 ).then((response)=>{
+                    if(response.data.statusCode===0 && response.data.data){
+                        this.login(userId,password);
+                        resolve(response.data.data)
+                    }else if(response.data.errors.message){
+                        reject(response.data.errors.message)
+                    }else{
+                        reject("Fail to signup");
+                    }
+                });
+                })
+            })
+            return promise;
     }
 
     signup(userId: string,password: string,code:string){
@@ -191,6 +224,30 @@ class UserProflie implements IUserProflie{
                 if(response.data.statusCode===0){
                     this.publicKey=response.data.data;
                     resolve(this.publicKey);
+                }
+            });
+        });
+        return promise;
+    }
+
+    checkUserIfExisting(userId: string){
+        const queryUrl=config.api.checkUserIfExistingUrl;
+        const promise=new Promise((resolve,reject)=>{
+            if(this.publicKey){
+                resolve(this.publicKey);
+            }
+            axios({
+                method: "get",
+                url: queryUrl+"/"+userId,
+                headers: {
+                'Content-Type': 'application/json;charset=UTF-8'
+                }
+            }
+            ).then((response)=>{
+                if(response.data.statusCode===0){
+                    resolve(response.data.data);
+                }else{
+                    reject(false)
                 }
             });
         });

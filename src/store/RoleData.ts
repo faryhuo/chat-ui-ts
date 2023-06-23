@@ -5,12 +5,12 @@ import config  from './AppConfig';
 export interface IRoleData{
     currentRoles:IRole[];
     allRoles:IRole[];
-    getContentByRole:(role: string)=>string;
+    getContentByRole:(role: number)=>string;
     checkRoleIsExisting:(name:string)=>boolean;
 
 }
 export interface  IRole{
-    roleId:string;
+    roleId:number;
     description:string;
     descriptionCN:string;
     roleNameCN:string;
@@ -140,7 +140,7 @@ class RoleData implements IRoleData{
     }
     
 
-    getContentByRole(role: string){
+    getContentByRole(role: number){
         for(let i=0;i<this.roles.length;i++){
             if(this.roles[i].roleId===role){
                 return config.isChinese?this.roles[i]?.descriptionCN:this.roles[i]?.description;
@@ -190,7 +190,7 @@ class RoleData implements IRoleData{
     }
 
 
-    deleteRole(roleId: string){
+    deleteRole(roleId: number){
         return new Promise((resolve,reject)=>{
          axios({
                  method: "delete",

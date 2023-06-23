@@ -43,7 +43,7 @@ const RoleDetails:React.FC<IProps> = observer(({store,config,role,handleCancel})
         let newRole:IRole={
           descriptionCN:"",
           roleNameCN:"",
-          roleId:"",
+          roleId:-1,
           roleName:"",
           description:"",
           tags:tags
@@ -100,7 +100,7 @@ const RoleDetails:React.FC<IProps> = observer(({store,config,role,handleCancel})
         <Form.Item label={t("Name")} name="name" 
                 rules={[{ required: true },({  }) => ({
                   validator(_, value) {
-                    if (!value || value==(config.isChinese?role?.roleNameCN:role?.roleName)) {
+                    if (!value || value===(config.isChinese?role?.roleNameCN:role?.roleName)) {
                       return Promise.resolve();
                     }
                     if (!RoleData.checkRoleIsExisting(value)) {

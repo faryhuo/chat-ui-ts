@@ -58,13 +58,23 @@ const LoginForm : React.FC<IProps>= observer(({login,handleCancel,config,store,u
     };
 
     const onLogin = () => {
-      login(userId,password).then(()=>{
-        store.getChatHistory()
-        handleCancel();
-        success();
-      },(msg)=>{
-        fail(msg);
-      })
+      if(forgetFlag){
+        userProfile.resetPwd(userId,password,code).then(()=>{
+          store.getChatHistory()
+          handleCancel();
+          success();
+        },(msg)=>{
+          fail(msg);
+        })
+      }else{
+        login(userId,password).then(()=>{
+          store.getChatHistory()
+          handleCancel();
+          success();
+        },(msg)=>{
+          fail(msg);
+        })
+      }
     };
 
     const onLogout= () =>{

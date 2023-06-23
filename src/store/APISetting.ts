@@ -48,6 +48,7 @@ class APISetting implements IAPISetting{
     moduleUrl=`${this.host}/${this.chatConfigServiceName}/config/modules`
     loginUrl=`${this.host}/${this.userServiceName}/user/user-tokens`
     signUpUrl=`${this.host}/${this.userServiceName}/user/user`
+    checkUserIfExistingUrl=`${this.host}/${this.userServiceName}/user/user`
 
     publicKeyUrl=`${this.host}/${this.userServiceName}/user/rsapubkey`
     userInfoUrl=`${this.host}/${this.userServiceName}/user/user-info`
