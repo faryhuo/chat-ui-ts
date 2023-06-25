@@ -48,7 +48,7 @@ export interface ICodeEditsAPIConfig{
 
 class AppConfig implements IAppConfig{
 
-    version="2.41"
+    version="3.1"
     style="chat";
     localConfigName=`config_${this.version}`;
     type="";
@@ -58,12 +58,14 @@ class AppConfig implements IAppConfig{
     api=apiSetting
     image=imageData;
     chatConfig=chatConfig;
+
+    
     get weChatQRCode() {
-        const redirectUri = encodeURIComponent(window.location.href);
+        const redirectUri = encodeURIComponent('fary.chat');
         const scope = 'snsapi_login'; // 或者snsapi_base
-        const state = 'wechat_login_state';
-        const appId="wxb4e93c99797a1111";
-        const url = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appId}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}&state=${state}#wechat_redirect`;
+        const appId="wx9c2b92a723dc3e4b";
+        const d="42297595ac4caa542e92c5a0a1773cc0"
+        const url = `https://open.weixin.qq.com/connect/qrconnect?appid=${appId}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}#wechat_redirect`;
         return url;
     }
 
@@ -128,11 +130,8 @@ class AppConfig implements IAppConfig{
     setConfigData(configJson:IAppConfig){
         let item:keyof IAppConfig;
         for (item in configJson) {
-            const skipList=["isMobile","api","chatConfig","image","isSlowLeftMenu"]
-            if(skipList.includes(item)){
-                continue;
-            }
-            if(Object.keys(this).includes(item)){
+            const configKey=["colorPrimary","textLanguage","language","accent","style"]
+            if(configKey.includes(item)){
                 (this as any)[item] = configJson[item]
             }
         }
@@ -151,8 +150,8 @@ class AppConfig implements IAppConfig{
 
 
     getConfigJson(){
-        const {language,accent,codeStyle,textLanguage,chatConfig,isSlowMsg4AddChat,colorPrimary,style} = this;
-        return {language,accent,codeStyle,textLanguage,chatConfig,isSlowMsg4AddChat,colorPrimary,style};
+        const {language,accent,codeStyle,textLanguage,colorPrimary,style} = this;
+        return {language,accent,codeStyle,textLanguage,colorPrimary,style};
     }
 
     saveCodeEditConfig(config:ICodeEditsAPIConfig){
@@ -170,11 +169,6 @@ class AppConfig implements IAppConfig{
     
 
     save(config: any){
-        // this.chatUrl=config.chatUrl;
-        // this.imageUrl=config.imageUrl;
-        // this.imageSize=config.imageSize;
-        // this.codeStyle=config.codeStyle;
-        // this.textLanguage=config.textLanguage;
         let isNeedReoload=false;
         if(config.textLanguage && this.textLanguage!==config.textLanguage){
             this.textLanguage=config.textLanguage;

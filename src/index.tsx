@@ -11,7 +11,9 @@ const root = ReactDOM.createRoot(
 );
 root.render(
       <BrowserRouter>
-    <Main></Main></BrowserRouter>
+    <Main></Main>
+    <a className='icp_link'target='blank' href='https://beian.miit.gov.cn/#/Integrated/index'>粤ICP备2023068902号-1</a>    
+    </BrowserRouter>
 );
 
 setTimeout(()=>{

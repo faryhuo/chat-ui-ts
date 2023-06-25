@@ -19,6 +19,8 @@ const RoleList:React.FC<IProps> = observer(({config,store})=>{
     const {t} =useTranslation();
     const [open,setOpen]=useState(false);
     const [roleDetails,setRoleDetails]=useState<IRole | undefined>(undefined);
+    const [currentPage,setCurrentPage]=useState(1);
+    const [pageSize,setPageSize]=useState(10);
 
     const data = roleData.currentRoles;
     const useRole=(role:IRole)=>{
@@ -43,6 +45,7 @@ const RoleList:React.FC<IProps> = observer(({config,store})=>{
 
     const onSearch=(name:string)=>{
       roleData.search(name);
+      setCurrentPage(1);
     }
 
     const onDelete=(roleId: number)=>{
@@ -54,9 +57,14 @@ const RoleList:React.FC<IProps> = observer(({config,store})=>{
       fontSize:"16px"
     }
 
+    const changeTag=(tag: string)=>{
+      setCurrentPage(1);
+      roleData.changeTag(tag)
+    }
+
     return (<div className="role-list-wrapper">           
       <Radio.Group value={roleData.currentTag} buttonStyle="solid" 
-      onChange={(e)=>{roleData.changeTag(e.target.value)}}>
+      onChange={(e)=>{changeTag(e.target.value)}}>
         {
           roleData.currentTags.map((tag,index)=>(
             <Radio.Button  key={index} value={tag}>{t("tags."+tag)}</Radio.Button>)
@@ -86,10 +94,14 @@ const RoleList:React.FC<IProps> = observer(({config,store})=>{
         xl: 3,
         xxl: 4,
       }}
+      pagination={{ position:"bottom", align:"center",hideOnSinglePage:true,current:currentPage,pageSize,onChange(page, pageSize) {
+        setCurrentPage(page);
+        setPageSize(pageSize)
+      }}}
       dataSource={data}
       renderItem={(item) => (
         <List.Item>
-          <Card title={config.isChinese?item.roleNameCN:item.roleName}
+          <Card title={<h4 className='role-title'>{config.isChinese?item.roleNameCN:item.roleName}</h4>}
           extra={
             <Popconfirm
             placement="bottom"

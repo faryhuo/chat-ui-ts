@@ -902,7 +902,7 @@ class MessageData implements  IMessage{
             return this.data;
         }
         if(this.data[this.data.length-1].choices){
-            return this.data[this.data.length-1].choices[0].message.content;
+            return this.data[this.data.length-1].choices[0]?.message?.content;
         }else{
             return this.data[this.data.length-1].text;
         }

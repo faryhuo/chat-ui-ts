@@ -46,7 +46,7 @@ class Main extends Component {
                             <div className="chat-right-content">
                                 <Routes messageData={messageData} appConfig={appConfig} ></Routes>
                             </div>  
-                        </div>      
+                        </div>  
                     </div>
                 </div>
             </ConfigProvider>)

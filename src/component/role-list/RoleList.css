@@ -6,3 +6,7 @@
     max-height:350px;
     overflow: auto;
 }
+.role-list-wrapper .role-title{
+    color:var(--color-primary);
+    font-style: oblique;
+}

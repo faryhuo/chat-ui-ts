@@ -11,3 +11,12 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.icp_link{
+    position: fixed;
+    bottom: 0;
+    font-size: 9px;
+    left: 50%;
+    text-decoration: none;
+    color: #000;
+}
