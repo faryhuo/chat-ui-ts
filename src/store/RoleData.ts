@@ -7,7 +7,7 @@ export interface IRoleData{
     allRoles:IRole[];
     getContentByRole:(role: number)=>string;
     checkRoleIsExisting:(name:string)=>boolean;
-
+    getToken:()=>Promise<any>;
 }
 export interface  IRole{
     roleId:number;
@@ -16,6 +16,7 @@ export interface  IRole{
     roleNameCN:string;
     roleName:string;
     tags:string[];
+    token?:string;
 }
 
 class RoleData implements IRoleData{
@@ -168,7 +169,8 @@ class RoleData implements IRoleData{
     }
 
 
-    addRole(role:IRole){
+    addRole(role:IRole,token:string){
+        role.token=token;
        return new Promise((resolve,reject)=>{
         axios({
                 method: "post",
@@ -189,6 +191,15 @@ class RoleData implements IRoleData{
         });
     }
 
+    getToken(){
+        return axios({
+            method: "get",
+            url: `${config.api.chatRoleUrl}/token`,
+            headers: {
+            'Content-Type': 'application/json;charset=UTF-8'
+            }
+        });
+     }
 
     deleteRole(roleId: number){
         return new Promise((resolve,reject)=>{

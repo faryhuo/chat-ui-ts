@@ -15,8 +15,9 @@ type IProps={
   store:IMessage;
   role?:IRole;
   handleCancel:()=>void;
+  token:string;
 }
-const RoleDetails:React.FC<IProps> = observer(({store,config,role,handleCancel})=>{
+const RoleDetails:React.FC<IProps> = observer(({store,config,role,handleCancel,token})=>{
 
     const {t} =useTranslation();
 
@@ -38,7 +39,7 @@ const RoleDetails:React.FC<IProps> = observer(({store,config,role,handleCancel})
         if(tags){
           role.tags=tags;
         }
-        RoleData.addRole(role).then(handleCancel);
+        RoleData.addRole(role,token).then(handleCancel);
       }else{
         let newRole:IRole={
           descriptionCN:"",
@@ -55,7 +56,7 @@ const RoleDetails:React.FC<IProps> = observer(({store,config,role,handleCancel})
           newRole.description=description;
           newRole.roleName=name;
         }
-        RoleData.addRole(newRole);
+        RoleData.addRole(newRole,token);
       }
     }
 

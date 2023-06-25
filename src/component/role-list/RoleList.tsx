@@ -21,6 +21,7 @@ const RoleList:React.FC<IProps> = observer(({config,store})=>{
     const [roleDetails,setRoleDetails]=useState<IRole | undefined>(undefined);
     const [currentPage,setCurrentPage]=useState(1);
     const [pageSize,setPageSize]=useState(10);
+    const [token,setToken]=useState("");
 
     const data = roleData.currentRoles;
     const useRole=(role:IRole)=>{
@@ -34,13 +35,21 @@ const RoleList:React.FC<IProps> = observer(({config,store})=>{
     }
 
     const edit=(role:IRole)=>{
-      setRoleDetails(role)
-      setOpen(true);
+      roleData.getToken().then((response)=>{
+        const token=response.data.data;
+        setToken(token);
+        setRoleDetails(role)
+        setOpen(true);
+      })
     }
 
     const addRole=()=>{
-      setRoleDetails(undefined)
-      setOpen(true);
+      roleData.getToken().then((response)=>{
+        const token=response.data.data;
+        setToken(token);
+        setRoleDetails(undefined)
+        setOpen(true);
+      })
     }
 
     const onSearch=(name:string)=>{
@@ -137,7 +146,7 @@ const RoleList:React.FC<IProps> = observer(({config,store})=>{
         width={700}
         destroyOnClose={true}
       >
-        <RoleDetails handleCancel={handleCancel} role={roleDetails} config={config} store={store}></RoleDetails>
+        <RoleDetails handleCancel={handleCancel} role={roleDetails} config={config} store={store} token={token}></RoleDetails>
       </Modal>
       </div>)
 })
