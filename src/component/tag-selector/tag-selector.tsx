@@ -9,7 +9,7 @@ type IProps={
 const TagSelector:React.FC<IProps> = (props)=>{
 
     const tagRender = (props: CustomTagProps) => {
-      const { label, value, closable, onClose } = props;
+      const { label, closable, onClose } = props;
       const onPreventMouseDown = (event: React.MouseEvent<HTMLSpanElement>) => {
         event.preventDefault();
         event.stopPropagation();

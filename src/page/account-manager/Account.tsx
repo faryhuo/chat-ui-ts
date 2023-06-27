@@ -19,10 +19,10 @@ const Account : React.FC<IProps>= observer(({login,handleCancel,config,store,use
 
   const loginForm=<LoginForm config={config} store={store} userProfile={userProfile}  login={login} handleCancel={handleCancel}></LoginForm>;
   const signUpForm=<SignUpForm config={config} store={store} userProfile={userProfile}  login={login} handleCancel={handleCancel}></SignUpForm>;
-  const url=config.weChatQRCode;
+  // const url=config.weChatQRCode;
     return (
       <div>
-        <AccountManageTab url={url} loginForm={loginForm}
+        <AccountManageTab loginForm={loginForm}
         signUpForm={signUpForm}/>
       </div>
     )

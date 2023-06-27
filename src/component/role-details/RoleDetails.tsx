@@ -99,7 +99,7 @@ const RoleDetails:React.FC<IProps> = observer(({store,config,role,handleCancel,t
         style={{padding:"10px"}}
       >
         <Form.Item label={t("Name")} name="name" 
-                rules={[{ required: true },({  }) => ({
+                rules={[{ required: true },() => ({
                   validator(_, value) {
                     if (!value || value===(config.isChinese?role?.roleNameCN:role?.roleName)) {
                       return Promise.resolve();

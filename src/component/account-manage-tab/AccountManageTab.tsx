@@ -1,15 +1,14 @@
 import React from 'react';
 import type { TabsProps } from 'antd';
-import { Tabs,QRCode } from 'antd';
+import { Tabs } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { observer } from "mobx-react-lite";
 
 type IProps={
   loginForm:any;
   signUpForm:any;
-  url:string;
 }
-const AccountManageTab:React.FC<IProps> = observer(({url,loginForm,signUpForm})=>{
+const AccountManageTab:React.FC<IProps> = observer(({loginForm,signUpForm})=>{
 
     const {t} =useTranslation();
     const items: TabsProps['items'] = [

@@ -160,9 +160,9 @@ const LoginForm : React.FC<IProps>= observer(({login,handleCancel,config,store,u
           <Checkbox>Remember me</Checkbox>
         </Form.Item>
 
-        <a className="login-form-forgot" href="#" onClick={onForgetPwd}>
+        <span className="login-form-forgot"   onClick={onForgetPwd}>
           Forgot password
-        </a>
+        </span>
       </Form.Item>}
 
         <Form.Item className="login-form-btn-list">
