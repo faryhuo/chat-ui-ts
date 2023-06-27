@@ -4,7 +4,8 @@ import { observer } from "mobx-react"
 import { Select } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { InputNumber } from 'antd';
-import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faClose,faCheck } from '@fortawesome/free-solid-svg-icons'
 import {IAppConfig} from '../../store/AppConfig';
 import './ChatConfigForm.css'
 type IProps={
@@ -85,8 +86,8 @@ const ChatConfigForm: React.FC<IProps> = ({config})=>{
         <Form.Item label={t("Enable stream")}
                   name="stream"  valuePropName="checked">
          <Switch
-              checkedChildren={<CheckOutlined />}
-              unCheckedChildren={<CloseOutlined />}
+              checkedChildren={<FontAwesomeIcon icon={faCheck} />}
+              unCheckedChildren={<FontAwesomeIcon icon={faClose} />}
             />
 
         </Form.Item>

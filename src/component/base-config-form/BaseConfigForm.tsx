@@ -1,7 +1,8 @@
 import React  from 'react';
 import { Button, Form,Switch, Radio,message } from 'antd';
 import { observer } from "mobx-react"
-import {CheckOutlined, CloseOutlined } from '@ant-design/icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faClose,faCheck } from '@fortawesome/free-solid-svg-icons'
 import {CodeStyleInput} from '../../component'
 import { useTranslation } from 'react-i18next';
 import { HexColorPicker } from "react-colorful";
@@ -81,8 +82,8 @@ const BaseConfigForm: React.FC<IProps>  = ({config})=>{
         <Form.Item label={t("Enable pop-up message when add new chat")}
                   name="isSlowMsg4AddChat"  valuePropName="checked">
          <Switch
-              checkedChildren={<CheckOutlined />}
-              unCheckedChildren={<CloseOutlined />}
+              checkedChildren={<FontAwesomeIcon icon={faCheck} />}
+              unCheckedChildren={<FontAwesomeIcon icon={faClose} />}
             />
 
         </Form.Item>

@@ -3,16 +3,13 @@ import axios from 'axios';
 import { observer } from "mobx-react-lite";
 import { useState } from 'react';
 import { Input,Space,Button} from 'antd';
-import { AudioOutlined,PauseCircleOutlined,PushpinOutlined } from '@ant-design/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPaperPlane,faBroom } from '@fortawesome/free-solid-svg-icons'
-
+import { faPaperPlane,faBroom,faMicrophone,faCircleStop,faThumbTack } from '@fortawesome/free-solid-svg-icons'
 //import {Upload} from '../index'
 import { useTranslation } from 'react-i18next';
 import './SendButton.css'
 import {IAppConfig} from '../../store/AppConfig';
 import {IMessage} from '../../store/MessageData';
-//import AuditUtils from '../../utils/AudioUtils';
 
 type IProps={
   config:IAppConfig;
@@ -174,7 +171,7 @@ const SendButton:React.FC<IProps> = observer(({store,config,setBtnHeight})=>{
         />
         <div className="sent-btn-actions"  >
         <Button disabled={store.isType===false} shape="circle"onClick={convertMsg}
-          icon={isStart?<PauseCircleOutlined />:<AudioOutlined/>}/>
+          icon={isStart?<FontAwesomeIcon icon={faCircleStop} />:<FontAwesomeIcon icon={faMicrophone}/>}/>
           {/* <Button  className="resize-btn" disabled={store.isType===false}  shape="circle" onClick={sendMsg}
           icon={
             <Upload store={store} config={config} callChatAPI={callChatAPI} callImageAPI={callImageAPI} ></Upload>
@@ -185,7 +182,7 @@ const SendButton:React.FC<IProps> = observer(({store,config,setBtnHeight})=>{
         <div className="sent-btn-actions"  >
         <Button disabled={store.isType===false}  type="primary" shape="circle" onClick={sendMsg}
          icon={<FontAwesomeIcon icon={faPaperPlane }/>}/>
-        <Button className="resize-btn"  shape="circle" onClick={resizeInput} icon={<PushpinOutlined />}/>
+        <Button className="resize-btn"  shape="circle" onClick={resizeInput} icon={<FontAwesomeIcon icon={faThumbTack} />}/>
         </div>
       </Space.Compact>
     </div>);

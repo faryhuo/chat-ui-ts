@@ -1,4 +1,3 @@
-import { MenuFoldOutlined,MenuUnfoldOutlined} from '@ant-design/icons';
 import { Menu,Button,Avatar,Modal } from 'antd';
 import { observer } from "mobx-react-lite";
 import './Header.css';
@@ -11,7 +10,7 @@ import {IAppConfig} from '../../store/AppConfig';
 import {IMessage} from '../../store/MessageData';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faComments,faLaptopCode,faGear, faLinesLeaning,faImages,faPhotoFilm } from '@fortawesome/free-solid-svg-icons'
+import { faComments,faLaptopCode,faGear,faOutdent, faLinesLeaning,faImages,faPhotoFilm } from '@fortawesome/free-solid-svg-icons'
 
 type IProps={
   config:IAppConfig;
@@ -98,7 +97,7 @@ const Header: React.FC<IProps> = observer(({store,config}) => {
     <div className="action-list">
       {!config.hideMenuTypeList.includes(store.type) &&
       <Button
-          icon={config.isSlowLeftMenu?<MenuFoldOutlined />:<MenuUnfoldOutlined />}
+          icon={config.isSlowLeftMenu?<FontAwesomeIcon icon={faOutdent} />:<FontAwesomeIcon rotation={180} icon={faOutdent}  />}
           onClick={()=>{config.triggerMenu()}}
         />}
     </div>

@@ -3,7 +3,8 @@ import {Input, UploadFile } from 'antd';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import { observer } from "mobx-react-lite";
-import { PlusOutlined,LoadingOutlined } from '@ant-design/icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faFileExport } from '@fortawesome/free-solid-svg-icons'
 import { Upload, message } from 'antd';
 import { UploadChangeParam } from 'antd/es/upload';
 import {IAppConfig} from '../../store/AppConfig';
@@ -75,7 +76,7 @@ const ImageSend  : React.FC<IProps> = observer(({store,config})=>{
   };
   const getUploadButton = (text:string)=> (
     <div>
-      {loading ? <LoadingOutlined /> : <PlusOutlined />}
+      {loading ? <FontAwesomeIcon icon={faFileExport} /> : <FontAwesomeIcon icon={faFileExport}  />}
       <div
         style={{
           marginTop: 8,

@@ -1,4 +1,5 @@
-import { PlusOutlined, } from '@ant-design/icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faKey } from '@fortawesome/free-solid-svg-icons'
 import { Upload, message } from 'antd';
 
 const AppUpload = ({store,config,callChatAPI,callImageAPI})=>{
@@ -52,7 +53,7 @@ const AppUpload = ({store,config,callChatAPI,callImageAPI})=>{
         onChange={handleChange}
         style={{width:20}}
       >
-        <PlusOutlined></PlusOutlined>
+        <FontAwesomeIcon icon={faKey}/>
       </Upload></div>)
 }
 

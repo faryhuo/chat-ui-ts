@@ -5,7 +5,8 @@ import { Image } from 'antd';
 import copy from 'copy-to-clipboard';
 import './MessageList.css';
 import { Button } from 'antd';
-import {CopyOutlined} from '@ant-design/icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCopy } from '@fortawesome/free-solid-svg-icons'
 import * as CodeStyle  from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import Markdown from '../markdown/Markdown'
 import MessageItem2 from '../message-list-antd/MessageItem';
@@ -124,7 +125,7 @@ class MessageList extends Component<IProps,IStates> {
                 <div className="chat-code-content">
                             <span className="copy-button">
                             <Button type="primary" 
-                            onClick={()=>{copy(item.code)}} icon={<CopyOutlined />} size="small" >copy</Button></span>
+                            onClick={()=>{copy(item.code)}} icon={<FontAwesomeIcon icon={faCopy} />} size="small" >copy</Button></span>
                              <SyntaxHighlighter style={(CodeStyle as any)[this.props.config.codeStyle]} language={"java"} >{item.code}</SyntaxHighlighter>
                         </div>
             </div>

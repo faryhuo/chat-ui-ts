@@ -5,7 +5,8 @@ import { observer } from "mobx-react-lite";
 import {IMessage} from '../../store/MessageData';
 import {IUserProflie} from '../../store/UserProfile';
 import {IAppConfig} from '../../store/AppConfig';
-import {LockOutlined } from '@ant-design/icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faKey } from '@fortawesome/free-solid-svg-icons'
 import './SignUpForm.css'
 
 type IProps={
@@ -121,7 +122,7 @@ const SignUpForm : React.FC<IProps>= observer(({login,handleCancel,config,store,
         <Form.Item label={t("Password")} name="password" 
         rules={[{ required: true }]}
         tooltip={ruleMessage.required}>
-        <Input.Password  prefix={<LockOutlined></LockOutlined>}
+        <Input.Password  prefix={<FontAwesomeIcon icon={faKey}/>}
           placeholder="input password"
           visibilityToggle={{ visible: passwordVisible, onVisibleChange: setPasswordVisible }}
         />
@@ -137,7 +138,7 @@ const SignUpForm : React.FC<IProps>= observer(({login,handleCancel,config,store,
           },
         })]}
         tooltip={ruleMessage.required}>
-        <Input.Password  prefix={<LockOutlined></LockOutlined>}
+        <Input.Password  prefix={<FontAwesomeIcon icon={faKey}/>}
           placeholder="re-input password"
           visibilityToggle={{ visible: passwordVisible2, onVisibleChange: setPasswordVisible2 }}
         />

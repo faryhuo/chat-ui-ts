@@ -7,7 +7,8 @@ import * as CodeStyle  from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import config from '../../store/AppConfig';
 import copy from 'copy-to-clipboard';
 import { Button } from 'antd';
-import {CopyOutlined} from '@ant-design/icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCopy } from '@fortawesome/free-solid-svg-icons'
 import 'github-markdown-css';
 import { observer } from "mobx-react-lite"
 import './Markdown.css'
@@ -76,7 +77,7 @@ const Markdown : React.FC<IProps>=observer(({content})=>{
                     <span className="mk-title"></span>
                     <span className="mk-copy-button">
                     <Button type="primary" 
-                    onClick={()=>{copy(codeContent)}} icon={<CopyOutlined />} size="small" >Copy</Button></span></div>
+                    onClick={()=>{copy(codeContent)}} icon={<FontAwesomeIcon icon={faCopy} />} size="small" >Copy</Button></span></div>
                      <SyntaxHighlighter
                          children={String(children).replace(/\n$/, '')}
                          style={(CodeStyle  as any)[config.codeStyle]} 

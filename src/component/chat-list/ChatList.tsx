@@ -1,7 +1,7 @@
 import { Avatar, List,Button,Popconfirm} from 'antd';
 import './ChatList.css';
 import { observer } from "mobx-react-lite";
-import moment from 'moment';
+import dayjs from 'dayjs';
 import icon from './favicon-32x32.png';
 import { Input } from 'antd';
 import { useTranslation } from 'react-i18next';
@@ -25,16 +25,16 @@ const ChatList: React.FC<IProps>  =({store}) => {
   }
 
 
-  const formatDate=(date: moment.MomentInput)=>{
+  const formatDate=(date: string | number | dayjs.Dayjs | Date | null | undefined)=>{
     const dateFormat="MM-DD";
     const timeFormat="hh:mm:ss";
-    const today = moment().startOf('day'); 
-    const momentDate = moment(date)
+    const today = dayjs().startOf('day'); 
+    const momentDate = dayjs(date)
     const isToday = momentDate.isSame(today, 'd')
     if(isToday){
-      return moment(date).format(timeFormat);
+      return dayjs(date).format(timeFormat);
     }else{
-      return moment(date).format(dateFormat);
+      return dayjs(date).format(dateFormat);
     }
   }
 
