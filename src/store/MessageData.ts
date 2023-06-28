@@ -2,15 +2,16 @@ import { makeObservable, observable, computed, action} from "mobx";
 import i18n from '../utils/i18n';
 import config  from './AppConfig';
 import axios from 'axios';
-import { saveAs } from 'file-saver'
 import { fetchEventSource } from "@microsoft/fetch-event-source";
 import userProflie from "./UserProfile";
 import roleData,{IRoleData,IRole} from "./RoleData";
 import imageData from "./ImageData";
-import {
-    encode
-} from 'gpt-tokenizer'
+import saveAs from 'file-saver';
 
+let encodeFun: any
+import('gpt-tokenizer').then(({encode})=>{
+    encodeFun=encode;
+})
 export interface  ISessiondata{
     isSys?:boolean;
     isDefault?:boolean;
@@ -912,8 +913,10 @@ class MessageData implements  IMessage{
         let tokenNum=0;
         messageListData.forEach(item=>{
             tokenNum += 4; 
-            tokenNum += encode(item.content).length;
-            tokenNum += encode(item.role).length;
+            if(encodeFun!=null){
+                tokenNum += encodeFun(item.content).length;
+                tokenNum += encodeFun(item.role).length;
+            }
         });
         tokenNum +=2;
         return tokenNum;
@@ -1044,7 +1047,6 @@ class MessageData implements  IMessage{
         configData[config.localConfigName]=config.getConfigJson();
         const blob = new Blob([JSON.stringify(configData)]);
         saveAs(blob, 'export_data.json')
-    
     }
 
 

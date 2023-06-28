@@ -2,9 +2,9 @@ import React from 'react';
 import ReactMarkdown from 'react-markdown';//引入
 import remarkGfm from 'remark-gfm';// 划线、表、任务列表和直接url等的语法扩展
 import rehypeRaw from 'rehype-raw'// 解析标签，支持html语法
-import SyntaxHighlighter from 'react-syntax-highlighter';
-import * as CodeStyle  from 'react-syntax-highlighter/dist/esm/styles/hljs';
-import config from '../../store/AppConfig';
+//import * as CodeStyle  from 'react-syntax-highlighter/dist/esm/styles/hljs';
+import {a11yDark} from 'react-syntax-highlighter/dist/esm/styles/hljs';
+//import config from '../../store/AppConfig';
 import copy from 'copy-to-clipboard';
 import { Button } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -12,10 +12,12 @@ import { faCopy } from '@fortawesome/free-solid-svg-icons'
 import 'github-markdown-css';
 import { observer } from "mobx-react-lite"
 import './Markdown.css'
-
+import asyncComponent from '../async-component/AsyncComponent'; 
 type IProps={
     content:string;
-  }
+}
+
+
 const Markdown : React.FC<IProps>=observer(({content})=>{
 
     const getLanguage= (con: string) =>{
@@ -59,6 +61,9 @@ const Markdown : React.FC<IProps>=observer(({content})=>{
         }
         return { language, activeLang };
     }
+
+    const AsyncSyntaxHighlighter = asyncComponent(() => import ('react-syntax-highlighter'));
+
  
     return(
         <ReactMarkdown
@@ -78,9 +83,10 @@ const Markdown : React.FC<IProps>=observer(({content})=>{
                     <span className="mk-copy-button">
                     <Button type="primary" 
                     onClick={()=>{copy(codeContent)}} icon={<FontAwesomeIcon icon={faCopy} />} size="small" >Copy</Button></span></div>
-                     <SyntaxHighlighter
+                     <AsyncSyntaxHighlighter
                          children={String(children).replace(/\n$/, '')}
-                         style={(CodeStyle  as any)[config.codeStyle]} 
+                         //style={(CodeStyle  as any)[config.codeStyle]} 
+                         style={a11yDark}
                          language={match?match[1]:"java"}
                          PreTag="div"
                          {...props}

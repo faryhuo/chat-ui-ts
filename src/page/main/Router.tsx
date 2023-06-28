@@ -1,46 +1,57 @@
-import ConfigPage from '../config/Config';
-import Chat from '../chat/Chat';
-import Code from '../code/Code';
-import ImageEdit from '../image-edit/ImageEdit';
-import Frame from '../iframe/Iframe';
+//import ConfigPage from '../config/Config';
+//import Chat from '../chat/Chat';
+//import Code from '../code/Code';
+//import ImageEdit from '../image-edit/ImageEdit';
+//import Frame from '../iframe/Iframe';
 import { Routes, Route,useLocation  } from 'react-router-dom';
 import React, { useEffect } from 'react';
 import {IAppConfig} from '../../store/AppConfig';
 import {IMessage} from '../../store/MessageData';
+import asyncComponent  from '../../component/async-component/AsyncComponent';
+
+
 type IProps={
     appConfig:IAppConfig;
   messageData:IMessage;
 }
+const AsyncChat = asyncComponent(() => import ('../chat/Chat'));
+const AsyncCode= asyncComponent(() => import ('../code/Code'));
+const AsyncImageEdit= asyncComponent(() => import ('../image-edit/ImageEdit'));
+const AsyncFrame= asyncComponent(() => import ('../iframe/Iframe'));
+const AsyncConfigPage= asyncComponent(() => import ('../config/Config'));
+
 const pageList=[{
     path:"/chat",
-    component:Chat
+    component:AsyncChat
 },{
     path:"/image",
-    component:Chat
+    component:AsyncChat
 },{
     path:"/code",
-    component:Code
-},{
+    component:AsyncCode
+},
+{
     path:"/image_edit",
-    component:ImageEdit
-},{
+    component:AsyncImageEdit
+},
+{
     path:"/config/:id",
-    component:ConfigPage
+    component:AsyncConfigPage
 },{
     path:"/tips",
-    component:Frame,
+    component:AsyncFrame,
     props:{
         src:"https://newzone.top/chatgpt/"
     },
 },{
     path:"/sd",
-    component:Frame,
+    component:AsyncFrame,
     props:{
         src:"https://e152ddfadd87f15ffb.gradio.live"
     },
 },{
     path:"/",
-    component:Chat,
+    component:AsyncChat,
     exact:true
 }];
 

@@ -20,7 +20,7 @@ const BaseConfigForm: React.FC<IProps>  = ({config})=>{
     const { t } = useTranslation();
 
     let imageSize = Form.useWatch('imageSize', form);
-    let codeStyle = Form.useWatch('codeStyle', form);
+    // let codeStyle = Form.useWatch('codeStyle', form);
     let textLanguage = Form.useWatch('textLanguage', form);
     let isSlowMsg4AddChat = Form.useWatch('isSlowMsg4AddChat', form);
     let colorPrimary = Form.useWatch('colorPrimary', form);
@@ -36,7 +36,7 @@ const BaseConfigForm: React.FC<IProps>  = ({config})=>{
     const save = () => {
       config.save({
         imageSize:imageSize,
-        codeStyle:codeStyle,
+        // codeStyle:codeStyle,
         textLanguage:textLanguage,
         isSlowMsg4AddChat:isSlowMsg4AddChat,
         colorPrimary:colorPrimary,
@@ -74,11 +74,11 @@ const BaseConfigForm: React.FC<IProps>  = ({config})=>{
           name="colorPrimary">
           <HexColorPicker />
         </Form.Item>
-        <Form.Item label={t("Code Style")}
+        {/* <Form.Item label={t("Code Style")}
          rules={[{ required: true }]}
         tooltip={ruleMessage.required}  name="codeStyle">
           <CodeStyleInput ></CodeStyleInput>
-        </Form.Item>
+        </Form.Item> */}
         <Form.Item label={t("Enable pop-up message when add new chat")}
                   name="isSlowMsg4AddChat"  valuePropName="checked">
          <Switch
