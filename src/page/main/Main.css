@@ -30,7 +30,7 @@
 }
 
 .chat-wrapper .chat-header .chat-left-content button{
-    margin-left: 66px;
+    margin-left: 92px;
     display: block;
     margin-top: 3px;
 }
@@ -42,7 +42,7 @@
 
 .chat-wrapper .chat-left-content{
     position: relative;
-    flex:0 0 268px;
+    flex:0 0 310px;
     overflow: auto;
 }
 .chat-wrapper .chat-right-content{

@@ -44,9 +44,11 @@ const CodeEditConfigForm : React.FC<IProps> = ({config})=>{
         {contextHolder}      
       <Form
         form={form}
-        layout="vertical"
+        layout={config.formLayout as any}
+        labelCol={{ span: 4 }}
+        wrapperCol={{ span: 12 }}
+        style={{padding:"10px"}}        
         initialValues={config.getCodeEditConfig()}
-        style={{padding:"10px"}}
       >
         <Form.Item label={t("Model")} name="model" tooltip={t("which models work with the Chat API.")}>
               <Select
@@ -64,7 +66,7 @@ const CodeEditConfigForm : React.FC<IProps> = ({config})=>{
         </Form.Item>
 
         
-        <Form.Item>
+        <Form.Item wrapperCol={ { offset: 4, span: 12 }}>
           <Button type="primary" onClick={save}>Save</Button>
         </Form.Item>
       </Form>

@@ -26,6 +26,7 @@ export interface  ISessiondata{
     end?:boolean;
     history?:any;
     currentIndex?:number;
+    title?:string;
 }
 
 export interface  ISession{
@@ -89,6 +90,7 @@ export interface IMessage{
     checkChatId:(chatId: string)=>string;
     latestMessage:any;
     roleData:IRoleData;
+    hideLastData:(chatId:string)=>void;
 }
 
 class MessageData implements  IMessage{
@@ -420,19 +422,28 @@ class MessageData implements  IMessage{
         }
     }
 
-    addData(newChat: any,chatId: string) {
+    addData(newChat: ISessiondata,chatId: string) {
         if(!chatId){
             chatId=this.activeSession;
         }
         let {type,session}=this;
-        let data=[];
+        let data:ISessiondata[]=[];
+        let curentItem:ISession | null=null;
         for(let i=0;i<session.length;i++){
             let item=session[i];
             if(item.type===type && item.chatId===chatId){
                 data=item.data;
+                curentItem=item;
                 item.updateDate=new Date();
                 break;
             }
+        }
+        if((data.length===0 || data[0].isDefault) && newChat.text && curentItem){
+            let text:string=newChat.text;
+            if(text.length>=20){
+                text=text.substring(0,20)+"...";
+            }
+            curentItem.chatName=text;
         }
         data.push(newChat);
         this.saveSessionToLocal();
@@ -488,6 +499,7 @@ class MessageData implements  IMessage{
 
     selectChat(chatId: string){
         this.activeSession=chatId;
+        this.hideLastData(chatId);
     }
 
     changeRole(chatId: string,role: number | undefined){

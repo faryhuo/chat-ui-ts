@@ -7,7 +7,7 @@ import { Input } from 'antd';
 import { useTranslation } from 'react-i18next';
 import {IMessage} from '../../store/MessageData';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPaintbrush, faTrashCan,faCheck } from '@fortawesome/free-solid-svg-icons'
+import { faPaintbrush, faTrashCan,faCheck,faShare} from '@fortawesome/free-solid-svg-icons'
 
 
 type IProps ={
@@ -48,12 +48,16 @@ const ChatList: React.FC<IProps>  =({store}) => {
     e.stopPropagation();
   }
 
+  const share = (chatId:string)=>{
+    console.log(chatId);
+  }
+
   return  (<div className="session-list-wrapper">
         <List 
           dataSource={store.sessionList.reverse()}
           renderItem={(item:any) => (
             <List.Item key={item.key} className={item.select?"selected":""} style={item.select?{}:{}}
-            onClick={()=>{store.selectChat(item.key)}}>
+            onClick={()=>{store.selectChat(item.key);}}>
               {!item.edit?(<List.Item.Meta
                 avatar={<Avatar src={icon} />}
                 title={<span>{item.name}</span>}
@@ -71,6 +75,10 @@ const ChatList: React.FC<IProps>  =({store}) => {
               <Button
                 icon={<FontAwesomeIcon icon={faPaintbrush} />} size ="small"
                 onClick={(e)=>{showChatNameEditor(item.edit,item.key,e)}}
+              />
+              <Button
+                icon={<FontAwesomeIcon icon={faShare} />} size ="small"
+                onClick={(e)=>{share(item.key)}}
               />
              <Popconfirm
                 placement="right"

@@ -79,7 +79,7 @@ const BaseConfigForm: React.FC<IProps>  = ({config})=>{
         tooltip={ruleMessage.required}  name="codeStyle">
           <CodeStyleInput ></CodeStyleInput>
         </Form.Item> */}
-        <Form.Item label={t("Enable pop-up message when add new chat")}
+        <Form.Item label={t("Default Message")}
                   name="isSlowMsg4AddChat"  valuePropName="checked">
          <Switch
               checkedChildren={<FontAwesomeIcon icon={faCheck} />}
