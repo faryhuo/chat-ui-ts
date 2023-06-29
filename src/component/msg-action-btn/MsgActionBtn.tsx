@@ -20,8 +20,17 @@ const MsgActionBtn:React.FC<IProps> = observer(({store,item,index})=>{
      return (store.data.indexOf(item)===store.data.length-1) && item.isDefault!==true && (item.stream?item.end:true )
     }
 
+    const showDetails=()=>{
+      item.isDetails=!!!item.isDetails;
+    }
+
     return (
       <div className="msg-action-btn">
+      {/* {<div className="msg-show-btn">
+        <Button type="link" block onClick={showDetails}>
+        {item.isDetails===false?t('Show'):t("Hide")}
+      </Button>
+      </div>} */}
       <div className="msg-page-btn">
       {(store.hasHistory(item.history))?<Pagination 
       hideOnSinglePage
@@ -29,9 +38,12 @@ const MsgActionBtn:React.FC<IProps> = observer(({store,item,index})=>{
       style={{marginBottom:5}}
       current={(item.currentIndex?item.currentIndex:0)+1} onChange={(page)=>{store.changeMessage(index,page-1)}}/>
       :<></>}</div><div className="msg-sent-btn">
-      <Button onClick={store.regenerateResponse}
-      style={isSlowRegenerateBtn()?{}:{display:'none'}} icon={<FontAwesomeIcon icon={faRefresh} style={{marginRight:5}}></FontAwesomeIcon>}>
-        {t('Regenerate')}</Button></div>
+      {isSlowRegenerateBtn()?<Button onClick={store.regenerateResponse}
+       icon={<FontAwesomeIcon icon={faRefresh} style={{marginRight:5}}></FontAwesomeIcon>}>
+        {t('Regenerate')}</Button>:<Button style={item.hasShowDetails===true?{}:{"display":"none"}} type="link" className="msg-link-btn"  onClick={showDetails}>
+        {item.isDetails===false?t('Show All'):t("Hide")}
+        </Button>}
+        </div>
       </div>);
 })
 

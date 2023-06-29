@@ -14,3 +14,8 @@
         flex:0 0 120px;
     }
 }
+.msg-link-btn{
+    float: right;
+    padding: 0;
+    margin-right: 0;
+}

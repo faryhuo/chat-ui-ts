@@ -7,6 +7,8 @@ import MessageItem2 from '../message-list-antd/MessageItem';
 import MessageItemChat from '../message-list-chat/MessageItem';
 import {IAppConfig} from '../../store/AppConfig';
 import {IMessage,ISessiondata} from '../../store/MessageData';
+import classNames from 'classnames';
+
 type IProps={
   config:IAppConfig;
   store:IMessage;
@@ -111,11 +113,12 @@ class MessageList extends Component<IProps,IStates> {
 
 
     renderMessage(item:ISessiondata,type:string,key:number){
+        const classs=classNames({"chat-row":true,"chat-row-hide":item?.isDetails===false && item?.hasShowDetails===true});
         if(item.text){
-            return <div className="chat-row"><pre style={{maxWidth:700,margin:0,whiteSpace:'break-spaces'}}>{item.text}</pre>
+            return <div className={classs}><pre style={{maxWidth:700,margin:0,whiteSpace:'break-spaces'}}>{item.text}</pre>
             </div>
         }else if(item.code){
-            return <div className="chat-row">
+            return <div className={classs}>
                 <div className="chat-code-content">
                         <Markdown content={item.code}></Markdown>            
                 </div>
@@ -133,19 +136,19 @@ class MessageList extends Component<IProps,IStates> {
                     return true;
                 });
             }
-            return this.renderSysChat(newChoices);
+            return this.renderSysChat(newChoices,classs);
         }else{
-            return this.renderSysChat(item.choices);
+            return this.renderSysChat(item.choices,classs);
         }
     }
 
-    renderSysChat(choices: any[]){
+    renderSysChat(choices: any[],classs: string | undefined){
         if(!choices || !choices.length){
             return <div></div>
         }
         let list=this.getMessage(choices);
         let i=0;
-        return <div className="chat-row">{list.map((item)=>{
+        return <div className={classs}>{list.map((item)=>{
             return (<div key={i}>{item}
             </div>);
         })}</div>;

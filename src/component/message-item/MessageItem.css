@@ -1,3 +1,7 @@
 .message-item-user .markdown-body{
     background: transparent !important;
 }
+.chat-row-hide{
+    max-height: 200px;
+    overflow: hidden;
+}

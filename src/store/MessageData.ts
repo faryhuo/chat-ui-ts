@@ -16,6 +16,8 @@ export interface  ISessiondata{
     isSys?:boolean;
     isDefault?:boolean;
     isEdit?:boolean;
+    isDetails?:boolean;
+    hasShowDetails?:boolean;
     text?:any;
     choices?:any;
     code?:any;
@@ -644,13 +646,48 @@ class MessageData implements  IMessage{
         }
     }
 
+    getDataByChatId(chatId:string):ISession | null{
+        let data:ISession | null=null;
+        this.session.forEach((item)=>{
+            if(item.chatId===chatId){
+                data=item;
+                return false;
+            }
+        });
+        return data;
+    }
+
+    hideLastData(chatId:string){
+        const session= this.getDataByChatId(chatId);
+        if(session!==null){
+           const data= session.data;
+           if(data.length>=2){
+                const lastData=data.slice(0,data.length-2);
+                lastData.forEach((item)=>{
+                    if(item.isDetails===null || item.isDetails===undefined){
+                        item.isDetails=false;
+                    }
+                    item.hasShowDetails=false;
+                    if(item.choices){
+                        if(JSON.stringify(item.choices).length>=300){
+                            item.hasShowDetails=true;
+                        }
+                    }
+                })
+           }
+        }
+    }
+
     callChatAPI(chatId: string){
         if(config.chatConfig.getAPIConfig().stream){
           return this.callChatAPIByStreamByPost(chatId).then(()=>{
+            this.hideLastData(chatId);
             this.save(chatId);
           })
         }else{
           return this.callChatAPIByHttp(chatId).then(()=>{
+            this.hideLastData(chatId);
+
             this.save(chatId);
           })
         }
@@ -801,6 +838,10 @@ class MessageData implements  IMessage{
           }
         ).then((response)=>{
             this.enableType(chatId);
+            if(response.data.error){
+                this.handleAPIError(response.data.error,chatId);
+                return;
+            }
             if(response.data.data.error){
               this.handleAPIError(response.data.data.error,chatId);
               return;
