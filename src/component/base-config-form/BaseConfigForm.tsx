@@ -3,7 +3,7 @@ import { Button, Form,Switch, Radio,message } from 'antd';
 import { observer } from "mobx-react"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faClose,faCheck } from '@fortawesome/free-solid-svg-icons'
-import {CodeStyleInput} from '../../component'
+// import {CodeStyleInput} from '../../component'
 import { useTranslation } from 'react-i18next';
 import { HexColorPicker } from "react-colorful";
 import {IAppConfig} from '../../store/AppConfig';
@@ -45,9 +45,9 @@ const BaseConfigForm: React.FC<IProps>  = ({config})=>{
       success();
     };
 
-    const ruleMessage={
-      "required":t('This is a required field')
-    }
+    // const ruleMessage={
+    //   "required":t('This is a required field')
+    // }
 
     return (
       <Form

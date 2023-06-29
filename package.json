@@ -38,7 +38,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-app-rewired build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "analyze": "source-map-explorer 'build/static/js/*.js'"
@@ -73,6 +73,9 @@
     "@types/react-dom": "^18.0.11",
     "@types/react-scroll-to-bottom": "^4.2.0",
     "@types/react-syntax-highlighter": "^15.5.6",
+    "customize-cra": "^1.0.0",
+    "react-app-rewire-compression-plugin": "^1.0.0",
+    "react-app-rewired": "^2.2.1",
     "react-scripts": "^5.0.1",
     "source-map-explorer": "^2.5.3",
     "typescript": "^4.9.5"
