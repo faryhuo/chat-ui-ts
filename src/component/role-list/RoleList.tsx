@@ -76,7 +76,7 @@ const RoleList:React.FC<IProps> = observer(({config,store})=>{
       onChange={(e)=>{changeTag(e.target.value)}}>
         {
           roleData.currentTags.map((tag,index)=>(
-            <Radio.Button  key={index} value={tag}>{t("tags."+tag)}</Radio.Button>)
+            <Radio.Button  key={index} value={tag}>{t<string>("tags."+tag)}</Radio.Button>)
           )
         }
       </Radio.Group>
@@ -118,8 +118,8 @@ const RoleList:React.FC<IProps> = observer(({config,store})=>{
             description={t('Are you want to delete the role.')}
             onConfirm={(e)=>onDelete(item.roleId)}
             onCancel={(e)=>e?.stopPropagation()}
-            okText={t("Yes")}
-            cancelText={t("No")}
+            okText={t<string>("Yes")}
+            cancelText={t<string>("No")}
           >
           <Button shape="circle" icon={<FontAwesomeIcon icon={faTrash} />}/>
           </Popconfirm>

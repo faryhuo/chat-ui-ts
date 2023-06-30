@@ -28,7 +28,7 @@ const MsgActionBtn:React.FC<IProps> = observer(({store,item,index})=>{
       <div className="msg-action-btn">
       {/* {<div className="msg-show-btn">
         <Button type="link" block onClick={showDetails}>
-        {item.isDetails===false?t('Show'):t("Hide")}
+        {item.isDetails===false?t('Show'):t<string>("Hide")}
       </Button>
       </div>} */}
       <div className="msg-page-btn">
@@ -41,7 +41,7 @@ const MsgActionBtn:React.FC<IProps> = observer(({store,item,index})=>{
       {isSlowRegenerateBtn()?<Button onClick={store.regenerateResponse}
        icon={<FontAwesomeIcon icon={faRefresh} style={{marginRight:5}}></FontAwesomeIcon>}>
         {t('Regenerate')}</Button>:<Button style={item.hasShowDetails===true?{}:{"display":"none"}} type="link" className="msg-link-btn"  onClick={showDetails}>
-        {item.isDetails===false?t('Show All'):t("Hide")}
+        {item.isDetails===false?t('Show All'):t<string>("Hide")}
         </Button>}
         </div>
       </div>);

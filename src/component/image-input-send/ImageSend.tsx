@@ -210,8 +210,8 @@ const ImageSend  : React.FC<IProps> = observer(({store,config})=>{
         </div>
           <Search
       value={message}
-        placeholder={t("Instructions") as string}
-        enterButton={t("Sent")}
+        placeholder={t<string>("Instructions") as string}
+        enterButton={t<string>("Sent")}
       size="large"
       disabled={store.isType===false}
       onChange={(e) => typeMsg(e)}

@@ -79,7 +79,7 @@ const RoleDetails:React.FC<IProps> = observer(({store,config,role,handleCancel,t
     const getTagOptions=()=>{
       const options: { value: string; label: string; }[]=[];
       RoleData.currentTags.forEach((item)=>{
-        const option={value:item,label:t("tags."+item)}
+        const option={value:item,label:t<string>("tags."+item)}
         options.push(option);
       });
       return options;
@@ -98,7 +98,7 @@ const RoleDetails:React.FC<IProps> = observer(({store,config,role,handleCancel,t
         wrapperCol={{ span: 20 }}
         style={{padding:"10px"}}
       >
-        <Form.Item label={t("Name")} name="name" 
+        <Form.Item label={t<string>("Name")} name="name" 
                 rules={[{ required: true },() => ({
                   validator(_, value) {
                     if (!value || value===(config.isChinese?role?.roleNameCN:role?.roleName)) {
@@ -113,13 +113,13 @@ const RoleDetails:React.FC<IProps> = observer(({store,config,role,handleCancel,t
             <Input            
             ></Input>
         </Form.Item>
-        <Form.Item label={t("Description")} name="description" rules={[{ required: true }]}>     
+        <Form.Item label={t<string>("Description")} name="description" rules={[{ required: true }]}>     
         <Input.TextArea autoSize={{ minRows: 8 }}           
           size="large"
           spellCheck={true}
           allowClear></Input.TextArea>
         </Form.Item>
-        <Form.Item label={t("Tags")} name="tags" rules={[{ required: true }]}>
+        <Form.Item label={t<string>("Tags")} name="tags" rules={[{ required: true }]}>
             <TagSelector
               options={getTagOptions()}
             ></TagSelector>

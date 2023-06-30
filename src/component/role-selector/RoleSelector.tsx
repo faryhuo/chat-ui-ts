@@ -25,7 +25,7 @@ const RoleSelector:React.FC<IProps> = observer(({store,roleList})=>{
       value={store.role} onChange={(value)=>{
           store.changeRole(store.activeSession,value)
       }}
-      placeholder={t("Select a role")}
+      placeholder={t<string>("Select a role")}
       showSearch
       filterOption={(input, option) =>
         (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
@@ -38,7 +38,7 @@ const RoleSelector:React.FC<IProps> = observer(({store,roleList})=>{
           <Space style={{ padding: '0 8px 4px' }}>
 
             <Button onClick={addRole} style={{width:'100%'}} icon={<FontAwesomeIcon icon={faAdd} />} type="text">
-              &nbsp;{t("More Details")}
+              &nbsp;{t<string>("More Details")}
             </Button>
           </Space>
         </>)}

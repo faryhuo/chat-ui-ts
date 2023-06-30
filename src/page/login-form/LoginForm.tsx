@@ -130,14 +130,14 @@ const LoginForm : React.FC<IProps>= observer(({login,handleCancel,config,store,u
         onFinish={onLogin}
         style={{padding:"10px"}}
       >
-        <Form.Item label={t("User name / Phone number")} name="userId"
+        <Form.Item label={t<string>("User name / Phone number")} name="userId"
         rules={[{ required: true }]}
         tooltip={ruleMessage.required}>
           <Input       prefix={<FontAwesomeIcon icon={faUserShield} className="site-form-item-icon" />}
           ></Input>
         </Form.Item>
 
-        <Form.Item label={t("Password")} name="password" 
+        <Form.Item label={t<string>("Password")} name="password" 
         rules={[{ required: true }]}
         tooltip={ruleMessage.required}>
         <Input.Password  prefix={<FontAwesomeIcon icon={faKey}/>}
@@ -146,7 +146,7 @@ const LoginForm : React.FC<IProps>= observer(({login,handleCancel,config,store,u
         />
         </Form.Item>
         
-        {enableSMSCode && <Form.Item label={t("SMS Code")} name="code" 
+        {enableSMSCode && <Form.Item label={t<string>("SMS Code")} name="code" 
         rules={[{ required: true }]}
         tooltip={ruleMessage.required}>
         <Space.Compact>
@@ -167,7 +167,7 @@ const LoginForm : React.FC<IProps>= observer(({login,handleCancel,config,store,u
 
         <Form.Item className="login-form-btn-list">
           <Button type="primary" htmlType="submit">{t(loginBtnTitle)}</Button>
-          {userProfile.isLogin && !forgetFlag &&<Button  onClick={onLogout}>{t("Logout")}</Button>}
+          {userProfile.isLogin && !forgetFlag &&<Button  onClick={onLogout}>{t<string>("Logout")}</Button>}
         </Form.Item>
       </Form>
       </div>

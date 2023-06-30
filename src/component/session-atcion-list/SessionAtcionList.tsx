@@ -68,8 +68,8 @@ const SessionAtcionList : React.FC<IProps> = observer(({store,config,onOpen})=>{
         list.push(<RoleSelector key={3} store={store} roleList={roleList}></RoleSelector>);
         list.push(<Switch key={4}  className="option-btn" 
             onClick={()=>{config.chatConfig.switchStream()}}
-          checkedChildren={t("Stream")}
-          unCheckedChildren={t("Full")}
+          checkedChildren={t<string>("Stream")}
+          unCheckedChildren={t<string>("Full")}
           defaultChecked={config.chatConfig.getAPIConfig().stream}
         />);
       }else if(store.type==='image'){
@@ -88,8 +88,8 @@ const SessionAtcionList : React.FC<IProps> = observer(({store,config,onOpen})=>{
         title={t('Message')}
         description={t('Are you want to delete the chat.')}
         onConfirm={(e)=>clear(e)}
-        okText={t("Yes")}
-        cancelText={t("No")}
+        okText={t<string>("Yes")}
+        cancelText={t<string>("No")}
       >
          <Button 
         icon={<FontAwesomeIcon icon={faTrashCan} />} size ="small"/>

@@ -111,7 +111,7 @@ const SignUpForm : React.FC<IProps>= observer(({login,handleCancel,config,store,
         onFinish={onLogin}
         style={{padding:"10px"}}
       >
-        <Form.Item label={t("Phone number")} name="userId"
+        <Form.Item label={t<string>("Phone number")} name="userId"
         rules={[{ required: true }]}
         tooltip={ruleMessage.required}>
           <Input       addonBefore={prefixSelector}
@@ -119,7 +119,7 @@ const SignUpForm : React.FC<IProps>= observer(({login,handleCancel,config,store,
         </Form.Item>
 
 
-        <Form.Item label={t("Password")} name="password" 
+        <Form.Item label={t<string>("Password")} name="password" 
         rules={[{ required: true }]}
         tooltip={ruleMessage.required}>
         <Input.Password  prefix={<FontAwesomeIcon icon={faKey}/>}
@@ -128,7 +128,7 @@ const SignUpForm : React.FC<IProps>= observer(({login,handleCancel,config,store,
         />
         </Form.Item>
 
-        <Form.Item label={t("Re-Password")} name="password2" 
+        <Form.Item label={t<string>("Re-Password")} name="password2" 
         rules={[{ required: true },({ getFieldValue }) => ({
           validator(_, value) {
             if (!value || getFieldValue('password') === value) {
@@ -145,7 +145,7 @@ const SignUpForm : React.FC<IProps>= observer(({login,handleCancel,config,store,
         </Form.Item>
 
         
-        <Form.Item label={t("SMS Code")} name="code" 
+        <Form.Item label={t<string>("SMS Code")} name="code" 
         rules={[{ required: true }]}
         tooltip={ruleMessage.required}>
         <Space.Compact>

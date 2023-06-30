@@ -88,8 +88,8 @@ const ChatList: React.FC<IProps>  =({store}) => {
                 description={t('Are you want to delete the chat.')}
                 onConfirm={(e)=>clear(item.key,e)}
                 onCancel={(e)=>e?.stopPropagation()}
-                okText={t("Yes")}
-                cancelText={t("No")}
+                okText={t<string>("Yes")}
+                cancelText={t<string>("No")}
               >
                  <Button onClick={(e)=>e.stopPropagation()}
                 icon={<FontAwesomeIcon icon={faTrashCan} />} size ={buttonSize}/>

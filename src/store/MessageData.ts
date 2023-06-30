@@ -936,7 +936,7 @@ class MessageData implements  IMessage{
     }
 
     get systemText(){
-        return this.role?roleData.getContentByRole(this.role):i18n.t("Type something to search on ChatGPT")
+        return this.role?roleData.getContentByRole(this.role):i18n.t<string>("Type something to search on ChatGPT")
     }
 
     getChatParams(){
