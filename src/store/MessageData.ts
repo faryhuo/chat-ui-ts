@@ -543,13 +543,13 @@ class MessageData implements  IMessage{
         this.type=type;
         config.changeType(type);
         if(this.sessionList.length){
-            this.activeSession=this.sessionList[0].key;
+            this.activeSession=this.sessionList[this.sessionList.length-1].key;
         }
     }
 
     selectChat(chatId: string){
         if(this.type==="chat"){
-            window.location.hash="#/chat";
+            window.location.hash="#/chat"
         }
         this.activeSession=chatId;
         this.hideLastData(chatId);
