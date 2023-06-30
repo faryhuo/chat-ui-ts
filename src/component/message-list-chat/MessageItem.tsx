@@ -50,11 +50,13 @@ const MessageItemChat : React.FC<IProps> = observer(({store,config,renderMessage
   return (<div className="message-list-wrapper-chat" style={{height:'100%'}}>
       <Card title={store.currentChatName}   className="antd-card-wrapper"
       extra={<ActionBtnList onOpen={onOpen} store={store} config={config}></ActionBtnList>} style={{ width: '100%',height:'100%'}}>
-      <ScrollToBottom>
+      <ScrollToBottom >
+        <div id="chat-message-list">
           {store.data.map((item,key)=>{
           return item.isSys?(<MessageItem index={key} store={store} item={item} type={"system"} key={key} content={renderMessage(item,store.type,key)}></MessageItem>):
           (<MessageItem store={store} type={"user"} key={key} index={key}  text={item.text} content={renderMessage(item,store.type,key)}></MessageItem>)
           })}
+          </div>
           <div ref={messagesEndRef}/>
       </ScrollToBottom>
       <ChatConfigList config={config} open={open} onClose={onClose}></ChatConfigList>

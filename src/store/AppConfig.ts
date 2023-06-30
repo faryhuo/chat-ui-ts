@@ -52,7 +52,7 @@ class AppConfig implements IAppConfig{
     style="chat";
     localConfigName=`config_${this.version}`;
     type="";
-    hideMenuTypeList=["tips","config","sd"]
+    hideMenuTypeList=["tips","config","sd","share"]
     isSlowLeftMenu=isMobile?false:true;
     isMobile=isMobile;
     api=apiSetting
@@ -112,6 +112,7 @@ class AppConfig implements IAppConfig{
             colorPrimary: observable,
             isSlowLeftMenuFlag: computed,
             triggerMenu: action,
+            changeType:action,
             save: action
         });
         if(localStorage[this.localConfigName]){
@@ -124,6 +125,10 @@ class AppConfig implements IAppConfig{
         }else{
             document.documentElement.style.setProperty('--color-primary', this.colorPrimary);
         }
+    }
+
+    changeType(type: string){
+        this.type=type;
     }
 
 

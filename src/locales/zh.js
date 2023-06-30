@@ -44,6 +44,8 @@ const config = {
     "frequency_penalty":"内容惩罚 (frequency_penalty)",
     "Color Primary":"主题颜色",
     "Choose a conversation style":"选择一个内容生成偏向",
+    "Choose a conversation style and role to start":"选择你希望AI扮演的角色和聊天风格",
+    "Just Start":"直接开始",
     "Roles management":"角色管理",
     "Tags":"标签",
     "Description":"详细描述",

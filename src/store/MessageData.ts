@@ -7,6 +7,7 @@ import userProflie from "./UserProfile";
 import roleData,{IRoleData,IRole} from "./RoleData";
 import imageData from "./ImageData";
 import saveAs from 'file-saver';
+import { Location } from "react-router-dom";
 
 let encodeFun: any
 import('gpt-tokenizer').then(({encode})=>{
@@ -70,6 +71,7 @@ export interface IMessage{
     localSessionName:string;
     activeSession:string;
     addChat:()=>string;
+    newChat:()=>void;
     addChatWithRole:(role:IRole)=>string;
     endStream:(chatId:string)=>void;
     appendData:(text:any,chatId:string)=>void;
@@ -106,10 +108,13 @@ export interface IMessage{
     latestMessage:any;
     roleData:IRoleData;
     hideLastData:(chatId:string)=>void;
+    changeTypeByUrl:(location: Location)=>void;
+    share:(node: any)=>Promise<void>
 }
 
 class MessageData implements  IMessage{
     
+
     version="2.0"
     localSessionName=`session_${this.version}`
     roleData=roleData;
@@ -204,6 +209,23 @@ class MessageData implements  IMessage{
         }else{
             this.loadDataFromlocalStore();
         }
+        //this.changeTypeByUrl();
+    }
+
+    changeTypeByUrl(location: Location){
+        const pathname=location.pathname;
+        if(pathname.startsWith("/config")){
+            this.changeType("config")
+        }else if(pathname.startsWith("/share")){
+            this.changeType("share")
+        }else{
+            const type=pathname.replace("/","");
+            const types=["chat","image","sd","code"];
+            if(types.includes(type)){
+                this.changeType(pathname.replace("/",""))
+            }
+        }
+        console.log(this.type)
     }
 
     loadDataFromlocalStore(){
@@ -305,6 +327,14 @@ class MessageData implements  IMessage{
         this.saveSessionToDB(chatId)
     }
 
+    newChat(){
+        if(this.type==="chat"){
+            this.activeSession="";
+            window.location.hash="#/";
+        }else{
+            this.addChat();
+        }
+    }
 
     addChat(){
         const data:Array<ISessiondata>=[];
@@ -511,13 +541,16 @@ class MessageData implements  IMessage{
             return;
         }
         this.type=type;
-        config.type=type;
+        config.changeType(type);
         if(this.sessionList.length){
-            this.activeSession=this.sessionList[this.sessionList.length-1].key;
+            this.activeSession=this.sessionList[0].key;
         }
     }
 
     selectChat(chatId: string){
+        if(this.type==="chat"){
+            window.location.hash="#/chat";
+        }
         this.activeSession=chatId;
         this.hideLastData(chatId);
     }
@@ -931,7 +964,7 @@ class MessageData implements  IMessage{
                 }
             })
             this.setSession(data);
-            this.changeType("chat");
+            //this.changeType("chat");
         });
     }
 
@@ -1125,6 +1158,13 @@ class MessageData implements  IMessage{
         saveAs(blob, 'export_data.json')
     }
 
+    async share(node: any){
+        await import('html-to-image').then(({toJpeg})=>{
+            toJpeg(node, { quality: 0.95,backgroundColor:""}).then((blob)=>{
+                saveAs(blob, 'chat.jpeg')
+            })
+        })
+    }
 
 
 }

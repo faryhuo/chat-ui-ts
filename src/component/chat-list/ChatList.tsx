@@ -51,7 +51,7 @@ const ChatList: React.FC<IProps>  =({store}) => {
   }
 
   const share = (chatId:string)=>{
-    console.log(chatId);
+    store.share(window.document.getElementById("chat-message-list"));
   }
 
   return  (<div className="session-list-wrapper">

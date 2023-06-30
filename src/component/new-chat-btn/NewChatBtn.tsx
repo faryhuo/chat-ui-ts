@@ -14,7 +14,7 @@ const NewChatBtn:React.FC<IProps> = observer(({store})=>{
 
     return (<div>           
     <Button type="primary" shape="round" icon={<FontAwesomeIcon icon={faBroom} size="lg" />} size="large" 
-    onClick={()=>{store.addChat()}}>{t('New Chat')}</Button></div>)
+    onClick={()=>{store.newChat()}}>{t('New Chat')}</Button></div>)
 })
 
 export default NewChatBtn;

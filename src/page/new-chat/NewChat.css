@@ -1,3 +1,19 @@
 .new-chat-page{
-    background-image:url("../../../public/home_bg.png");
+    /* background-image:url("../../../public/home_bg.png"); */
+    overflow: auto;
+}
+.new-chat-page .new-chat-title{
+    text-align: center;
+    margin-top: 50px;
+    margin-bottom: 20px;
+}
+.new-chat-page .just-start{
+    text-align: center;
+    margin-bottom: 20px;
+}
+.new-chat-page .role-config-page{
+    background-image: none;
+}
+.new-chat-page .role-config-page .role-list-wrapper{
+    background-color: rgba(0, 0, 0, 0);
 }

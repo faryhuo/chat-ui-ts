@@ -8,6 +8,9 @@ import React, { useEffect } from 'react';
 import {IAppConfig} from '../../store/AppConfig';
 import {IMessage} from '../../store/MessageData';
 import asyncComponent  from '../../component/async-component/AsyncComponent';
+import NewChat from '../new-chat/NewChat';
+
+
 
 
 type IProps={
@@ -19,6 +22,7 @@ const AsyncCode= asyncComponent(() => import ('../code/Code'));
 const AsyncImageEdit= asyncComponent(() => import ('../image-edit/ImageEdit'));
 const AsyncFrame= asyncComponent(() => import ('../iframe/Iframe'));
 const AsyncConfigPage= asyncComponent(() => import ('../config/Config'));
+const AsyncChatShare= asyncComponent(() => import ('../chat-share/ChatShare'));
 
 const pageList=[{
     path:"/chat",
@@ -38,6 +42,9 @@ const pageList=[{
     path:"/config/:id",
     component:AsyncConfigPage
 },{
+    path:"/share/:id",
+    component:AsyncChatShare
+},{
     path:"/tips",
     component:AsyncFrame,
     props:{
@@ -51,7 +58,7 @@ const pageList=[{
     },
 },{
     path:"/",
-    component:AsyncChat,
+    component:NewChat,
     exact:true
 }];
 
@@ -62,11 +69,7 @@ const AppRoutes:React.FC<IProps> = ({messageData,appConfig})=>{
 
 
     useEffect(()=>{
-        if(location.pathname.startsWith("/config")){
-            messageData.changeType("config")
-        }else{
-            messageData.changeType(location.pathname.replace("/",""))
-        }
+        messageData.changeTypeByUrl(location);
     },[location,messageData])
 
   return (<Routes>
