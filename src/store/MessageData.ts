@@ -29,6 +29,14 @@ export interface  ISessiondata{
     title?:string;
 }
 
+export interface ISessionMenu{
+    name:string;
+    key:string;
+    edit:boolean;
+    date:Date;
+    select:string;
+}
+
 export interface  ISession{
     chatId:string;
     type:string;
@@ -68,7 +76,7 @@ export interface IMessage{
     data:Array<ISessiondata>;
     sessionData:Array<ISession>;
     currentSession:Array<ISession>;
-    sessionList:any;
+    sessionList:ISessionMenu[];
     getMessageListData:()=>any;
     enableType:(chatId: string)=>void;
     needStream:boolean;
@@ -571,8 +579,8 @@ class MessageData implements  IMessage{
         })    
     }
 
-    get sessionList(){
-        let arr:any=[];
+    get sessionList():ISessionMenu[]{
+        let arr:ISessionMenu[]=[];
         this.session.forEach((obj) => {
             if(obj.type!==this.type){
                 return true;

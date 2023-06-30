@@ -5,7 +5,7 @@ import dayjs from 'dayjs';
 import icon from './favicon-32x32.png';
 import { Input } from 'antd';
 import { useTranslation } from 'react-i18next';
-import {IMessage} from '../../store/MessageData';
+import {IMessage,ISessionMenu} from '../../store/MessageData';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPaintbrush, faTrashCan,faCheck,faShare} from '@fortawesome/free-solid-svg-icons'
 
@@ -18,6 +18,8 @@ type IProps ={
 const ChatList: React.FC<IProps>  =({store}) => {
 
   const {t} = useTranslation();
+
+  const buttonSize= "small"
 
   const clear= (key: string,e: any) =>{
     store.clear(key);
@@ -38,12 +40,12 @@ const ChatList: React.FC<IProps>  =({store}) => {
     }
   }
 
-  const showChatNameEditor = (edit: any,key: any,e: { stopPropagation: () => void; })=>{
+  const showChatNameEditor = (edit: boolean,key: string,e: { stopPropagation: () => void; })=>{
     store.updateChatStatus(!edit,key);
     e.stopPropagation();
   }
 
-  const updateChatName = (e: { target: { value: any; }; stopPropagation: () => void; },key: any)=>{
+  const updateChatName = (e: { target: { value: string; }; stopPropagation: () => void; },key: string)=>{
     store.updateChatName(e.target.value,key);
     e.stopPropagation();
   }
@@ -55,7 +57,7 @@ const ChatList: React.FC<IProps>  =({store}) => {
   return  (<div className="session-list-wrapper">
         <List 
           dataSource={store.sessionList.reverse()}
-          renderItem={(item:any) => (
+          renderItem={(item:ISessionMenu) => (
             <List.Item key={item.key} className={item.select?"selected":""} style={item.select?{}:{}}
             onClick={()=>{store.selectChat(item.key);}}>
               {!item.edit?(<List.Item.Meta
@@ -65,7 +67,7 @@ const ChatList: React.FC<IProps>  =({store}) => {
               />):<Input defaultValue={item.name} onChange={(e)=>updateChatName(e,item.key)}
               addonAfter={
                 <Button
-                icon={<FontAwesomeIcon icon={faCheck}  />} size ="small"
+                icon={<FontAwesomeIcon icon={faCheck}  />} size ={buttonSize}
                 onClick={(e)=>{showChatNameEditor(item.edit,item.key,e)}}
               />
               }
@@ -73,11 +75,11 @@ const ChatList: React.FC<IProps>  =({store}) => {
               <div>
               {!item.edit && <span>
               <Button
-                icon={<FontAwesomeIcon icon={faPaintbrush} />} size ="small"
+                icon={<FontAwesomeIcon icon={faPaintbrush} />} size ={buttonSize}
                 onClick={(e)=>{showChatNameEditor(item.edit,item.key,e)}}
               />
               <Button
-                icon={<FontAwesomeIcon icon={faShare} />} size ="small"
+                icon={<FontAwesomeIcon icon={faShare} />} size ={buttonSize}
                 onClick={(e)=>{share(item.key)}}
               />
              <Popconfirm
@@ -90,7 +92,7 @@ const ChatList: React.FC<IProps>  =({store}) => {
                 cancelText={t("No")}
               >
                  <Button onClick={(e)=>e.stopPropagation()}
-                icon={<FontAwesomeIcon icon={faTrashCan} />} size ="small"/>
+                icon={<FontAwesomeIcon icon={faTrashCan} />} size ={buttonSize}/>
               </Popconfirm>
              </span>}
               </div>
