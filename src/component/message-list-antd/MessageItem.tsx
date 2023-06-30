@@ -60,7 +60,7 @@ const messageItem2: React.FC<IProps> = observer(({store,config,renderMessage}) =
 
   const editAndResent=(index: number,item: ISessiondata)=>{
     item.isEdit=false;
-    if(store && index){
+    if(store && index && item.text){
         store.reSentMsg(index,item.text);
     }
   }

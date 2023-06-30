@@ -6,7 +6,7 @@ import Markdown from '../markdown/Markdown'
 import MessageItem2 from '../message-list-antd/MessageItem';
 import MessageItemChat from '../message-list-chat/MessageItem';
 import {IAppConfig} from '../../store/AppConfig';
-import {IMessage,ISessiondata} from '../../store/MessageData';
+import {Ichoices, IMessage,ISessiondata} from '../../store/MessageData';
 import classNames from 'classnames';
 
 type IProps={
@@ -129,9 +129,9 @@ class MessageList extends Component<IProps,IStates> {
         }else if(type==="code"){
             let newChoices: { message: { content: string; }; }[]=[];
             if(item.choices && item.choices.length){
-                item.choices.map((subItem: { text: string; })=>{
+                item.choices.map((subItem)=>{
                     newChoices.push({
-                        message:{content:"```"+subItem.text+"```"}
+                        message:{content:"```"+subItem.message.content+"```"}
                     });
                     return true;
                 });
@@ -142,7 +142,7 @@ class MessageList extends Component<IProps,IStates> {
         }
     }
 
-    renderSysChat(choices: any[],classs: string | undefined){
+    renderSysChat(choices: Ichoices[] | null | undefined,classs: string | undefined){
         if(!choices || !choices.length){
             return <div></div>
         }

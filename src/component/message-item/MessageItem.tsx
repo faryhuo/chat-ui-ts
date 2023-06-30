@@ -34,7 +34,8 @@ class MessageItem extends Component<IProps, IStats> {
     
     editInput(){
         this.setState({
-            isEdit:true
+            isEdit:true,
+            content:this.props.text
         })
     }
 

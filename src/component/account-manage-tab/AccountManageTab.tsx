@@ -14,17 +14,17 @@ const AccountManageTab:React.FC<IProps> = observer(({loginForm,signUpForm})=>{
     const items: TabsProps['items'] = [
       // {
       //   key: '1',
-      //   label: t("WeChat Login"),
+      //   label: t<string>("WeChat Login"),
       //   children:<QRCode value={url || '-'} />        
       // },
       {
         key: '2',
-        label: t("Account Login"),
+        label: t<string>("Account Login"),
         children: loginForm,
       },
       {
         key: '3',
-        label: t("Sign Up"),
+        label: t<string>("Sign Up"),
         children: signUpForm,
       }
     ];

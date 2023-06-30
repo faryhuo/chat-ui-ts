@@ -12,14 +12,21 @@ let encodeFun: any
 import('gpt-tokenizer').then(({encode})=>{
     encodeFun=encode;
 })
+
+export interface Ichoices{
+    message:{
+        content:string;
+    }
+}
+
 export interface  ISessiondata{
     isSys?:boolean;
     isDefault?:boolean;
     isEdit?:boolean;
     isDetails?:boolean;
     hasShowDetails?:boolean;
-    text?:any;
-    choices?:any;
+    text?:string;
+    choices?:Ichoices[] | null;
     code?:any;
     image?:any;
     stream?:boolean;
@@ -118,7 +125,7 @@ class MessageData implements  IMessage{
             {
             isSys:true,
             isDefault:true,
-            text:i18n.t("Type something to search on ChatGPT")
+            text:i18n.t<string>("Type something to search on ChatGPT")
             }
         ],
         updateDate:new Date()
@@ -131,7 +138,7 @@ class MessageData implements  IMessage{
             {
              isSys:true,
              isDefault:true,
-            text:i18n.t("Type something to generate a image"),
+            text:i18n.t<string>("Type something to generate a image"),
             choices:null
             }
         ],
@@ -145,7 +152,7 @@ class MessageData implements  IMessage{
             {
                 isSys:true,
                 isDefault:true,
-               text:i18n.t("Type the code and your requirement"),
+               text:i18n.t<string>("Type the code and your requirement"),
                choices:null
                }
         ],
@@ -238,7 +245,11 @@ class MessageData implements  IMessage{
         this.disableType(chatId);
         try{
             if(this.type==="image"){
-                this.callImageAPI(chatId,this.data[this.data.length-1].text).then(()=>{
+                const msg=this.data[this.data.length-1].text;
+                if(!msg){
+                    return;
+                }
+                this.callImageAPI(chatId,msg).then(()=>{
                     this.sessionData.forEach((item)=>{
                         if(item.chatId===chatId){
                             const lastData=item.data[item.data.length-1];
@@ -305,11 +316,11 @@ class MessageData implements  IMessage{
                 isDefault:true
             };
             if(this.type==="chat"){
-                tmp.text=i18n.t("Type something to search on ChatGPT");
+                tmp.text=i18n.t<string>("Type something to search on ChatGPT");
             }else if(this.type==="image"){
-                tmp.text=i18n.t("Type something to generate a image");
+                tmp.text=i18n.t<string>("Type something to generate a image");
             }else if(this.type==="code"){
-                tmp.text=i18n.t("Type the code and your requirement");
+                tmp.text=i18n.t<string>("Type the code and your requirement");
             }
             data.push(tmp)
         }
@@ -423,9 +434,10 @@ class MessageData implements  IMessage{
                 break;
             }
         }
-        if(text && data){
-            data[data.length-1].choices[0].message.content+=text;
-            this.latestText=data[data.length-1].choices[0].message.content;
+        const choices=data[data.length-1].choices;
+        if(text && data && choices && choices.length>0){
+            choices[0].message.content+=text;
+            this.latestText=choices[0].message.content;
             this.saveSessionToLocal();
         }
     }
@@ -963,8 +975,9 @@ class MessageData implements  IMessage{
         if(this.data.length<=1){
             return this.data;
         }
-        if(this.data[this.data.length-1].choices){
-            return this.data[this.data.length-1].choices[0]?.message?.content;
+        const choices=this.data[this.data.length-1].choices;
+        if(choices && choices.length>0){
+            return choices[0]?.message?.content;
         }else{
             return this.data[this.data.length-1].text;
         }
@@ -1011,8 +1024,10 @@ class MessageData implements  IMessage{
                 }
                 msg.content=content;
             }else{
-                msg.role="user"
-                msg.content=item.text;
+                msg.role="user";
+                if(item.text){
+                    msg.content=item.text;
+                }
             }
             if(msg.content){
                 messages.push(msg);
