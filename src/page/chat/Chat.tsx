@@ -9,6 +9,7 @@ import {IAppConfig} from '../../store/AppConfig';
 import {IMessage} from '../../store/MessageData';
 import './Chat.css'
 import { observer } from "mobx-react"
+import { useParams } from 'react-router-dom';
 
 type IProps={
   config:IAppConfig;
@@ -18,7 +19,10 @@ type IProps={
 const Chat: React.FC<IProps> = ({store,config})=>{
 
     const [btnHeight,setBtnHeight]=useState(48);
-
+    const {chatId}=useParams();
+    if(chatId){
+        store.selectChat(chatId);
+    }
     return (
     <div className="message-page">
     <div className="message-list" style={{bottom:btnHeight}}>                

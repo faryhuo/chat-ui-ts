@@ -25,8 +25,8 @@ const RoleList:React.FC<IProps> = observer(({config,store})=>{
 
     const data = roleData.currentRoles;
     const useRole=(role:IRole)=>{
-      store.addChatWithRole(role);
-      window.location.hash="/chat";
+      const chatId=store.addChatWithRole(role);
+      window.location.hash=`#/chat/${chatId}`;
     }
 
 

@@ -25,7 +25,7 @@ const AsyncConfigPage= asyncComponent(() => import ('../config/Config'));
 const AsyncChatShare= asyncComponent(() => import ('../chat-share/ChatShare'));
 
 const pageList=[{
-    path:"/chat",
+    path:"/chat/:chatId",
     component:AsyncChat
 },{
     path:"/image",
@@ -58,6 +58,10 @@ const pageList=[{
     },
 },{
     path:"/",
+    component:NewChat,
+    exact:true
+},{
+    path:"/chat",
     component:NewChat,
     exact:true
 }];

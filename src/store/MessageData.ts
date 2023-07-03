@@ -392,7 +392,6 @@ class MessageData implements  IMessage{
             updateDate: new Date()
         };
         this.session.push(sessionData);
-        this.activeSession=chatId;
         this.save(chatId);
         return chatId;
     }
@@ -542,15 +541,14 @@ class MessageData implements  IMessage{
         }
         this.type=type;
         config.changeType(type);
-        if(this.sessionList.length){
-            this.activeSession=this.sessionList[this.sessionList.length-1].key;
+        if(type==="code" || type === "image"){
+            if(this.sessionList.length){
+                this.activeSession=this.sessionList[this.sessionList.length-1].key;
+            }
         }
     }
 
     selectChat(chatId: string){
-        if(this.type==="chat"){
-            window.location.hash="#/chat"
-        }
         this.activeSession=chatId;
         this.hideLastData(chatId);
     }
@@ -631,7 +629,7 @@ class MessageData implements  IMessage{
                 return true;
             }
             let item:any={};
-            item.name=obj.chatName?obj.chatName:"Chat "+(arr.length+1);
+            item.name=obj.chatName?obj.chatName:"New Chat";
             item.key=obj.chatId;
             item.edit=obj.edit;
             item.date=obj.updateDate;

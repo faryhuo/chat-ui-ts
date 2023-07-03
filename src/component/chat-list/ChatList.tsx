@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import {IMessage,ISessionMenu} from '../../store/MessageData';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPaintbrush, faTrashCan,faCheck,faShare} from '@fortawesome/free-solid-svg-icons'
+import { Link } from 'react-router-dom';
 
 
 type IProps ={
@@ -58,20 +59,26 @@ const ChatList: React.FC<IProps>  =({store}) => {
         <List 
           dataSource={store.sessionList.reverse()}
           renderItem={(item:ISessionMenu) => (
-            <List.Item key={item.key} className={item.select?"selected":""} style={item.select?{}:{}}
+            <List.Item key={item.key} className={item.select?"selected":""} 
+            style={item.select?{}:{}}
             onClick={()=>{store.selectChat(item.key);}}>
-              {!item.edit?(<List.Item.Meta
+              {!item.edit?(
+              <Link to={`/chat/${item.key}`} style={{"width":"100%"}}>
+              <List.Item.Meta
                 avatar={<Avatar src={icon} />}
                 title={<span>{item.name}</span>}
                 description={!item.edit && formatDate(item.date)}
-              />):<Input defaultValue={item.name} onChange={(e)=>updateChatName(e,item.key)}
+              />
+              </Link>
+              ):<Input defaultValue={item.name} onChange={(e)=>updateChatName(e,item.key)}
               addonAfter={
                 <Button
                 icon={<FontAwesomeIcon icon={faCheck}  />} size ={buttonSize}
                 onClick={(e)=>{showChatNameEditor(item.edit,item.key,e)}}
               />
               }
-              />}
+              />
+              }
               <div>
               {!item.edit && <span>
               <Button

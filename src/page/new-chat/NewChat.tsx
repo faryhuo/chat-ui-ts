@@ -15,8 +15,8 @@ const NewChat: React.FC<IProps> = ({store,config})=>{
 
   const addChat=()=>{
     store.changeType("chat");
-    store.addChat();
-    window.location.hash="#/chat"
+    const chatId=store.addChat();
+    window.location.hash=`#/chat/${chatId}`;
   }
 
   const {t} = useTranslation();
