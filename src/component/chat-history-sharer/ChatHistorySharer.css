@@ -1,0 +1,13 @@
+.sharer-action-btn{
+    width: 100%;
+    padding: 8px 10px;
+    display: flex;
+}
+.sharer-action-btn button{
+    flex: 1;
+    margin: 10px;
+}
+.sharer-review-content{ 
+    max-height: 500px;
+    overflow: auto;
+}

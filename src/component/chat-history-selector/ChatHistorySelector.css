@@ -1,0 +1,36 @@
+.share-history-list{
+    margin-top: 20px;
+    border-radius: 10px;
+    border: 1px solid #dedede;
+    overflow: auto;
+    max-height: 400px;
+}
+.share-history-row{
+    max-height: 40px;
+    display: flex;
+    padding: 8px 10px;
+    border: 1px solid #dedede;
+    cursor: pointer;
+}
+.share-history-row-title{
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0;
+    flex: 0 0 40px;
+}
+.share-history-row-content{
+    display: block;
+    max-height: 40px;
+    line-height: 30px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+}
+.share-history-row-selected{
+    color: #fff;
+    background-color: var(--color-primary);
+    box-shadow:0 2px 0 rgba(5, 145, 255, 0.1);
+}

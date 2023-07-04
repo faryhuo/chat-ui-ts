@@ -83,6 +83,7 @@ export interface IMessage{
     changeRole:(chatId: string,role: number | undefined)=>void;
     role:number | undefined;
     data:Array<ISessiondata>;
+    getDataChatId:(chatId:string)=>Array<ISessiondata>;
     sessionData:Array<ISession>;
     currentSession:Array<ISession>;
     sessionList:ISessionMenu[];
@@ -568,6 +569,7 @@ class MessageData implements  IMessage{
                         chatName=config.isChinese?sItem.roleNameCN:sItem.roleName;
                         if(this.data && this.data.length && config.isSlowMsg4AddChat){
                             this.data[0].text=this.systemText;
+                            this.data[0].isSys=false;
                         }
                     }
                 })
@@ -598,6 +600,18 @@ class MessageData implements  IMessage{
                 item.data=[]
             }
         }
+    }
+    getDataChatId(chatId:string):Array<ISessiondata>{
+        let {type,session}=this;
+        let data: Array<ISessiondata>=[];
+        for(let i=0;i<session.length;i++){
+            let item=session[i];
+            if(item.type===type && item.chatId===chatId){
+                data=item.data;
+                break;
+            }
+        }
+        return data;
     }
 
     get data():Array<ISessiondata>{

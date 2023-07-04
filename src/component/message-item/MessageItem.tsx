@@ -16,6 +16,7 @@ type IProps={
     index:number;
     store?:IMessage;
     item?:ISessiondata;
+    readonly?:boolean;
 }
 type IStats={
     isEdit: boolean;
@@ -60,7 +61,7 @@ class MessageItem extends Component<IProps, IStats> {
         this.setState({content:e.target.value})
     }
 
-    userInput(content: any){
+    userInput(){
         return (<div className="rce-container-mbox message-item-user">
         <div className="rce-mbox rce-mbox-right" style={{background:config.colorPrimary+"a3"}}>
             <div className="rce-mbox-body">
@@ -80,18 +81,18 @@ class MessageItem extends Component<IProps, IStats> {
         </div>}</div>
                 <div  className="rce-mbox-time non-copiable"></div></div>
                 <svg  className="rce-mbox-right-notch" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" ><path style={{fill:config.colorPrimary+"a3",fillOpacity: 0.3}} d="M0 0v20L20 0"></path></svg></div>
-                <div style={{float:'right'}}>
+        {this.props.readonly!==true && <div style={{float:'right'}}>
                 {!this.state.isEdit && <Button onClick={()=>{this.editInput()}}  shape="round" icon={<FontAwesomeIcon icon={faPaintbrush}  />}  ></Button>}
                 {this.state.isEdit && <Button style={{display:'block',marginBottom:5}} onClick={()=>{this.editAndResent()}} shape="round" icon={<FontAwesomeIcon icon={faCheck}  />}  ></Button>}
                 {this.state.isEdit && <Button onClick={()=>{this.cancel()}}  shape="round" icon={<FontAwesomeIcon icon={faTrashCan}  />}  ></Button>}
-                </div>                   
+                </div>}                   
                 </div>)
     }
 
     render(){    
         let type=this.props.type;    
         if(type==="user"){
-            return this.userInput(this.props.content);
+            return this.userInput();
         }
         const {item,store,index} = this.props;
         return (

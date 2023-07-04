@@ -3,13 +3,14 @@ import './ChatList.css';
 import { observer } from "mobx-react-lite";
 import dayjs from 'dayjs';
 import icon from './favicon-32x32.png';
-import { Input } from 'antd';
+import { Input,Modal } from 'antd';
 import { useTranslation } from 'react-i18next';
 import {IMessage,ISessionMenu} from '../../store/MessageData';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPaintbrush, faTrashCan,faCheck,faShare} from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom';
-
+import { useState } from 'react';
+import ChatShareSteps from '../chat-share-steps/ChatShareSteps';
 
 type IProps ={
   store: IMessage
@@ -19,6 +20,8 @@ type IProps ={
 const ChatList: React.FC<IProps>  =({store}) => {
 
   const {t} = useTranslation();
+  const [open,setOpen] = useState(false);
+  const [currentChatId,setCurrentChatId] = useState<string>("");
 
   const buttonSize= "small"
 
@@ -51,8 +54,15 @@ const ChatList: React.FC<IProps>  =({store}) => {
     e.stopPropagation();
   }
 
-  const share = (chatId:string)=>{
-    store.share(window.document.getElementById("chat-message-list"));
+  const share = (chatId:string,e: {stopPropagation: () => void;})=>{
+    setOpen(true);
+    setCurrentChatId(chatId);
+    e.stopPropagation();
+  }
+
+  const handleCancel= ()=>{
+    setOpen(false);
+    setCurrentChatId("");
   }
 
   return  (<div className="session-list-wrapper">
@@ -87,7 +97,7 @@ const ChatList: React.FC<IProps>  =({store}) => {
               />
               <Button
                 icon={<FontAwesomeIcon icon={faShare} />} size ={buttonSize}
-                onClick={(e)=>{share(item.key)}}
+                onClick={(e)=>{share(item.key,e)}}
               />
              <Popconfirm
                 placement="right"
@@ -106,6 +116,16 @@ const ChatList: React.FC<IProps>  =({store}) => {
             </List.Item>
           )}
         />
+      <Modal
+        open={open}
+        title={"Share History"}
+        onCancel={handleCancel}
+        footer={false}
+        destroyOnClose={true}
+        width={900}
+      >
+         <ChatShareSteps data={store.getDataChatId(currentChatId)}></ChatShareSteps>
+      </Modal>
     </div>);
 };
 export default observer(ChatList);
