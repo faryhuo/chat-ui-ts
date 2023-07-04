@@ -1,6 +1,24 @@
 .sharer-review-page-content{
     background-color: #f0f2f5;
-    padding:20px 0;
     border-radius: 10px;
     border: 1px solid #dedede;
+}
+
+.sharer-review-page-summary{
+    padding: 20px;
+    box-sizing: border-box;
+}
+.sharer-summary{
+    background-color: var(--color-primary);
+    display: flex;  
+    border-radius: 10px;
+    width: 100%;
+    padding: 10px;
+}
+.sharer-summary-web-info{
+    flex: 1;
+}
+.sharer-summary-params{
+    float: right;
+    flex: 1;
 }

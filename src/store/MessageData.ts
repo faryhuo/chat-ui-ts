@@ -83,7 +83,7 @@ export interface IMessage{
     changeRole:(chatId: string,role: number | undefined)=>void;
     role:number | undefined;
     data:Array<ISessiondata>;
-    getDataChatId:(chatId:string)=>Array<ISessiondata>;
+    getChatInfoByChatId:(chatId:string)=>ISession | null;
     sessionData:Array<ISession>;
     currentSession:Array<ISession>;
     sessionList:ISessionMenu[];
@@ -601,13 +601,13 @@ class MessageData implements  IMessage{
             }
         }
     }
-    getDataChatId(chatId:string):Array<ISessiondata>{
+    getChatInfoByChatId(chatId:string):ISession | null{
         let {type,session}=this;
-        let data: Array<ISessiondata>=[];
+        let data: ISession | null=null;
         for(let i=0;i<session.length;i++){
             let item=session[i];
             if(item.type===type && item.chatId===chatId){
-                data=item.data;
+                data=item;
                 break;
             }
         }

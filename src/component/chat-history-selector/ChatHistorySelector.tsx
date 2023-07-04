@@ -47,7 +47,7 @@ const ChatHistorySelector:React.FC<IProps> = observer(({data,selectAll,clear,sel
         </Form.Item>
       </Form>
 
-      <div>
+      <div className="sharer-action-btn">
         <Button onClick={selectAll}>Select All</Button>
         <Button  onClick={clear}>Clear</Button>
       </div>

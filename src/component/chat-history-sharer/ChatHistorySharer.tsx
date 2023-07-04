@@ -12,9 +12,11 @@ import { useRef } from 'react';
 type IProps={
   data:ISessiondata[];
   selects:number[];
+  topic:string;
+  time:Date;
 }
 
-const ChatHistorySharer:React.FC<IProps> = observer(({data,selects})=>{
+const ChatHistorySharer:React.FC<IProps> = observer(({data,selects,topic,time})=>{
 
   const {t} = useTranslation();
   const pageRef:any =useRef(null);
@@ -36,7 +38,7 @@ const ChatHistorySharer:React.FC<IProps> = observer(({data,selects})=>{
       <Button icon={<FontAwesomeIcon icon={faShare}/>}>{t('Share Line')}</Button>
     </div>
     <div className="sharer-review-content" ref={pageRef}>
-      <ChatHistorySharerPage data={data.filter((value,index)=>{
+      <ChatHistorySharerPage topic={topic} time={time} data={data.filter((value,index)=>{
         return selects.includes(index);
       })}></ChatHistorySharerPage>
     </div>

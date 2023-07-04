@@ -4,15 +4,15 @@ import { useTranslation } from 'react-i18next';
 import ChatHistorySelector from '../chat-history-selector/ChatHistorySelector';
 import ChatHistorySharer from '../chat-history-sharer/ChatHistorySharer';
 import { observer } from "mobx-react-lite";
-import {ISessiondata} from '../../store/MessageData';
+import {ISession} from '../../store/MessageData';
 import "./ChatShareSteps.css";
 
 type IProps={
-  data:ISessiondata[];
+  sessionData:ISession;
 }
 
 
-const ChatShareSteps :React.FC<IProps> = observer(({data})=>{
+const ChatShareSteps :React.FC<IProps> = observer(({sessionData})=>{
 
     const {t} =useTranslation();
     const [current, setCurrent] = useState(0);
@@ -24,14 +24,14 @@ const ChatShareSteps :React.FC<IProps> = observer(({data})=>{
     };
 
     const initArr=[];
-    for(let i=0;i<data.length;i++){
+    for(let i=0;i<sessionData.data.length;i++){
       initArr.push(i);
     }
     const [selects,setSelects]=useState<number[]>(initArr);
   
     const selectAll=()=>{
       const arr=[];
-      for(let i=0;i<data.length;i++){
+      for(let i=0;i<sessionData.data.length;i++){
         arr.push(i);
       }
       setSelects(arr);
@@ -55,13 +55,14 @@ const ChatShareSteps :React.FC<IProps> = observer(({data})=>{
     }
 
     const steps =[{
-      title: t(`Choose`),
+      title: t(`Select`),
       content: <ChatHistorySelector select={select}
       selectAll={selectAll} selects={selects} clear={clear}
-      data={data}></ChatHistorySelector>,
+      data={sessionData.data}></ChatHistorySelector>,
     },{
       title: t(`Review`),
-      content: <ChatHistorySharer selects={selects}  data={data}></ChatHistorySharer>,
+      content: <ChatHistorySharer topic={sessionData.chatName?sessionData.chatName:""} 
+      time={sessionData.updateDate?sessionData.updateDate:new Date()} selects={selects}  data={sessionData.data}></ChatHistorySharer>,
     }]
   
 
@@ -71,6 +72,7 @@ const ChatShareSteps :React.FC<IProps> = observer(({data})=>{
           current={current}
           onChange={onChange}
           items={steps}
+          type="navigation"
         /> 
       </div>
       <Divider/>

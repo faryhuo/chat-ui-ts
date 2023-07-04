@@ -124,7 +124,7 @@ const ChatList: React.FC<IProps>  =({store}) => {
         destroyOnClose={true}
         width={900}
       >
-         <ChatShareSteps data={store.getDataChatId(currentChatId)}></ChatShareSteps>
+         <ChatShareSteps sessionData={store.getChatInfoByChatId(currentChatId) as any}></ChatShareSteps>
       </Modal>
     </div>);
 };
