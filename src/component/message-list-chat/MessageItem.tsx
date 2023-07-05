@@ -17,7 +17,7 @@ type IProps={
 }
 const MessageItemChat : React.FC<IProps> = observer(({store,config,renderMessage}) => {
 
-  const messagesEndRef =useRef(null);
+  const messagesEndRef =useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
 
   const onOpen = () => {
@@ -34,7 +34,7 @@ const MessageItemChat : React.FC<IProps> = observer(({store,config,renderMessage
     const scrollMessage=()=>{
       scrollMessageTimeout.current = null; 
       if(messagesEndRef && messagesEndRef.current && open===false){
-        (messagesEndRef as any).current.scrollIntoView({ behavior: 'smooth' });
+        messagesEndRef.current.scrollIntoView();
       }
     }
   
@@ -51,7 +51,7 @@ const MessageItemChat : React.FC<IProps> = observer(({store,config,renderMessage
       <Card title={store.currentChatName}   className="antd-card-wrapper"
       extra={<ActionBtnList onOpen={onOpen} store={store} config={config}></ActionBtnList>} style={{ width: '100%',height:'100%'}}>
       <ScrollToBottom >
-        <div id="chat-message-list">
+        <div>
           {store.data.map((item,key)=>{
           return item.isSys?(<MessageItem index={key} store={store} item={item} type={"system"} key={key} content={renderMessage(item,store.type,key)}></MessageItem>):
           (<MessageItem store={store} type={"user"} key={key} index={key}  text={item.text} content={renderMessage(item,store.type,key)}></MessageItem>)

@@ -5,11 +5,3 @@
     max-height: 200px;
     overflow: hidden;
 }
-.chat-row{
-    word-wrap: break-word;
-    white-space: break-spaces;
-}
-.chat-row pre{
-    word-wrap: break-word;
-    white-space: break-spaces;
-}

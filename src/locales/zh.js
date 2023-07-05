@@ -41,7 +41,7 @@ const config = {
     "Export":"导出聊天记录",
     "Import":"加载聊天记录",
     "Reset":"清空数据",
-    "frequency_penalty":"内容惩罚 (frequency_penalty)",
+    "frequency_penalty":"频率惩罚度 (frequency_penalty)",
     "Color Primary":"主题颜色",
     "Choose a conversation style":"选择一个内容生成偏向",
     "Choose a conversation style and role to start":"选择你希望AI扮演的角色和聊天风格",
@@ -91,6 +91,7 @@ const config = {
     "Regenerate":"重新生成",
     "presence_penalty":"话题新鲜度 (presence_penalty)",
     "temperature":"随机性 (temperature)",
-    "max_tokens":"单次回复限制 (max_tokens)"
+    "max_tokens":"单次回复限制 (max_tokens)",
+    "top_p":"核采样 (top_p)"
 }
 export default config;

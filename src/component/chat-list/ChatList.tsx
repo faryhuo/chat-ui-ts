@@ -73,7 +73,9 @@ const ChatList: React.FC<IProps>  =({store}) => {
             style={item.select?{}:{}}
             onClick={()=>{store.selectChat(item.key);}}>
               {!item.edit?(
-              <Link to={`/chat/${item.key}`} style={{"width":"100%"}}>
+              <Link 
+              to={`/chat/${item.key}`}
+               style={{"width":"100%"}}>
               <List.Item.Meta
                 avatar={<Avatar src={icon} />}
                 title={<span>{item.name}</span>}

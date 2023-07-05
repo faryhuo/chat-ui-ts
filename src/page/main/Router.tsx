@@ -1,5 +1,5 @@
 //import ConfigPage from '../config/Config';
-//import Chat from '../chat/Chat';
+import Chat from '../chat/Chat';
 //import Code from '../code/Code';
 //import ImageEdit from '../image-edit/ImageEdit';
 //import Frame from '../iframe/Iframe';
@@ -17,7 +17,7 @@ type IProps={
     appConfig:IAppConfig;
   messageData:IMessage;
 }
-const AsyncChat = asyncComponent(() => import ('../chat/Chat'));
+//const AsyncChat = asyncComponent(() => import ('../chat/Chat'));
 const AsyncCode= asyncComponent(() => import ('../code/Code'));
 const AsyncImageEdit= asyncComponent(() => import ('../image-edit/ImageEdit'));
 const AsyncFrame= asyncComponent(() => import ('../iframe/Iframe'));
@@ -26,10 +26,10 @@ const AsyncChatShare= asyncComponent(() => import ('../chat-share/ChatShare'));
 
 const pageList=[{
     path:"/chat/:chatId",
-    component:AsyncChat
+    component:Chat
 },{
     path:"/image",
-    component:AsyncChat
+    component:Chat
 },{
     path:"/code",
     component:AsyncCode

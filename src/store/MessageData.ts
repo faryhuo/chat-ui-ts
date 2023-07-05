@@ -215,18 +215,23 @@ class MessageData implements  IMessage{
 
     changeTypeByUrl(location: Location){
         const pathname=location.pathname;
-        if(pathname.startsWith("/config")){
-            this.changeType("config")
+        let type="";
+        if(pathname.startsWith("/chat")){
+            type="chat";
+        }else if(pathname.startsWith("/config")){
+            type="config";
         }else if(pathname.startsWith("/share")){
-            this.changeType("share")
+            type="share";
         }else{
-            const type=pathname.replace("/","");
-            const types=["chat","image","sd","code"];
-            if(types.includes(type)){
-                this.changeType(pathname.replace("/",""))
+            const ctype=pathname.replace("/","");
+            const types=["image","sd","code"];
+            if(types.includes(ctype)){
+                type=ctype;
             }
         }
-        console.log(this.type)
+        if(type!==this.type){
+            this.changeType(type)
+        }
     }
 
     loadDataFromlocalStore(){
@@ -488,7 +493,7 @@ class MessageData implements  IMessage{
                 break;
             }
         }
-        if((data.length===0 || data[0].isDefault) && newChat.text && curentItem){
+        if((data.length===0 || (data[0].isDefault && data.length===1 )) && newChat.text && curentItem){
             let text:string=newChat.text;
             if(text.length>=20){
                 text=text.substring(0,20)+"...";
@@ -844,7 +849,6 @@ class MessageData implements  IMessage{
                 },
                 body:JSON.stringify(params),
                 onmessage(msg) {
-                  //console.log("message", msg.data); // this works - data is here!
                   let data = msg.data; 
                   try{
                     if(!data){
@@ -969,7 +973,6 @@ class MessageData implements  IMessage{
           }
         ).then((response)=>{
             const data=response.data.data;
-            //console.log(data);
             this.session.forEach(item=>{
                 if(item.type==="image"){
                     data.push(item);
@@ -1001,7 +1004,6 @@ class MessageData implements  IMessage{
             }
             chatTokens = this.encodeChat(messageListData);
         }
-        console.log(chatTokens);
         let params={ 
           messages:JSON.stringify(messageListData),
           uuid: this.activeSession,

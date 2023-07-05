@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {
 
     MessageList,
@@ -20,9 +20,12 @@ const Chat: React.FC<IProps> = ({store,config})=>{
 
     const [btnHeight,setBtnHeight]=useState(48);
     const {chatId}=useParams();
-    if(chatId){
-        store.selectChat(chatId);
-    }
+    useEffect(()=>{
+        if(chatId && chatId!==store.activeSession){
+            store.selectChat(chatId);
+        }
+    },[chatId,store])
+
     return (
     <div className="message-page">
     <div className="message-list" style={{bottom:btnHeight}}>                

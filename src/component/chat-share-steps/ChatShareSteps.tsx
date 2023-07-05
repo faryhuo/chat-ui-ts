@@ -19,7 +19,6 @@ const ChatShareSteps :React.FC<IProps> = observer(({sessionData})=>{
 
 
     const onChange = (value: number) => {
-      console.log('onChange:', value);
       setCurrent(value);
     };
 
@@ -41,7 +40,6 @@ const ChatShareSteps :React.FC<IProps> = observer(({sessionData})=>{
     const select=(index:number)=>{
       const arr=selects.slice(0,selects.length);
       const ind=arr.indexOf(index);
-      console.log(ind);
       if(ind>=0){
         arr.splice(ind,1);
       }else{

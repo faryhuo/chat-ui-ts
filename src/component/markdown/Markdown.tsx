@@ -1,7 +1,10 @@
-import React from 'react';
 import ReactMarkdown from 'react-markdown';//引入
-import remarkGfm from 'remark-gfm';// 划线、表、任务列表和直接url等的语法扩展
-import rehypeRaw from 'rehype-raw'// 解析标签，支持html语法
+import RemarkGfm from 'remark-gfm';// 划线、表、任务列表和直接url等的语法扩展
+import RehypeRaw from 'rehype-raw'// 解析标签，支持html语法
+import RehypeKatex from "rehype-katex";//支持数学公式
+import RemarkMath from "remark-math";
+import RemarkBreaks from "remark-breaks";
+
 //import * as CodeStyle  from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import {a11yDark} from 'react-syntax-highlighter/dist/esm/styles/hljs';
 //import config from '../../store/AppConfig';
@@ -10,13 +13,14 @@ import { Button } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCopy } from '@fortawesome/free-solid-svg-icons'
 import 'github-markdown-css';
+import "katex/dist/katex.min.css";
 import { observer } from "mobx-react-lite"
 import './Markdown.css'
 import asyncComponent from '../async-component/AsyncComponent'; 
+
 type IProps={
     content:string;
 }
-
 
 const Markdown : React.FC<IProps>=observer(({content})=>{
 
@@ -58,24 +62,31 @@ const Markdown : React.FC<IProps>=observer(({content})=>{
         }else if (con.indexOf("js") === 0) {
             language = "javascript";
             activeLang = "js";
+        }else if (con.indexOf("mermaid") === 0) {
+            language = "mermaid";
+            activeLang = "mermaid";
         }
         return { language, activeLang };
     }
 
     const AsyncSyntaxHighlighter = asyncComponent(() => import ('react-syntax-highlighter'));
+    const AsyncMermaid = asyncComponent(() => import ("../mermaid/Mermaid"));
 
  
     return(
         <ReactMarkdown
          className='markdown-body'
          children={content}
-         remarkPlugins={[remarkGfm]}
-         rehypePlugins={[rehypeRaw]}
+         remarkPlugins={[RemarkMath, RemarkGfm, RemarkBreaks]}
+         rehypePlugins={[RehypeRaw,RehypeKatex]}
          components={{
              code({ node, inline, className, children, ...props }) {
                  const match = /language-(\w+)/.exec(className || '')
                  const { language, activeLang } = getLanguage(String(children))
                  const codeContent=String(children).replace(activeLang?activeLang:language, '');
+                 if(match && match[1]==="mermaid"){
+                     return <AsyncMermaid code={String(children)}></AsyncMermaid>
+                 }
                  return !inline ? (
                     <div className={`mk-code-content`}>
                     <div className="mk-button-wrapper">

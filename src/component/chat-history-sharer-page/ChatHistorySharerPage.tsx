@@ -24,14 +24,16 @@ const ChatHistorySharer:React.FC<IProps> = observer(({data,topic,time})=>{
         </div>
         <div className="sharer-summary-params">
           <table>
+            <tbody>
             <tr><td>count : </td><td> {data.length}</td></tr>
             <tr><td>topic : </td><td> {topic}</td></tr>
             <tr><td>time : </td><td> {dayjs(time).format("DD/MM/YYYY")}</td></tr>
+            </tbody>
           </table>
         </div>
       </div>
     </div>
-    <div className="sharer-review-page-message">
+    <div className="sharer-review-page-message message-list-wrapper">
     {data.map((item,key)=>{
           return item.isSys?(<MessageItem index={key} item={item} type={"system"} key={key} 
           content={<Markdown content={item.choices?.length?item.choices[0].message.content:item.text+""}/>}></MessageItem>):
