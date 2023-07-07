@@ -113,6 +113,8 @@ export interface IMessage{
     share:(node: any)=>Promise<void>
 }
 
+
+
 class MessageData implements  IMessage{
     
 
@@ -215,7 +217,7 @@ class MessageData implements  IMessage{
 
     changeTypeByUrl(location: Location){
         const pathname=location.pathname;
-        let type="";
+        let type="chat";
         if(pathname.startsWith("/chat")){
             type="chat";
         }else if(pathname.startsWith("/config")){
@@ -229,8 +231,14 @@ class MessageData implements  IMessage{
                 type=ctype;
             }
         }
-        if(type!==this.type){
-            this.changeType(type)
+        console.log(type);
+        if(userProflie.premission.includes(type)){
+            if(type!==this.type){
+                this.changeType(type)
+            }
+        }else{
+            userProflie.openPage();
+            window.history.back();
         }
     }
 

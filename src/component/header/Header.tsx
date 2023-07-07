@@ -2,7 +2,7 @@ import { Menu,Button,Avatar,Modal } from 'antd';
 import { observer } from "mobx-react-lite";
 import './Header.css';
 import { useTranslation } from 'react-i18next';
-import React, { useState } from 'react';
+import React  from 'react';
 import userProfile from '../../store/UserProfile';
 import Account from '../../page/account-manager/Account';
 import { Link } from 'react-router-dom';
@@ -10,7 +10,7 @@ import {IAppConfig} from '../../store/AppConfig';
 import {IMessage} from '../../store/MessageData';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faComments,faLaptopCode,faGear,faOutdent, faLinesLeaning,faImages,faPhotoFilm } from '@fortawesome/free-solid-svg-icons'
+import { faComments,faLaptopCode,faGear,faOutdent, faLinesLeaning,faImages } from '@fortawesome/free-solid-svg-icons'
 
 type IProps={
   config:IAppConfig;
@@ -20,7 +20,6 @@ type IProps={
 const Header: React.FC<IProps> = observer(({store,config}) => {
 
   const { t } = useTranslation();
-  const [open, setOpen] = useState(false);
 
   const items = [
     {
@@ -28,11 +27,11 @@ const Header: React.FC<IProps> = observer(({store,config}) => {
       key: 'chat',
       icon: <FontAwesomeIcon icon={faComments} />
     },
-    {
-      label: <Link to="/sd">{t('Stable Diffusion')}</Link>,
-      key: 'sd',
-      icon: <FontAwesomeIcon icon={faImages} />
-    },
+    // {
+    //   label: <Link to="/sd">{t('Stable Diffusion')}</Link>,
+    //   key: 'sd',
+    //   icon: <FontAwesomeIcon icon={faImages} />
+    // },
     {
       label: <Link to="/image">{t('Image')}</Link>,
       key: 'image',
@@ -43,11 +42,11 @@ const Header: React.FC<IProps> = observer(({store,config}) => {
       key: 'code',
       icon: <FontAwesomeIcon icon={faLaptopCode} />,
     },
-    {
-      label: <Link to="/image_edit">{t('Image Edit')}</Link>,
-      key: 'image_edit',
-      icon: <FontAwesomeIcon icon={faPhotoFilm} />,
-    },
+    // {
+    //   label: <Link to="/image_edit">{t('Image Edit')}</Link>,
+    //   key: 'image_edit',
+    //   icon: <FontAwesomeIcon icon={faPhotoFilm} />,
+    // },
     {
       label: <Link to="/tips">{t('Tips')}</Link>,
       key: 'tips',
@@ -62,9 +61,7 @@ const Header: React.FC<IProps> = observer(({store,config}) => {
 
 
   const getItems = ()=>{
-    return items.filter((item)=>{
-      return userProfile.premission.includes(item.key);
-    });
+    return items;
   }
 
   const onClick = (e: { key: string; }) => {
@@ -76,11 +73,11 @@ const Header: React.FC<IProps> = observer(({store,config}) => {
   };
 
   const handleCancel=()=>{
-    setOpen(false);
+    userProfile.closePage();
   }
 
   const showModal = () => {
-    setOpen(true);
+    userProfile.openPage();
   };
 
   const getUserName=()=>{
@@ -116,7 +113,7 @@ const Header: React.FC<IProps> = observer(({store,config}) => {
           size="large"
         >{getUserName()}</Avatar>
               <Modal
-        open={open}
+        open={userProfile.pageOpen}
         title={false}
         onCancel={handleCancel}
         footer={false}

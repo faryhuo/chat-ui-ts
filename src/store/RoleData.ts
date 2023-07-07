@@ -1,6 +1,7 @@
 import { makeObservable, observable, action} from "mobx";
 import axios from 'axios';
 import config  from './AppConfig';
+import Fuse from 'fuse.js';
 //import prompts from '../data/prompt';
 export interface IRoleData{
     currentRoles:IRole[];
@@ -63,12 +64,23 @@ class RoleData implements IRoleData{
           const roleName = this.getRoleName(role);
           const description = this.getDescription(role);
           const hasMatchingTag = this.hasMatchingTag(role);
-          const keywordMatches = this.keywordMatchesFilter(role);
       
-          return roleName && description && (hasMatchingTag || this.currentTag === 'all') && keywordMatches;
+          return roleName && description && (hasMatchingTag || this.currentTag === 'all');
         });
-      
-        return filteredRoles;
+        if(this.filterBy){
+            const options = {keys:[{name:'roleNameCN',weight:1},{name:'roleName',weight:1}
+        ,{name:'description',weight:0.5},{name:'descriptionCN',weight:0.5}],
+        includeMatches:true} // 搜索配置，可以配置多个查找字段
+            const fuse = new Fuse(filteredRoles, options);
+            const result=fuse.search(this.filterBy);
+            const list:IRole[]=[];
+            result.forEach((item)=>{
+                list.push(item.item);
+            })
+            return list;
+        }else{
+            return filteredRoles;
+        }
       }
       
       getRoleName(role: IRole) {

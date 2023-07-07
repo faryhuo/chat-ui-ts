@@ -9,6 +9,7 @@ export interface IUserProflie{
     userName:string;
     password:string;
     isLogin:boolean;
+    pageOpen:boolean;
     login:(userId:string,password:string)=>void;
     resetPwd:(userId: string,password: string,code:string)=>Promise<any>;
     currentUser:string;
@@ -17,6 +18,8 @@ export interface IUserProflie{
     sentSMSCode :(phone:string)=>Promise<any>;
     signup: (userId: string,password: string,code:string)=>Promise<any>;
     checkUserIfExisting:(userId: string)=>Promise<any>;
+    openPage:()=>void;
+    closePage:()=>void;
 }
 export interface IModules{
     id:string;
@@ -36,6 +39,15 @@ class UserProflie implements IUserProflie{
     publicKey="";
     token="";
     modules:IModules[]=[];
+    pageOpen=false;
+
+    openPage(){
+        this.pageOpen=true;
+    }
+    closePage(){
+        this.pageOpen=false;
+    }
+
 
     login(userId: string,password: string){
         this.userId=userId;
@@ -161,8 +173,11 @@ class UserProflie implements IUserProflie{
             userId: observable,
             userName: observable,
             premission: observable,
+            pageOpen: observable,
             currentUser:computed,
             login: action,
+            openPage: action,
+            closePage: action,
             logout: action,
             fetchModulesData: action.bound,
             loginByToken: action.bound

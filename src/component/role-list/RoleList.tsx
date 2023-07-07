@@ -10,6 +10,9 @@ import {IMessage} from '../../store/MessageData';
 import RoleDetails from '../role-details/RoleDetails';
 import './RoleList.css'
 import { useState } from 'react';
+import userProfile from '../../store/UserProfile';
+
+
 type IProps={
   config:IAppConfig;
   store:IMessage;
@@ -35,6 +38,10 @@ const RoleList:React.FC<IProps> = observer(({config,store})=>{
     }
 
     const edit=(role:IRole)=>{
+      if(!userProfile.isLogin){
+        userProfile.openPage();
+        return;
+      }
       roleData.getToken().then((response)=>{
         const token=response.data.data;
         setToken(token);
@@ -44,6 +51,10 @@ const RoleList:React.FC<IProps> = observer(({config,store})=>{
     }
 
     const addRole=()=>{
+      if(!userProfile.isLogin){
+        userProfile.openPage();
+        return;
+      }
       roleData.getToken().then((response)=>{
         const token=response.data.data;
         setToken(token);
@@ -57,7 +68,16 @@ const RoleList:React.FC<IProps> = observer(({config,store})=>{
       setCurrentPage(1);
     }
 
+    const clearCondition=()=>{
+      roleData.search("");
+      setCurrentPage(1);
+    }
+
     const onDelete=(roleId: number)=>{
+      if(!userProfile.isLogin){
+        userProfile.openPage();
+        return;
+      }
       roleData.deleteRole(roleId);
     }
 
@@ -88,6 +108,7 @@ const RoleList:React.FC<IProps> = observer(({config,store})=>{
          <Space direction="horizontal">
           <Button type="primary" onClick={addRole}>{t('Add Role')}</Button>
           <Input.Search width={300} placeholder="input search text" onSearch={(e)=>{onSearch(e)}} enterButton  />
+          <Button   onClick={clearCondition}>{t('Clear')}</Button>
         </Space>
       </div>
       <div style={{height:20}}>
