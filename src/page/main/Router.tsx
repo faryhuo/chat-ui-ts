@@ -31,6 +31,9 @@ const pageList=[{
     path:"/image",
     component:Chat
 },{
+    path:"/image/:chatId",
+    component:Chat
+},{
     path:"/code",
     component:AsyncCode
 },

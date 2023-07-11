@@ -17,7 +17,7 @@ import "katex/dist/katex.min.css";
 import { observer } from "mobx-react-lite"
 import './Markdown.css'
 import asyncComponent from '../async-component/AsyncComponent'; 
-
+import SyntaxHighlighter from 'react-syntax-highlighter';
 type IProps={
     content:string;
 }
@@ -69,7 +69,6 @@ const Markdown : React.FC<IProps>=observer(({content})=>{
         return { language, activeLang };
     }
 
-    const AsyncSyntaxHighlighter = asyncComponent(() => import ('react-syntax-highlighter'));
     const AsyncMermaid = asyncComponent(() => import ("../mermaid/Mermaid"));
 
  
@@ -94,10 +93,10 @@ const Markdown : React.FC<IProps>=observer(({content})=>{
                     <span className="mk-copy-button">
                     <Button type="primary" 
                     onClick={()=>{copy(codeContent)}} icon={<FontAwesomeIcon icon={faCopy} />} size="small" >Copy</Button></span></div>
-                     <AsyncSyntaxHighlighter
+                     <SyntaxHighlighter
                          children={String(children).replace(/\n$/, '')}
                          //style={(CodeStyle  as any)[config.codeStyle]} 
-                         style={a11yDark}
+                         style={a11yDark as any}
                          language={match?match[1]:"java"}
                          PreTag="div"
                          {...props}

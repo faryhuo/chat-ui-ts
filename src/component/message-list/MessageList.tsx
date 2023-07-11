@@ -60,7 +60,7 @@ class MessageList extends Component<IProps> {
         })}</div>;
     }
 
-    renderSysImage(image: { width: string | number | undefined; height: string | number | undefined; uri: string | undefined; }){
+    renderSysImage(image: { width: string | number; height: string | number; uri: string; } | undefined){
         if(!image){
             return <div></div>
         }

@@ -3,6 +3,7 @@ import './ChatList.css';
 import { observer } from "mobx-react-lite";
 import dayjs from 'dayjs';
 import icon from './favicon-32x32.png';
+import icon2 from './ai_image.png';
 import { Input,Modal } from 'antd';
 import { useTranslation } from 'react-i18next';
 import {IMessage,ISessionMenu} from '../../store/MessageData';
@@ -71,13 +72,13 @@ const ChatList: React.FC<IProps>  =({store}) => {
           renderItem={(item:ISessionMenu) => (
             <List.Item key={item.key} className={item.select?"selected":""} 
             style={item.select?{}:{}}
-            onClick={()=>{store.selectChat(item.key);}}>
+            >
               {!item.edit?(
               <Link 
-              to={`/chat/${item.key}`}
+              to={`/${store.type}/${item.key}`}
                style={{"width":"100%"}}>
               <List.Item.Meta
-                avatar={<Avatar src={icon} />}
+                avatar={<Avatar src={store.type==="chat"?icon:icon2} />}
                 title={<span>{item.name}</span>}
                 description={!item.edit && formatDate(item.date)}
               />

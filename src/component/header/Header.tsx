@@ -81,11 +81,7 @@ const Header: React.FC<IProps> = observer(({store,config}) => {
   };
 
   const getUserName=()=>{
-    if(!userProfile.isLogin){
-      return t<string>("Login")
-    }else{
-      return userProfile.currentUser;
-    }
+    return userProfile.currentUser;
   }
 
 

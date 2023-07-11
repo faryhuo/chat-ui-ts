@@ -20,8 +20,14 @@ export interface Ichoices{
     }
 }
 
+export interface  IImage{
+    uri:string;
+    width:string | number;
+    height:string | number;
+}
+
 export interface  ISessiondata{
-    isSys?:boolean;
+    isSys:boolean;
     isDefault?:boolean;
     isEdit?:boolean;
     isDetails?:boolean;
@@ -29,7 +35,7 @@ export interface  ISessiondata{
     text?:string;
     choices?:Ichoices[] | null;
     code?:any;
-    image?:any;
+    image?:IImage;
     stream?:boolean;
     end?:boolean;
     history?:any;
@@ -94,7 +100,6 @@ export interface IMessage{
     updateChatName:(name: string | undefined,chatId: string)=>void;
     updateChatStatus:(status: boolean,chatId: string)=>void;
     currentChatName:string;
-    latestText:string;
     saveDataToFile:()=>void;
     loadDataFromFile:(file:Blob)=>void;
     reSentMsg:(index:number,msg:string)=>void;
@@ -106,7 +111,7 @@ export interface IMessage{
     getChatHistory:()=>void;
     loadDataFromlocalStore:()=>void;
     checkChatId:(chatId: string)=>string;
-    latestMessage:any;
+    latestMessage:string | undefined;
     roleData:IRoleData;
     hideLastData:(chatId:string)=>void;
     changeTypeByUrl:(location: Location)=>void;
@@ -123,60 +128,13 @@ class MessageData implements  IMessage{
     roleData=roleData;
     type="chat"
     activeSession="chat_"+new Date().getTime()
-    session:Array<ISession>=[{
-        chatId:this.activeSession+"",
-        type:"chat",
-        chatName:"Chat 1",
-        edit:false,
-        isType:true,
-        data:[
-            {
-            isSys:true,
-            isDefault:true,
-            text:i18n.t<string>("Type something to search on ChatGPT")
-            }
-        ],
-        updateDate:new Date()
-    },{
-        chatId:"image",
-        type:"image",
-        edit:false,
-        isType:true,
-        data:[
-            {
-             isSys:true,
-             isDefault:true,
-            text:i18n.t<string>("Type something to generate a image"),
-            choices:null
-            }
-        ],
-        updateDate:new Date()
-    },{
-        chatId:"code",
-        type:"code",
-        edit:false,
-        isType:true,
-        data:[
-            {
-                isSys:true,
-                isDefault:true,
-               text:i18n.t<string>("Type the code and your requirement"),
-               choices:null
-               }
-        ],
-        updateDate:new Date()
-    }]
-
-    latestText="";
-    
-
+    session:Array<ISession>=[];    
 
     constructor() {
         makeObservable(this, {
             type: observable,
             session: observable,
             activeSession: observable,
-            latestText:observable,
             data: computed,
             role: computed,
             sessionList: computed,
@@ -220,13 +178,15 @@ class MessageData implements  IMessage{
         let type="chat";
         if(pathname.startsWith("/chat")){
             type="chat";
+        }else if(pathname.startsWith("/image")){
+            type="image";
         }else if(pathname.startsWith("/config")){
             type="config";
         }else if(pathname.startsWith("/share")){
             type="share";
         }else{
             const ctype=pathname.replace("/","");
-            const types=["image","sd","code"];
+            const types=["sd","code"];
             if(types.includes(ctype)){
                 type=ctype;
             }
@@ -353,7 +313,7 @@ class MessageData implements  IMessage{
     addChat(){
         const data:Array<ISessiondata>=[];
         
-        let chatId="chat"+new Date().getTime();
+        let chatId=this.type+new Date().getTime();
         if(config.isSlowMsg4AddChat){
             let tmp:ISessiondata={
                 isSys:true,
@@ -371,7 +331,7 @@ class MessageData implements  IMessage{
         const sessionData:ISession={
             type:this.type,
             chatId:chatId,
-            chatName:"Chat "+(this.session.length+1),
+            chatName:"New Chat",
             data:data,
             isType:true,
             edit:false,
@@ -389,7 +349,7 @@ class MessageData implements  IMessage{
         let chatId="chat"+new Date().getTime();
         if(config.isSlowMsg4AddChat){
             let tmp:ISessiondata={
-                isSys:true,
+                isSys:false,
                 isDefault:true
             };
             tmp.text=config.isChinese?role.descriptionCN:role.description;
@@ -446,42 +406,20 @@ class MessageData implements  IMessage{
     }
 
     endStream(chatId: string) {
-        if(!chatId){
-            chatId=this.activeSession;
-        }
-        let {type,session}=this;
-        let data:Array<ISessiondata>=[];
-        for(let i=0;i<session.length;i++){
-            let item=session[i];
-            if(item.type===type && item.chatId===chatId){
-                data=item.data;
-                break;
-            }
-        }
-        if(data){
-            data[data.length-1].end=true;
+        const chatData= this.getChatInfoByChatId(chatId);
+        if(chatData && chatData.data && chatData.data.length>=1){
+            chatData.data[chatData.data.length-1].end=true;
         }
     }
 
-    appendData(text: any,chatId: string) {
-        if(!chatId){
-            chatId=this.activeSession;
-        }
-        let {type,session}=this;
-        let data:Array<ISessiondata>=[];
-        for(let i=0;i<session.length;i++){
-            let item=session[i];
-            if(item.type===type && item.chatId===chatId){
-                data=item.data;
-                item.updateDate=new Date();
-                break;
+    appendData(text: string,chatId: string) {
+        const chatData= this.getChatInfoByChatId(chatId);
+        if(chatData && chatData.data && chatData.data.length>=1){
+            const data=chatData.data;
+            const choices=chatData.data[data.length-1].choices;
+            if(text && data && choices && choices.length>0){
+                choices[0].message.content+=text;
             }
-        }
-        const choices=data[data.length-1].choices;
-        if(text && data && choices && choices.length>0){
-            choices[0].message.content+=text;
-            this.latestText=choices[0].message.content;
-            this.saveSessionToLocal();
         }
     }
 
@@ -710,7 +648,8 @@ class MessageData implements  IMessage{
                 }               
             }
             this.addData(msg,chatId);              
-           }   
+           }
+           this.save(chatId);   
           }
         ,(err)=>{
             this.handleAPIError(err,chatId);
@@ -838,6 +777,15 @@ class MessageData implements  IMessage{
         return promise;
     } 
 
+    _isValidJSON=(str:string)=> {
+        try {
+          JSON.parse(str);
+        } catch (e) {
+          return false;
+        }
+        return true;
+      }
+
     callChatAPIByStreamByPost=(chatId:string)=>{
         const params=this.getChatParams();
         const queryUrl =`${config.api.chatStreamUrl}`;
@@ -848,10 +796,14 @@ class MessageData implements  IMessage{
             end:false,
             choices:[{message:{content:""}}]
         }
-        const promise=new Promise((resolve, reject)=>{
+        const ctrl = new AbortController();
+
+        const promise=new Promise((resolve)=>{
             let errorMsg="";
-            fetchEventSource(queryUrl, {
+            fetchEventSource(queryUrl, 
+                {
                 method: "POST",
+                signal:ctrl.signal,
                 headers: {
                   "content-type": "application/json",
                 },
@@ -861,18 +813,6 @@ class MessageData implements  IMessage{
                   try{
                     if(!data){
                         return true;
-                    }
-                    if(data.indexOf("data: ")===0){
-                        data=data.replace("data: ","")
-                    }else{
-                        errorMsg=errorMsg+data;
-                        return true;
-                    }
-                    if(!self.isNeedStream(chatId)){
-                        resolve(true);
-                        self.endStream(chatId);
-                        self.enableType(chatId);
-                        return;
                     }
                     if(data==="[DONE]"){
                         resolve(true);
@@ -888,18 +828,27 @@ class MessageData implements  IMessage{
                         self.endStream(chatId);
                         self.enableType(chatId);
                         return;
+                    }
+                    if(!self.isNeedStream(chatId)){
+                        resolve(true);
+                        ctrl.abort();
+                        self.endStream(chatId);
+                        self.enableType(chatId);
+                        return;
+                    }
+                    if(!self._isValidJSON(data)){
+                        errorMsg=errorMsg+data;
+                        return true;
                     }else {
                         self.appendData(JSON.parse(data).choices[0].delta.content,chatId);
                     }
                     }catch(e){
-                        reject(e);
-                        self.endStream(chatId);
-                        self.enableType(chatId);
+                        ctrl.abort();
+                        self._fetchSSEErrorHandle(resolve,chatId);
                     }
                 },onerror(e){
-                    reject(e);
-                    self.endStream(chatId);
-                    self.enableType(chatId);
+                    self._fetchSSEErrorHandle(resolve,chatId);
+                    throw e;
                 }
               });
         
@@ -907,6 +856,13 @@ class MessageData implements  IMessage{
         });
         return promise;
     } 
+
+    _fetchSSEErrorHandle(resolve: (value: unknown) => void,chatId:string){
+        resolve(false);
+        this.appendData("got a unknow exception. please re-try",chatId);
+        this.endStream(chatId);
+        this.enableType(chatId);
+    }
 
     _closeEventSource(eventSource: EventSource, chatId: string) {
         eventSource.close();
@@ -960,10 +916,7 @@ class MessageData implements  IMessage{
                       'Content-Type': 'application/json;charset=UTF-8'
                     },
                     data : JSON.stringify(data)
-                  }
-                ).then((response)=>{
-
-                });
+                  });
                 return;
             }
         });
@@ -981,11 +934,6 @@ class MessageData implements  IMessage{
           }
         ).then((response)=>{
             const data=response.data.data;
-            this.session.forEach(item=>{
-                if(item.type==="image"){
-                    data.push(item);
-                }
-            })
             this.setSession(data);
             //this.changeType("chat");
         });
@@ -1028,13 +976,13 @@ class MessageData implements  IMessage{
 
     get latestMessage(){
         if(this.data.length<=1){
-            return this.data;
+            return "";
         }
         const choices=this.data[this.data.length-1].choices;
         if(choices && choices.length>0){
             return choices[0]?.message?.content;
         }else{
-            return this.data[this.data.length-1].text;
+            return this.data[this.data.length-1]?.text;
         }
     }  
 
@@ -1134,7 +1082,7 @@ class MessageData implements  IMessage{
     }
 
     get currentChatName(){
-        let chatName="Chat 1"
+        let chatName=""
         this.sessionData.forEach((item)=>{
             if(item.chatId===this.activeSession){
                 chatName=item.chatName?item.chatName:""
