@@ -191,7 +191,6 @@ class MessageData implements  IMessage{
                 type=ctype;
             }
         }
-        console.log(type);
         if(userProflie.premission.includes(type)){
             if(type!==this.type){
                 this.changeType(type)

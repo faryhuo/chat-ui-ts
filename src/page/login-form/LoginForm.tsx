@@ -88,7 +88,7 @@ const LoginForm : React.FC<IProps>= observer(({login,handleCancel,config,store,u
 
     const onForgetPwd= () =>{
       setForgetFlag(true);
-      setLoginBtnTitle("Reset")
+      setLoginBtnTitle("Reset Password")
       setEnableSMSCode(true);
     }
 

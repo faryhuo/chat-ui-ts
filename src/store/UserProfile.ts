@@ -283,7 +283,7 @@ class UserProflie implements IUserProflie{
 
 
     encrypt(text: string) {
-        const encrypt = new JSEncrypt();
+        const encrypt = new JSEncrypt({default_key_size:'2048'});
         encrypt.setPublicKey(this.publicKey);
         const encrypted = encrypt.encrypt(text);
         return encrypted;

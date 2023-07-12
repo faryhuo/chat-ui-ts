@@ -1,5 +1,4 @@
 import {useRef} from 'react';
-import axios from 'axios';
 import { observer } from "mobx-react-lite";
 import { useState } from 'react';
 import { Input,Space,Button} from 'antd';
@@ -52,21 +51,6 @@ const SendButton:React.FC<IProps> = observer(({store,config,setBtnHeight})=>{
       }
     }
 
-    // const convertMsg2=()=>{
-    //   if(isStart){
-    //     clearTimeout(timeObj);
-    //     iatRecorder.stop();
-    //     setStart(false);
-    //   }else{
-    //     setStart(true);
-    //     iatRecorder.start();
-    //     timeObj= setTimeout(()=>{
-    //       iatRecorder.stop();
-    //       setStart(false);
-    //     },60000);
-    //   }
-    // }
-
 
     iatRecorder.onTextChange = (text:string)=>{
       if(store.isType){
@@ -74,46 +58,6 @@ const SendButton:React.FC<IProps> = observer(({store,config,setBtnHeight})=>{
       } 
     }
 
-    
-    const callChatAPI=(chatId: string)=>{
-      store.callChatAPI(chatId);
-    }
-
-    const callImageAPI=(chatId: string,queryUrl: string | null)=>{
-      if(!queryUrl){
-        queryUrl = `${config.api.imageUrl}?message=${message}&uuid=${store.activeSession}&size=${config.image.imageSize}`;  
-      }
-      axios({
-        method: "post",
-        url: queryUrl,
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8'
-        }
-      }
-      ).then((response)=>{
-        store.enableType(chatId);
-        if(response.data.data.error){
-          store.handleAPIError(response.data.data.error,chatId);
-          return;
-        }
-        const images = response.data.data.data;
-        for(let index in images){
-          let msg={
-              isSys:true,
-              type:"image",
-              image:{
-                uri: images[index].url?images[index].url:"data:image/png;base64,"+images[index].b64_json,
-                width:256,
-                height:256
-              }               
-          }
-          store.addData(msg,chatId);              
-         }   
-        }
-      ,(err)=>{
-        store.handleAPIError(err,chatId);
-      });
-    }
 
 
     const sendMsg= (event: any)=>{
@@ -137,9 +81,9 @@ const SendButton:React.FC<IProps> = observer(({store,config,setBtnHeight})=>{
         text:message
       },chatId)
       if(store.type==="image"){
-        callImageAPI(chatId,null);
+        store.callImageAPI(chatId,message)
       }else {
-        callChatAPI(chatId);
+        store.callChatAPI(chatId);
       }
       store.disableType(chatId);
       setTimeout(()=>{
