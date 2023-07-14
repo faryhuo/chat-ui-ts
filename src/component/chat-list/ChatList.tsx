@@ -1,4 +1,4 @@
-import { Avatar, List,Button,Popconfirm} from 'antd';
+import { Avatar,Button,Popconfirm} from 'antd';
 import './ChatList.css';
 import { observer } from "mobx-react-lite";
 import dayjs from 'dayjs';
@@ -12,6 +12,7 @@ import { faPaintbrush, faTrashCan,faCheck,faShare} from '@fortawesome/free-solid
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import ChatShareSteps from '../chat-share-steps/ChatShareSteps';
+import QueueAnim from 'rc-queue-anim';
 
 type IProps ={
   store: IMessage
@@ -66,34 +67,34 @@ const ChatList: React.FC<IProps>  =({store}) => {
     setCurrentChatId("");
   }
 
+  const dataSouce=store.sessionList.reverse();
+
+
   return  (<div className="session-list-wrapper">
-        <List 
-          dataSource={store.sessionList.reverse()}
-          renderItem={(item:ISessionMenu) => (
-            <List.Item key={item.key} className={item.select?"selected":""} 
-            style={item.select?{}:{}}
-            >
+    <QueueAnim delay={300} className="session-list-items" component="ul" type={['right', 'left']} leaveReverse>
+        {dataSouce.map((item:ISessionMenu) => (
+            <li key={item.key} className={(item.select?"selected":"")+ " session-list-item"}>
               {!item.edit?(
-              <Link 
-              to={`/${store.type}/${item.key}`}
-               style={{"width":"100%"}}>
-              <List.Item.Meta
-                avatar={<Avatar src={store.type==="chat"?icon:icon2} />}
-                title={<span>{item.name}</span>}
-                description={!item.edit && formatDate(item.date)}
-              />
+              <Link  className="session-item-link"  to={`/${store.type}/${item.key}`}>
+              <div className="icon">
+                <Avatar src={store.type==="chat"?icon:icon2} />
+              </div>
+              <div className="content">
+                  <div className="session-name">{item.name}</div>
+                  <div className="session-date">{formatDate(item.date)}</div>
+              </div>              
               </Link>
               ):<Input defaultValue={item.name} onChange={(e)=>updateChatName(e,item.key)}
               addonAfter={
                 <Button
                 icon={<FontAwesomeIcon icon={faCheck}  />} size ={buttonSize}
-                onClick={(e)=>{showChatNameEditor(item.edit,item.key,e)}}
-              />
+                onClick={(e)=>{showChatNameEditor(item.edit,item.key,e)}} />
               }
               />
               }
-              <div>
+              <div className="session-action-btn">
               {!item.edit && <span>
+                
               <Button
                 icon={<FontAwesomeIcon icon={faPaintbrush} />} size ={buttonSize}
                 onClick={(e)=>{showChatNameEditor(item.edit,item.key,e)}}
@@ -116,9 +117,10 @@ const ChatList: React.FC<IProps>  =({store}) => {
               </Popconfirm>
              </span>}
               </div>
-            </List.Item>
-          )}
-        />
+            </li>
+          ))
+      }
+      </QueueAnim>
       <Modal
         open={open}
         title={"Share History"}
