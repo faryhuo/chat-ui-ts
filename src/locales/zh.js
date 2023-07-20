@@ -1,7 +1,7 @@
 const config = {
     "tags":{
         "all":"全部",
-        "favorite":"常用",
+        "favorite":"收藏",
         "language":"语言/翻译",
         "mind":"发散思维",
         "write":"写作辅助",

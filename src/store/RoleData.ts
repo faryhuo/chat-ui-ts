@@ -2,6 +2,7 @@ import { makeObservable, observable, action} from "mobx";
 import axios from 'axios';
 import config  from './AppConfig';
 import Fuse from 'fuse.js';
+import userProflie from "./UserProfile";
 //import prompts from '../data/prompt';
 export interface IRoleData{
     currentRoles:IRole[];
@@ -18,11 +19,14 @@ export interface  IRole{
     roleName:string;
     tags:string[];
     token?:string;
+    favorite?:boolean;
 }
+
+const favorite="favorite";
 
 class RoleData implements IRoleData{
     roles:IRole[]=[];
-    currentTag="favorite";
+    currentTag=favorite;
 
 
     constructor() {
@@ -38,6 +42,17 @@ class RoleData implements IRoleData{
     }
 
     filterBy="";
+
+    triggerFavorite(item:IRole){
+        item.favorite=!!!item.favorite;
+        this.roles.push(item);
+        this.roles.pop();
+        const self=this;
+        if(userProflie.token){
+            self.triggerFavorateAPI(item.roleId,item.favorite,userProflie.token);
+        }
+    }
+  
 
     search(name:string){
         this.filterBy=name;
@@ -92,6 +107,9 @@ class RoleData implements IRoleData{
       }
       
       hasMatchingTag(role: IRole) {
+        if(this.currentTag===favorite){
+            return role.favorite===true;
+        }
         return role.tags && role.tags.includes(this.currentTag);
       }
       
@@ -105,6 +123,7 @@ class RoleData implements IRoleData{
     get currentTags(){
         const tags:string[]=[];
         tags.push("all");
+        tags.push(favorite);
         this.roles.forEach((role)=>{
             if(!!(config.isChinese?role.roleNameCN:role.roleName) && 
             !!(config.isChinese?role.descriptionCN:role.description)){
@@ -175,13 +194,63 @@ class RoleData implements IRoleData{
                 const data = response.data;
                 if(data.data){
                     this.roles=data.data;
+                    this.fetchFavorite();
                 }
-              }
+            }
         });
     }
 
+    
+    fetchFavorite() {
+        let token=userProflie.token;
+        if(!token){
+            return;
+        }
+        axios({
+            method: "get",
+            url: config.api.favoriteRoleUrl+"?uuid="+new Date().getTime(),
+            headers: {
+              'Content-Type': 'application/json;charset=UTF-8',
+              'token':token
+            }
+          }).then((response)=>{
+            if (response.data) {
+                const data = response.data;
+                if(data.data){
+                    const arr:number[]=data.data;
+                    this.roles.forEach(item=>{
+                        item.favorite=arr.includes(item.roleId);
+                    })
+                }
+            }
+        });
+    }
 
-    addRole(role:IRole,token:string){
+    triggerFavorateAPI(roleId:number,type:boolean,token:string){
+       return new Promise((resolve,reject)=>{
+        axios({
+                method: type?"post":"delete",
+                url: config.api.favoriteRoleUrl+"/"+roleId,
+                headers: {
+                'Content-Type': 'application/json;charset=UTF-8',
+                "token":token
+                }
+            }).then((response)=>{
+                const data=response.data;
+                if(data.message){
+                    reject(data.message)
+                    return;
+                }
+                if(data && data.data){
+                    resolve(data);
+                }else{
+                    reject(data);
+                }
+            })
+        });
+    }
+
+    saveRole(role:IRole,token:string){
         role.token=token;
        return new Promise((resolve,reject)=>{
         axios({
@@ -198,13 +267,20 @@ class RoleData implements IRoleData{
                     return;
                 }
                 if(data && data.data){
-                    this.fetchData();
-                    resolve(true);
+                    resolve(data);
                 }else{
                     reject(data);
                 }
             })
         });
+    }
+
+
+
+    addRole(role:IRole,token:string){
+        return this.saveRole(role,token).then(()=>{
+            this.fetchData();
+        })
     }
 
     getToken(){

@@ -35,7 +35,8 @@ class APISetting implements IAPISetting{
     smsServiceName="chat-sms-service"
 
     historyServiceName="chat-history-service"
-    
+    userFavoriteName="chat-user-favorite-service"
+
     chatUrl=`${this.host}/${this.chatServiceName}/chat/v2/info`;
     chatStreamUrl=`${this.host}/${this.chatServiceName}/chat/v2/stream`;
 
@@ -54,7 +55,10 @@ class APISetting implements IAPISetting{
     userInfoUrl=`${this.host}/${this.userServiceName}/user/user-info`
     historyUrl=`${this.host}/${this.historyServiceName}/history`
     sentSmsCodeUrl=`${this.host}/${this.smsServiceName}/sms/send/`    
-  
+
+    favoriteRoleUrl=`${this.host}/${this.userFavoriteName}/favorite/roles`    
+    fetFavoriteChatUrl=`${this.host}/${this.userFavoriteName}/favorite/chats`    
+
 }
 const apiSetting = new APISetting()
 export default apiSetting;

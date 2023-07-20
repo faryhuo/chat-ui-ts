@@ -25,7 +25,7 @@ type Model="gpt-3.5-turbo" | "gpt-3.5-turbo-16k"|
 
 class ChatConfig implements IChatConfig{
     
-    version="2.0"
+    version="2.1"
     localConfigName=`chat_config_${this.version}`;
 
     apiConfig:IChatAPIConfig={
@@ -35,7 +35,7 @@ class ChatConfig implements IChatConfig{
         presence_penalty:0,
         frequency_penalty:0,
         max_tokens:1024,
-        stream:false
+        stream:true
     }
 
     chatModelList:Model[] = ["gpt-3.5-turbo","gpt-3.5-turbo-16k",

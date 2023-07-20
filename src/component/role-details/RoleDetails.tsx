@@ -105,6 +105,9 @@ const RoleDetails:React.FC<IProps> = observer(({store,config,role,handleCancel,t
     const getTagOptions=()=>{
       const options: { value: string; label: string; }[]=[];
       RoleData.currentTags.forEach((item)=>{
+        if(item==="favorite" || item==="all"){
+          return;
+        }
         const option={value:item,label:t<string>("tags."+item)}
         options.push(option);
       });

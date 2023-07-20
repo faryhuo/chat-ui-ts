@@ -2,7 +2,7 @@ import React from 'react';
 import { Button,List,Card,Radio,Divider,Modal,Input,Space,Popconfirm,message } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEdit,faTrash,faLightbulb} from '@fortawesome/free-solid-svg-icons'
+import { faEdit,faTrash,faLightbulb,faStar} from '@fortawesome/free-solid-svg-icons'
 import { observer } from "mobx-react-lite";
 import roleData,{IRole} from "../../store/RoleData";
 import {IAppConfig} from '../../store/AppConfig';
@@ -82,6 +82,7 @@ const RoleList:React.FC<IProps> = observer(({config,store})=>{
       roleData.deleteRole(roleId);
     }
 
+
     const buttonStyle={
       width:"100%",
       fontSize:"16px"
@@ -134,6 +135,11 @@ const RoleList:React.FC<IProps> = observer(({config,store})=>{
         <List.Item>
           <Card title={<h4 className='role-title'>{config.isChinese?item.roleNameCN:item.roleName}</h4>}
           extra={
+            <div>
+            <Button shape="circle" icon={<FontAwesomeIcon icon={faStar}/>}
+            style={{marginRight:10}} onClick={()=>roleData.triggerFavorite(item)} 
+            type={item.favorite?"primary":"default"}/>
+
             <Popconfirm
             placement="bottom"
             title={t('Message')}
@@ -145,6 +151,7 @@ const RoleList:React.FC<IProps> = observer(({config,store})=>{
           >
           <Button shape="circle" icon={<FontAwesomeIcon icon={faTrash} />}/>
           </Popconfirm>
+          </div>
          }
               actions={[
                  <Button icon={<FontAwesomeIcon icon={faLightbulb} />} 
