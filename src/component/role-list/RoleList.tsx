@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button,List,Card,Radio,Divider,Modal,Input,Space,Popconfirm } from 'antd';
+import { Button,List,Card,Radio,Divider,Modal,Input,Space,Popconfirm,message } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit,faTrash,faLightbulb} from '@fortawesome/free-solid-svg-icons'
@@ -31,6 +31,7 @@ const RoleList:React.FC<IProps> = observer(({config,store})=>{
       const chatId=store.addChatWithRole(role);
       window.location.hash=`#/chat/${chatId}`;
     }
+    const [messageApi, contextHolder] = message.useMessage();
 
 
     const handleCancel=()=>{
@@ -167,8 +168,9 @@ const RoleList:React.FC<IProps> = observer(({config,store})=>{
         width={700}
         destroyOnClose={true}
       >
-        <RoleDetails handleCancel={handleCancel} role={roleDetails} config={config} store={store} token={token}></RoleDetails>
+        <RoleDetails messageApi={messageApi} handleCancel={handleCancel} role={roleDetails} config={config} store={store} token={token}></RoleDetails>
       </Modal>
+      {contextHolder}
       </div>)
 })
 

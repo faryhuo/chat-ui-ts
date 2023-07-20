@@ -71,7 +71,7 @@ const ChatList: React.FC<IProps>  =({store}) => {
 
 
   return  (<div className="session-list-wrapper">
-    <QueueAnim delay={300} className="session-list-items" component="ul" type={['right', 'left']} leaveReverse>
+    <QueueAnim delay={300} interval={store.type==="chat"?100:0} className="session-list-items" component="ul" type={['right', 'left']} >
         {dataSouce.map((item:ISessionMenu) => (
             <li key={item.key} className={(item.select?"selected":"")+ " session-list-item"}>
               {!item.edit?(

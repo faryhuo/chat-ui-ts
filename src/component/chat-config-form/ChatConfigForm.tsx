@@ -14,7 +14,6 @@ type IProps={
 const ChatConfigForm: React.FC<IProps> = ({config})=>{
 
     const [form] = Form.useForm();
-    const [messageApi, contextHolder] = message.useMessage();
     const { t } = useTranslation();
 
     let model = Form.useWatch('model', form);
@@ -24,6 +23,8 @@ const ChatConfigForm: React.FC<IProps> = ({config})=>{
     let frequency_penalty = Form.useWatch('frequency_penalty', form);
     let max_tokens = Form.useWatch('max_tokens', form);
     let stream = Form.useWatch('stream', form);
+
+    const [messageApi, contextHolder] = message.useMessage();
 
     const success = () => {
       messageApi.open({

@@ -186,7 +186,7 @@ class MessageData implements  IMessage{
             type="share";
         }else{
             const ctype=pathname.replace("/","");
-            const types=["sd","code"];
+            const types=["sd","code","tips"];
             if(types.includes(ctype)){
                 type=ctype;
             }
@@ -441,7 +441,7 @@ class MessageData implements  IMessage{
         if((data.length===0 || (data[0].isDefault && data.length===1 )) && newChat.text && curentItem){
             let text:string=newChat.text;
             if(text.length>=20){
-                text=text.substring(0,20)+"...";
+                text=text.substring(0,25)+"...";
             }
             curentItem.chatName=text;
         }

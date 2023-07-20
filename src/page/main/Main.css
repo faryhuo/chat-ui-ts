@@ -42,7 +42,7 @@
 
 .chat-wrapper .chat-left-content{
     position: relative;
-    flex:0 0 310px;
+    flex:0 0 330px;
     overflow: auto;
 }
 .chat-wrapper .chat-right-content{

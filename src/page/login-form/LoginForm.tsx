@@ -156,11 +156,11 @@ const LoginForm : React.FC<IProps>= observer(({login,handleCancel,config,store,u
         {!forgetFlag && <Form.Item>
 
         <Form.Item name="remember" valuePropName="checked" noStyle>
-          <Checkbox>Remember me</Checkbox>
+          <Checkbox>{t('Remember me')}</Checkbox>
         </Form.Item>
 
         <span className="login-form-forgot"   onClick={onForgetPwd}>
-          Forgot password
+          {t('Forgot password')}
         </span>
       </Form.Item>}
 

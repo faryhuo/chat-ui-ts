@@ -193,6 +193,10 @@ class RoleData implements IRoleData{
                 data:JSON.stringify(role)
             }).then((response)=>{
                 const data=response.data;
+                if(data.message){
+                    reject(data.message)
+                    return;
+                }
                 if(data && data.data){
                     this.fetchData();
                     resolve(true);

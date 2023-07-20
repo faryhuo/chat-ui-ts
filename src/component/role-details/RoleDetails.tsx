@@ -9,6 +9,7 @@ import {IAppConfig} from '../../store/AppConfig';
 import { IRole } from '../../store/RoleData';
 import TagSelector from '../tag-selector/tag-selector';
 import RoleData from '../../store/RoleData';
+import { MessageInstance } from 'antd/es/message/interface';
 
 type IProps={
   config:IAppConfig;
@@ -16,8 +17,9 @@ type IProps={
   role?:IRole;
   handleCancel:()=>void;
   token:string;
+  messageApi:MessageInstance;
 }
-const RoleDetails:React.FC<IProps> = observer(({store,config,role,handleCancel,token})=>{
+const RoleDetails:React.FC<IProps> = observer(({store,config,role,handleCancel,token,messageApi})=>{
 
     const {t} =useTranslation();
 
@@ -26,6 +28,20 @@ const RoleDetails:React.FC<IProps> = observer(({store,config,role,handleCancel,t
     let name = Form.useWatch('name', form);
     let description = Form.useWatch('description', form);
     let tags = Form.useWatch('tags', form);
+
+    const success = () => {
+      messageApi.open({
+        type: 'success',
+        content: 'Updated success',
+      });
+    };
+
+    const fail = (msg:string) => {
+      messageApi.open({
+        type: 'error',
+        content: msg,
+      });
+    };
 
     const save=()=>{
       if(role){
@@ -39,7 +55,12 @@ const RoleDetails:React.FC<IProps> = observer(({store,config,role,handleCancel,t
         if(tags){
           role.tags=tags;
         }
-        RoleData.addRole(role,token).then(handleCancel);
+        RoleData.addRole(role,token).then(()=>{
+          success();
+          handleCancel();
+        }).catch((data)=>{
+          fail(data)
+        });
       }else{
         let newRole:IRole={
           descriptionCN:"",
@@ -56,7 +77,12 @@ const RoleDetails:React.FC<IProps> = observer(({store,config,role,handleCancel,t
           newRole.description=description;
           newRole.roleName=name;
         }
-        RoleData.addRole(newRole,token);
+        RoleData.addRole(newRole,token).then(()=>{
+          success();
+          handleCancel();
+        }).catch((data)=>{
+          fail(data)
+        });
       }
     }
 
@@ -126,7 +152,7 @@ const RoleDetails:React.FC<IProps> = observer(({store,config,role,handleCancel,t
         </Form.Item>
         <Form.Item wrapperCol={ { span: 12 }} >
             <Button type="primary"  htmlType="submit" icon={<FontAwesomeIcon icon={faSave}/>}
-            >Save</Button>
+            >&nbsp;{t('Save')}&nbsp;</Button>
           </Form.Item>
       </Form>
     </div>)

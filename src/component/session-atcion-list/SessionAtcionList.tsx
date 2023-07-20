@@ -63,7 +63,7 @@ const SessionAtcionList : React.FC<IProps> = observer(({store,config,onOpen})=>{
     const getActionButtonList=()=>{
       const list=[];
       if(store.type==='chat'){
-        list.push(<Button className="option-btn" key={1}  onClick={onOpen}>More</Button>);
+        list.push(<Button className="option-btn" key={1}  onClick={onOpen}>{t("More")}</Button>);
         !config.isMobile && list.push(<Segmented key={2}  value={getSelectedItem()} onChange={changeType}  style={{marginRight:10}}  options={options} />);
         list.push(<RoleSelector key={3} store={store} roleList={roleList}></RoleSelector>);
         list.push(<Switch key={4}  className="option-btn" 

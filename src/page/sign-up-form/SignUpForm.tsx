@@ -139,7 +139,7 @@ const SignUpForm : React.FC<IProps>= observer(({login,handleCancel,config,store,
         })]}
         tooltip={ruleMessage.required}>
         <Input.Password  prefix={<FontAwesomeIcon icon={faKey}/>}
-          placeholder="re-input password"
+          placeholder={t<string>("re-input password")}
           visibilityToggle={{ visible: passwordVisible2, onVisibleChange: setPasswordVisible2 }}
         />
         </Form.Item>
