@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button,List,Card,Radio,Divider,Modal,Input,Space,Popconfirm,message } from 'antd';
+import { Button,List,Card,Radio,Divider,Modal,Input,Space,Popconfirm,message,Tag } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit,faTrash,faLightbulb,faStar} from '@fortawesome/free-solid-svg-icons'
@@ -162,7 +162,16 @@ const RoleList:React.FC<IProps> = observer(({config,store})=>{
                  style={buttonStyle} type="link">&nbsp;{t('Edit')}</Button>,
               ]}
           >
-            {config.isChinese?item.descriptionCN:item.description}
+            <div className="role-description">
+              {config.isChinese?item.descriptionCN:item.description}
+            </div>
+            <div className="role-tags">
+              <Space size={[0, 8]} wrap>
+                {item.tags.map((tag)=>
+                <Tag color="cyan">{t("tags."+tag)}</Tag>
+                )}
+              </Space>
+            </div>
           </Card>
             
         </List.Item>
