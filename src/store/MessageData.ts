@@ -49,9 +49,11 @@ export interface ISessionMenu{
     edit:boolean;
     date:Date;
     select:string;
+    favorite:boolean;
 }
 
 export interface  ISession{
+    favorite: boolean;
     chatId:string;
     type:string;
     chatName?:string;
@@ -80,6 +82,7 @@ export interface IMessage{
     newChat:()=>void;
     addChatWithRole:(role:IRole)=>string;
     endStream:(chatId:string)=>void;
+    triggerFavorite:(chatId: string)=>void;
     appendData:(text:any,chatId:string)=>void;
     addData:(newChat: any,chatId: string) =>void;
     clear:(chatId: string) =>void;
@@ -334,6 +337,7 @@ class MessageData implements  IMessage{
             data:data,
             isType:true,
             edit:false,
+            favorite:false,
             updateDate: new Date()
         };
         this.session.push(sessionData);
@@ -362,6 +366,7 @@ class MessageData implements  IMessage{
             isType:true,
             edit:false,
             role:role.roleId,
+            favorite:false,
             updateDate: new Date()
         };
         this.session.push(sessionData);
@@ -410,6 +415,43 @@ class MessageData implements  IMessage{
             chatData.data[chatData.data.length-1].end=true;
         }
     }
+
+    triggerFavorite(chatId: string) {
+        const chatData= this.getChatInfoByChatId(chatId);
+        if(!chatData){
+            return;
+        }
+        chatData.favorite=!!!chatData.favorite;
+        if(userProflie.isLogin && userProflie.token){
+            this.triggerFavorateAPI(chatData,chatData.favorite,userProflie.token);
+        }else{
+            this.saveSessionToLocal();
+        }
+    }
+    triggerFavorateAPI(chatData:ISession,type:boolean,token:string){
+        return new Promise((resolve,reject)=>{
+         axios({
+                 method: type?"post":"delete",
+                 url: config.api.fetFavoriteChatUrl+"/"+chatData.chatId,
+                 headers: {
+                 'Content-Type': 'application/json;charset=UTF-8',
+                 "token":token
+                 }
+             }).then((response)=>{
+                 const data=response.data;
+                 if(data.message){
+                     reject(data.message)
+                     return;
+                 }
+                 if(data && data.data){
+                     resolve(data);
+                 }else{
+                     reject(data);
+                 }
+             })
+         });
+     }
+
 
     appendData(text: string,chatId: string) {
         const chatData= this.getChatInfoByChatId(chatId);
@@ -598,6 +640,7 @@ class MessageData implements  IMessage{
             item.edit=obj.edit;
             item.date=obj.updateDate;
             item.select=item.key===this.activeSession;
+            item.favorite=obj.favorite;
             arr.push(item);
         });
         return arr;
@@ -932,9 +975,24 @@ class MessageData implements  IMessage{
             }
           }
         ).then((response)=>{
-            const data=response.data.data;
+            const data=response.data.data;            
             this.setSession(data);
-            //this.changeType("chat");
+            axios({
+                method: "get",
+                url: config.api.fetFavoriteChatUrl,
+                headers: {
+                'Content-Type': 'application/json;charset=UTF-8',
+                "token":userProflie.token
+                }
+            }).then((favoriteResponse)=>{
+                const favoriteData = favoriteResponse.data;
+                if(favoriteData.data){
+                    const arr:string[]=favoriteData.data;
+                    this.sessionData.forEach(item=>{
+                        item.favorite=arr.includes(item.chatId);
+                    });
+                }
+            })
         });
     }
 

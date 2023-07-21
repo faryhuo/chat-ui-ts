@@ -67,17 +67,19 @@ class MessageItem extends Component<IProps, IStats> {
             <div className="rce-mbox-body">
             <div className="rce-mbox-title rce-mbox-title--clear">
                 <span>{this.props.title?this.props.title:"User"}</span>
-                </div><div className="rce-mbox-text right">{this.state.isEdit?<TextArea
+                </div><div className="rce-mbox-text right">{this.state.isEdit?
+            <div className="chat-row">
+            <TextArea
           value={this.state.content}
           size="large"
-          style={{maxWidth:700}}
+          style={{width:750}}
           onChange={(e)=>{this.changeContent(e)}}
           autoSize={{ minRows: 2, maxRows: 8 }}
           spellCheck={true}
           allowClear
         //   onPressEnter={()=>this.editAndResent()}
           maxLength={2000}
-        />:<div className={classNames({"chat-row":true,"chat-row-hide":this.props.item?.isDetails===false && this.props.item?.hasShowDetails===true})}><pre style={{margin:0}}>{this.props.content}</pre>
+        /></div>:<div className={classNames({"chat-row":true,"chat-row-hide":this.props.item?.isDetails===false && this.props.item?.hasShowDetails===true})}><pre style={{margin:0}}>{this.props.content}</pre>
         </div>}</div>
                 <div  className="rce-mbox-time non-copiable"></div></div>
                 <svg  className="rce-mbox-right-notch" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" ><path style={{fill:config.colorPrimary+"a3",fillOpacity: 0.3}} d="M0 0v20L20 0"></path></svg></div>

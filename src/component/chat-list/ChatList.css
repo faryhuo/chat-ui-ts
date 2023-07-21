@@ -42,7 +42,7 @@
     color: #000;
 }
 .session-action-btn{
-    flex:0 0 60px;
+    flex:0 0 20px;
 }
 
 .session-list-wrapper .session-list-items{
@@ -62,4 +62,7 @@
 }
 .session-item-link .session-date{
     font-size: 11px;
+}
+.chat-session-action-button{
+    width:100px
 }

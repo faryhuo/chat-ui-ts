@@ -114,6 +114,10 @@ const config = {
     "API configuration":"配置",
     "Full":"返回全部",
     "Stream":"逐字返回",
-    "Style":"风格"
+    "Style":"风格",
+    "Share":"分享",
+    "Favorite":"收藏",
+    "Remove":"移除",
+    "Delete":"删除"
 }
 export default config;
