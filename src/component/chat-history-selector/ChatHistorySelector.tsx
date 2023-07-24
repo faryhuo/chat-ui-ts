@@ -35,21 +35,21 @@ const ChatHistorySelector:React.FC<IProps> = observer(({data,selectAll,clear,sel
       >
         <Form.Item label={t<string>("Export format")} name="format">
           <Radio.Group>
-            <Radio.Button value="text">Text</Radio.Button>
-            <Radio.Button value="image">Image</Radio.Button>
+            <Radio.Button value="text">{t('Text')}</Radio.Button>
+            <Radio.Button value="image">{t('Page')}</Radio.Button>
           </Radio.Group>
         </Form.Item>
-        <Form.Item label={t<string>("Include default message")} name="include">
+        {/* <Form.Item label={t<string>("Include default message")} name="include">
           <Radio.Group>
             <Radio.Button value="Y">Yes</Radio.Button>
             <Radio.Button value="N">No</Radio.Button>
           </Radio.Group>
-        </Form.Item>
+        </Form.Item> */}
       </Form>
 
       <div className="sharer-action-btn">
-        <Button onClick={selectAll}>Select All</Button>
-        <Button  onClick={clear}>Clear</Button>
+        <Button onClick={selectAll}>{t('Select All')}</Button>
+        <Button  onClick={clear}>{t('Clear')}</Button>
       </div>
 
       <div className="share-history-list">

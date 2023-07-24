@@ -27,7 +27,7 @@ const ChatHistorySharer:React.FC<IProps> = observer(({data,selects,topic,time})=
   const success4CopyTolink = () => {
     messageApi.open({
       type: 'success',
-      content: 'Copy the link successlly',
+      content: t('Copy the link successlly, The link will expired after 1 day.'),
     });
   };
   const download=()=>{
@@ -72,7 +72,7 @@ const ChatHistorySharer:React.FC<IProps> = observer(({data,selects,topic,time})=
   return (<div className="sharer-review-page">
     <div className="sharer-action-btn">
       <Button onClick={download} icon={<FontAwesomeIcon icon={faDownload}/>}>{t('Download')}</Button>
-      <Button onClick={shareTolink} icon={<FontAwesomeIcon icon={faShare}/>}>{t('Share Line')}</Button>
+      <Button onClick={shareTolink} icon={<FontAwesomeIcon icon={faShare}/>}>{t('Share Link')}</Button>
     </div>
     <div className="sharer-review-content" ref={pageRef}>
       <ChatHistorySharerPage topic={topic} time={time} data={data.filter((value,index)=>{

@@ -159,7 +159,7 @@ const ChatList: React.FC<IProps>  =({store}) => {
       </QueueAnim>
       <Modal
         open={open}
-        title={"Share History"}
+        title={t<string>("Share History")}
         onCancel={handleCancel}
         footer={false}
         destroyOnClose={true}

@@ -2,6 +2,7 @@ import { makeObservable, observable, computed, action} from "mobx";
 import config  from './AppConfig';
 import axios from 'axios';
 import JSEncrypt from 'jsencrypt';
+import i18n from 'i18next';
 
 
 export interface IUserProflie{
@@ -161,7 +162,7 @@ class UserProflie implements IUserProflie{
         if(this.userName){
             return this.userName;
         }else{
-            return "Login"
+            return i18n.t("Login");
         }
     }
 

@@ -127,6 +127,16 @@ const config = {
     "More Details":"更多",
     "topic":"主题",
     "time":"时间",
-    "count":"记录数"
+    "count":"记录数",
+    "Share History":"聊天记录分享",
+    "Select":"选择要分享的内容",
+    "Review":"预览",
+    "Export format":"导出格式",
+    "Select All":"选择全部",
+    "Download":"下载",
+    "Share Link":"链接分享",
+    "Text":"文本",
+    "Page":"页面",
+    "Copy the link successlly, The link will expired after 1 day.":"链接已经复制到粘贴板，该链接会在一天后过期."
 }
 export default config;

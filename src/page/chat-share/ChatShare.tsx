@@ -31,7 +31,13 @@ const ChatShare: React.FC<IProps> = ()=>{
                 const sharePage=<SharePage topic={data.chatName?data.chatName:""} 
                 data={data.data} time={data.updateDate?data.updateDate:new Date()}></SharePage>
                 setContent(sharePage);
+            }else{
+                alert('The link is expired.');
+                window.location.href=window.location.origin;
             }
+        }).catch(()=>{
+            alert('The link is expired.');
+            window.location.href=window.location.origin;
         })
     },[]);
 
