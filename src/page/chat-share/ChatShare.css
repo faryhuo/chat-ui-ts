@@ -1,5 +1,7 @@
-.message-page .message-stop-btn{
-    position: fixed;
-    left: 50%;
-    z-index: 10;
+.message-share-page{
+    padding: 30px;
+}
+.message-share-page .action-btn{
+    text-align: center;
+    margin: 10px;
 }

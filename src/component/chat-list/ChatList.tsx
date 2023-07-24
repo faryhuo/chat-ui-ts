@@ -2,7 +2,6 @@ import { Avatar,Button,Divider,Popconfirm,Dropdown} from 'antd';
 import type { MenuProps } from 'antd';
 import './ChatList.css';
 import { observer } from "mobx-react-lite";
-import dayjs from 'dayjs';
 import icon from './favicon-32x32.png';
 import icon2 from './ai_image.png';
 import { Input,Modal } from 'antd';
@@ -14,7 +13,7 @@ import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import ChatShareSteps from '../chat-share-steps/ChatShareSteps';
 import QueueAnim from 'rc-queue-anim';
-
+import {formatShortDate,isSameDay} from '../../utils/dateUtils';
 type IProps ={
   store: IMessage
 }
@@ -32,19 +31,6 @@ const ChatList: React.FC<IProps>  =({store}) => {
     store.clear(key);
   }
 
-
-  const formatDate=(date: string | number | dayjs.Dayjs | Date | null | undefined)=>{
-    const dateFormat="MM-DD";
-    const timeFormat="hh:mm:ss";
-    const today = dayjs().startOf('day'); 
-    const momentDate = dayjs(date)
-    const isToday = momentDate.isSame(today, 'd')
-    if(isToday){
-      return dayjs(date).format(timeFormat);
-    }else{
-      return dayjs(date).format(dateFormat);
-    }
-  }
 
   const showChatNameEditor = (edit: boolean,key: string)=>{
     store.updateChatStatus(!edit,key);
@@ -123,7 +109,7 @@ const ChatList: React.FC<IProps>  =({store}) => {
         </div>
         <div className="content">
             <div className="session-name">{item.name}</div>
-            <div className="session-date">{formatDate(item.date)}</div>
+            <div className="session-date">{formatShortDate(item.date)}</div>
         </div>              
         </Link>
         ):<Input defaultValue={item.name} onChange={(e)=>updateChatName(e,item.key)}
@@ -145,19 +131,29 @@ const ChatList: React.FC<IProps>  =({store}) => {
     );
   }
 
+
+
+  const recnetDataSouce=dataSouce.filter(item=>{
+    return isSameDay(item.date);
+  })
+
   const historyDataSouce=dataSouce.filter(item=>{
-    return !!!item.favorite;
+    return !!!item.favorite && !isSameDay(item.date);
   })
 
   const favoriteDataSouce=dataSouce.filter(item=>{
-    return !!item.favorite;
+    return !!item.favorite && !isSameDay(item.date);
   })
   return  (<div className="session-list-wrapper">
-    <Divider>Favorite</Divider>
+    <Divider>{t('Recent')}</Divider>
+    <QueueAnim  delay={500} interval={0} className="session-list-items" component="ul" type={['right', 'left']} leaveReverse>
+        {recnetDataSouce.map((item3:ISessionMenu) =>  renderItem(item3))}
+      </QueueAnim>
+    <Divider>{t('Favorite')}</Divider>
     <QueueAnim  delay={500} interval={0} className="session-list-items" component="ul" type={['right', 'left']} leaveReverse>
         {favoriteDataSouce.map((item:ISessionMenu) =>renderItem(item))}
       </QueueAnim>
-      <Divider>History</Divider>
+      <Divider>{t('History')}</Divider>
       <QueueAnim  delay={500} interval={0} className="session-list-items" component="ul" type={['right', 'left']} leaveReverse>
         {historyDataSouce.map((item2:ISessionMenu) =>  renderItem(item2))}
       </QueueAnim>

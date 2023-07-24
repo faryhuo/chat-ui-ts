@@ -22,3 +22,7 @@
     float: right;
     flex: 1;
 }
+.sharer-review-page-message .message-item-user .chat-row pre{
+    word-wrap: break-word;
+    white-space: break-spaces;
+}

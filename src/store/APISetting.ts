@@ -59,6 +59,8 @@ class APISetting implements IAPISetting{
     favoriteRoleUrl=`${this.host}/${this.userFavoriteName}/favorite/roles`    
     fetFavoriteChatUrl=`${this.host}/${this.userFavoriteName}/favorite/chats`    
 
+    sharingUrl=`${this.host}/${this.historyServiceName}/share`    
+
 }
 const apiSetting = new APISetting()
 export default apiSetting;

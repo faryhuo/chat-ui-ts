@@ -1,8 +1,8 @@
 import React from 'react';
-import { Button,Select,Divider,Space } from 'antd';
+import { Button,Select,Divider } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faAdd } from '@fortawesome/free-solid-svg-icons'
+import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import { observer } from "mobx-react-lite";
 import {IMessage} from '../../store/MessageData';
 type IProps={
@@ -35,12 +35,10 @@ const RoleSelector:React.FC<IProps> = observer(({store,roleList})=>{
         <>
           {menu}
           <Divider style={{ margin: '8px 0' }} />
-          <Space style={{ padding: '0 8px 4px' }}>
-
-            <Button onClick={addRole} style={{width:'100%'}} icon={<FontAwesomeIcon icon={faAdd} />} type="text">
+          <Button onClick={addRole} style={{width:'100%'}} icon={<FontAwesomeIcon 
+          icon={faSearch} />} type="text">
               &nbsp;{t<string>("More Details")}
             </Button>
-          </Space>
         </>)}
       
     />)

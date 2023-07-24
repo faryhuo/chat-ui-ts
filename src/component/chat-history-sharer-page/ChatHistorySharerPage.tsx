@@ -4,6 +4,7 @@ import "./ChatHistorySharerPage.css";
 import MessageItem from "../message-item/MessageItem";
 import Markdown from "../markdown/Markdown";
 import dayjs from 'dayjs';
+import { useTranslation } from 'react-i18next';
 
 type IProps={
   data:ISessiondata[];
@@ -13,6 +14,7 @@ type IProps={
 
 const ChatHistorySharer:React.FC<IProps> = observer(({data,topic,time})=>{
 
+  const {t} = useTranslation();
 
   return (<div className="sharer-review-page-content" id="sharer-review-page-content">
     <div className="sharer-review-page-summary">
@@ -20,14 +22,14 @@ const ChatHistorySharer:React.FC<IProps> = observer(({data,topic,time})=>{
         <div className="sharer-summary-web-info">
           <h2 style={{margin:5}}>ChatGPT Web</h2>
           <span style={{margin:10}}>
-             Url : <a href="https://fary.chat">fary.chat</a></span>
+             Url : <a href="https://fary.chat" style={{color:'#fff'}}>fary.chat</a></span>
         </div>
         <div className="sharer-summary-params">
           <table>
             <tbody>
-            <tr><td>count : </td><td> {data.length}</td></tr>
-            <tr><td>topic : </td><td> {topic}</td></tr>
-            <tr><td>time : </td><td> {dayjs(time).format("DD/MM/YYYY")}</td></tr>
+            <tr><td>{t('count')} : </td><td> {data.length}</td></tr>
+            <tr><td>{t('topic')} : </td><td> {topic}</td></tr>
+            <tr><td>{t('time')} : </td><td> {dayjs(time).format("DD/MM/YYYY")}</td></tr>
             </tbody>
           </table>
         </div>

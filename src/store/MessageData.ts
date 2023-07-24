@@ -168,12 +168,48 @@ class MessageData implements  IMessage{
         if(localStorage["user-token"]){
             userProflie.token=localStorage["user-token"];
             userProflie.loginByToken().then(()=>{
-                this.getChatHistory();
+                this.getChatHistory().then(()=>{
+                    this.addSharingData();
+                });
             })
         }else{
             this.loadDataFromlocalStore();
+            this.addSharingData();
         }
         //this.changeTypeByUrl();
+    }
+
+    addSharingData(){
+        if(!window.location.hash.startsWith("/share")){
+            return;
+        }
+        const uuidFromUrl=window.location.hash.replace("/share/","")
+        if(!uuidFromUrl){
+            return;
+        }
+        let hasRecord=false;
+        this.sessionData.forEach((item)=>{
+            if(item.chatId===uuidFromUrl){
+                 hasRecord=true;
+                 return false;
+            }
+        })
+        if(hasRecord){
+            return;
+        }
+        axios(config.api.sharingUrl+"/"+uuidFromUrl,{
+            method:"get"
+        }).then((response)=>{
+            const data:ISession=response.data.data;
+            if(data){
+               data.chatId=uuidFromUrl;
+               data.updateDate=new Date();
+               this.sessionData.push(data);
+               if(userProflie.isLogin){
+                    this.saveSessionToDB(uuidFromUrl)
+               }
+            }
+        })
     }
 
     changeTypeByUrl(location: Location){
@@ -185,8 +221,6 @@ class MessageData implements  IMessage{
             type="image";
         }else if(pathname.startsWith("/config")){
             type="config";
-        }else if(pathname.startsWith("/share")){
-            type="share";
         }else{
             const ctype=pathname.replace("/","");
             const types=["sd","code","tips"];

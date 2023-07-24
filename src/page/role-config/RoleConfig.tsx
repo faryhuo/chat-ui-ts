@@ -7,13 +7,14 @@ import {IMessage} from '../../store/MessageData';
 type IProps={
   config:IAppConfig;
   store:IMessage;
+  readonly?:boolean
 }
 
 
-const RoleConfig:React.FC<IProps> = observer(({config,store})=>{
+const RoleConfig:React.FC<IProps> = observer(({config,store,readonly})=>{
   return (
   <div className="role-config-page">
-    <RoleList config={config} store={store}></RoleList>
+    <RoleList readonly={!!readonly} config={config} store={store}></RoleList>
   </div>)
 });
 

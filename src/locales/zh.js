@@ -118,6 +118,15 @@ const config = {
     "Share":"分享",
     "Favorite":"收藏",
     "Remove":"移除",
-    "Delete":"删除"
+    "Delete":"删除",
+    "Go to Role Management":"角色管理",
+    "Are you want to delete the role.":"确定删除这个角色吗",
+    "Message":"消息",
+    "History":"历史记录",
+    "Recent":"最近的",
+    "More Details":"更多",
+    "topic":"主题",
+    "time":"时间",
+    "count":"记录数"
 }
 export default config;

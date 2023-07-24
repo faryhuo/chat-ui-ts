@@ -22,7 +22,6 @@ const AsyncCode= asyncComponent(() => import ('../code/Code'));
 const AsyncImageEdit= asyncComponent(() => import ('../image-edit/ImageEdit'));
 const AsyncFrame= asyncComponent(() => import ('../iframe/Iframe'));
 const AsyncConfigPage= asyncComponent(() => import ('../config/Config'));
-const AsyncChatShare= asyncComponent(() => import ('../chat-share/ChatShare'));
 
 const pageList=[{
     path:"/chat/:chatId",
@@ -44,9 +43,6 @@ const pageList=[{
 {
     path:"/config/:id",
     component:AsyncConfigPage
-},{
-    path:"/share/:id",
-    component:AsyncChatShare
 },{
     path:"/tips",
     component:AsyncFrame,
