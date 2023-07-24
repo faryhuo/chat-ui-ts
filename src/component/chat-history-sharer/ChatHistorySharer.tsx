@@ -1,4 +1,4 @@
-import { Button  } from 'antd';
+import { Button,message  } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faDownload,faShare } from '@fortawesome/free-solid-svg-icons'
@@ -22,7 +22,14 @@ const ChatHistorySharer:React.FC<IProps> = observer(({data,selects,topic,time})=
 
   const {t} = useTranslation();
   const pageRef:any =useRef(null);
+  const [messageApi, contextHolder] = message.useMessage();
 
+  const success4CopyTolink = () => {
+    messageApi.open({
+      type: 'success',
+      content: 'Copy the link successlly',
+    });
+  };
   const download=()=>{
     import('html-to-image').then(({toJpeg})=>{
       const node=document.getElementById("sharer-review-page-content");
@@ -55,8 +62,9 @@ const ChatHistorySharer:React.FC<IProps> = observer(({data,selects,topic,time})=
     }).then((response)=>{
       const uuid=response.data.data;
       if(uuid){
-        const url=`${window.location.host}/share.html?uuid=${uuid}`
-        console.log(url);
+        const url=`${window.location.origin}/share.html?uuid=${uuid}`
+        navigator.clipboard.writeText(url);
+        success4CopyTolink();
       }
     })
   }
@@ -71,6 +79,7 @@ const ChatHistorySharer:React.FC<IProps> = observer(({data,selects,topic,time})=
         return selects.includes(index);
       })}></ChatHistorySharerPage>
     </div>
+    {contextHolder}
   </div>)
 })
 

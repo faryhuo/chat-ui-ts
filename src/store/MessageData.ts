@@ -180,10 +180,10 @@ class MessageData implements  IMessage{
     }
 
     addSharingData(){
-        if(!window.location.hash.startsWith("/share")){
+        if(!window.location.hash.startsWith("#/share")){
             return;
         }
-        const uuidFromUrl=window.location.hash.replace("/share/","")
+        const uuidFromUrl=window.location.hash.replace("#/share/","")
         if(!uuidFromUrl){
             return;
         }
@@ -195,6 +195,7 @@ class MessageData implements  IMessage{
             }
         })
         if(hasRecord){
+            window.location.hash=`#/chat/${uuidFromUrl}`;
             return;
         }
         axios(config.api.sharingUrl+"/"+uuidFromUrl,{
@@ -208,6 +209,8 @@ class MessageData implements  IMessage{
                if(userProflie.isLogin){
                     this.saveSessionToDB(uuidFromUrl)
                }
+               window.location.hash=`/chat/${uuidFromUrl}`;
+               this.saveSessionToLocal();
             }
         })
     }
