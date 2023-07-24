@@ -9,6 +9,7 @@ import {IAppConfig} from '../../store/AppConfig';
 import {IMessage} from '../../store/MessageData';
 import './RoleListItem.css'
 import userProfile from '../../store/UserProfile';
+import classNames from 'classnames';
 
 
 type IProps={
@@ -78,7 +79,7 @@ const RoleList:React.FC<IProps> = observer(({config,role,store,edit,readonly})=>
          hoverable={readonly}
               actions={readonly?[]:actionButtons}
           >
-            <div className="role-description">
+            <div className={classNames("role-description",{"readonly":!!readonly})}>
               {config.isChinese?role.descriptionCN:role.description}
             </div>
             <div className="role-tags">

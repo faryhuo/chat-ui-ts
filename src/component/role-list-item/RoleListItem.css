@@ -1,0 +1,6 @@
+.role-description.readonly{
+    height:180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+}
