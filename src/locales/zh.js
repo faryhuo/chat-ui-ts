@@ -32,9 +32,11 @@ const config = {
         "academic":"学术/教师"
     },
     "api":{
-        "sms code is invalid":"验证码不正确"
+        "sms code is invalid":"验证码不正确",
+        "Don't submit multi time.":"不要重复提交"
     }
     ,
+    "resent after":"重新发送",
     "Show All":"展开",
     "Hide":"缩小",
     "Select a role":"选择想要AI扮演的角色",
@@ -109,6 +111,7 @@ const config = {
     "Re-Password":"确认密码",
     "Phone number":"手机号码",
     "re-input password":"再输入一次密码",
+    "input password":"输入密码",
     "Name":"名称",
     "Save":"保存",
     "Use":"使用",
@@ -144,6 +147,7 @@ const config = {
     "Copy the link successlly, The link will expired after 1 day.":"链接已经复制到粘贴板，该链接会在一天后过期.",
     "Return mode":"返回模式",
     "The phone no. is exsiting, please go to login.":"账号已经存在, 请不要重复注册",
-    "The two passwords that you entered do not match!":"密码不一致，请重新输入"
+    "The two passwords that you entered do not match!":"密码不一致，请重新输入",
+    "Updated success":"修改成功"
 }
 export default config;

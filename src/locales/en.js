@@ -32,7 +32,8 @@ const config= {
         "academic":"Academic"
     },
     "api":{
-        "sms code is invalid":"sms code is invalid"
+        "sms code is invalid":"sms code is invalid",
+        "Don't submit multi time.":"Don't submit multi time."
     },
     "Chat":"Chat",
     "Image":"Image",

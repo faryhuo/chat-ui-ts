@@ -30,7 +30,7 @@ const ChatConfigForm: React.FC<IProps> = ({config})=>{
     const success = () => {
       messageApi.open({
         type: 'success',
-        content: 'Updated success',
+        content: t<string>('Updated success'),
       });
     };
 
@@ -94,7 +94,7 @@ const ChatConfigForm: React.FC<IProps> = ({config})=>{
 
         </Form.Item>
         <Form.Item wrapperCol= { {offset: 4, span: 12 }}>
-          <Button type="primary" onClick={save}>Save</Button>
+          <Button type="primary" onClick={save}>{t('Save')}</Button>
         </Form.Item>
       </Form>
       </div>

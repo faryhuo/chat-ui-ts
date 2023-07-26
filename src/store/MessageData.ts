@@ -3,7 +3,7 @@ import i18n from '../utils/i18n';
 import config  from './AppConfig';
 import axios from 'axios';
 import { fetchEventSource } from "@microsoft/fetch-event-source";
-import userProflie from "./UserProfile";
+import userProflie,{USER_TOKEN_KEY} from "./UserProfile";
 import roleData,{IRoleData,IRole} from "./RoleData";
 import imageData from "./ImageData";
 import saveAs from 'file-saver';
@@ -123,7 +123,6 @@ export interface IMessage{
 }
 
 
-
 class MessageData implements  IMessage{
     
 
@@ -166,8 +165,8 @@ class MessageData implements  IMessage{
             regenerateResponse:action.bound,
             getChatHistory:action.bound
         })
-        if(localStorage["user-token"]){
-            userProflie.token=localStorage["user-token"];
+        if(localStorage[USER_TOKEN_KEY]){
+            userProflie.token=localStorage[USER_TOKEN_KEY];
             userProflie.loginByToken().then(()=>{
                 this.getChatHistory().then(()=>{
                     this.addSharingData();

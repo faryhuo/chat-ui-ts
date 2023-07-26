@@ -3,6 +3,7 @@ import axios from 'axios';
 import config  from './AppConfig';
 import Fuse from 'fuse.js';
 import userProflie from "./UserProfile";
+import i18n from "../utils/i18n";
 //import prompts from '../data/prompt';
 export interface IRoleData{
     currentRoles:IRole[];
@@ -263,7 +264,7 @@ class RoleData implements IRoleData{
             }).then((response)=>{
                 const data=response.data;
                 if(data.message){
-                    reject(data.message)
+                    reject(i18n.t("api."+data.message));
                     return;
                 }
                 if(data && data.data){

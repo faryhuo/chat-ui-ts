@@ -32,7 +32,7 @@ const RoleDetails:React.FC<IProps> = observer(({store,config,role,handleCancel,t
     const success = () => {
       messageApi.open({
         type: 'success',
-        content: 'Updated success',
+        content: t<string>('Updated success'),
       });
     };
 

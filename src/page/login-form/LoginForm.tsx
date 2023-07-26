@@ -101,7 +101,7 @@ const LoginForm : React.FC<IProps>= observer(({login,handleCancel,config,store,u
           let sec= 60;
           const timer= setInterval(()=>{
             sec--;
-            setSentSmsTitle(`resent after ${sec}s`);
+            setSentSmsTitle(`${t<string>('resent after')} ${sec}s`);
             if(sec===0){
               setCodeSend(false);
               setSentSmsTitle("Sent SMS code");

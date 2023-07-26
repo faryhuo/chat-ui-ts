@@ -4,6 +4,9 @@ import axios from 'axios';
 import JSEncrypt from 'jsencrypt';
 import i18n from 'i18next';
 
+const USER_TOKEN_KEY="user-token"
+
+export {USER_TOKEN_KEY}
 
 export interface IUserProflie{
     userId:string;
@@ -72,7 +75,7 @@ class UserProflie implements IUserProflie{
                     this.token=response.data.data;
                     this.isLogin=true;
                     this.loginByToken();
-                    localStorage["user-token"]=this.token;
+                    localStorage[USER_TOKEN_KEY]=this.token;
                     resolve(this.token)
                 }else if(response.data.errors.message){
                     const errorMsg=i18n.t<string>("api."+response.data.errors.message);
@@ -157,7 +160,7 @@ class UserProflie implements IUserProflie{
         this.isLogin=false;
         this.userId="";
         this.userName="";
-        localStorage["user-token"]="";
+        localStorage[USER_TOKEN_KEY]="";
     }
 
     get currentUser(){
@@ -220,7 +223,7 @@ class UserProflie implements IUserProflie{
                 //this.premission.push("image_edit");
             }else{
                 //alert('The login token is expired. Please login it again if need.')
-                localStorage["user-token"]="";
+                localStorage[USER_TOKEN_KEY]="";
             }
         });
     }
