@@ -41,7 +41,6 @@ class UserProflie implements IUserProflie{
     token="";
     modules:IModules[]=[];
     pageOpen=false;
-
     openPage(){
         this.pageOpen=true;
     }
@@ -76,9 +75,10 @@ class UserProflie implements IUserProflie{
                     localStorage["user-token"]=this.token;
                     resolve(this.token)
                 }else if(response.data.errors.message){
-                    reject(response.data.errors.message)
+                    const errorMsg=i18n.t<string>("api."+response.data.errors.message);
+                    reject(errorMsg)
                 }else{
-                    reject("Fail to login");
+                    reject(i18n.t<string>("Fail to login"));
                 }
             });
             })
@@ -108,9 +108,10 @@ class UserProflie implements IUserProflie{
                         this.login(userId,password);
                         resolve(response.data.data)
                     }else if(response.data.errors.message){
-                        reject(response.data.errors.message)
+                        const errorMsg=i18n.t<string>("api."+response.data.errors.message);
+                        reject(errorMsg)
                     }else{
-                        reject("Fail to signup");
+                        reject(i18n.t<string>("Fail to Reset password"));
                     }
                 });
                 })
@@ -140,7 +141,8 @@ class UserProflie implements IUserProflie{
                     this.login(userId,password);
                     resolve(response.data.data)
                 }else if(response.data.errors.message){
-                    reject(response.data.errors.message)
+                    const errorMsg=i18n.t<string>("api."+response.data.errors.message);
+                    reject(errorMsg)
                 }else{
                     reject("Fail to signup");
                 }
@@ -217,8 +219,8 @@ class UserProflie implements IUserProflie{
                 this.premission.push("image");
                 //this.premission.push("image_edit");
             }else{
-                alert('The login token is expired. Please login it again if need.')
-                this.token="";
+                //alert('The login token is expired. Please login it again if need.')
+                localStorage["user-token"]="";
             }
         });
     }

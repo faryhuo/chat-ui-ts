@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch,Select,Button, Segmented ,Popconfirm} from 'antd';
+import { Select,Button, Segmented ,Popconfirm} from 'antd';
 import { useTranslation } from 'react-i18next';
 import { observer } from "mobx-react-lite";
 import {IAppConfig} from '../../store/AppConfig';
@@ -7,6 +7,7 @@ import {IMessage} from '../../store/MessageData';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import RoleSelector from '../role-selector/RoleSelector';
+import chatConfig from "../../store/ChatConfig";
 import './SessionActionList.css';
 type IProps={
   config:IAppConfig;
@@ -43,9 +44,9 @@ const SessionAtcionList : React.FC<IProps> = observer(({store,config,onOpen})=>{
   
 
     const getSelectedItem=()=>{
-      if(config.chatConfig.apiConfig.temperature>0.7){
+      if(chatConfig.apiConfig.temperature>0.7){
         return options[2];
-      }else if(config.chatConfig.apiConfig.temperature<0.5){
+      }else if(chatConfig.apiConfig.temperature<0.5){
         return options[0];
       }else {
         return options[1];
@@ -56,7 +57,7 @@ const SessionAtcionList : React.FC<IProps> = observer(({store,config,onOpen})=>{
       const index=options.indexOf(e);
       const temperatureList=[0,0.6,1];
       if(index>=0){
-        config.chatConfig.apiConfig.temperature=temperatureList[index];
+        chatConfig.apiConfig.temperature=temperatureList[index];
       }
     }
 
@@ -66,12 +67,17 @@ const SessionAtcionList : React.FC<IProps> = observer(({store,config,onOpen})=>{
         list.push(<Button className="option-btn" key={1}  onClick={onOpen}>{t("More")}</Button>);
         !config.isMobile && list.push(<Segmented key={2}  value={getSelectedItem()} onChange={changeType}  style={{marginRight:10}}  options={options} />);
         list.push(<RoleSelector key={3} store={store} roleList={roleList}></RoleSelector>);
-        list.push(<Switch key={4}  className="option-btn" 
-            onClick={()=>{config.chatConfig.switchStream()}}
-          checkedChildren={t<string>("Stream")}
-          unCheckedChildren={t<string>("Full")}
-          defaultChecked={config.chatConfig.getAPIConfig().stream}
-        />);
+        // list.push(<Switch key={4}  className="option-btn" 
+        //     onClick={()=>{chatConfig.switchStream()}}
+        //   checkedChildren={t<string>("Stream")}
+        //   unCheckedChildren={t<string>("Full")}
+        //   defaultChecked={chatConfig.getAPIConfig().stream}
+        // />);
+        list.push(<Select key={4}  style={{width:180}}
+          className="option-btn"  onChange={(e)=>chatConfig.changeModel(e)}
+        options={chatConfig.chatModelList.map((item) => ({ label: item, value: item }))}
+        value={chatConfig.apiConfig.model}
+      />);
       }else if(store.type==='image'){
         list.push(<Select key={5} style={{minWidth:80}}
           placement="bottomLeft"

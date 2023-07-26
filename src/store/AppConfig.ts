@@ -4,7 +4,6 @@ import i18n from '../utils/i18n';
 import {isMobile} from 'react-device-detect';
 import apiSetting,{IAPISetting} from "./APISetting";
 import imageData,{IImageData} from "./ImageData";
-import chatConfig,{IChatConfig} from "./ChatConfig";
 
 export interface IAppConfig{
     version:string;
@@ -32,7 +31,6 @@ export interface IAppConfig{
     clearConfig:()=>void;
     clearHistory:()=>void;
     iatRecorder:any;
-    chatConfig:IChatConfig;
     formLayout:string;
     isChinese:boolean;
     isEnglish:boolean;
@@ -48,7 +46,7 @@ export interface ICodeEditsAPIConfig{
 
 class AppConfig implements IAppConfig{
 
-    version="3.1"
+    version="3.2"
     style="chat";
     localConfigName=`config_${this.version}`;
     type="";
@@ -57,7 +55,6 @@ class AppConfig implements IAppConfig{
     isMobile=isMobile;
     api=apiSetting
     image=imageData;
-    chatConfig=chatConfig;
 
     
     // get weChatQRCode() {

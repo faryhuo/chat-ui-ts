@@ -31,6 +31,9 @@ const config= {
         "pedagogy":"Pedagogy",
         "academic":"Academic"
     },
+    "api":{
+        "sms code is invalid":"sms code is invalid"
+    },
     "Chat":"Chat",
     "Image":"Image",
     "Config":"Config"

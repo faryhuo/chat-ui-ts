@@ -1,4 +1,5 @@
 import { makeObservable, observable, action} from "mobx";
+import userProflie from "./UserProfile";
 
 export interface IChatConfig{
     apiConfig:IChatAPIConfig;
@@ -21,11 +22,11 @@ export interface IChatAPIConfig{
 
 type Model="gpt-3.5-turbo" | "gpt-3.5-turbo-16k"|
 "gpt-3.5-turbo-0613" | "gpt-3.5-turbo-16k-0613"
-| "gpt-4"
+| "gpt-4" | "gpt-4-0314" | "gpt-4-0613"
 
 class ChatConfig implements IChatConfig{
     
-    version="2.1"
+    version="2.4"
     localConfigName=`chat_config_${this.version}`;
 
     apiConfig:IChatAPIConfig={
@@ -40,14 +41,16 @@ class ChatConfig implements IChatConfig{
 
     chatModelList:Model[] = ["gpt-3.5-turbo","gpt-3.5-turbo-16k",
     "gpt-3.5-turbo-0613","gpt-3.5-turbo-16k-0613"
-    ,"gpt-4"]
+    ,"gpt-4","gpt-4-0314","gpt-4-0613"]
 
     modelMaxTokenMap = {
         "gpt-3.5-turbo":4096,
         "gpt-3.5-turbo-16k":16384,
         "gpt-3.5-turbo-0613":4096,
         "gpt-3.5-turbo-16k-0613":16384,
-        "gpt-4":8192 
+        "gpt-4":8192,
+        "gpt-4-0314":8192,
+        "gpt-4-0613":8192
     }
 
     modelMap = {
@@ -55,7 +58,9 @@ class ChatConfig implements IChatConfig{
         "gpt-3.5-turbo-16k":"gpt-3.5-turbo-16k",
         "gpt-3.5-turbo-0613":"gpt-3.5-turbo-16k-0613",
         "gpt-3.5-turbo-16k-0613":"gpt-3.5-turbo-16k-0613",
-        "gpt-4":"gpt-4" 
+        "gpt-4":"gpt-4",
+        "gpt-4-0314":"gpt-4-0314",
+        "gpt-4-0613":"gpt-4-0613" 
     }
 
     getMaxTokenByModel(model:Model){
@@ -93,11 +98,26 @@ class ChatConfig implements IChatConfig{
     }
 
     saveAPIConfig(config:IChatAPIConfig){
-        let item:keyof IChatAPIConfig;
-        for(item in config){
-            (this.apiConfig as any)[item]=config[item];
+        const configKeys = Object.keys(config) as Array<keyof IChatAPIConfig>;
+
+        configKeys.forEach((item) => {
+            if(item==="model"){
+                if(config[item]===this.apiConfig.model){
+                    return;
+                }
+                this.changeModel(config[item]);
+            }else{
+                (this.apiConfig as any)[item]=config[item];
+            }
+        });
+        localStorage.setItem(this.localConfigName, JSON.stringify(this.getAPIConfig()));
+    }
+    changeModel(model:Model){
+        if(userProflie.isLogin){
+            this.apiConfig.model=model;
+        }else{
+            userProflie.openPage();
         }
-        localStorage[this.localConfigName]=JSON.stringify(this.getAPIConfig());
     }
     getAPIConfig(){
         return this.apiConfig;

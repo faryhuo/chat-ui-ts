@@ -8,6 +8,7 @@ import roleData,{IRoleData,IRole} from "./RoleData";
 import imageData from "./ImageData";
 import saveAs from 'file-saver';
 import { Location } from "react-router-dom";
+import chatConfig from "./ChatConfig";
 
 let encodeFun: any
 import('gpt-tokenizer').then(({encode})=>{
@@ -787,7 +788,7 @@ class MessageData implements  IMessage{
     }
 
     callChatAPI(chatId: string){
-        if(config.chatConfig.getAPIConfig().stream){
+        if(chatConfig.getAPIConfig().stream){
           return this.callChatAPIByStreamByPost(chatId).then(()=>{
             this.hideLastData(chatId);
             this.save(chatId);
@@ -802,7 +803,7 @@ class MessageData implements  IMessage{
     }
 
     callChatAPINotSave(chatId: string){
-        if(config.chatConfig.getAPIConfig().stream){
+        if(chatConfig.getAPIConfig().stream){
           return this.callChatAPIByStreamByPost(chatId);
         }else{
           return this.callChatAPIByHttp(chatId)
@@ -926,9 +927,10 @@ class MessageData implements  IMessage{
                         self._fetchSSEErrorHandle(resolve,chatId);
                     }
                 },onerror(e){
+                    ctrl.abort();
                     self._fetchSSEErrorHandle(resolve,chatId);
                     throw e;
-                }
+                },openWhenHidden:true
               });
         
             self.addData(msgItem,chatId);   
@@ -1038,15 +1040,15 @@ class MessageData implements  IMessage{
     }
 
     getChatParams(){
-        const chatConfig=config.chatConfig.getAPIConfig();
+        const chatAPIConfig=chatConfig.getAPIConfig();
         let messageListData= this.getMessageListData();
         let chatTokens = this.encodeChat(messageListData)
-        let model=chatConfig.model;
-        if(chatTokens+chatConfig.max_tokens>=config.chatConfig.getMaxTokenByModel(model) 
-        && !config.chatConfig.isMaxTokenModel(model)){
-            model=config.chatConfig.getMaxTokenModel(model);
+        let model=chatAPIConfig.model;
+        if(chatTokens+chatAPIConfig.max_tokens>= chatConfig.getMaxTokenByModel(model) 
+        && !chatConfig.isMaxTokenModel(model)){
+            model=userProflie.isLogin?chatConfig.getMaxTokenModel(model):model;
         }
-        while(chatTokens+chatConfig.max_tokens>=config.chatConfig.getMaxTokenByModel(model)){
+        while(chatTokens+chatAPIConfig.max_tokens>=chatConfig.getMaxTokenByModel(model)){
             if(messageListData[0].role==="system"){
                 messageListData.splice(2,1);
             }else{
@@ -1058,12 +1060,12 @@ class MessageData implements  IMessage{
           messages:JSON.stringify(messageListData),
           uuid: this.activeSession,
           model: model,
-          temperature:chatConfig.temperature,
-          top_p:chatConfig.top_p,
-          presence_penalty:chatConfig.presence_penalty,
-          frequency_penalty:chatConfig.frequency_penalty,
-          max_tokens:chatConfig.max_tokens?chatConfig.max_tokens:1024,
-          stream:chatConfig.stream
+          temperature:chatAPIConfig.temperature,
+          top_p:chatAPIConfig.top_p,
+          presence_penalty:chatAPIConfig.presence_penalty,
+          frequency_penalty:chatAPIConfig.frequency_penalty,
+          max_tokens:chatAPIConfig.max_tokens?chatAPIConfig.max_tokens:1024,
+          stream:chatAPIConfig.stream
         }
         return params;
     }

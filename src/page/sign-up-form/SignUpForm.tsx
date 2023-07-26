@@ -61,7 +61,7 @@ const SignUpForm : React.FC<IProps>= observer(({login,handleCancel,config,store,
     const onSentSMSCode=(e:any)=>{
       userProfile.checkUserIfExisting(userId).then((result)=>{
         if(result===false){
-          fail("The phone no. is exsiting, please go to login.")
+          fail(t<string>("The phone no. is exsiting, please go to login."));
           return;
         }
         setCodeSend(true);
@@ -93,8 +93,8 @@ const SignUpForm : React.FC<IProps>= observer(({login,handleCancel,config,store,
     }
 
     const prefixSelector = (
-      <Form.Item name="prefix" noStyle>
-        <Select style={{ width: 70 }} defaultValue="86">
+      <Form.Item name="prefix" noStyle initialValue="86">
+        <Select style={{ width: 70 }}>
           <Select.Option  value="86">+86</Select.Option>
           <Select.Option value="87">+87</Select.Option>
         </Select>
@@ -134,7 +134,8 @@ const SignUpForm : React.FC<IProps>= observer(({login,handleCancel,config,store,
             if (!value || getFieldValue('password') === value) {
               return Promise.resolve();
             }
-            return Promise.reject(new Error('The two passwords that you entered do not match!'));
+            return Promise.reject(
+              new Error(t<string>('The two passwords that you entered do not match!')));
           },
         })]}
         tooltip={ruleMessage.required}>

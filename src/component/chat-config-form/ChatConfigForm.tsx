@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faClose,faCheck } from '@fortawesome/free-solid-svg-icons'
 import {IAppConfig} from '../../store/AppConfig';
 import './ChatConfigForm.css'
+import chatConfig from '../../store/ChatConfig';
 type IProps={
   config:IAppConfig;
 }
@@ -34,7 +35,7 @@ const ChatConfigForm: React.FC<IProps> = ({config})=>{
     };
 
     const save = () => {
-      config.chatConfig.saveAPIConfig({
+      chatConfig.saveAPIConfig({
         model:model,
         temperature:temperature,
         top_p:top_p,
@@ -55,12 +56,12 @@ const ChatConfigForm: React.FC<IProps> = ({config})=>{
         layout={config.formLayout as any}
         labelCol={{ span: 4 }}
         wrapperCol={{ span: 14 }}
-        initialValues={config.chatConfig.getAPIConfig()}
+        initialValues={chatConfig.getAPIConfig()}
         style={{padding:"10px"}}
       >
         <Form.Item label={t<string>("Model")} name="model" tooltip={t<string>("which models work with the Chat API.")}>
               <Select
-                options={config.chatConfig.chatModelList.map((item) => ({ label: item, value: item }))}
+                options={chatConfig.chatModelList.map((item) => ({ label: item, value: item }))}
               />
         </Form.Item>
         <Form.Item label={t<string>("max_tokens")} name="max_tokens" tooltip={t<string>("max length of GPT return")}>

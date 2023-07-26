@@ -31,6 +31,10 @@ const config = {
         "pedagogy":"教育/学生",
         "academic":"学术/教师"
     },
+    "api":{
+        "sms code is invalid":"验证码不正确"
+    }
+    ,
     "Show All":"展开",
     "Hide":"缩小",
     "Select a role":"选择想要AI扮演的角色",
@@ -71,7 +75,7 @@ const config = {
     "This is a required field":"这个字段不能为空",
     "Sent":"发送",
     "Type here... (Shift + Enter = Line break)":"输入... (按住Shift + Enter键换行)",
-    "Type something to search on ChatGPT":"请输入想要搜索的内容",
+    "Type something to search on ChatGPT":"请提出你的问题或者需求",
     "Type something to generate a image":"输入文本将会生成相应的图片，如果上传一张图片，会生成一张类似的图片",
     "Login":"登录",
     "Cancel":"取消",
@@ -137,6 +141,9 @@ const config = {
     "Share Link":"链接分享",
     "Text":"文本",
     "Page":"页面",
-    "Copy the link successlly, The link will expired after 1 day.":"链接已经复制到粘贴板，该链接会在一天后过期."
+    "Copy the link successlly, The link will expired after 1 day.":"链接已经复制到粘贴板，该链接会在一天后过期.",
+    "Return mode":"返回模式",
+    "The phone no. is exsiting, please go to login.":"账号已经存在, 请不要重复注册",
+    "The two passwords that you entered do not match!":"密码不一致，请重新输入"
 }
 export default config;

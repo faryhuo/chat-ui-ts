@@ -1,5 +1,5 @@
 import React  from 'react';
-import {  Form,Slider,Button } from 'antd';
+import {  Form,Slider,Button, Switch } from 'antd';
 import { observer } from "mobx-react"
 import { Select } from 'antd';
 import { useTranslation } from 'react-i18next';
@@ -9,6 +9,7 @@ import './ChatConfigSimpleForm.css'
 import type { SliderMarks } from 'antd/es/slider';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faClose } from '@fortawesome/free-solid-svg-icons'
+import chatConfig from '../../store/ChatConfig';
 
 type IProps={
   config:IAppConfig;
@@ -29,7 +30,7 @@ const ChatConfigForm: React.FC<IProps> = ({config,onClose})=>{
     const save = (value:any,field:string) => {
       let params:any={};
       params[field]=value;
-      config.chatConfig.saveAPIConfig(params);
+      chatConfig.saveAPIConfig(params);
     };
     
     return (
@@ -41,21 +42,29 @@ const ChatConfigForm: React.FC<IProps> = ({config,onClose})=>{
       <Form
         form={form}
         layout="vertical"
-        initialValues={config.chatConfig.getAPIConfig()}
+        initialValues={chatConfig.getAPIConfig()}
         style={{padding:"10px"}}
       >
         <Form.Item label={t<string>("Model")} name="model" tooltip={t<string>("which models work with the Chat API.")}>
               <Select onChange={(e)=>save(e,"model")}
-                options={config.chatConfig.chatModelList.map((item) => ({ label: item, value: item }))}
+                options={chatConfig.chatModelList.map((item) => ({ label: item, value: item }))}
               />
         </Form.Item>
         <Form.Item label={t<string>("Choose a conversation style")} name="temperature" 
         tooltip={t<string>("What sampling temperature to use, between 0 and 2. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic.We generally recommend altering this or top_p but not both.")}>
               <Slider   onChange={(e)=>save(e,"temperature")} marks={marks} included={false} 
-              defaultValue={1}     step={0.01}      min={0}
+                  step={0.01}      min={0}
           max={2}/>
         </Form.Item>
 
+        <Form.Item label={t<string>("Return mode")} name="stream" 
+        valuePropName="checked">
+          <Switch key={4}  className="option-btn" 
+              onClick={()=>{chatConfig.switchStream()}}
+            checkedChildren={t<string>("Stream")}
+            unCheckedChildren={t<string>("Full")}
+          />        
+        </Form.Item>
 
         
         <Form.Item label={t<string>("presence_penalty")} name="presence_penalty" 

@@ -135,6 +135,8 @@ const ChatList: React.FC<IProps>  =({store}) => {
 
   const recnetDataSouce=dataSouce.filter(item=>{
     return isSameDay(item.date);
+  }).sort((a,b)=>{
+    return (b.date as any) - (a.date as any)
   })
 
   const historyDataSouce=dataSouce.filter(item=>{
