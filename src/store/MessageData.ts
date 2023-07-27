@@ -884,7 +884,8 @@ class MessageData implements  IMessage{
                 method: "POST",
                 signal:ctrl.signal,
                 headers: {
-                  "content-type": "application/json",
+                  'token':userProflie.token,
+                  "content-type": "application/json"
                 },
                 body:JSON.stringify(params),
                 onmessage(msg) {
@@ -957,6 +958,7 @@ class MessageData implements  IMessage{
             method: "post",
             url: queryUrl,
             headers: {
+              'token':userProflie.token,
               'Content-Type': 'application/json;charset=UTF-8'
             },
             data : JSON.stringify(params)
