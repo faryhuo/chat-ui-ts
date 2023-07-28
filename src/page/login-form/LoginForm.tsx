@@ -43,12 +43,6 @@ const LoginForm : React.FC<IProps>= observer(({login,handleCancel,config,store,u
     };
 
 
-    const successLogout = () => {
-      messageApi.open({
-        type: 'success',
-        content: 'Logout success',
-      });
-    };
 
     const fail = (msg:string) => {
       messageApi.open({
@@ -77,12 +71,6 @@ const LoginForm : React.FC<IProps>= observer(({login,handleCancel,config,store,u
       }
     };
 
-    const onLogout= () =>{
-      userProfile.logout();
-      store.loadDataFromlocalStore();
-      handleCancel();
-      successLogout()
-    }
 
 
 
@@ -166,7 +154,6 @@ const LoginForm : React.FC<IProps>= observer(({login,handleCancel,config,store,u
 
         <Form.Item className="login-form-btn-list">
           <Button type="primary" htmlType="submit">{t(loginBtnTitle)}</Button>
-          {userProfile.isLogin && !forgetFlag &&<Button  onClick={onLogout}>{t<string>("Logout")}</Button>}
         </Form.Item>
       </Form>
       </div>

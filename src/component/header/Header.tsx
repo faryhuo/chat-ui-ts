@@ -1,4 +1,4 @@
-import { Menu,Button,Avatar,Modal } from 'antd';
+import { Menu,Button,Avatar,Modal, Dropdown,message} from 'antd';
 import { observer } from "mobx-react-lite";
 import './Header.css';
 import { useTranslation } from 'react-i18next';
@@ -10,7 +10,8 @@ import {IAppConfig} from '../../store/AppConfig';
 import {IMessage} from '../../store/MessageData';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faComments,faLaptopCode,faGear,faOutdent, faLinesLeaning,faImages } from '@fortawesome/free-solid-svg-icons'
+import { faComments,faLaptopCode,faGear,faOutdent, faLinesLeaning,faImages,faPerson,faSignOut } from '@fortawesome/free-solid-svg-icons'
+import userProflie from '../../store/UserProfile';
 
 type IProps={
   config:IAppConfig;
@@ -20,6 +21,7 @@ type IProps={
 const Header: React.FC<IProps> = observer(({store,config}) => {
 
   const { t } = useTranslation();
+  const [messageApi, contextHolder] = message.useMessage();
 
   const items = [
     {
@@ -84,6 +86,36 @@ const Header: React.FC<IProps> = observer(({store,config}) => {
     return userProfile.currentUser;
   }
 
+  const successLogout = () => {
+    userProflie.logout();
+    messageApi.open({
+      type: 'success',
+      content: t('Logout success'),
+    });
+  };
+
+  const goToPersonPage = () => {
+    window.location.hash="#/person";
+  };
+
+  const getButtonList=()=>{
+    return [
+      {
+        key: '1',
+        label: (  <Button  style={{width:120}}
+          icon={<FontAwesomeIcon icon={faPerson} />} 
+          onClick={goToPersonPage}
+        >&nbsp;{t('Information')}</Button>),
+      },
+      {
+        key: '2',
+        label: (<Button style={{width:120}}
+          icon={<FontAwesomeIcon icon={faSignOut} />} 
+          onClick={successLogout}
+          >&nbsp;{t('Logout')}</Button>),
+      }]
+  }
+
 
   return (
   <div className="menu-header">
@@ -100,15 +132,28 @@ const Header: React.FC<IProps> = observer(({store,config}) => {
         </Menu>
     </div>
     <div className="login-user">
-      <Avatar
+      {userProflie.isLogin?(
+       <Dropdown trigger={['click']} menu={{ items:getButtonList()}} placement="bottomLeft">
+       <Avatar
+          style={{
+            backgroundColor: config.colorPrimary,
+            verticalAlign: 'middle',
+          }}
+          shape="square"
+          size="large"
+        >{getUserName()}</Avatar>
+     </Dropdown>  
+      ):(<Avatar
           onClick={showModal}
           style={{
             backgroundColor: config.colorPrimary,
             verticalAlign: 'middle',
           }}
+          shape="square"
           size="large"
-        >{getUserName()}</Avatar>
-              <Modal
+        >{getUserName()}</Avatar>)}
+
+        <Modal
         open={userProfile.pageOpen}
         title={false}
         onCancel={handleCancel}
@@ -118,6 +163,7 @@ const Header: React.FC<IProps> = observer(({store,config}) => {
       >
         <Account config={config} store={store} userProfile={userProfile}  login={login} handleCancel={handleCancel}></Account>
       </Modal>
+      {contextHolder}
     </div>
   </div>
   );

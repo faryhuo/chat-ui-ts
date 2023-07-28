@@ -106,6 +106,8 @@ const config = {
     "Account Login":"账号登录",
     "Sign Up":"注册",
     "Logout":"登出",
+    "Logout success":"登出成功",
+    "Information":"个人信息",
     "Remember me":"记住密码",
     "Forgot password":"忘记密码？",
     "Re-Password":"确认密码",
@@ -148,6 +150,8 @@ const config = {
     "Return mode":"返回模式",
     "The phone no. is exsiting, please go to login.":"账号已经存在, 请不要重复注册",
     "The two passwords that you entered do not match!":"密码不一致，请重新输入",
-    "Updated success":"修改成功"
+    "Updated success":"修改成功",
+    "All":"全部",
+    "Main":"主要的"
 }
 export default config;

@@ -226,7 +226,7 @@ class MessageData implements  IMessage{
             type="config";
         }else{
             const ctype=pathname.replace("/","");
-            const types=["sd","code","tips"];
+            const types=["sd","code","tips","person"];
             if(types.includes(ctype)){
                 type=ctype;
             }

@@ -61,6 +61,9 @@ class APISetting implements IAPISetting{
 
     sharingUrl=`${this.host}/${this.historyServiceName}/share`    
 
+    aiModelsUrl=`${this.host}/${this.userServiceName}/user/models`
+    tokenUsageUrl=`${this.host}/${this.userServiceName}/user/models/usage`
+
 }
 const apiSetting = new APISetting()
 export default apiSetting;

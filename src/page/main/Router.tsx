@@ -22,6 +22,7 @@ const AsyncCode= asyncComponent(() => import ('../code/Code'));
 const AsyncImageEdit= asyncComponent(() => import ('../image-edit/ImageEdit'));
 const AsyncFrame= asyncComponent(() => import ('../iframe/Iframe'));
 const AsyncConfigPage= asyncComponent(() => import ('../config/Config'));
+const AsyncPersonInfoPage= asyncComponent(() => import ('../person-info/PersonInfo'));
 
 const pageList=[{
     path:"/chat/:chatId",
@@ -63,7 +64,12 @@ const pageList=[{
     path:"/chat",
     component:NewChat,
     exact:true
+},{
+    path:"/person",
+    component:AsyncPersonInfoPage,
+    exact:true
 }];
+
 
 
 const AppRoutes:React.FC<IProps> = ({messageData,appConfig})=>{

@@ -1,14 +1,15 @@
 import React from 'react';
-import { Select,Button, Segmented ,Popconfirm} from 'antd';
+import { Select,Button, Segmented ,Popconfirm,Divider} from 'antd';
 import { useTranslation } from 'react-i18next';
 import { observer } from "mobx-react-lite";
 import {IAppConfig} from '../../store/AppConfig';
 import {IMessage} from '../../store/MessageData';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { faTrashCan,faSearch } from '@fortawesome/free-solid-svg-icons';
 import RoleSelector from '../role-selector/RoleSelector';
 import chatConfig from "../../store/ChatConfig";
 import './SessionActionList.css';
+import { useState } from 'react';
 type IProps={
   config:IAppConfig;
   store:IMessage;
@@ -17,6 +18,7 @@ type IProps={
 const SessionAtcionList : React.FC<IProps> = observer(({store,config,onOpen})=>{
 
     const {t} =useTranslation();
+    const [moreModules,setMoreModules]= useState(false);
     const options = [
       t('Precise'),
       t('Balanced'),
@@ -53,6 +55,14 @@ const SessionAtcionList : React.FC<IProps> = observer(({store,config,onOpen})=>{
       }
     }
 
+    const getModulesDataSource=()=>{
+      if(moreModules){
+        return chatConfig.chatModelList;
+      }else{
+        return chatConfig.sampleChatModelList;
+      }
+    }
+
     const changeType=(e:any)=>{
       const index=options.indexOf(e);
       const temperatureList=[0,0.6,1];
@@ -75,8 +85,17 @@ const SessionAtcionList : React.FC<IProps> = observer(({store,config,onOpen})=>{
         // />);
         list.push(<Select key={4}  style={{width:180}}
           className="option-btn"  onChange={(e)=>chatConfig.changeModel(e)}
-        options={chatConfig.chatModelList.map((item) => ({ label: item, value: item }))}
+        options={getModulesDataSource().map((item) => ({ label: item, value: item }))}
         value={chatConfig.apiConfig.model}
+        dropdownRender={(menu) => (
+          <>
+            {menu}
+            <Divider style={{ margin: '8px 0' }} />
+            <Button onClick={()=>setMoreModules(!moreModules)} style={{width:'100%'}} icon={<FontAwesomeIcon 
+            icon={faSearch} />} type="text">
+                &nbsp;{t<string>(!moreModules?"All":"Main")}
+              </Button>
+          </>)}
       />);
       }else if(store.type==='image'){
         list.push(<Select key={5} style={{minWidth:80}}

@@ -43,6 +43,8 @@ class ChatConfig implements IChatConfig{
     "gpt-3.5-turbo-0613","gpt-3.5-turbo-16k-0613"
     ,"gpt-4","gpt-4-0314","gpt-4-0613"]
 
+    sampleChatModelList:Model[]= ["gpt-3.5-turbo","gpt-4"];
+
     modelMaxTokenMap = {
         "gpt-3.5-turbo":4096,
         "gpt-3.5-turbo-16k":16384,
