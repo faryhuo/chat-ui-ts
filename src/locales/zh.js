@@ -152,6 +152,13 @@ const config = {
     "The two passwords that you entered do not match!":"密码不一致，请重新输入",
     "Updated success":"修改成功",
     "All":"全部",
-    "Main":"主要的"
+    "Main":"主要的",
+    "Model Name":"模型名称",
+    "Input Token Usage":"发送给ChatGPT的信息的Token数",
+    "Output Token Usage":"ChatGPT返回信息的Token数",
+    "Total":"产生的费用(美金)",
+    "Sum":"一共(美金)",
+    "Token Usage":"Token的使用情况",
+    "User Info":"个人信息"
 }
 export default config;

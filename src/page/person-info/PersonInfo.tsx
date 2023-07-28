@@ -6,6 +6,7 @@ import userProflie from '../../store/UserProfile';
 import { ColumnsType } from 'antd/es/table';
 import UserInfo, { ITokenUsage } from '../../store/UserInfo';
 import userInfo from '../../store/UserInfo';
+import { observer } from 'mobx-react-lite';
 type IProps={
 }
 
@@ -13,22 +14,32 @@ const PersonInfo:React.FC<IProps> = ()=>{
 
   const { t } = useTranslation();
 
+
+  const getTokenTemplate=(val:number,price:number)=>{
+    return (<><span>{(val/1000).toFixed(2)} K</span><span>(price : ${price} / 1K tokens)</span></>)
+  }
+
   const columns: ColumnsType<ITokenUsage>  = [
     {
-      title: 'Model Name',
+      title: t('Model Name'),
       dataIndex: 'modelName',
     },
     {
-      title: 'Input Token Usage',
+      title: t('Input Token Usage'),
       dataIndex: 'inputTokenUsage',
+      responsive: ['lg'],
+      render: (val:number) => getTokenTemplate(val,0.002),
     },
     {
-      title: 'Output Token Usage',
+      title: t('Output Token Usage'),
       dataIndex: 'outputTokenUsage',
+      responsive: ['lg'],
+      render: (val:number) => getTokenTemplate(val,0.002),
     },
     {
-      title: 'Total',
-      dataIndex: 'total'
+      title: t('Total'),
+      dataIndex: 'total',
+      render: (total:number) => <span>$ {total.toFixed(4)}</span>,
     }
   ];
 
@@ -37,7 +48,6 @@ const PersonInfo:React.FC<IProps> = ()=>{
     userInfo.fetchTokenUsage();
   },[]);
 
-  const data:ITokenUsage[]=UserInfo.tokenUsage;
 
   const getTotal=()=>{
     const data=UserInfo.tokenUsage;
@@ -45,7 +55,7 @@ const PersonInfo:React.FC<IProps> = ()=>{
       return data.reduce((prev,item)=>{
         prev.total=prev.total+item.total;
         return prev;
-      }).total;
+      }).total.toFixed(4);
     }else{
       return 0;
     }
@@ -61,13 +71,13 @@ const PersonInfo:React.FC<IProps> = ()=>{
 
       <Divider></Divider>
       <div className="token-usage">
-        <h3>Token Usage</h3>
-        <Table columns={columns} dataSource={data} pagination={false} bordered={true}/>
+        <h3>{t('Token Usage')}</h3>
+        <Table columns={columns} dataSource={userInfo.tokenUsage} pagination={false} bordered={true}/>
         <div className="total">
-        <span>Sum :   {getTotal()}</span>
+        <span>{t('Sum')} :   $ {getTotal()}</span>
         </div>
       </div>
     </div>)
 }
 
-export default PersonInfo;
+export default observer(PersonInfo);
