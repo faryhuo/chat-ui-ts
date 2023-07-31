@@ -6,6 +6,8 @@ export interface ITokenUsage{
     modelName:string;
     inputTokenUsage:number;
     outputTokenUsage:number;
+    inputTokenPrice:number;
+    outputTokenPrice:number;
     total:number;
 }
 

@@ -115,7 +115,7 @@ class ChatConfig implements IChatConfig{
         localStorage.setItem(this.localConfigName, JSON.stringify(this.getAPIConfig()));
     }
     changeModel(model:Model){
-        if(userProflie.isLogin){
+        if(userProflie.token){
             this.apiConfig.model=model;
         }else{
             userProflie.openPage();

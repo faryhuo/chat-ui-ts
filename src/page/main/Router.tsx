@@ -18,7 +18,7 @@ type IProps={
   messageData:IMessage;
 }
 //const AsyncChat = asyncComponent(() => import ('../chat/Chat'));
-const AsyncCode= asyncComponent(() => import ('../code/Code'));
+// const AsyncCode= asyncComponent(() => import ('../code/Code'));
 const AsyncImageEdit= asyncComponent(() => import ('../image-edit/ImageEdit'));
 const AsyncFrame= asyncComponent(() => import ('../iframe/Iframe'));
 const AsyncConfigPage= asyncComponent(() => import ('../config/Config'));
@@ -33,10 +33,11 @@ const pageList=[{
 },{
     path:"/image/:chatId",
     component:Chat
-},{
-    path:"/code",
-    component:AsyncCode
 },
+// {
+//     path:"/code",
+//     component:AsyncCode
+// },
 {
     path:"/image_edit",
     component:AsyncImageEdit

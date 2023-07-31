@@ -16,29 +16,33 @@ const PersonInfo:React.FC<IProps> = ()=>{
 
 
   const getTokenTemplate=(val:number,price:number)=>{
-    return (<><span>{(val/1000).toFixed(2)} K</span><span>(price : ${price} / 1K tokens)</span></>)
+    return (<><span>{(val/1000).toFixed(2)} K</span> &nbsp;&nbsp;&nbsp; <span>({t('price')} : ${price} / 1K tokens)</span></>)
   }
 
   const columns: ColumnsType<ITokenUsage>  = [
     {
       title: t('Model Name'),
+      key:'modelName',
       dataIndex: 'modelName',
     },
     {
       title: t('Input Token Usage'),
       dataIndex: 'inputTokenUsage',
+      key:'inputTokenUsage',
       responsive: ['lg'],
-      render: (val:number) => getTokenTemplate(val,0.002),
+      render: (val:number,record:ITokenUsage) => getTokenTemplate(val,record.inputTokenPrice),
     },
     {
       title: t('Output Token Usage'),
       dataIndex: 'outputTokenUsage',
+      key:'outputTokenUsage',
       responsive: ['lg'],
-      render: (val:number) => getTokenTemplate(val,0.002),
+      render: (val:number,record:ITokenUsage) => getTokenTemplate(val,record.outputTokenPrice),
     },
     {
       title: t('Total'),
       dataIndex: 'total',
+      key:'total',
       render: (total:number) => <span>$ {total.toFixed(4)}</span>,
     }
   ];
@@ -52,10 +56,11 @@ const PersonInfo:React.FC<IProps> = ()=>{
   const getTotal=()=>{
     const data=UserInfo.tokenUsage;
     if(data && data.length>0){
-      return data.reduce((prev,item)=>{
-        prev.total=prev.total+item.total;
-        return prev;
-      }).total.toFixed(4);
+      let total=0;
+      data.forEach(item=>{
+        total+=item.total;
+      })
+      return total.toFixed(4);
     }else{
       return 0;
     }

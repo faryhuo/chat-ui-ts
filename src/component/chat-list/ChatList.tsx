@@ -146,19 +146,19 @@ const ChatList: React.FC<IProps>  =({store}) => {
   const favoriteDataSouce=dataSouce.filter(item=>{
     return !!item.favorite && !isSameDay(item.date);
   })
+
+  const renderList=(source: ISessionMenu[])=>{
+      return <QueueAnim delay={300} interval={0} className="session-list-items" component="ul" type={['right', 'left']} leaveReverse>
+        {source.map((item: ISessionMenu) => renderItem(item))}
+      </QueueAnim>;
+  }
   return  (<div className="session-list-wrapper">
     <Divider>{t('Recent')}</Divider>
-    <QueueAnim  delay={500} interval={0} className="session-list-items" component="ul" type={['right', 'left']} leaveReverse>
-        {recnetDataSouce.map((item3:ISessionMenu) =>  renderItem(item3))}
-      </QueueAnim>
+      {renderList(recnetDataSouce)}
     <Divider>{t('Favorite')}</Divider>
-    <QueueAnim  delay={500} interval={0} className="session-list-items" component="ul" type={['right', 'left']} leaveReverse>
-        {favoriteDataSouce.map((item:ISessionMenu) =>renderItem(item))}
-      </QueueAnim>
+    {renderList(favoriteDataSouce)}
       <Divider>{t('History')}</Divider>
-      <QueueAnim  delay={500} interval={0} className="session-list-items" component="ul" type={['right', 'left']} leaveReverse>
-        {historyDataSouce.map((item2:ISessionMenu) =>  renderItem(item2))}
-      </QueueAnim>
+      {renderList(historyDataSouce)}
       <Modal
         open={open}
         title={t<string>("Share History")}

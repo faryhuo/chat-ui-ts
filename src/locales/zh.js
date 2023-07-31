@@ -36,6 +36,7 @@ const config = {
         "Don't submit multi time.":"不要重复提交"
     }
     ,
+    "price":"价格",
     "resent after":"重新发送",
     "Show All":"展开",
     "Hide":"缩小",

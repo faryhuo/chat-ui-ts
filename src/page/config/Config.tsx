@@ -35,11 +35,11 @@ const ConfigPage:React.FC<IProps> = observer(({config,store})=>{
               <ChatConfigForm config={config}></ChatConfigForm>
               </Card>
             </Panel>
-            <Panel header={t<string>("Code edits API Configuration")} key="3">
+            {/* <Panel header={t<string>("Code edits API Configuration")} key="3">
               <Card>
               <CodeEditConfigForm config={config}></CodeEditConfigForm>
               </Card>
-            </Panel>
+            </Panel> */}
             <Panel header={t<string>("Roles management")} key="4">
               <RoleConfigPage readonly={false}  config={config} store={store}></RoleConfigPage>
             </Panel>
