@@ -4,6 +4,7 @@ import config  from './AppConfig';
 import Fuse from 'fuse.js';
 import userProflie from "./UserProfile";
 import i18n from "../utils/i18n";
+import { IChatAPIConfig } from "./ChatConfig";
 //import prompts from '../data/prompt';
 export interface IRoleData{
     currentRoles:IRole[];
@@ -21,6 +22,8 @@ export interface  IRole{
     tags:string[];
     token?:string;
     favorite?:boolean;
+    setting?:IChatAPIConfig;
+    isCustomSetting:boolean;
 }
 
 const favorite="favorite";

@@ -4,6 +4,7 @@ import i18n from '../utils/i18n';
 import { isMobile } from 'react-device-detect';
 import apiSetting, { IAPISetting } from "./APISetting";
 import imageData, { IImageData } from "./ImageData";
+import { FormLayout } from "antd/es/form/Form";
 
 export interface IAppConfig {
     version: string;
@@ -31,7 +32,7 @@ export interface IAppConfig {
     clearConfig: () => void;
     clearHistory: () => void;
     iatRecorder: any;
-    formLayout: string;
+    formLayout: FormLayout ;
     isChinese: boolean;
     isEnglish: boolean;
 }
@@ -42,6 +43,8 @@ export interface ICodeEditsAPIConfig {
     temperature: number;
     top_p: number;
 }
+
+type configKey="colorPrimary" | "textLanguage" | "language" | "accent" | "style" 
 
 
 class AppConfig implements IAppConfig {
@@ -66,7 +69,7 @@ class AppConfig implements IAppConfig {
     //     return url;
     // }
 
-    get formLayout() {
+    get formLayout():FormLayout {
         return isMobile ? "vertical" : "horizontal"
     }
 
@@ -128,13 +131,17 @@ class AppConfig implements IAppConfig {
         this.type = type;
     }
 
+    setConfig(key:configKey,value:IAppConfig[configKey]){
+        this[key]=value;
+    }
 
     setConfigData(configJson: IAppConfig) {
         let item: keyof IAppConfig;
         for (item in configJson) {
             const configKey = ["colorPrimary", "textLanguage", "language", "accent", "style"]
             if (configKey.includes(item)) {
-                (this as any)[item] = configJson[item]
+                const key=item as configKey;
+                this.setConfig(key,configJson[key]);
             }
         }
         document.documentElement.style.setProperty('--color-primary', this.colorPrimary);
@@ -181,9 +188,7 @@ class AppConfig implements IAppConfig {
             document.documentElement.style.setProperty('--color-primary', config.colorPrimary);
             isNeedReoload = true;
         }
-        for (let item in config) {
-            (this as any)[item] = config[item];
-        }
+        this.setConfigData(config);
         localStorage[this.localConfigName] = JSON.stringify(this.getConfigJson());
         if (isNeedReoload) {
             window.location.reload();

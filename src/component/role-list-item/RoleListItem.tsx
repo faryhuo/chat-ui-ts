@@ -90,7 +90,7 @@ const RoleList:React.FC<IProps> = observer(({config,role,store,edit,readonly})=>
               </Space>
             </div>
             <div className="role-item-icon">
-                <FontAwesomeIcon icon={faArrowRightLong}  size="xl"></FontAwesomeIcon>
+                <FontAwesomeIcon icon={faArrowRightLong} beat  size="xl"></FontAwesomeIcon>
             </div>
           </Card>
       </div>)

@@ -53,7 +53,7 @@ const ChatConfigForm: React.FC<IProps> = ({config})=>{
         {contextHolder}      
       <Form
         form={form}
-        layout={config.formLayout as any}
+        layout={config.formLayout}
         labelCol={{ span: 4 }}
         wrapperCol={{ span: 14 }}
         initialValues={chatConfig.getAPIConfig()}

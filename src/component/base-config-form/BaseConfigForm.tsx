@@ -52,7 +52,7 @@ const BaseConfigForm: React.FC<IProps> = ({ config }) => {
   return (
     <Form
       form={form}
-      layout={config.formLayout as any}
+      layout={config.formLayout}
       labelCol={{ span: 4 }}
       wrapperCol={{ span: 12 }}
       initialValues={config.getConfigJson()}

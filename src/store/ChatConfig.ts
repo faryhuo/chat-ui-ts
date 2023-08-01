@@ -98,6 +98,10 @@ class ChatConfig implements IChatConfig {
             }
         }
     }
+    saveAPIConfigValue<K extends keyof IChatAPIConfig>(key:K,value:IChatAPIConfig[K]) {
+        this.apiConfig[key]=value;
+    }
+
 
     saveAPIConfig(config: IChatAPIConfig) {
         const configKeys = Object.keys(config) as Array<keyof IChatAPIConfig>;
@@ -109,7 +113,7 @@ class ChatConfig implements IChatConfig {
                 }
                 this.changeModel(config[item]);
             } else {
-                (this.apiConfig as any)[item] = config[item];
+                this.saveAPIConfigValue(item,config[item]);
             }
         });
         localStorage.setItem(this.localConfigName, JSON.stringify(this.getAPIConfig()));
