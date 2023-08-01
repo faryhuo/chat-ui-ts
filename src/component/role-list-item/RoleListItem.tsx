@@ -2,7 +2,7 @@ import React from 'react';
 import { Button,Card,Space,Popconfirm,Tag } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEdit,faTrash,faLightbulb,faStar} from '@fortawesome/free-solid-svg-icons'
+import { faEdit,faTrash,faLightbulb,faStar, faArrowRightLong} from '@fortawesome/free-solid-svg-icons'
 import { observer } from "mobx-react-lite";
 import roleData,{IRole} from "../../store/RoleData";
 import {IAppConfig} from '../../store/AppConfig';
@@ -69,7 +69,7 @@ const RoleList:React.FC<IProps> = observer(({config,role,store,edit,readonly})=>
     </Popconfirm>
   </div>;
 
-    return (<div className="role-list-item-wrapper">           
+    return (<div className={classNames("role-list-item-wrapper",{"readonly":!!readonly})}>           
                <Card title={<h4 className='role-title'>
                {config.isChinese?role.roleNameCN:role.roleName}</h4>}
           extra={
@@ -79,15 +79,18 @@ const RoleList:React.FC<IProps> = observer(({config,role,store,edit,readonly})=>
          hoverable={readonly}
               actions={readonly?[]:actionButtons}
           >
-            <div className={classNames("role-description",{"readonly":!!readonly})}>
+            <div className={"role-description"}>
               {config.isChinese?role.descriptionCN:role.description}
             </div>
-            <div className="role-tags">
+            <div className="role-item-tags">
               <Space size={[0, 8]} wrap>
                 {role.tags.map((tag,index)=>
                 <Tag  key={index} color="cyan">{t("tags."+tag)}</Tag>
                 )}
               </Space>
+            </div>
+            <div className="role-item-icon">
+                <FontAwesomeIcon icon={faArrowRightLong}  size="xl"></FontAwesomeIcon>
             </div>
           </Card>
       </div>)

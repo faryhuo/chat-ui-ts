@@ -59,7 +59,7 @@ const MessageItemChat : React.FC<IProps> = observer(({store,config,renderMessage
           </div>
           <div ref={messagesEndRef}/>
       </ScrollToBottom>
-      <ChatConfigList config={config} open={open} onClose={onClose}></ChatConfigList>
+      <ChatConfigList store={store}  open={open} onClose={onClose}></ChatConfigList>
       </Card>
       <div></div>
   </div>)

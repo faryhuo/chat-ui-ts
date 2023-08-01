@@ -8,7 +8,7 @@ import roleData,{IRoleData,IRole} from "./RoleData";
 import imageData from "./ImageData";
 import saveAs from 'file-saver';
 import { Location } from "react-router-dom";
-import chatConfig from "./ChatConfig";
+import chatConfig, { IChatAPIConfig } from "./ChatConfig";
 
 let encodeFun: any
 import('gpt-tokenizer').then(({encode})=>{
@@ -61,6 +61,7 @@ export interface  ISession{
     edit:boolean;
     isType:boolean;
     data:Array<ISessiondata>;
+    chatConfig?:IChatAPIConfig;
     role?:number;
     updateDate?:Date;
 }
@@ -91,7 +92,7 @@ export interface IMessage{
     changeType:(type: string)=>void;
     selectChat:(chatId: string)=>void;
     changeRole:(chatId: string,role: number | undefined)=>void;
-    role:number | undefined;
+    role:number | undefined | null;
     data:Array<ISessiondata>;
     getChatInfoByChatId:(chatId:string)=>ISession | null;
     sessionData:Array<ISession>;
@@ -119,7 +120,9 @@ export interface IMessage{
     roleData:IRoleData;
     hideLastData:(chatId:string)=>void;
     changeTypeByUrl:(location: Location)=>void;
-    share:(node: any)=>Promise<void>
+    share:(node: any)=>Promise<void>;
+    chatApiConfig:IChatAPIConfig;
+    setChatApiConfig:<K extends keyof IChatAPIConfig>(key: K, value: IChatAPIConfig[K])=>void;
 }
 
 
@@ -159,6 +162,7 @@ class MessageData implements  IMessage{
             hasHistory: action,
             changeMessage: action,
             checkChatId:action,
+            setChatApiConfig:action,
             loadDataFromFile: action.bound,
             reSentMsg:action.bound,
             callChatAPI:action.bound,
@@ -375,7 +379,8 @@ class MessageData implements  IMessage{
             isType:true,
             edit:false,
             favorite:false,
-            updateDate: new Date()
+            updateDate: new Date(),
+            chatConfig:chatConfig.apiConfig
         };
         this.session.push(sessionData);
         this.activeSession=chatId;
@@ -609,52 +614,68 @@ class MessageData implements  IMessage{
     }
 
     get role(){
-        let {type,activeSession,session}=this;
-        let role;
-        for(let i=0;i<session.length;i++){
-            let item=session[i];
-            if(item.type===type && item.chatId===activeSession){
-                role=item.role;
-                break;
-            }
+        const { type, activeSession, session } = this;
+        const sessionMatch = session.find(item => item.type === type && item.chatId === activeSession);
+        if (sessionMatch) {
+            return sessionMatch.role;
+        }else{
+            return null;
         }
-        return role;
     }
 
     clearCurrentData(){
-        let {type,activeSession,session}=this;
-        for(let i=0;i<session.length;i++){
-            let item=session[i];
-            if(item.type===type && item.chatId===activeSession){
-                item.data=[]
-            }
+        const { type, activeSession, session } = this;
+        const sessionMatch = session.find(item => item.type === type && item.chatId === activeSession);
+        if (sessionMatch) {
+            sessionMatch.data=[];
         }
     }
     getChatInfoByChatId(chatId:string):ISession | null{
         let {type,session}=this;
-        let data: ISession | null=null;
-        for(let i=0;i<session.length;i++){
-            let item=session[i];
-            if(item.type===type && item.chatId===chatId){
-                data=item;
-                break;
-            }
+        const sessionMatch = session.find(item => item.type === type && item.chatId === chatId);
+        if (sessionMatch) {
+           return sessionMatch
+        }else{
+            return null;
         }
-        return data;
+    }
+
+
+    setChatApiConfig<K extends keyof IChatAPIConfig>(key: K, value: IChatAPIConfig[K]) {
+        if(!userProflie.token && key==="model"){
+            userProflie.openPage();
+            return;
+        }
+        const { type, activeSession, session } = this;
+        const sessionMatch = session.find(item => item.type === type && item.chatId === activeSession);
+        if (sessionMatch) {
+            if (!sessionMatch.chatConfig) {
+                sessionMatch.chatConfig = Object.assign({},chatConfig.getAPIConfig());
+            }
+            sessionMatch.chatConfig[key] = value;
+        }
+    }
+
+    get chatApiConfig():IChatAPIConfig{
+        let {type,activeSession,session}=this;
+        let config:IChatAPIConfig =chatConfig.getAPIConfig();
+        const sessionMatch = session.find(item => item.type === type && item.chatId === activeSession);
+        if (sessionMatch && sessionMatch.chatConfig) {
+            config=sessionMatch.chatConfig;
+        }
+        return config;
     }
 
     get data():Array<ISessiondata>{
         let {type,activeSession,session}=this;
         let data: Array<ISessiondata>=[];
-        for(let i=0;i<session.length;i++){
-            let item=session[i];
-            if(item.type===type && item.chatId===activeSession){
-                data=item.data;
-                break;
-            }
+        const sessionMatch = session.find(item => item.type === type && item.chatId === activeSession);
+        if (sessionMatch && sessionMatch.data) {
+            data=sessionMatch.data;
         }
         return data;
     }
+
     get sessionData():Array<ISession>{
         return this.session;
     }
@@ -1041,7 +1062,7 @@ class MessageData implements  IMessage{
     }
 
     getChatParams(){
-        const chatAPIConfig=chatConfig.getAPIConfig();
+        const chatAPIConfig=this.chatApiConfig;
         let messageListData= this.getMessageListData();
         let chatTokens = this.encodeChat(messageListData)
         let model=chatAPIConfig.model;

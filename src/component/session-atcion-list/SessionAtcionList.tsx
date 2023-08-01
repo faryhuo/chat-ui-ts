@@ -46,9 +46,10 @@ const SessionAtcionList : React.FC<IProps> = observer(({store,config,onOpen})=>{
   
 
     const getSelectedItem=()=>{
-      if(chatConfig.apiConfig.temperature>0.7){
+      const apiConfig=store.chatApiConfig;
+      if(apiConfig.temperature>0.7){
         return options[2];
-      }else if(chatConfig.apiConfig.temperature<0.5){
+      }else if(apiConfig.temperature<0.5){
         return options[0];
       }else {
         return options[1];
@@ -67,7 +68,7 @@ const SessionAtcionList : React.FC<IProps> = observer(({store,config,onOpen})=>{
       const index=options.indexOf(e);
       const temperatureList=[0,0.6,1];
       if(index>=0){
-        chatConfig.apiConfig.temperature=temperatureList[index];
+        store.setChatApiConfig("temperature",temperatureList[index]);
       }
     }
 
@@ -84,9 +85,9 @@ const SessionAtcionList : React.FC<IProps> = observer(({store,config,onOpen})=>{
         //   defaultChecked={chatConfig.getAPIConfig().stream}
         // />);
         list.push(<Select key={4}  style={{width:180}}
-          className="option-btn"  onChange={(e)=>chatConfig.changeModel(e)}
+          className="option-btn"  onChange={(e)=>store.setChatApiConfig("model",e)}
         options={getModulesDataSource().map((item) => ({ label: item, value: item }))}
-        value={chatConfig.apiConfig.model}
+        value={store.chatApiConfig.model}
         dropdownRender={(menu) => (
           <>
             {menu}

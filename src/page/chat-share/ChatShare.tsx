@@ -28,7 +28,7 @@ const ChatShare: React.FC<IProps> = ()=>{
             const data:ISession=response.data.data;
             if(data){
                 setUUID(uuidFromUrl);
-                const sharePage=<SharePage topic={data.chatName?data.chatName:""} 
+                const sharePage=<SharePage chatApiConfig={data.chatConfig} topic={data.chatName?data.chatName:""} 
                 data={data.data} time={data.updateDate?data.updateDate:new Date()}></SharePage>
                 setContent(sharePage);
             }else{

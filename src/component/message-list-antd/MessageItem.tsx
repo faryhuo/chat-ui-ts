@@ -110,7 +110,7 @@ const messageItem2: React.FC<IProps> = observer(({store,config,renderMessage}) =
             </List>
             <div ref={messagesEndRef}/>
             </ScrollToBottom>
-            <ChatConfigList config={config} open={open} onClose={onClose}></ChatConfigList>
+            <ChatConfigList store={store}  open={open} onClose={onClose}></ChatConfigList>
       </Card>
     </div>
   );
