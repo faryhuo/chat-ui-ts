@@ -84,7 +84,7 @@ const RoleList:React.FC<IProps> = observer(({config,role,store,edit,readonly})=>
             </div>
             <div className="role-item-tags">
               <Space size={[0, 8]} wrap>
-                {role.tags.map((tag,index)=>
+                {role.tags && role.tags.map((tag,index)=>
                 <Tag  key={index} color="cyan">{t("tags."+tag)}</Tag>
                 )}
               </Space>

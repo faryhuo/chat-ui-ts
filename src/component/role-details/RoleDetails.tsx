@@ -49,62 +49,62 @@ const RoleDetails: React.FC<IProps> = observer(({ store, config, role, handleCan
     });
   };
 
-  const save = () => {
-    form.validateFields();
-    if (form.getFieldsError().length > 0) {
-      return;
-    }
-    if (role) {
-      if (config.isChinese) {
-        role.descriptionCN = description;
-        role.roleNameCN = name;
+  const save = async () => {
+    form.validateFields().then(()=>{
+      if (role) {
+        if (config.isChinese) {
+          role.descriptionCN = description;
+          role.roleNameCN = name;
+        } else {
+          role.description = description;
+          role.roleName = name;
+        }
+        if (tags) {
+          role.tags = tags;
+        }
+        role.isCustomSetting=isCustomSetting;
+        if(isCustomSetting){
+          role.setting=settingForm.getFieldsValue();
+        }else{
+          role.setting=undefined;
+        }
+        RoleData.addRole(role, token).then(() => {
+          success();
+          handleCancel();
+        }).catch((data) => {
+          fail(data)
+        });
       } else {
-        role.description = description;
-        role.roleName = name;
+        let newRole: IRole = {
+          descriptionCN: "",
+          roleNameCN: "",
+          roleId: -1,
+          roleName: "",
+          description: "",
+          tags: tags,
+          isCustomSetting: false
+        };
+        if (config.isChinese) {
+          newRole.descriptionCN = description;
+          newRole.roleNameCN = name;
+        } else {
+          newRole.description = description;
+          newRole.roleName = name;
+        }
+        newRole.isCustomSetting=isCustomSetting;
+        if(isCustomSetting){
+          newRole.setting=settingForm.getFieldsValue();
+        }
+        RoleData.addRole(newRole, token).then(() => {
+          success();
+          handleCancel();
+        }).catch((data) => {
+          fail(data)
+        });
       }
-      if (tags) {
-        role.tags = tags;
-      }
-      role.isCustomSetting=isCustomSetting;
-      if(isCustomSetting){
-        role.setting=settingForm.getFieldsValue();
-      }else{
-        role.setting=undefined;
-      }
-      RoleData.addRole(role, token).then(() => {
-        success();
-        handleCancel();
-      }).catch((data) => {
-        fail(data)
-      });
-    } else {
-      let newRole: IRole = {
-        descriptionCN: "",
-        roleNameCN: "",
-        roleId: -1,
-        roleName: "",
-        description: "",
-        tags: tags,
-        isCustomSetting: false
-      };
-      if (config.isChinese) {
-        newRole.descriptionCN = description;
-        newRole.roleNameCN = name;
-      } else {
-        newRole.description = description;
-        newRole.roleName = name;
-      }
-      newRole.isCustomSetting=isCustomSetting;
-      if(isCustomSetting){
-        newRole.setting=settingForm.getFieldsValue();
-      }
-      RoleData.addRole(newRole, token).then(() => {
-        success();
-        handleCancel();
-      }).catch((data) => {
-        fail(data)
-      });
-    }
+    }).catch(()=>{
+
+    });
   }
 
   const getInitValues = (role: IRole | undefined) => {
@@ -114,7 +114,7 @@ const RoleDetails: React.FC<IProps> = observer(({ store, config, role, handleCan
         description: config.isChinese ? role.descriptionCN : role.description,
         tags: role.tags,
         isCustomSetting: role.isCustomSetting,
-        setting: role.setting
+        setting: role.setting?role.setting:chatConfig.apiConfig
       }
     } else {
       return {

@@ -409,7 +409,8 @@ class MessageData implements IMessage {
             edit: false,
             role: role.roleId,
             favorite: false,
-            updateDate: new Date()
+            updateDate: new Date(),
+            chatConfig:role.setting?role.setting:chatConfig.getAPIConfig()
         };
         this.session.push(sessionData);
         this.save(chatId);
