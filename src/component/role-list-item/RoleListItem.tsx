@@ -71,7 +71,7 @@ const RoleList:React.FC<IProps> = observer(({config,role,store,edit,readonly})=>
 
     return (<div className={classNames("role-list-item-wrapper",{"readonly":!!readonly})}>           
                <Card title={<h4 className='role-title'>
-               {config.isChinese?role.roleNameCN:role.roleName}</h4>}
+               {role.roleName}</h4>}
           extra={
             readonly?false:headerBtn
          }
@@ -80,7 +80,7 @@ const RoleList:React.FC<IProps> = observer(({config,role,store,edit,readonly})=>
               actions={readonly?[]:actionButtons}
           >
             <div className={"role-description"}>
-              {config.isChinese?role.descriptionCN:role.description}
+              {role.description}
             </div>
             <div className="role-item-tags">
               <Space size={[0, 8]} wrap>

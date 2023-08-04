@@ -16,14 +16,13 @@ export interface IRoleData{
 export interface  IRole{
     roleId:number;
     description:string;
-    descriptionCN:string;
-    roleNameCN:string;
     roleName:string;
     tags:string[];
     token?:string;
     favorite?:boolean;
     setting?:IChatAPIConfig;
     isCustomSetting:boolean;
+    language:string;
 }
 
 const favorite="favorite";
@@ -103,11 +102,11 @@ class RoleData implements IRoleData{
       }
       
       getRoleName(role: IRole) {
-        return config.isChinese ? role.roleNameCN : role.roleName;
+        return  role.roleName;
       }
       
       getDescription(role: IRole) {
-        return config.isChinese ? role.descriptionCN : role.description;
+        return role.description;
       }
       
       hasMatchingTag(role: IRole) {
@@ -129,8 +128,7 @@ class RoleData implements IRoleData{
         tags.push("all");
         tags.push(favorite);
         this.roles.forEach((role)=>{
-            if(!!(config.isChinese?role.roleNameCN:role.roleName) && 
-            !!(config.isChinese?role.descriptionCN:role.description)){
+            if(!!(role.roleName) &&  !!(role.description)){
                 if(role.tags && role.tags.length){
                     role.tags.forEach(tag=>{
                         if(!tags.includes(tag)){
@@ -166,7 +164,7 @@ class RoleData implements IRoleData{
     checkRoleIsExisting(name:string){
         let result=false;
         for(let i=0;i<this.currentRoles.length;i++){
-            const currentRoleName=config.isChinese?this.currentRoles[i].roleNameCN:this.currentRoles[i].roleName;
+            const currentRoleName=this.currentRoles[i].roleName;
             if(name===currentRoleName){
                 result=true;
                 break;
@@ -179,7 +177,7 @@ class RoleData implements IRoleData{
     getContentByRole(role: number){
         for(let i=0;i<this.roles.length;i++){
             if(this.roles[i].roleId===role){
-                return config.isChinese?this.roles[i]?.descriptionCN:this.roles[i]?.description;
+                return this.roles[i]?.description;
             }
         }
         return "";
@@ -188,7 +186,7 @@ class RoleData implements IRoleData{
     fetchData() {
         axios({
             method: "get",
-            url: config.api.chatRoleUrl+"?uuid="+new Date().getTime(),
+            url: config.api.chatRoleUrl+`?language=${config.textLanguage}&uuid=${new Date().getTime()}`,
             headers: {
               'Content-Type': 'application/json;charset=UTF-8'
             }

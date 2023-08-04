@@ -188,6 +188,9 @@ class AppConfig implements IAppConfig {
             document.documentElement.style.setProperty('--color-primary', config.colorPrimary);
             isNeedReoload = true;
         }
+        if(this.textLanguage !== config.textLanguage){
+            isNeedReoload = true;
+        }
         this.setConfigData(config);
         localStorage[this.localConfigName] = JSON.stringify(this.getConfigJson());
         if (isNeedReoload) {

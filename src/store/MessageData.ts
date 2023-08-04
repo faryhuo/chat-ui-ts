@@ -397,13 +397,13 @@ class MessageData implements IMessage {
                 isSys: false,
                 isDefault: true
             };
-            tmp.text = config.isChinese ? role.descriptionCN : role.description;
+            tmp.text = role.description;
             data.push(tmp)
         }
         const sessionData: ISession = {
             type: "chat",
             chatId: chatId,
-            chatName: config.isChinese ? role.roleNameCN : role.roleName,
+            chatName: role.roleName,
             data: data,
             isType: true,
             edit: false,
@@ -601,7 +601,7 @@ class MessageData implements IMessage {
                 let chatName;
                 roleData.roles.forEach((sItem) => {
                     if (role === sItem.roleId) {
-                        chatName = config.isChinese ? sItem.roleNameCN : sItem.roleName;
+                        chatName = sItem.roleName;
                         if (this.data && this.data.length && config.isSlowMsg4AddChat) {
                             this.data[0].text = this.systemText;
                             this.data[0].isSys = false;

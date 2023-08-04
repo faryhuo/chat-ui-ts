@@ -52,13 +52,8 @@ const RoleDetails: React.FC<IProps> = observer(({ store, config, role, handleCan
   const save = async () => {
     form.validateFields().then(()=>{
       if (role) {
-        if (config.isChinese) {
-          role.descriptionCN = description;
-          role.roleNameCN = name;
-        } else {
-          role.description = description;
-          role.roleName = name;
-        }
+        role.description = description;
+        role.roleName = name;
         if (tags) {
           role.tags = tags;
         }
@@ -76,21 +71,15 @@ const RoleDetails: React.FC<IProps> = observer(({ store, config, role, handleCan
         });
       } else {
         let newRole: IRole = {
-          descriptionCN: "",
-          roleNameCN: "",
           roleId: -1,
           roleName: "",
           description: "",
           tags: tags,
-          isCustomSetting: false
+          isCustomSetting: false,
+          language:config.textLanguage
         };
-        if (config.isChinese) {
-          newRole.descriptionCN = description;
-          newRole.roleNameCN = name;
-        } else {
-          newRole.description = description;
-          newRole.roleName = name;
-        }
+        newRole.description = description;
+        newRole.roleName = name;
         newRole.isCustomSetting=isCustomSetting;
         if(isCustomSetting){
           newRole.setting=settingForm.getFieldsValue();
@@ -110,8 +99,8 @@ const RoleDetails: React.FC<IProps> = observer(({ store, config, role, handleCan
   const getInitValues = (role: IRole | undefined) => {
     if (role) {
       return {
-        name: config.isChinese ? role.roleNameCN : role.roleName,
-        description: config.isChinese ? role.descriptionCN : role.description,
+        name:  role.roleName,
+        description: role.description,
         tags: role.tags,
         isCustomSetting: role.isCustomSetting,
         setting: role.setting?role.setting:chatConfig.apiConfig
@@ -197,7 +186,7 @@ const RoleDetails: React.FC<IProps> = observer(({ store, config, role, handleCan
         <Form.Item label={t<string>("Name")} name="name"
           rules={[{ required: true }, () => ({
             validator(_, value) {
-              if (!value || value === (config.isChinese ? role?.roleNameCN : role?.roleName)) {
+              if (!value || value === role?.roleName) {
                 return Promise.resolve();
               }
               if (!RoleData.checkRoleIsExisting(value)) {
