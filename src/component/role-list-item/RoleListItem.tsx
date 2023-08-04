@@ -1,53 +1,53 @@
 import React from 'react';
-import { Button,Card,Space,Popconfirm,Tag } from 'antd';
+import { Button, Card, Space, Popconfirm, Tag } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEdit,faTrash,faLightbulb,faStar, faArrowRightLong} from '@fortawesome/free-solid-svg-icons'
+import { faEdit, faTrash, faLightbulb, faStar, faArrowRightLong } from '@fortawesome/free-solid-svg-icons'
 import { observer } from "mobx-react-lite";
-import roleData,{IRole} from "../../store/RoleData";
-import {IAppConfig} from '../../store/AppConfig';
-import {IMessage} from '../../store/MessageData';
+import roleData, { IRole } from "../../store/RoleData";
+import { IAppConfig } from '../../store/AppConfig';
+import { IMessage } from '../../store/MessageData';
 import './RoleListItem.css'
 import userProfile from '../../store/UserProfile';
 import classNames from 'classnames';
 
 
-type IProps={
-  role:IRole;
-  config:IAppConfig;
-  store:IMessage;
-  edit:(role:IRole)=>void;
-  readonly:boolean
+type IProps = {
+  role: IRole;
+  config: IAppConfig;
+  store: IMessage;
+  edit: (role: IRole) => void;
+  readonly: boolean
 }
-const RoleList:React.FC<IProps> = observer(({config,role,store,edit,readonly})=>{
+const RoleList: React.FC<IProps> = observer(({ config, role, store, edit, readonly }) => {
 
-    const {t} =useTranslation();
+  const { t } = useTranslation();
 
-    const useRole=(role:IRole)=>{
-      const chatId=store.addChatWithRole(role);
-      window.location.hash=`#/chat/${chatId}`;
+  const useRole = (role: IRole) => {
+    const chatId = store.addChatWithRole(role);
+    window.location.hash = `#/chat/${chatId}`;
+  }
+
+  const onDelete = (roleId: number) => {
+    if (!userProfile.isLogin) {
+      userProfile.openPage();
+      return;
     }
-
-    const onDelete=(roleId: number)=>{
-      if(!userProfile.isLogin){
-        userProfile.openPage();
-        return;
-      }
-      roleData.deleteRole(roleId);
-    }
+    roleData.deleteRole(roleId);
+  }
 
 
-    const buttonStyle={
-      width:"100%",
-      fontSize:"16px"
-    }
+  const buttonStyle = {
+    width: "100%",
+    fontSize: "16px"
+  }
 
   const actionButtons = [
     <Button icon={<FontAwesomeIcon icon={faLightbulb} />}
-      style={buttonStyle} type="link" onClick={() => { useRole(role); } }>
+      style={buttonStyle} type="link" onClick={() => { useRole(role); }}>
       &nbsp;{t('Use')}</Button>,
     <Button icon={<FontAwesomeIcon icon={faEdit} />}
-      onClick={() => { edit(role); } }
+      onClick={() => { edit(role); }}
       style={buttonStyle} type="link">&nbsp;{t('Edit')}</Button>,
   ];
 
@@ -69,31 +69,31 @@ const RoleList:React.FC<IProps> = observer(({config,role,store,edit,readonly})=>
     </Popconfirm>
   </div>;
 
-    return (<div className={classNames("role-list-item-wrapper",{"readonly":!!readonly})}>           
-               <Card title={<h4 className='role-title'>
-               {role.roleName}</h4>}
-          extra={
-            readonly?false:headerBtn
-         }
-         onClick={()=>{readonly &&  useRole(role)}}
-         hoverable={readonly}
-              actions={readonly?[]:actionButtons}
-          >
-            <div className={"role-description"}>
-              {role.description}
-            </div>
-            <div className="role-item-tags">
-              <Space size={[0, 8]} wrap>
-                {role.tags && role.tags.map((tag,index)=>
-                <Tag  key={index} color="cyan">{t("tags."+tag)}</Tag>
-                )}
-              </Space>
-            </div>
-            <div className="role-item-icon">
-                <FontAwesomeIcon icon={faArrowRightLong} beat  size="xl"></FontAwesomeIcon>
-            </div>
-          </Card>
-      </div>)
+  return (<div className={classNames("role-list-item-wrapper", { "readonly": !!readonly })}>
+    <Card title={<h4 className='role-title'>
+      {role.roleName}</h4>}
+      extra={
+        readonly ? false : headerBtn
+      }
+      onClick={() => { readonly && useRole(role) }}
+      hoverable={readonly}
+      actions={readonly ? [] : actionButtons}
+    >
+      <div className={"role-description"}>
+        {role.description}
+      </div>
+      <div className="role-item-tags">
+        <Space size={[0, 8]} wrap>
+          {role.tags && role.tags.map((tag, index) =>
+            <Tag key={index} color="cyan">{t("tags." + tag)}</Tag>
+          )}
+        </Space>
+      </div>
+      <div className="role-item-icon">
+        <FontAwesomeIcon icon={faArrowRightLong} beat size="xl"></FontAwesomeIcon>
+      </div>
+    </Card>
+  </div>)
 })
 
 export default RoleList;

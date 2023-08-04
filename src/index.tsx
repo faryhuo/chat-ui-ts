@@ -3,21 +3,21 @@ import './index.css';
 import './utils/i18n';
 //import reportWebVitals from './reportWebVitals';
 import Main from './page/main/Main';
-import { HashRouter as  Router } from 'react-router-dom';
+import { HashRouter as Router } from 'react-router-dom';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-    <Router>
-      <Main></Main>
-      <a className='icp_link'target='blank' href='https://beian.miit.gov.cn/#/Integrated/index'>粤ICP备2023068902号-1</a>    
-    </Router>
+  <Router>
+    <Main></Main>
+    <a className='icp_link' target='blank' href='https://beian.miit.gov.cn/#/Integrated/index'>粤ICP备2023068902号-1</a>
+  </Router>
 );
 
-setTimeout(()=>{
-  const imageDom=document.getElementById('image');
-  if(imageDom!=null){
+setTimeout(() => {
+  const imageDom = document.getElementById('image');
+  if (imageDom != null) {
     imageDom.remove();
   }
 });
