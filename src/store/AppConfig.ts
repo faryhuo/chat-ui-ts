@@ -182,13 +182,11 @@ class AppConfig implements IAppConfig {
         if (config.textLanguage && this.textLanguage !== config.textLanguage) {
             this.textLanguage = config.textLanguage;
             i18n.changeLanguage(this.textLanguage);
+            isNeedReoload = true;
         }
         if (config.colorPrimary && this.colorPrimary !== config.colorPrimary) {
             this.colorPrimary = config.colorPrimary;
             document.documentElement.style.setProperty('--color-primary', config.colorPrimary);
-            isNeedReoload = true;
-        }
-        if(this.textLanguage !== config.textLanguage){
             isNeedReoload = true;
         }
         this.setConfigData(config);
