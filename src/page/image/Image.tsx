@@ -1,15 +1,8 @@
-import {useEffect, useState} from 'react';
-import {
 
-    MessageList,
-    SendButton
-} from '../../component';
-import {Button} from 'antd';
 import {IAppConfig} from '../../store/AppConfig';
 import {IMessage} from '../../store/MessageData';
-import './Chat.css'
-import { observer } from "mobx-react"
-import { useParams } from 'react-router-dom';
+import './Image.css'
+import { observer } from "mobx-react-lite"
 
 type IProps={
   config:IAppConfig;

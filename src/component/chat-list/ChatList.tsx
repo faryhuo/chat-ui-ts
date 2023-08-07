@@ -3,7 +3,6 @@ import type { MenuProps } from 'antd';
 import './ChatList.css';
 import { observer } from "mobx-react-lite";
 import icon from './favicon-32x32.png';
-import icon2 from './ai_image.png';
 import { Input, Modal } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { IMessage, ISessionMenu } from '../../store/MessageData';
@@ -105,7 +104,7 @@ const ChatList: React.FC<IProps> = ({ store }) => {
       {!item.edit ? (
         <Link className="session-item-link" to={`/${store.type}/${item.key}`}>
           <div className="icon">
-            <Avatar src={store.type === "chat" ? icon : icon2} />
+            <Avatar src={icon} />
           </div>
           <div className="content">
             <div className="session-name">{item.name}</div>

@@ -10,7 +10,6 @@ import ChatConfigForm from './chat-config-form/ChatConfigForm';
 import CodeEditConfigForm from './code-edit-config-form/CodeEditConfigForm';
 import Upload from './upload/Upload';
 import SendInput from './mutli-input-send/SendInput'
-import ImageSend from './image-input-send/ImageSend';
 import ConfigActionBtn from './config-action-btn/ConfigActionBtn';
 import RoleList from './role-list/RoleList';
 
@@ -26,7 +25,6 @@ export {
     ChatConfigForm,
     Upload,
     SendInput,
-    ImageSend,
     CodeEditConfigForm,
     ConfigActionBtn,
     RoleList

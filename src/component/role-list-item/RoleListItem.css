@@ -9,6 +9,8 @@
 }
 .role-list-item-wrapper .ant-card:hover{
     border-color:var(--color-primary);
+    transition: transform 0.5s;
+    transform: scale(1.05);
 }
 
 .role-list-item-wrapper.readonly:hover .role-item-icon{

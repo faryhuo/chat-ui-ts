@@ -120,7 +120,7 @@ const Header: React.FC<IProps> = observer(({store,config}) => {
   return (
   <div className="menu-header">
     <div className="action-list">
-      {!config.hideMenuTypeList.includes(store.type) &&
+      {store.type==="chat" &&
       <Button
           icon={config.isSlowLeftMenu?<FontAwesomeIcon icon={faOutdent} />:<FontAwesomeIcon rotation={180} icon={faOutdent}  />}
           onClick={()=>{config.triggerMenu()}}

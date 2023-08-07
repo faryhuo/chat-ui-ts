@@ -23,26 +23,6 @@ class MessageList extends Component<IProps> {
         if (item.text) {
             return <div className={classs}><pre style={{ maxWidth: 700, margin: 0, whiteSpace: 'break-spaces' }}>{item.text}</pre>
             </div>
-        } else if (item.code) {
-            return <div className={classs}>
-                <div className="chat-code-content">
-                    <Markdown content={item.code}></Markdown>
-                </div>
-            </div>
-        }
-        if (type === "image" || type === "image_edit") {
-            return this.renderSysImage(item.image);
-        } else if (type === "code") {
-            let newChoices: { message: { content: string; }; }[] = [];
-            if (item.choices && item.choices.length) {
-                item.choices.map((subItem) => {
-                    newChoices.push({
-                        message: { content: "```" + subItem.message.content + "```" }
-                    });
-                    return true;
-                });
-            }
-            return this.renderSysChat(newChoices, classs);
         } else {
             return this.renderSysChat(item.choices, classs);
         }

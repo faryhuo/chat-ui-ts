@@ -19,29 +19,25 @@ type IProps={
 }
 //const AsyncChat = asyncComponent(() => import ('../chat/Chat'));
 // const AsyncCode= asyncComponent(() => import ('../code/Code'));
-const AsyncImageEdit= asyncComponent(() => import ('../image-edit/ImageEdit'));
 const AsyncFrame= asyncComponent(() => import ('../iframe/Iframe'));
 const AsyncConfigPage= asyncComponent(() => import ('../config/Config'));
 const AsyncPersonInfoPage= asyncComponent(() => import ('../person-info/PersonInfo'));
+ const AsyncImage= asyncComponent(() => import ('../image/Image'));
 
 const pageList=[{
     path:"/chat/:chatId",
     component:Chat
 },{
     path:"/image",
-    component:Chat
+    component:AsyncImage
 },{
     path:"/image/:chatId",
-    component:Chat
+    component:AsyncImage
 },
 // {
 //     path:"/code",
 //     component:AsyncCode
 // },
-{
-    path:"/image_edit",
-    component:AsyncImageEdit
-},
 {
     path:"/config/:id",
     component:AsyncConfigPage

@@ -35,8 +35,6 @@ export interface ISessiondata {
     hasShowDetails?: boolean;
     text?: string;
     choices?: Ichoices[] | null;
-    code?: any;
-    image?: IImage;
     stream?: boolean;
     end?: boolean;
     history?: any;
@@ -56,7 +54,6 @@ export interface ISessionMenu {
 export interface ISession {
     favorite: boolean;
     chatId: string;
-    type: string;
     chatName?: string;
     edit: boolean;
     isType: boolean;
@@ -96,7 +93,6 @@ export interface IMessage {
     data: Array<ISessiondata>;
     getChatInfoByChatId: (chatId: string) => ISession | null;
     sessionData: Array<ISession>;
-    currentSession: Array<ISession>;
     sessionList: ISessionMenu[];
     getMessageListData: () => any;
     enableType: (chatId: string) => void;
@@ -256,8 +252,8 @@ class MessageData implements IMessage {
                     }
                 }
             })
-            if (this.currentSession.length) {
-                this.activeSession = this.currentSession[this.currentSession.length - 1].chatId;
+            if (this.sessionData.length) {
+                this.activeSession = this.sessionData[this.sessionData.length - 1].chatId;
             } else {
                 this.activeSession = "";
             }
@@ -269,13 +265,8 @@ class MessageData implements IMessage {
     }
 
     changeMessage(rowIndex: number, msgIndex: number) {
-        if (this.type === "image") {
-            this.data[rowIndex].image = this.data[rowIndex].history[msgIndex];
-            this.data[rowIndex].currentIndex = msgIndex;
-        } else {
-            this.data[rowIndex].choices = this.data[rowIndex].history[msgIndex];
-            this.data[rowIndex].currentIndex = msgIndex;
-        }
+        this.data[rowIndex].choices = this.data[rowIndex].history[msgIndex];
+        this.data[rowIndex].currentIndex = msgIndex;
     }
 
     regenerateResponse() {
@@ -283,45 +274,21 @@ class MessageData implements IMessage {
         let chatId = this.activeSession + "";
         this.disableType(chatId);
         try {
-            if (this.type === "image") {
-                const msg = this.data[this.data.length - 1].text;
-                if (!msg) {
-                    return;
-                }
-                this.callImageAPI(chatId, msg).then(() => {
-                    this.sessionData.forEach((item) => {
-                        if (item.chatId === chatId) {
-                            const lastData = item.data[item.data.length - 1];
-                            if (oldMsg && !oldMsg.history) {
-                                lastData.history = [oldMsg?.image];
-                            } else {
-                                lastData.history = oldMsg?.history;
-                            }
-                            lastData.history.push(lastData.image);
-                            lastData.currentIndex = lastData.history.length - 1;
-                            if (!userProflie.isLogin) {
-                                localStorage[this.localSessionName] = JSON.stringify(this.sessionData);
-                            }
+            this.callChatAPINotSave(chatId).then(() => {
+                this.sessionData.forEach((item) => {
+                    if (item.chatId === chatId) {
+                        const lastData = item.data[item.data.length - 1];
+                        if (oldMsg && !oldMsg.history) {
+                            lastData.history = [oldMsg?.choices];
+                        } else {
+                            lastData.history = oldMsg?.history;
                         }
-                    });
-                })
-            } else {
-                this.callChatAPINotSave(chatId).then(() => {
-                    this.sessionData.forEach((item) => {
-                        if (item.chatId === chatId) {
-                            const lastData = item.data[item.data.length - 1];
-                            if (oldMsg && !oldMsg.history) {
-                                lastData.history = [oldMsg?.choices];
-                            } else {
-                                lastData.history = oldMsg?.history;
-                            }
-                            lastData.history.push(lastData.choices);
-                            lastData.currentIndex = lastData.history.length - 1;
-                            this.save(chatId);
-                        }
-                    });
+                        lastData.history.push(lastData.choices);
+                        lastData.currentIndex = lastData.history.length - 1;
+                        this.save(chatId);
+                    }
                 });
-            }
+            });
         } catch (e) {
             this.enableType(chatId);
         }
@@ -372,7 +339,6 @@ class MessageData implements IMessage {
             data.push(tmp)
         }
         const sessionData: ISession = {
-            type: this.type,
             chatId: chatId,
             chatName: "New Chat",
             data: data,
@@ -401,7 +367,6 @@ class MessageData implements IMessage {
             data.push(tmp)
         }
         const sessionData: ISession = {
-            type: "chat",
             chatId: chatId,
             chatName: role.roleName,
             data: data,
@@ -410,7 +375,7 @@ class MessageData implements IMessage {
             role: role.roleId,
             favorite: false,
             updateDate: new Date(),
-            chatConfig:role.setting?role.setting:chatConfig.getAPIConfig()
+            chatConfig: role.setting ? role.setting : chatConfig.getAPIConfig()
         };
         this.session.push(sessionData);
         this.save(chatId);
@@ -433,11 +398,11 @@ class MessageData implements IMessage {
     }
 
     isNeedStream(chatId: string): boolean {
-        let { type, session } = this;
+        let { session } = this;
         let data: Array<ISessiondata> = [];
         for (let i = 0; i < session.length; i++) {
             let item = session[i];
-            if (item.type === type && item.chatId === chatId) {
+            if (item.chatId === chatId) {
                 data = item.data;
                 break;
             }
@@ -511,12 +476,12 @@ class MessageData implements IMessage {
         if (!chatId) {
             chatId = this.activeSession;
         }
-        let { type, session } = this;
+        let { session } = this;
         let data: ISessiondata[] = [];
         let curentItem: ISession | null = null;
         for (let i = 0; i < session.length; i++) {
             let item = session[i];
-            if (item.type === type && item.chatId === chatId) {
+            if (item.chatId === chatId) {
                 data = item.data;
                 curentItem = item;
                 item.updateDate = new Date();
@@ -538,14 +503,14 @@ class MessageData implements IMessage {
     clear(chatId: string) {
         for (let i = 0; i < this.session.length; i++) {
             let item = this.session[i];
-            if (item.type === this.type && item.chatId === chatId) {
+            if (item.chatId === chatId) {
                 //remove(this.session,i)
                 this.session.splice(i, 1);
                 break;
             }
         }
-        if (this.currentSession.length) {
-            this.activeSession = this.currentSession[this.currentSession.length - 1].chatId;
+        if (this.sessionData.length) {
+            this.activeSession = this.sessionData[this.sessionData.length - 1].chatId;
         } else {
             this.activeSession = "";
         }
@@ -590,10 +555,10 @@ class MessageData implements IMessage {
     }
 
     changeRole(chatId: string, role: number | undefined) {
-        let { type, session } = this;
+        let { session } = this;
         for (let i = 0; i < session.length; i++) {
             let item = session[i];
-            if (item.type === type && item.chatId === chatId) {
+            if (item.chatId === chatId) {
                 item.role = role;
                 if (!role) {
                     item.chatName = "New Chat";
@@ -615,8 +580,8 @@ class MessageData implements IMessage {
     }
 
     get role() {
-        const { type, activeSession, session } = this;
-        const sessionMatch = session.find(item => item.type === type && item.chatId === activeSession);
+        const { activeSession, session } = this;
+        const sessionMatch = session.find(item => item.chatId === activeSession);
         if (sessionMatch) {
             return sessionMatch.role;
         } else {
@@ -625,15 +590,15 @@ class MessageData implements IMessage {
     }
 
     clearCurrentData() {
-        const { type, activeSession, session } = this;
-        const sessionMatch = session.find(item => item.type === type && item.chatId === activeSession);
+        const { activeSession, session } = this;
+        const sessionMatch = session.find(item => item.chatId === activeSession);
         if (sessionMatch) {
             sessionMatch.data = [];
         }
     }
     getChatInfoByChatId(chatId: string): ISession | null {
-        let { type, session } = this;
-        const sessionMatch = session.find(item => item.type === type && item.chatId === chatId);
+        let { session } = this;
+        const sessionMatch = session.find(item => item.chatId === chatId);
         if (sessionMatch) {
             return sessionMatch
         } else {
@@ -647,8 +612,8 @@ class MessageData implements IMessage {
             userProflie.openPage();
             return;
         }
-        const { type, activeSession, session } = this;
-        const sessionMatch = session.find(item => item.type === type && item.chatId === activeSession);
+        const { activeSession, session } = this;
+        const sessionMatch = session.find(item => item.chatId === activeSession);
         if (sessionMatch) {
             if (!sessionMatch.chatConfig) {
                 sessionMatch.chatConfig = Object.assign({}, chatConfig.getAPIConfig());
@@ -658,9 +623,9 @@ class MessageData implements IMessage {
     }
 
     get chatApiConfig(): IChatAPIConfig {
-        let { type, activeSession, session } = this;
+        let { activeSession, session } = this;
         let config: IChatAPIConfig = chatConfig.getAPIConfig();
-        const sessionMatch = session.find(item => item.type === type && item.chatId === activeSession);
+        const sessionMatch = session.find(item => item.chatId === activeSession);
         if (sessionMatch && sessionMatch.chatConfig) {
             config = sessionMatch.chatConfig;
         }
@@ -668,9 +633,9 @@ class MessageData implements IMessage {
     }
 
     get data(): Array<ISessiondata> {
-        let { type, activeSession, session } = this;
+        let { activeSession, session } = this;
         let data: Array<ISessiondata> = [];
-        const sessionMatch = session.find(item => item.type === type && item.chatId === activeSession);
+        const sessionMatch = session.find(item => item.chatId === activeSession);
         if (sessionMatch && sessionMatch.data) {
             data = sessionMatch.data;
         }
@@ -681,18 +646,9 @@ class MessageData implements IMessage {
         return this.session;
     }
 
-    get currentSession(): Array<ISession> {
-        return this.session.filter((item) => {
-            return item.type === this.type;
-        })
-    }
-
     get sessionList(): ISessionMenu[] {
         let arr: ISessionMenu[] = [];
         this.session.forEach((obj) => {
-            if (obj.type !== this.type) {
-                return true;
-            }
             let item: any = {};
             item.name = obj.chatName ? obj.chatName : "New Chat";
             item.key = obj.chatId;

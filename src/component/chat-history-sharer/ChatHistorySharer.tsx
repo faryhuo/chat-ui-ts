@@ -47,7 +47,6 @@ const ChatHistorySharer: React.FC<IProps> = observer(({ data, selects, topic, ti
       isType: false,
       edit: false,
       chatId: "",
-      type: "chat",
       chatName: topic,
       data: data.filter((value, index) => {
         return selects.includes(index);

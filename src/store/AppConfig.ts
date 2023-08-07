@@ -53,7 +53,7 @@ class AppConfig implements IAppConfig {
     style = "chat";
     localConfigName = `config_${this.version}`;
     type = "";
-    hideMenuTypeList = ["tips", "config", "sd", "share", "person"]
+    hideMenuTypeList = ["image","tips", "config", "sd", "share", "person"]
     isSlowLeftMenu = isMobile ? false : true;
     isMobile = isMobile;
     api = apiSetting
