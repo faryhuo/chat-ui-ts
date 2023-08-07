@@ -1,5 +1,16 @@
-.message-page .message-stop-btn{
-    position: fixed;
-    left: 50%;
-    z-index: 10;
+.ai-image-page .ant-layout-sider {
+    background: #e5e7eb;
+    padding: 10px;
+}
+.ai-image-page-content{
+    background: #fff;
+    padding: 10px;
+}
+.ai-image-page-content .ant-layout-header{
+    background: #fff;
+}
+
+.ai-image-page-content-header span{
+    font-size: 16px;
+    font-weight: 600;
 }

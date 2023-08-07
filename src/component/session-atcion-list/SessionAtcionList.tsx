@@ -25,12 +25,6 @@ const SessionAtcionList: React.FC<IProps> = observer(({ store, config, onOpen })
     t('Creative')
   ];
 
-  const imageSizeList = [
-    t('256x256'),
-    t('512x512'),
-    t('1024x1024')
-  ];
-
 
   const roleList: any[] = [{ label: "", value: "" }];
   store.roleData.allRoles.forEach(item => {
@@ -91,15 +85,6 @@ const SessionAtcionList: React.FC<IProps> = observer(({ store, config, onOpen })
               &nbsp;{t<string>(!moreModules ? "All" : "Main")}
             </Button>
           </>)}
-      />);
-    } else if (store.type === 'image') {
-      list.push(<Select key={5} style={{ minWidth: 80 }}
-        placement="bottomLeft"
-        className="option-btn"
-        value={config.image.imageSize} onChange={(value) => {
-          config.image.changeImageSize(value);
-        }}
-        options={imageSizeList.map((item, index) => ({ label: item, value: item }))}
       />);
     }
     list.push(<Popconfirm
