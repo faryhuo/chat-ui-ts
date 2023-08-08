@@ -35,6 +35,7 @@ const config= {
         "sms code is invalid":"sms code is invalid",
         "Don't submit multi time.":"Don't submit multi time."
     },
+    "image":{"Select":"Select"},
     "Chat":"Chat",
     "Image":"Image",
     "Config":"Config"

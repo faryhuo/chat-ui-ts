@@ -1,6 +1,21 @@
+.ai-image-page{
+    position: absolute;
+    bottom:0;
+    right: 0;
+    top:0;
+    left: 0;
+}
+.ai-image-page .ai-image-page-wrapper{
+    position: absolute;
+    bottom:0;
+    right: 0;
+    top:0;
+    left: 0;
+}
 .ai-image-page .ant-layout-sider {
     background: #e5e7eb;
     padding: 10px;
+    position: relative;
 }
 .ai-image-page-content{
     background: #fff;
@@ -9,8 +24,38 @@
 .ai-image-page-content .ant-layout-header{
     background: #fff;
 }
-
+.image-action-button{
+    margin:10px;
+    float: right;
+}
+.generate-tip{
+    font-size: 11px;
+}
+.clear-both{
+    clear: both;
+}
 .ai-image-page-content-header span{
     font-size: 16px;
     font-weight: 600;
+}
+.image-prompt-title,.image-other-title,.image-history-title{
+    font-size: 16px;
+    margin-bottom: 10px;
+    margin-top:10px;
+}
+.image-prompt-content,.image-other-content{
+    margin: 10px;
+}
+
+.ant-layout.ai-image-page-content{
+    position: relative;
+}
+.ant-layout .ai-image-page-content-main{
+    position: absolute;
+    bottom:0;
+    right: 0;
+    top:0;
+    left: 0;
+    overflow: auto;
+    padding: 20px;
 }

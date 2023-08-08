@@ -9,6 +9,7 @@ import {IAppConfig} from '../../store/AppConfig';
 import {IMessage} from '../../store/MessageData';
 import asyncComponent  from '../../component/async-component/AsyncComponent';
 import NewChat from '../new-chat/NewChat';
+import { MessageInstance } from 'antd/es/message/interface';
 
 
 
@@ -16,6 +17,7 @@ import NewChat from '../new-chat/NewChat';
 type IProps={
     appConfig:IAppConfig;
   messageData:IMessage;
+  messageApi:MessageInstance
 }
 //const AsyncChat = asyncComponent(() => import ('../chat/Chat'));
 // const AsyncCode= asyncComponent(() => import ('../code/Code'));
@@ -69,7 +71,7 @@ const pageList=[{
 
 
 
-const AppRoutes:React.FC<IProps> = ({messageData,appConfig})=>{
+const AppRoutes:React.FC<IProps> = ({messageData,appConfig,messageApi})=>{
 
     const location = useLocation();
 
@@ -82,7 +84,7 @@ const AppRoutes:React.FC<IProps> = ({messageData,appConfig})=>{
     {
         pageList.map((item,index)=>{
             const AppComponent:any=item.component;
-            return (<Route  key={index} path={item.path} Component={(props)=><AppComponent key={index} {...item.props}{...props} store={messageData} config={appConfig}></AppComponent>} >
+            return (<Route  key={index} path={item.path} Component={(props)=><AppComponent key={index} {...item.props}{...props} globalMessageApi={messageApi} store={messageData} config={appConfig}></AppComponent>} >
                 </Route>)
         })
     }

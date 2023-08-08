@@ -1,0 +1,23 @@
+.image-detail{
+    padding: 10px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+.image-details-action-list button{
+    margin: 5px;
+}
+.image-header-action-list button{
+    margin: 5px;
+}
+.image-header-action-list{
+    margin-bottom: 10px;
+    float: right;
+}
+.image-details-action-list-title{
+    display: inline-block;
+    width:80px;
+}
+
+.image-details-item{
+    margin: 8px;
+}

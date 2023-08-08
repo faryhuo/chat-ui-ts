@@ -1,4 +1,3 @@
-import { Component } from 'react';
 import {
     ChatList,
     Header,
@@ -7,50 +6,51 @@ import {
 import './Main.css';
 import messageData from '../../store/MessageData';
 import appConfig from '../../store/AppConfig';
-import { observer } from "mobx-react"
+import { observer } from "mobx-react-lite"
 import Routes from './Router';
 import zhCN from 'antd/locale/zh_CN';
 import enUS from 'antd/locale/en_US';
-import {ConfigProvider } from 'antd';
+import {ConfigProvider, message } from 'antd';
+import { IProps } from 'rc-queue-anim';
 
-class Main extends Component {
+const Main:React.FC<IProps> = ()=>{
+    const [messageApi, contextHolder] = message.useMessage();
 
 
-    theme = {
+    const theme = {
         token: {
         colorPrimary: appConfig.colorPrimary
         },
     };
 
-    render(){        
-        return (
-            <ConfigProvider locale={appConfig.isChinese?zhCN:enUS} 
-                theme={
-                    this.theme
-                }>
-                <div className="chat-wrapper">
-                    <div className="chat-body">   
-                        <div className="chat-header">
-                            {appConfig.isSlowLeftMenuFlag && <div className="chat-left-content">
-                                <NewChatBtn  store={messageData}></NewChatBtn>
-                            </div>}
-                            <div className="chat-right-content">
-                            <Header store={messageData} config={appConfig}></Header>
-                            </div>
+    return (
+        <ConfigProvider locale={appConfig.isChinese?zhCN:enUS} 
+            theme={theme
+            }>
+            <div className="chat-wrapper">
+                <div className="chat-body">   
+                    <div className="chat-header">
+                        {appConfig.isSlowLeftMenuFlag && <div className="chat-left-content">
+                            <NewChatBtn  store={messageData}></NewChatBtn>
+                        </div>}
+                        <div className="chat-right-content">
+                        <Header store={messageData} config={appConfig}></Header>
                         </div>
-                        <div className="chat-content">
-                            {appConfig.isSlowLeftMenuFlag &&
-                            <div className="chat-left-content">
-                                <ChatList store={messageData}></ChatList>
-                            </div>}
-                            <div className="chat-right-content">
-                                <Routes messageData={messageData} appConfig={appConfig} ></Routes>
-                            </div>  
-                        </div>  
                     </div>
+                    <div className="chat-content">
+                        {appConfig.isSlowLeftMenuFlag &&
+                        <div className="chat-left-content">
+                            <ChatList store={messageData}></ChatList>
+                        </div>}
+                        <div className="chat-right-content">
+                            <Routes messageData={messageData} appConfig={appConfig} 
+                            messageApi={messageApi}></Routes>
+                        </div>  
+                    </div>  
                 </div>
-            </ConfigProvider>)
-    }
+            </div>
+            {contextHolder}
+        </ConfigProvider>)
 }
 
 
