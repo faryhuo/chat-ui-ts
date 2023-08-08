@@ -5,15 +5,20 @@
     width: 128px;
     height: 53px;
     background-size: cover;
-    /* border: 2px solid var(--color-primary); */
+    border: 2px solid #fff;
     margin: 10px;
     border-radius: 10px;
     color:#fff;
     font-size: 24px;
     text-align: center;
     font-weight: 800;
+    border: none;
 }
-.mage-model-wrapper .ant-radio-button.ant-radio-button-checked{
+.mage-model-wrapper .image-model-icon{
+    border: 2px solid #fff;
+}
+
+
+.image-params-wrapper .ant-radio-button-wrapper-checked.image-model-icon{
     border: 2px solid var(--color-primary);
-    border-radius: 10px;
 }
