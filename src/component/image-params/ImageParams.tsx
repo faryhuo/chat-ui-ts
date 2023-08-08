@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { observer } from "mobx-react-lite";
+
 import { Form, InputNumber, Radio, Select } from 'antd';
 import './ImageParams.css'
 type IProps={
@@ -30,7 +31,12 @@ const ImageParams:React.FC<IProps> = observer(()=>{
     },{
       value:"2",
       label:"超高清"
-    }]
+    }];
+
+    const mjButtonStyle={"backgroundImage":'url(' + require('./mj.png') + ')',backgroundSize: "cover",
+  width:"128px"};
+    const nijiButtonStyle={"backgroundImage":'url(' + require('./niji.png') + ')',backgroundSize: "cover",
+    width:"128px"};
 
     return (<div className="image-params-wrapper">
           <Form
@@ -50,12 +56,13 @@ const ImageParams:React.FC<IProps> = observer(()=>{
         </Radio.Group>
       </Form.Item>
 
-      <Form.Item label={t<string>("Image model")} name="model" 
+      <Form.Item label={t<string>("Image model")} name="model"  className='mage-model-wrapper'
       tooltip={<span><span>MJ: 偏真实通用模型</span><br/>
       <span>NIJI: 偏动漫风格、适用于二次元模型</span></span>}>
       <Radio.Group>
-        <Radio.Button value="MJ">MJ</Radio.Button>
-          <Radio.Button value="NIJI">NIJI</Radio.Button>
+        <Radio.Button className='image-model-icon' value="MJ" style={mjButtonStyle}>MJ
+        </Radio.Button>
+          <Radio.Button className='image-model-icon' value="NIJI" style={nijiButtonStyle}>NIJI</Radio.Button>
         </Radio.Group>
       </Form.Item>
 

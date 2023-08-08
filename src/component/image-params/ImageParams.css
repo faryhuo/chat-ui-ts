@@ -1,3 +1,19 @@
 .image-params-wrapper .ant-radio-button-wrapper{
     width: 115px;
 }
+.image-model-icon{
+    width: 128px;
+    height: 53px;
+    background-size: cover;
+    /* border: 2px solid var(--color-primary); */
+    margin: 10px;
+    border-radius: 10px;
+    color:#fff;
+    font-size: 24px;
+    text-align: center;
+    font-weight: 800;
+}
+.mage-model-wrapper .ant-radio-button.ant-radio-button-checked{
+    border: 2px solid var(--color-primary);
+    border-radius: 10px;
+}
