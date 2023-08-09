@@ -70,7 +70,7 @@ const Image: React.FC<IProps> = ({ config, globalMessageApi }) => {
               </Input.TextArea>
             </div>
             <div className="image-action-button">
-              <Button disabled={!!!imageData.prompt}  type="primary" onClick={generate}>{t('Submit Task')}</Button>
+              <Button disabled={imageData.disableSubmit}  type="primary" onClick={generate}>{t('Submit Task')}</Button>
             </div>
             <div className="clear-both">
 

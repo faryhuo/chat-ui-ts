@@ -187,6 +187,18 @@ const config = {
     "Submit Task":"提交任务",
     "Submit task successlly. you can go to other page first, I will tall you if done":
     "任务提交成功, 你可以先去其他页面等待，图片生成需要大约4分钟。",
-    "Image generated successlly":"图片已经生成，你可以去查看它了"
+    "Image generated successlly":"图片已经生成，你可以去查看它了",
+    "Transaction":"翻译",
+    "high":"深度调整",
+    "low":"微度调整",
+    "2x":"2倍",
+    "1.5x":"1.5倍",
+    "Adjust":"调整",
+    "Adjust the image highly":"对图片进行高度调整",
+    "Adjust the image lowly":"对图片进行微度调整",
+    "Zoom out 2x":"缩放2倍并且自动填充空白，再次生成4张图片",
+    "Zoom out 1.5x":"缩放1.5倍并且自动填充空白，再次生成4张图片",
+    "Reference image":"参考图片",
+    "Click or drag file to this area to upload":"点击或拖拽一个图片到这里作为输入支持PNG和JPG格式"
 }
 export default config;

@@ -107,7 +107,7 @@ const ImageParams: React.FC<IProps> = observer(() => {
     <p className="ant-upload-drag-icon">
       <InboxOutlined />
     </p>
-    <p className="ant-upload-text">Click or drag file to this area to upload</p>
+    <p className="ant-upload-text">{t('Click or drag file to this area to upload')}</p>
       </div>
     );
 
@@ -176,7 +176,7 @@ const ImageParams: React.FC<IProps> = observer(() => {
 
     <div className="image-param-set">
       <div className="image-param-label">{t<string>("Quality")} </div>
-      <div className="image-param-input"><Select style={{ width: '100%' }}
+      <div className="image-param-input"><Select style={{ width: '100%' }} onChange={(e) => { imageData.updateParams("quality",e)}}
         options={options} value={imageData.params.quality}></Select></div>
     </div>
 
@@ -194,7 +194,7 @@ const ImageParams: React.FC<IProps> = observer(() => {
     </div>
 
     <div className="image-param-set image-param-label">
-      以图生图
+      {t("Reference image")}
       <Tooltip placement="right" title="上传一张图片, 然后基于这张图片做修改">
           {questionBtn}        </Tooltip>
     </div>
@@ -213,8 +213,8 @@ const ImageParams: React.FC<IProps> = observer(() => {
       >
         {imageData.params.imageUrl ?(
           <>
-          <div style={{float:"right"}}>
-            <Button onClick={(e)=>{imageData.updateParams("imageUrl","");e.stopPropagation()}}
+          <div style={{float:"right",marginRight:10}}>
+            <Button shape="circle" type='primary' onClick={(e)=>{imageData.updateParams("imageUrl","");e.stopPropagation()}}
             icon={<FontAwesomeIcon icon={faTrashCan} />} size="small" /> 
           </div>
           <Image preview={false} src={imageData.params.imageUrl} 

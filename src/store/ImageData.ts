@@ -10,6 +10,7 @@ export interface IImageData {
     imageSize: string;
     params:ImageParam;
     prompt:string;
+    disableSubmit:boolean;
     setPrompt:(prompt:string)=>void;
     callImageAPI: (chatId: string, message: string) => Promise<any>
     changeImageSize: (size: string) => void;
@@ -51,6 +52,7 @@ export interface ImageParam {
 class ImageData implements IImageData {
 
     imageSize = "256x256";
+    disableSubmit=true;
 
     params:ImageParam={
         size:"16:9",
@@ -72,9 +74,15 @@ class ImageData implements IImageData {
     }
 
     prompt="";
+    hasTask=false;
 
     setPrompt(prompt:string){
-        this.prompt=prompt
+        this.prompt=prompt;
+        if(!prompt){
+            this.disableSubmit=true;
+        }else if(this.hasTask===false){
+            this.disableSubmit=false;
+        }
     }
 
     transaction(prompt:string){
@@ -246,6 +254,9 @@ class ImageData implements IImageData {
     }
 
     generateByData(requestData:{action:string,prompt?:string,image_id?:string},globalMessageApi:MessageInstance){
+        this.disableSubmit=true;
+        this.hasTask=true;
+        setTimeout(()=>{ this.disableSubmit=false},60000);
         const token="449f53e6ab334c52a9359406cc558be8";
         // this.data.push(
         //     {params:this.params,type:requestData.action,status:"process",
@@ -299,19 +310,20 @@ class ImageData implements IImageData {
                     }
                 }
             }
-            }).then(({ data }) =>{
-                console.log(data);
+            }).then(() =>{
+                this.disableSubmit=false;
+                this.hasTask=false;
                 localStorage["image_data"]=JSON.stringify(this.data);
-                globalMessageApi.success("Image generated successlly");
+                globalMessageApi.success(i18n.t<string>("Image generated successlly"),15);
+            }).catch(()=>{
+                this.disableSubmit=false;
+                this.hasTask=false;
             });    
     }
 
 
     generate(prompt:string,globalMessageApi:MessageInstance){
-        globalMessageApi.open({
-            type: 'success',
-            content: i18n.t<string>('Submit task successlly. you can go to other page first, I will tall you if done'),
-          });
+        globalMessageApi.success(i18n.t<string>('Submit task successlly. you can go to other page first, I will tall you if done'),15);
         let promptStr=this.buildPromptByParams(prompt);
         if(this.params.imageUrl){
             promptStr=this.params.imageUrl+" "+promptStr;
@@ -326,6 +338,7 @@ class ImageData implements IImageData {
     constructor() {
         makeObservable(this, {
             imageSize: observable,
+            disableSubmit: observable,
             params: observable,
             prompt:observable,
             data: observable,

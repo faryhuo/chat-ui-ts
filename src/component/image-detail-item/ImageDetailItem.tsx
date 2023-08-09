@@ -7,6 +7,7 @@ import { faBroom, faDownload, faRefresh, faTrashCan } from '@fortawesome/free-so
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './ImageDetailItem.css'
 import { MessageInstance } from 'antd/es/message/interface';
+import copy from 'copy-to-clipboard';
 import dayjs from 'dayjs'
 type IProps = {
   data: ImageResponse;
@@ -18,10 +19,7 @@ const ImageDetailItem: React.FC<IProps> = observer(({ data, globalMessageApi }) 
   const { t } = useTranslation();
   const buttonSize = "small"
   const success = () => {
-    messageApi.open({
-      type: 'success',
-      content: t<string>('Submit task successlly. you can go to other page first, I will tall you if done'),
-    });
+    messageApi.success(t('Submit task successlly. you can go to other page first, I will tall you if done'),15);
   };
 
   const updateMJImage = (imageId: string, action: string) => {
@@ -69,14 +67,22 @@ const ImageDetailItem: React.FC<IProps> = observer(({ data, globalMessageApi }) 
       </div>)
     } else if (actions.includes("high_variation")) {
       arr.push(<div key={1} className="image-details-action-list">
-        <span key={1} className="image-details-action-list-title">{t('Variation')} : </span>
-        <Button key={2} size={buttonSize} onClick={() => { updateMJImage(imageId, "high_variation") }}>high</Button>
-        <Button key={3} size={buttonSize} onClick={() => { updateMJImage(imageId, "low_variation") }}>low</Button>
+        <span key={1} className="image-details-action-list-title">{t('Adjust')} : </span>
+        <Tooltip placement="top" title={t("Adjust the image highly")}>
+        <Button key={2} size={buttonSize} onClick={() => { updateMJImage(imageId, "high_variation") }}>{t("high")}</Button>
+        </Tooltip>
+        <Tooltip placement="top" title={t("Adjust the image lowly")}>
+        <Button key={3} size={buttonSize} onClick={() => { updateMJImage(imageId, "low_variation") }}>{t("low")}</Button>
+        </Tooltip>
       </div>);
       arr.push(<div key={2} className="image-details-action-list">
         <span key={5} className="image-details-action-list-title">{t('Zoom out')} : </span>
-        {actions.includes("zoom_out_2x") && <Button key={1} size={buttonSize} onClick={() => { updateMJImage(imageId, "zoom_out_2x") }}>2x</Button>}
-        {actions.includes("zoom_out_1_5x") && <Button key={2} size={buttonSize} onClick={() => { updateMJImage(imageId, "zoom_out_1_5x") }}>1.5x</Button>}
+        <Tooltip placement="top" title={t("Zoom out 2x")}>
+        {actions.includes("zoom_out_2x") && <Button key={1} size={buttonSize} onClick={() => { updateMJImage(imageId, "zoom_out_2x") }}>{t("2x")}</Button>}
+        </Tooltip>
+        <Tooltip placement="top" title={t("Zoom out 1.5x")}>
+        {actions.includes("zoom_out_1_5x") && <Button key={2} size={buttonSize} onClick={() => { updateMJImage(imageId, "zoom_out_1_5x") }}>{t("1.5x")}</Button>}
+        </Tooltip>
       </div>)
     }
     return arr;
@@ -85,7 +91,11 @@ const ImageDetailItem: React.FC<IProps> = observer(({ data, globalMessageApi }) 
   const getHeaderButtonByType = (type: string) => {
     const arr = [];
     if (type === "generate") {
-      arr.push(<Button key={1} size={buttonSize} icon={<FontAwesomeIcon icon={faBroom} />}>{t('use')}</Button>)
+      arr.push(
+        <Tooltip key={1}  placement="top" title={data.prompt}>
+      <Button onClick={()=>{copy(data.prompt?data.prompt:"");message.success(t("Copy successlly"))}} size={buttonSize} icon={<FontAwesomeIcon icon={faBroom} />}>{t('use')}</Button>
+      </Tooltip>
+      )
     }
     arr.push(<Button key={2} onClick={()=>imageData.downloadImage(data.image_url)}
       size={buttonSize} icon={<FontAwesomeIcon icon={faDownload} />}>{t('download')}</Button>)
