@@ -63,7 +63,7 @@ const config = {
     "Base Configuration": "基础配置",
     "Chat API Configuration": "ChatGPT API 配置",
     "Model":"训练模型",
-    "Image Size":"图片大小",
+    "Image Size":"图片尺寸",
     "Code Style":"代码风格",
     "New Chat":"新会话",
     "What sampling temperature to use, between 0 and 2. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic.We generally recommend altering this or top_p but not both.":
@@ -184,6 +184,9 @@ const config = {
     "cute":"可爱",
     "expressive":"表现力",
     "Version":"版本",
-    "Submit Task":"提交任务"
+    "Submit Task":"提交任务",
+    "Submit task successlly. you can go to other page first, I will tall you if done":
+    "任务提交成功, 你可以先去其他页面等待，图片生成需要大约4分钟。",
+    "Image generated successlly":"图片已经生成，你可以去查看它了"
 }
 export default config;

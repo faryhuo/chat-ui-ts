@@ -123,6 +123,8 @@ const ImageParams: React.FC<IProps> = observer(() => {
   return (<div className="image-params-wrapper">
     <div className="image-param-set image-param-label">
       {t<string>("Image Size")}
+      <Tooltip placement="right" title="生成图片尺寸比例">
+          {questionBtn}        </Tooltip>
     </div>
     <div className="image-param-set image-param-input">
       <Radio.Group value={imageData.params.size} onChange={(e) => { imageData.updateParams("size", e.target.value) }}>
@@ -136,7 +138,7 @@ const ImageParams: React.FC<IProps> = observer(() => {
     </div>
     <div className="image-param-set image-param-label">
       {t<string>("Image model")}
-      <Tooltip placement="top" title={<span><span>MJ: 偏真实通用模型</span><br />
+      <Tooltip placement="right" title={<span><span>MJ: 偏真实通用模型</span><br />
         <span>NIJI: 偏动漫风格、适用于二次元模型</span></span>}>
         {questionBtn}      </Tooltip>
     </div>
@@ -162,7 +164,7 @@ const ImageParams: React.FC<IProps> = observer(() => {
 
     {imageData.params.model === "MJ" && <div className="image-param-set">
       <div className="image-param-label">{t<string>("Stylize")}
-        <Tooltip placement="top" title="风格化：--stylize 或 --s，范围 1-1000
+        <Tooltip placement="right" title="风格化：--stylize 或 --s，范围 1-1000
       参数释义：数值越高，画面表现也会更具丰富性和艺术性">
           {questionBtn}
         </Tooltip>
@@ -181,7 +183,7 @@ const ImageParams: React.FC<IProps> = observer(() => {
     <div className="image-param-set">
 
       <div className="image-param-label">{t<string>("Chaos")}
-        <Tooltip placement="top" title="取值范围：0-100、 --chaos 或 --c
+        <Tooltip placement="right" title="取值范围：0-100、 --chaos 或 --c
       混乱级别，可以理解为让AI天马行空的空间
       值越小越可靠、默认0最为精准">
           {questionBtn}        </Tooltip>
@@ -193,6 +195,8 @@ const ImageParams: React.FC<IProps> = observer(() => {
 
     <div className="image-param-set image-param-label">
       以图生图
+      <Tooltip placement="right" title="上传一张图片, 然后基于这张图片做修改">
+          {questionBtn}        </Tooltip>
     </div>
     <div  style={{padding:20}}>
       <Upload.Dragger

@@ -111,7 +111,10 @@ const ImageDetailItem: React.FC<IProps> = observer(({ data, globalMessageApi }) 
       <div className="image-content">
         <div className="image-detail">
           
-        {data.progress!==100 && <Progress type="dashboard" percent={75} />}
+        {data.progress!==100 && 
+            <Progress type="circle" percent={data.progress?data.progress:0} 
+            status="active" strokeColor={{ '0%': '#108ee9', '100%': '#87d068' }} />
+}
 
         {data.progress===100 && <Image src={data.image_url} width={imageData.getWidthBySize(data.params?.size)} height={imageData.getHeightBySize(data.params?.size)}></Image>}
         </div>

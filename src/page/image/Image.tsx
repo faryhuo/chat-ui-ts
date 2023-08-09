@@ -30,11 +30,10 @@ const Image: React.FC<IProps> = ({ config, globalMessageApi }) => {
   const { t } = useTranslation();
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
-  const [prompt, setPrompt] = useState("")
+  const [pageSize, setPageSize] = useState(4);
 
   const generate = () => {
-    ImageData.generate(prompt, globalMessageApi)
+    ImageData.generate(imageData.prompt, globalMessageApi)
   }
 
   const getDataSouce = () => {
@@ -49,9 +48,13 @@ const Image: React.FC<IProps> = ({ config, globalMessageApi }) => {
           <Content className="ai-image-page-content-main">
             <div className="image-prompt-title">
               <span>你想生成什么图像?</span>
+              <div>
+                <Button onClick={()=>imageData.transaction(imageData.prompt)}>{t('Transaction')}</Button>
+              </div>
             </div>
             <div className="image-prompt-content">
-              <Input.TextArea autoSize={{ minRows: 4 }} value={prompt} onChange={(e) => setPrompt(e.target.value)}
+              <Input.TextArea autoSize={{ minRows: 4 }} value={imageData.prompt} 
+              onChange={(e) => imageData.setPrompt(e.target.value)}
                 placeholder="例如: A cute little cat (Midjourney对中文描述词有一定限制、我们建议您点击右侧翻译将您的描述词转为英文再进行提交、联想则是会将您的描述词交由GPT让其发挥想象空间为您在此基础创建更为详细的描述！)"
                 size="large">
               </Input.TextArea>
@@ -67,7 +70,7 @@ const Image: React.FC<IProps> = ({ config, globalMessageApi }) => {
               </Input.TextArea>
             </div>
             <div className="image-action-button">
-              <Button disabled={!!!prompt}  type="primary" onClick={generate}>{t('Submit Task')}</Button>
+              <Button disabled={!!!imageData.prompt}  type="primary" onClick={generate}>{t('Submit Task')}</Button>
             </div>
             <div className="clear-both">
 

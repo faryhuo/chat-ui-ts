@@ -3,10 +3,16 @@ import axios from 'axios';
 import APISetting from './APISetting';
 import { MessageInstance } from "antd/es/message/interface";
 import saveAs from 'file-saver';
+import i18n from "../utils/i18n";
+import apiSetting from "./APISetting";
+import userProflie from "./UserProfile";
+import { IMessageListData } from "./MessageData";
 
 export interface IImageData {
     imageSize: string;
     params:ImageParam;
+    prompt:string;
+    setPrompt:(prompt:string)=>void;
     callImageAPI: (chatId: string, message: string) => Promise<any>
     changeImageSize: (size: string) => void;
     updateParams:<K extends keyof ImageParam>(key:K, value:ImageParam[K])=>void;
@@ -18,7 +24,6 @@ export interface IImageData {
     downloadImage:(url: string)=>void;
 }
 
-type imageType="generate" | "select" | "update"
 
 export interface ImageResponse {
     image_url:string;
@@ -26,7 +31,7 @@ export interface ImageResponse {
     progress:number;
     actions:string[];
     task_id:string;
-    type:imageType;
+    type:string;
     status:string;
     prompt?:string;
     date:Date;
@@ -66,6 +71,41 @@ class ImageData implements IImageData {
         if(key==="model"){
             this.params.version=(value==="MJ"?"5.2":"5");
         }
+    }
+
+    prompt="";
+
+    setPrompt(prompt:string){
+        this.prompt=prompt
+    }
+
+    transaction(prompt:string){
+        const queryUrl = apiSetting.chatUrl;
+        const messageListData:IMessageListData[]=[{
+            role:"system",content:"请帮我把中文转换成Midjourney能识别的英文单词"
+        },{
+            role:"user",content:prompt
+        }];
+        const params = {
+            messages: JSON.stringify(messageListData),
+            uuid: new Date().getTime(),
+            max_tokens: 150,
+            stream: false
+        }
+        return axios({
+            method: "post",
+            url: queryUrl,
+            headers: {
+                'token': userProflie.token,
+                'Content-Type': 'application/json;charset=UTF-8'
+            },
+            data: JSON.stringify(params)
+        }).then((response)=>{
+            const choices = response.data.data.choices;
+            if(choices && choices[0] && choices[0].message){
+                this.prompt=choices[0].message;
+            }
+        })
     }
 
 
@@ -210,6 +250,10 @@ class ImageData implements IImageData {
 
     generateByData(requestData:{action:string,prompt?:string,image_id?:string},globalMessageApi:MessageInstance){
         const token="449f53e6ab334c52a9359406cc558be8";
+        // this.data.push(
+        //     {params:this.params,type:requestData.action,status:"process",
+        //     actions:[],image_id:"",image_url:"",task_id:"",date:new Date(),
+        //     progress:0})
         return axios({
             url: `https://api.zhishuyun.com/midjourney/imagine/relax?token=${token}`,
             data: requestData,
@@ -233,19 +277,25 @@ class ImageData implements IImageData {
                     }
                     if(data.progress===100){
                         let obj=this.getImageByTaskId(taskId) as ImageResponse;
-                        obj.status="success";
-                        obj.date=new Date();
-                        obj.progress=100;
-                        if(requestData.prompt){
-                            obj.prompt=requestData.prompt;
+                        if(!obj){
+                            this.data.push(Object.assign(data,{date:new Date(),
+                                params:this.params,type:requestData.action,status:"success"}))
+                        }else{
+                            obj.status="success";
+                            obj.date=new Date();
+                            obj.progress=100;
+                            if(requestData.prompt){
+                                obj.prompt=requestData.prompt;
+                            }
+                            obj.actions=data.actions;
+                            obj.image_id=data.image_id;
+                            obj.image_url=data.image_url;
+                            this.setImageByTaskId(taskId,obj);
                         }
-                        obj.actions=data.actions;
-                        obj.image_url=data.image_url;
-                        this.setImageByTaskId(taskId,obj);
                     }else{
                        let obj=this.getImageByTaskId(taskId);
                        if(!obj){
-                            this.data.push(Object.assign(data,{params:this.params,type:action,status:"process"}))
+                            this.data.push(Object.assign(data,{params:this.params,type:requestData.action,status:"process"}))
                        }else{
                             obj.progress=data.progress;
                        }
@@ -259,7 +309,12 @@ class ImageData implements IImageData {
             });    
     }
 
+
     generate(prompt:string,globalMessageApi:MessageInstance){
+        globalMessageApi.open({
+            type: 'success',
+            content: i18n.t<string>('Submit task successlly. you can go to other page first, I will tall you if done'),
+          });
         let promptStr=this.buildPromptByParams(prompt);
         if(this.params.imageUrl){
             promptStr=this.params.imageUrl+" "+promptStr;
@@ -275,10 +330,12 @@ class ImageData implements IImageData {
         makeObservable(this, {
             imageSize: observable,
             params: observable,
+            prompt:observable,
             data: observable,
             changeImageSize: action,
             updateParams:action,
-            changeNoNeedEle:action
+            changeNoNeedEle:action,
+            setPrompt:action
         })
         if(localStorage["image_data"]){
             this.data=JSON.parse(localStorage["image_data"]);
