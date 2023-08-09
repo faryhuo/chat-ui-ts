@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Card, Image, message, Tooltip } from 'antd';
+import { Button, Card, Image, message, Progress, Tooltip } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { observer } from "mobx-react-lite";
 import imageData, { ImageResponse } from '../../store/ImageData';
@@ -87,7 +87,8 @@ const ImageDetailItem: React.FC<IProps> = observer(({ data, globalMessageApi }) 
     if (type === "generate") {
       arr.push(<Button key={1} size={buttonSize} icon={<FontAwesomeIcon icon={faBroom} />}>{t('use')}</Button>)
     }
-    arr.push(<Button key={2} size={buttonSize} icon={<FontAwesomeIcon icon={faDownload} />}>{t('download')}</Button>)
+    arr.push(<Button key={2} onClick={()=>imageData.downloadImage(data.image_url)}
+      size={buttonSize} icon={<FontAwesomeIcon icon={faDownload} />}>{t('download')}</Button>)
     arr.push(<Button key={3} size={buttonSize} icon={<FontAwesomeIcon icon={faTrashCan} />}>{t('delete')}</Button>)
     return arr;
   }
@@ -106,15 +107,20 @@ const ImageDetailItem: React.FC<IProps> = observer(({ data, globalMessageApi }) 
       <div className="image-header-action-list">
         {getHeaderButtonByType(data.type)}
       </div>
+      <div className="clear-both"></div>
       <div className="image-content">
         <div className="image-detail">
-          <Image src={data.image_url} width={250} height={250}></Image>
+          
+        {data.progress!==100 && <Progress type="dashboard" percent={75} />}
+
+        {data.progress===100 && <Image src={data.image_url} width={imageData.getWidthBySize(data.params?.size)} height={imageData.getHeightBySize(data.params?.size)}></Image>}
         </div>
+
         <div className="image-detail-button">
           {getDetailButtonByType(data.actions, data.image_id)}
         </div>
         <div className="image-generate-date">
-          {getDateFormat(data.date)}
+          {t('Time')} &nbsp;:&nbsp; {getDateFormat(data.date)}
         </div>
       </div>
     </Card>

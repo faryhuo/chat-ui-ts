@@ -182,6 +182,8 @@ const config = {
     "default":"默认",
     "scenic":"景观",
     "cute":"可爱",
-    "expressive":"表现力"
+    "expressive":"表现力",
+    "Version":"版本",
+    "Submit Task":"提交任务"
 }
 export default config;

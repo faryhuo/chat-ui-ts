@@ -1,3 +1,38 @@
 .image-params-wrapper .ant-radio-button-wrapper{
     width: 115px;
 }
+.image-model-icon{
+    width: 128px;
+    height: 53px;
+    background-size: cover;
+    border: 2px solid #fff;
+    margin: 10px;
+    border-radius: 10px;
+    color:#fff;
+    font-size: 24px;
+    text-align: center;
+    font-weight: 800;
+    border: none;
+}
+.mage-model-wrapper .image-model-icon{
+    border: 2px solid #fff;
+}
+
+
+.image-params-wrapper .ant-radio-button-wrapper-checked.image-model-icon{
+    border: 2px solid var(--color-primary);
+}
+.image-params-wrapper .image-param-set{
+    display: flex;
+    padding: 10px;
+}
+.image-params-wrapper .image-param-set .image-param-label{
+    flex:0 0 100px;
+}
+.image-param-label{
+    font-size: 16px;
+    line-height: 28px;
+}
+.image-params-wrapper .image-param-set .image-param-input{
+    flex:1
+}

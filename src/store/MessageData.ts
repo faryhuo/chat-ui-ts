@@ -231,13 +231,17 @@ class MessageData implements IMessage {
                 type = ctype;
             }
         }
+        
         if (userProflie.premission.includes(type)) {
             if (type !== this.type) {
                 this.changeType(type)
             }
         } else {
-            userProflie.openPage();
-            window.history.back();
+            //userProflie.openPage();
+            //window.history.back();
+        }
+        if (type !== this.type) {
+            this.changeType(type)
         }
     }
 

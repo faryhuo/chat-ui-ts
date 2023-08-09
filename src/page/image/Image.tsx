@@ -34,7 +34,7 @@ const Image: React.FC<IProps> = ({ config, globalMessageApi }) => {
   const [prompt, setPrompt] = useState("")
 
   const generate = () => {
-    ImageData.callMJAPI(prompt, "generate", globalMessageApi)
+    ImageData.generate(prompt, globalMessageApi)
   }
 
   const getDataSouce = () => {

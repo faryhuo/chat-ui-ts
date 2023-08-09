@@ -2,16 +2,20 @@ import { makeObservable, observable, action } from "mobx";
 import axios from 'axios';
 import APISetting from './APISetting';
 import { MessageInstance } from "antd/es/message/interface";
+import saveAs from 'file-saver';
 
 export interface IImageData {
     imageSize: string;
     params:ImageParam;
     callImageAPI: (chatId: string, message: string) => Promise<any>
     changeImageSize: (size: string) => void;
-    setParams:(params: ImageParam)=>void;
+    updateParams:<K extends keyof ImageParam>(key:K, value:ImageParam[K])=>void;
     changeNoNeedEle:(val: string)=>void;
     updateMJImage:(imageId:string,action:string,globalMessageApi:MessageInstance) => Promise<any>
-    callMJAPI:(prompt:string,action:string,globalMessageApi:MessageInstance) => Promise<any>
+    generate:(prompt:string,globalMessageApi:MessageInstance) => Promise<any>
+    getWidthBySize:(size:string)=>number;
+    getHeightBySize:(size:string)=>number;
+    downloadImage:(url: string)=>void;
 }
 
 type imageType="generate" | "select" | "update"
@@ -26,6 +30,7 @@ export interface ImageResponse {
     status:string;
     prompt?:string;
     date:Date;
+    params?:ImageParam;
 }
 
 export interface ImageParam {
@@ -37,6 +42,7 @@ export interface ImageParam {
     stylize?:number;
     style?:string;
     noNeedEle?:string;
+    imageUrl?:string;
 }
 
 class ImageData implements IImageData {
@@ -51,19 +57,80 @@ class ImageData implements IImageData {
         chaos:0,
         stylize:100,
         style:"",
-        noNeedEle:""
+        noNeedEle:"",
+        imageUrl:""
     }
+
+    updateParams<K extends keyof ImageParam>(key:K, value:ImageParam[K]){
+        this.params[key]=value;
+        if(key==="model"){
+            this.params.version=(value==="MJ"?"5.2":"5");
+        }
+    }
+
+
+    getWidthBySize(size?:string){
+        if(size==="1:1"){
+            return 256;
+        }if(size==="1:2"){
+            return 256/2;
+        }else if(size==="4:3"){
+            return 256;
+        }else if(size==="3:4"){
+            return 256/4*3;
+        }else if(size==="16:9"){
+            return 256;
+        }else if(size==="9:16"){
+            return 256/16*9;
+        }else{
+            return 256;
+        }
+    }
+
+    getImageByTaskId(taskId:string){
+        return this.data.find(item=>item.task_id===taskId);
+    }
+
+    setImageByTaskId(taskId:string,response:ImageResponse){
+        this.data.forEach(item=>{
+            if(item.task_id===taskId){
+                item=response;
+            }
+        })
+    }
+
+    getHeightBySize(size?:string){
+        if(size==="1:1"){
+            return 256;
+        }if(size==="1:2"){
+            return 256;
+        }else if(size==="4:3"){
+            return 256/4*3;
+        }else if(size==="3:4"){
+            return 256;
+        }else if(size==="16:9"){
+            return 256/16*9;
+        }else if(size==="9:16"){
+            return 256;
+        }else{
+            return 256;
+        }
+    }
+    
 
     changeNoNeedEle(val:string){
         this.params.noNeedEle=val;
     }
 
-    setParams(params: ImageParam){
-        if(params.model!==this.params.model){
-            params.version=(params.model==="MJ"?"5.2":"5");
-        }
-        this.params=params;
-    }
+    downloadImage(url: string) {
+        fetch(url, {
+            method: 'GET'
+          })
+            .then(response => response.blob())
+            .then(blob => {
+                saveAs(blob,"image.jpg");
+            });
+      }
 
     buildPromptByParams(prompt:string){
         const {size,stylize,model,quality,chaos,version,style,noNeedEle} = this.params;
@@ -71,7 +138,9 @@ class ImageData implements IImageData {
         let modelStyle="";
         if(model==="MJ"){
             modelVersion=`--v ${version}`;
-            modelStyle=`--s ${stylize}`
+            if(stylize){
+                modelStyle=`--s ${stylize}`
+            }
         }else if(model==="NIJI"){
             modelVersion=`--niji ${version}`;
             if(style){
@@ -80,7 +149,7 @@ class ImageData implements IImageData {
         }
         let noNeedEleStr="";
         if(noNeedEle){
-            noNeedEleStr=`--no ${noNeedEleStr}`
+            noNeedEleStr=`--no ${noNeedEle}`
         }
         return `${prompt} ${modelVersion} --ar ${size} --c ${chaos} --q ${quality} ${modelStyle} ${noNeedEleStr}`
     }
@@ -132,53 +201,74 @@ class ImageData implements IImageData {
     }
 
     updateMJImage(imageId:string,action:string,globalMessageApi:MessageInstance){
-        const options = {
-            method: "POST",
-            headers: {
-              "accept": "application/json",
-              "content-type": "application/json"
-            },
-            body: JSON.stringify({
-              "action": action,
-              "image_id": imageId
-            })
-          };
-          
-        return fetch("https://api.zhishuyun.com/midjourney/imagine/relax?token=449f53e6ab334c52a9359406cc558be8", options)
-            .then(response => response.json())
-            .then(response => {
-                if(response && response.image_url){
-                    this.data.push(Object.assign(response,{type:action,status:"success",date:new Date()}));
-                    localStorage["image_data"]=JSON.stringify(this.data);
-                    globalMessageApi.success("Image generated successlly");
-                }
-            })
-            .catch(err => console.error(err));
+        const requestData={
+            "action": action,
+            "image_id": imageId
+        };
+        return this.generateByData(requestData,globalMessageApi);    
     }
 
-    callMJAPI(prompt:string,action:string,globalMessageApi:MessageInstance){
-        const options = {
-            method: "POST",
+    generateByData(requestData:{action:string,prompt?:string,image_id?:string},globalMessageApi:MessageInstance){
+        const token="449f53e6ab334c52a9359406cc558be8";
+        return axios({
+            url: `https://api.zhishuyun.com/midjourney/imagine/relax?token=${token}`,
+            data: requestData,
             headers: {
-              "accept": "application/json",
-              "content-type": "application/json"
+                'accept': 'application/x-ndjson',
+                'content-type': 'application/json'
             },
-            body: JSON.stringify({
-              "action": action,
-              "prompt": this.buildPromptByParams(prompt)
-            })
-          };
-          
-        return fetch("https://api.zhishuyun.com/midjourney/imagine/relax?token=449f53e6ab334c52a9359406cc558be8", options)
-            .then(response => response.json())
-            .then(response => {
-                if(response && response.image_url){
-                    this.data.push(Object.assign(response,{type:action,date:new Date(),status:"success",prompt:prompt}));
-                    localStorage["image_data"]=JSON.stringify(this.data);
-                    globalMessageApi.success("Image generated successlly");
+            responseType: 'stream',
+            method: 'POST',
+            onDownloadProgress: progressEvent => {
+                const response = progressEvent.event.target.response;
+                const lines = response.split('\r\n').filter((line: any) => !!line)
+                const lastLine = lines[lines.length - 1]
+                if(lastLine){
+                    console.log(lastLine);
+                    const data=JSON.parse(lastLine);
+                    const taskId=data.task_id;
+                    if(data.code && data.detail){
+                        globalMessageApi.error(data.detail)
+                        return;
+                    }
+                    if(data.progress===100){
+                        let obj=this.getImageByTaskId(taskId) as ImageResponse;
+                        obj.status="success";
+                        obj.date=new Date();
+                        obj.progress=100;
+                        if(requestData.prompt){
+                            obj.prompt=requestData.prompt;
+                        }
+                        obj.actions=data.actions;
+                        obj.image_url=data.image_url;
+                        this.setImageByTaskId(taskId,obj);
+                    }else{
+                       let obj=this.getImageByTaskId(taskId);
+                       if(!obj){
+                            this.data.push(Object.assign(data,{params:this.params,type:action,status:"process"}))
+                       }else{
+                            obj.progress=data.progress;
+                       }
+                    }
                 }
-            })
-            .catch(err => console.error(err));
+            }
+            }).then(({ data }) =>{
+                console.log(data);
+                localStorage["image_data"]=JSON.stringify(this.data);
+                globalMessageApi.success("Image generated successlly");
+            });    
+    }
+
+    generate(prompt:string,globalMessageApi:MessageInstance){
+        let promptStr=this.buildPromptByParams(prompt);
+        if(this.params.imageUrl){
+            promptStr=this.params.imageUrl+" "+promptStr;
+        }
+        const requestData={
+            prompt: promptStr,
+            action: 'generate'
+        };
+        return this.generateByData(requestData,globalMessageApi);
     }
 
     constructor() {
@@ -187,7 +277,7 @@ class ImageData implements IImageData {
             params: observable,
             data: observable,
             changeImageSize: action,
-            setParams:action,
+            updateParams:action,
             changeNoNeedEle:action
         })
         if(localStorage["image_data"]){
