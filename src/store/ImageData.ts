@@ -5,8 +5,6 @@ import { MessageInstance } from "antd/es/message/interface";
 import saveAs from 'file-saver';
 import i18n from "../utils/i18n";
 import apiSetting from "./APISetting";
-import userProflie from "./UserProfile";
-import { IMessageListData } from "./MessageData";
 
 export interface IImageData {
     imageSize: string;
@@ -81,7 +79,7 @@ class ImageData implements IImageData {
 
     transaction(prompt:string){
         const queryUrl = apiSetting.chatUrl;
-        const messageListData:IMessageListData[]=[{
+        const messageListData=[{
             role:"system",content:"请帮我把中文转换成Midjourney能识别的英文单词"
         },{
             role:"user",content:prompt
@@ -96,14 +94,13 @@ class ImageData implements IImageData {
             method: "post",
             url: queryUrl,
             headers: {
-                'token': userProflie.token,
                 'Content-Type': 'application/json;charset=UTF-8'
             },
             data: JSON.stringify(params)
         }).then((response)=>{
             const choices = response.data.data.choices;
             if(choices && choices[0] && choices[0].message){
-                this.prompt=choices[0].message;
+                this.prompt=choices[0].message.content;
             }
         })
     }

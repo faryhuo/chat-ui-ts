@@ -48,7 +48,7 @@ const Image: React.FC<IProps> = ({ config, globalMessageApi }) => {
           <Content className="ai-image-page-content-main">
             <div className="image-prompt-title">
               <span>你想生成什么图像?</span>
-              <div>
+              <div style={{float:'right',marginBottom:10,marginRight:10}}>
                 <Button onClick={()=>imageData.transaction(imageData.prompt)}>{t('Transaction')}</Button>
               </div>
             </div>
