@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { observer } from "mobx-react-lite";
 import { InboxOutlined } from '@ant-design/icons';
 
-import { Button, InputNumber, message, Radio, Select, Tooltip, Upload,Image } from 'antd';
+import { Button, InputNumber, message, Radio, Select, Tooltip, Upload, Image, Slider, Row, Col } from 'antd';
 import './ImageParams.css'
 import imageData from '../../store/ImageData';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -73,14 +73,14 @@ const ImageParams: React.FC<IProps> = observer(() => {
     }
   }
 
-  const handleChange = (info:any) => {
+  const handleChange = (info: any) => {
     if (info.file.status === 'uploading') {
       return;
     }
     if (info.file.status === 'done') {
       // Get this url from response in real world.
       const fileName = info.file.response.data;
-      imageData.updateParams("imageUrl",`${apiSetting.imageUploadUrl}/${fileName}`)
+      imageData.updateParams("imageUrl", `${apiSetting.imageUploadUrl}/${fileName}`)
     }
   };
 
@@ -102,14 +102,14 @@ const ImageParams: React.FC<IProps> = observer(() => {
     style={{ backgroundColor: "#f0f0f0", marginLeft: 10 }}
     size="small" icon={<FontAwesomeIcon icon={faQuestion}></FontAwesomeIcon>}></Button>);
 
-    const uploadButton = (
-      <div style={{width:"100%",textAlign:"center",padding:20}}>
-    <p className="ant-upload-drag-icon">
-      <InboxOutlined />
-    </p>
-    <p className="ant-upload-text">{t('Click or drag file to this area to upload')}</p>
-      </div>
-    );
+  const uploadButton = (
+    <div style={{ width: "100%", textAlign: "center", padding: 20 }}>
+      <p className="ant-upload-drag-icon">
+        <InboxOutlined />
+      </p>
+      <p className="ant-upload-text">{t('Click or drag file to this area to upload')}</p>
+    </div>
+  );
 
   const mjButtonStyle = {
     "backgroundImage": 'url(' + require('./mj.png') + ')', backgroundSize: "cover",
@@ -124,7 +124,7 @@ const ImageParams: React.FC<IProps> = observer(() => {
     <div className="image-param-set image-param-label">
       {t<string>("Image Size")}
       <Tooltip placement="right" title="生成图片尺寸比例">
-          {questionBtn}        </Tooltip>
+        {questionBtn}        </Tooltip>
     </div>
     <div className="image-param-set image-param-input">
       <Radio.Group value={imageData.params.size} onChange={(e) => { imageData.updateParams("size", e.target.value) }}>
@@ -176,7 +176,7 @@ const ImageParams: React.FC<IProps> = observer(() => {
 
     <div className="image-param-set">
       <div className="image-param-label">{t<string>("Quality")} </div>
-      <div className="image-param-input"><Select style={{ width: '100%' }} onChange={(e) => { imageData.updateParams("quality",e)}}
+      <div className="image-param-input"><Select style={{ width: '100%' }} onChange={(e) => { imageData.updateParams("quality", e) }}
         options={options} value={imageData.params.quality}></Select></div>
     </div>
 
@@ -196,33 +196,63 @@ const ImageParams: React.FC<IProps> = observer(() => {
     <div className="image-param-set image-param-label">
       {t("Reference image")}
       <Tooltip placement="right" title="上传一张图片, 然后基于这张图片做修改">
-          {questionBtn}        </Tooltip>
+        {questionBtn}        </Tooltip>
     </div>
-    <div  style={{padding:20}}>
+    <div style={{ padding: 20 }}>
       <Upload.Dragger
         method="post"
         showUploadList={false}
         multiple={false}
         style={
-          {width:"100%",height:256}
+          { width: "100%", height: 256 }
         }
         listType="picture-card"
         action={apiSetting.imageUploadUrl}
         beforeUpload={beforeUpload}
         onChange={handleChange}
       >
-        {imageData.params.imageUrl ?(
+        {imageData.params.imageUrl ? (
           <>
-          <div style={{float:"right",marginRight:10}}>
-            <Button shape="circle" type='primary' onClick={(e)=>{imageData.updateParams("imageUrl","");e.stopPropagation()}}
-            icon={<FontAwesomeIcon icon={faTrashCan} />} size="small" /> 
-          </div>
-          <Image preview={false} src={imageData.params.imageUrl} 
-            width={200} height={200}
-          ></Image></>
+            <div style={{ float: "right", marginRight: 10 }}>
+              <Button shape="circle" type='primary' onClick={(e) => { imageData.updateParams("imageUrl", ""); e.stopPropagation() }}
+                icon={<FontAwesomeIcon icon={faTrashCan} />} size="small" />
+            </div>
+            <Image preview={false} src={imageData.params.imageUrl}
+              width={200} height={200}
+            ></Image></>
         ) : uploadButton}
       </Upload.Dragger>
 
+    </div>
+
+    <div className="image-param-set image-param-label image-iw">
+      {t("Reference image power")}
+      <Tooltip placement="right" title="参考图权重，值越大，参考图的权重越大">
+        {questionBtn}        </Tooltip>
+    </div>
+    <div className="image-iw-input">
+
+      <Row>
+        <Col span={16}>
+          <Slider
+            min={0}
+            max={2}
+            onChange={(e) => imageData.updateParams("iw", e)}
+            value={imageData.params.iw}
+            step={0.01}
+          />
+        </Col>
+        <Col span={4}>
+          <InputNumber
+            min={0}
+            max={1}
+            style={{ margin: '0 16px' }}
+            step={0.01}
+            value={imageData.params.iw}
+            onChange={(e) => imageData.updateParams("iw", e ? e : 1)}
+          />
+        </Col>
+      </Row>
     </div>
   </div>)
 })

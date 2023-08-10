@@ -350,7 +350,7 @@ class MessageData implements IMessage {
             edit: false,
             favorite: false,
             updateDate: new Date(),
-            chatConfig: chatConfig.apiConfig
+            chatConfig: Object.assign({},chatConfig.apiConfig)
         };
         this.session.push(sessionData);
         this.activeSession = chatId;
@@ -379,7 +379,7 @@ class MessageData implements IMessage {
             role: role.roleId,
             favorite: false,
             updateDate: new Date(),
-            chatConfig: role.setting ? role.setting : chatConfig.getAPIConfig()
+            chatConfig: role.setting ? role.setting :  Object.assign({},chatConfig.apiConfig)
         };
         this.session.push(sessionData);
         this.save(chatId);

@@ -180,7 +180,7 @@ const config = {
     "Quality":"质量",
     "Image model":"图片模型",
     "default":"默认",
-    "scenic":"景观",
+    "scenic":"风景",
     "cute":"可爱",
     "expressive":"表现力",
     "Version":"版本",
@@ -199,6 +199,7 @@ const config = {
     "Zoom out 2x":"缩放2倍并且自动填充空白，再次生成4张图片",
     "Zoom out 1.5x":"缩放1.5倍并且自动填充空白，再次生成4张图片",
     "Reference image":"参考图片",
+    "Reference image power":"参考图权重",
     "Click or drag file to this area to upload":"点击或拖拽一个图片到这里作为输入支持PNG和JPG格式"
 }
 export default config;

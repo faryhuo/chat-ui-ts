@@ -43,6 +43,7 @@ export interface ImageParam {
     model:string;
     quality:string;
     chaos:number;
+    iw:number;
     stylize?:number;
     style?:string;
     noNeedEle?:string;
@@ -63,6 +64,7 @@ class ImageData implements IImageData {
         stylize:100,
         style:"",
         noNeedEle:"",
+        iw:1,
         imageUrl:""
     }
 
@@ -136,6 +138,10 @@ class ImageData implements IImageData {
         return this.data.find(item=>item.task_id===taskId);
     }
 
+    getImageByImageId(imageId:string){
+        return this.data.find(item=>item.image_id===imageId);
+    }
+
     setImageByTaskId(taskId:string,response:ImageResponse){
         this.data.forEach(item=>{
             if(item.task_id===taskId){
@@ -178,25 +184,8 @@ class ImageData implements IImageData {
       }
 
     buildPromptByParams(prompt:string){
-        const {size,stylize,model,quality,chaos,version,style,noNeedEle} = this.params;
-        let modelVersion="";
-        let modelStyle="";
-        if(model==="MJ"){
-            modelVersion=`--v ${version}`;
-            if(stylize){
-                modelStyle=`--s ${stylize}`
-            }
-        }else if(model==="NIJI"){
-            modelVersion=`--niji ${version}`;
-            if(style){
-                modelStyle=`--style ${style}`
-            }
-        }
-        let noNeedEleStr="";
-        if(noNeedEle){
-            noNeedEleStr=`--no ${noNeedEle}`
-        }
-        return `${prompt} ${modelVersion} --ar ${size} --c ${chaos} --q ${quality} ${modelStyle} ${noNeedEleStr}`
+        const params = this.getParamsByPrompt(prompt);
+        return `${prompt} ${params.join(" ")}`;
     }
 
 
@@ -223,6 +212,49 @@ class ImageData implements IImageData {
         "status":"success"
     }]
 
+
+    getParamsByPrompt(prompt: string) {
+        const { size, stylize, model, quality, chaos, version, style, noNeedEle, iw, imageUrl } = this.params;
+        let modelVersion = "";
+        let modelStyle = "";
+        const params = [];
+        if (model === "MJ") {
+            modelVersion = `--v ${version}`;
+            if (stylize) {
+                modelStyle = `--s ${stylize}`;
+            }
+        } else if (model === "NIJI") {
+            modelVersion = `--niji ${version}`;
+            if (style) {
+                modelStyle = `--style ${style}`;
+            }
+        }
+        let noNeedEleStr = "";
+        if (noNeedEle) {
+            noNeedEleStr = `--no ${noNeedEle}`;
+        }
+        const arr = prompt.split(" ");
+        if (!arr.includes("--v") || !arr.includes("--niji")) {
+            params.push(modelVersion);
+            params.push(modelStyle);
+        }
+        if (!arr.includes("--ar")) {
+            params.push(`--ar ${size}`);
+        }
+        if (!arr.includes("--c")) {
+            params.push(`--c ${chaos}`);
+        }
+        if (!arr.includes("--q")) {
+            params.push(`--q ${quality}`);
+        }
+        if (!arr.includes("--no")) {
+            params.push(noNeedEleStr);
+        }
+        if (imageUrl && iw && !arr.includes("--iw")) {
+            params.push(`--iw ${iw}`);
+        }
+        return params;
+    }
 
     changeImageSize(size: string) {
         this.imageSize = size;
@@ -303,7 +335,13 @@ class ImageData implements IImageData {
                     }else{
                        let obj=this.getImageByTaskId(taskId);
                        if(!obj){
-                            this.data.push(Object.assign(data,{params:this.params,type:requestData.action,status:"process"}))
+                            let params:any={};
+                            if(requestData.prompt){
+                                params = this.params;
+                            }else if(requestData.image_id){
+                                params=this.getImageByImageId(requestData.image_id)?.params;
+                            }
+                            this.data.push(Object.assign(data,{params:params,type:requestData.action,status:"process"}))
                        }else{
                             obj.progress=data.progress;
                        }
@@ -326,7 +364,7 @@ class ImageData implements IImageData {
         globalMessageApi.success(i18n.t<string>('Submit task successlly. you can go to other page first, I will tall you if done'),15);
         let promptStr=this.buildPromptByParams(prompt);
         if(this.params.imageUrl){
-            promptStr=this.params.imageUrl+" "+promptStr;
+            promptStr=`< ${this.params.imageUrl} > ${promptStr}`;
         }
         const requestData={
             prompt: promptStr,
