@@ -199,7 +199,14 @@ const config = {
     "Zoom out 2x":"缩放2倍并且自动填充空白，再次生成4张图片",
     "Zoom out 1.5x":"缩放1.5倍并且自动填充空白，再次生成4张图片",
     "Reference image":"参考图片",
-    "Reference image power":"参考图权重",
-    "Click or drag file to this area to upload":"点击或拖拽一个图片到这里作为输入支持PNG和JPG格式"
+    "Reference image weight":"参考图权重",
+    "Value range: 0-100, - Chaos, or - c Chaos level, which can be understood as a space that allows AI to roam freely The smaller the value, the more reliable it is, with a default of 0 being the most accurate":
+    "取值范围：0-100、 --chaos 或 --c 混乱级别，可以理解为让AI天马行空的空间 值越小越可靠、默认0最为精准",
+    "Upload an image and make modifications based on it"
+    :"上传一张图片, 然后基于这张图片做修改",
+    "In reference to the weight of the reference image, the higher the value, the greater the significance of the reference image."
+    :"参考图权重，值越大，参考图的权重越大",
+    "Click or drag file to this area to upload":"点击或拖拽一个图片到这里作为输入支持PNG和JPG格式",
+    "Painting Square":"绘画广场"
 }
 export default config;

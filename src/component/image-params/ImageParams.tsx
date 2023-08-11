@@ -183,9 +183,9 @@ const ImageParams: React.FC<IProps> = observer(() => {
     <div className="image-param-set">
 
       <div className="image-param-label">{t<string>("Chaos")}
-        <Tooltip placement="right" title="取值范围：0-100、 --chaos 或 --c
-      混乱级别，可以理解为让AI天马行空的空间
-      值越小越可靠、默认0最为精准">
+        <Tooltip placement="right" 
+        title={t("Value range: 0-100, - Chaos, or - c Chaos level, which can be understood as a space that allows AI to roam freely The smaller the value, the more reliable it is, with a default of 0 being the most accurate")}
+        >
           {questionBtn}        </Tooltip>
       </div>
       <div className="image-param-input"><InputNumber min={0} max={100} value={imageData.params.chaos}
@@ -195,7 +195,8 @@ const ImageParams: React.FC<IProps> = observer(() => {
 
     <div className="image-param-set image-param-label">
       {t("Reference image")}
-      <Tooltip placement="right" title="上传一张图片, 然后基于这张图片做修改">
+      <Tooltip placement="right" title={t("Upload an image and make modifications based on it")}
+      >
         {questionBtn}        </Tooltip>
     </div>
     <div style={{ padding: 20 }}>
@@ -226,8 +227,9 @@ const ImageParams: React.FC<IProps> = observer(() => {
     </div>
 
     <div className="image-param-set image-param-label image-iw">
-      {t("Reference image power")}
-      <Tooltip placement="right" title="参考图权重，值越大，参考图的权重越大">
+      {t("Reference image weight")}
+      <Tooltip placement="right" title={t('In reference to the weight of the reference image, the higher the value, the greater the significance of the reference image.')}
+      >
         {questionBtn}        </Tooltip>
     </div>
     <div className="image-iw-input">

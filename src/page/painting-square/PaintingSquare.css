@@ -1,0 +1,8 @@
+.painting-square-page{
+    padding: 20px;
+}
+.painting-square-page .painting-square-image-item{
+    margin: 5px;
+    border-radius: 5px;
+    border:1px solid var(--color-primary)
+}

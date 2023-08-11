@@ -1,7 +1,7 @@
 import React from 'react';
 import { observer } from "mobx-react"
 import { Card,Collapse} from 'antd';
-import {BaseConfigForm,ChatConfigForm,CodeEditConfigForm,ConfigActionBtn} from '../../component';
+import {BaseConfigForm,ChatConfigForm,ConfigActionBtn} from '../../component';
 import { useTranslation } from 'react-i18next';
 import "./Config.css";
 import {IAppConfig} from '../../store/AppConfig';
@@ -35,11 +35,6 @@ const ConfigPage:React.FC<IProps> = observer(({config,store})=>{
               <ChatConfigForm config={config}></ChatConfigForm>
               </Card>
             </Panel>
-            {/* <Panel header={t<string>("Code edits API Configuration")} key="3">
-              <Card>
-              <CodeEditConfigForm config={config}></CodeEditConfigForm>
-              </Card>
-            </Panel> */}
             <Panel header={t<string>("Roles management")} key="4">
               <RoleConfigPage readonly={false}  config={config} store={store}></RoleConfigPage>
             </Panel>

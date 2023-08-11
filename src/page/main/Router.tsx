@@ -25,6 +25,7 @@ const AsyncFrame= asyncComponent(() => import ('../iframe/Iframe'));
 const AsyncConfigPage= asyncComponent(() => import ('../config/Config'));
 const AsyncPersonInfoPage= asyncComponent(() => import ('../person-info/PersonInfo'));
  const AsyncImage= asyncComponent(() => import ('../image/Image'));
+ const AsyncPaintingSquare= asyncComponent(() => import ('../painting-square/PaintingSquare'));
 
 const pageList=[{
     path:"/chat/:chatId",
@@ -33,8 +34,15 @@ const pageList=[{
     path:"/image",
     component:AsyncImage
 },{
+    path:"/image",
+    component:AsyncImage
+},{
     path:"/image/:chatId",
     component:AsyncImage
+},
+{
+    path:"/painting_square",
+    component:AsyncPaintingSquare
 },
 // {
 //     path:"/code",

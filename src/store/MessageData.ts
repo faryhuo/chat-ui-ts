@@ -222,6 +222,8 @@ class MessageData implements IMessage {
             type = "chat";
         } else if (pathname.startsWith("/image")) {
             type = "image";
+        } else if (pathname.startsWith("/painting_square")) {
+            type = "painting_square";
         } else if (pathname.startsWith("/config")) {
             type = "config";
         } else {
