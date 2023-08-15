@@ -44,7 +44,7 @@ class APISetting implements IAPISetting {
     editsUrl = `${this.host}/${this.chatServiceName}/edits/v2/info`;
     imageEditUrl = `${this.host}/${this.chatServiceName}/image/v2/edit`;
     variationsImageUrl = `${this.host}/${this.chatServiceName}/image/v2/variations`;
-    imageUploadUrl = `${this.host}/${this.chatServiceName}/upload/v2/image`
+    imageUploadUrl = `${this.host}/${this.historyServiceName}/image/upload`
     chatRoleUrl = `${this.host}/${this.chatConfigServiceName}/config/chat-roles`
     moduleUrl = `${this.host}/${this.chatConfigServiceName}/config/modules`
     loginUrl = `${this.host}/${this.userServiceName}/user/user-tokens`

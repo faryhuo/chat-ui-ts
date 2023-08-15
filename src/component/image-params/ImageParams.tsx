@@ -80,20 +80,20 @@ const ImageParams: React.FC<IProps> = observer(() => {
     if (info.file.status === 'done') {
       // Get this url from response in real world.
       const fileName = info.file.response.data;
-      imageData.updateParams("imageUrl", `${apiSetting.imageUploadUrl}/${fileName}`)
+      imageData.updateParams("imageUrl", `${fileName}`)
     }
   };
 
   const beforeUpload = (file: RcFile) => {
     const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
     if (!isJpgOrPng) {
-      message.error('You can only upload JPG/PNG file!');
+      message.error(t('You can only upload JPG/PNG file!'));
     }
-    const isLt10M = file.size / 1024 / 1024 < 10;
-    if (!isLt10M) {
-      message.error('Image must smaller than 10MB!');
+    const isLimit = file.size / 1024 / 1024 < 20;
+    if (!isLimit) {
+      message.error(t('Image must smaller than 20MB!'));
     }
-    return isJpgOrPng && isLt10M;
+    return isJpgOrPng && isLimit;
   };
 
 

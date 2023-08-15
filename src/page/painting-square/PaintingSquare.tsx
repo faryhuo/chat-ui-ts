@@ -12,20 +12,88 @@ const PaintingSquare:React.FC<IProps> = ({src})=>{
     height:256
   },{
     url:"",
-    width:256,
+    width:160,
     height:256
   },{
     url:"",
     width:256,
+    height:160
+  },{
+    url:"",
+    width:160,
     height:256
   },{
     url:"",
     width:256,
+    height:160
+  },{
+    url:"",
+    width:160,
     height:256
   },{
     url:"",
     width:256,
+    height:160
+  },{
+    url:"",
+    width:160,
     height:256
+  },{
+    url:"",
+    width:256,
+    height:160
+  },{
+    url:"",
+    width:160,
+    height:256
+  },{
+    url:"",
+    width:256,
+    height:160
+  },{
+    url:"",
+    width:160,
+    height:256
+  },{
+    url:"",
+    width:256,
+    height:160
+  },{
+    url:"",
+    width:160,
+    height:256
+  },{
+    url:"",
+    width:256,
+    height:160
+  },{
+    url:"",
+    width:160,
+    height:256
+  },{
+    url:"",
+    width:256,
+    height:160
+  },{
+    url:"",
+    width:160,
+    height:256
+  },{
+    url:"",
+    width:256,
+    height:160
+  },{
+    url:"",
+    width:256,
+    height:160
+  },{
+    url:"",
+    width:160,
+    height:256
+  },{
+    url:"",
+    width:256,
+    height:160
   }]
     return (
     <div className="painting-square-page">

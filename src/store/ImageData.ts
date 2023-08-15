@@ -337,7 +337,7 @@ class ImageData implements IImageData {
                        if(!obj){
                             let params:any={};
                             if(requestData.prompt){
-                                params = this.params;
+                                params = Object.assign({},this.params);
                             }else if(requestData.image_id){
                                 params=this.getImageByImageId(requestData.image_id)?.params;
                             }
