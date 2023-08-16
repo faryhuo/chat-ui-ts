@@ -5,6 +5,7 @@ import { MessageInstance } from "antd/es/message/interface";
 import saveAs from 'file-saver';
 import i18n from "../utils/i18n";
 import apiSetting from "./APISetting";
+import { fetchEventSource } from "@microsoft/fetch-event-source";
 
 export interface IImageData {
     imageSize: string;
@@ -285,78 +286,85 @@ class ImageData implements IImageData {
         return this.generateByData(requestData,globalMessageApi);    
     }
 
-    generateByData(requestData:{action:string,prompt?:string,image_id?:string},globalMessageApi:MessageInstance){
+
+    generateByData(requestData:{action?:string,prompt?:string,size?:string,image_id?:string},globalMessageApi:MessageInstance){
         this.disableSubmit=true;
         this.hasTask=true;
         setTimeout(()=>{ this.disableSubmit=false},60000);
-        const token="449f53e6ab334c52a9359406cc558be8";
-        // this.data.push(
-        //     {params:this.params,type:requestData.action,status:"process",
-        //     actions:[],image_id:"",image_url:"",task_id:"",date:new Date(),
-        //     progress:0})
-        return axios({
-            url: `https://api.zhishuyun.com/midjourney/imagine/relax?token=${token}`,
-            data: requestData,
-            headers: {
-                'accept': 'application/x-ndjson',
-                'content-type': 'application/json'
-            },
-            responseType: 'stream',
-            method: 'POST',
-            onDownloadProgress: progressEvent => {
-                const response = progressEvent.event.target.response;
-                const lines = response.split('\r\n').filter((line: any) => !!line)
-                const lastLine = lines[lines.length - 1]
-                if(lastLine){
-                    console.log(lastLine);
-                    const data=JSON.parse(lastLine);
-                    const taskId=data.task_id;
-                    if(data.code && data.detail){
-                        globalMessageApi.error(data.detail)
-                        return;
-                    }
-                    if(data.progress===100){
-                        let obj=this.getImageByTaskId(taskId) as ImageResponse;
-                        if(!obj){
-                            this.data.push(Object.assign(data,{date:new Date(),
-                                params:this.params,type:requestData.action,status:"success"}))
-                        }else{
-                            obj.status="success";
-                            obj.date=new Date();
-                            obj.progress=100;
-                            if(requestData.prompt){
-                                obj.prompt=requestData.prompt;
+        const ctrl = new AbortController();
+        const self=this;
+        const promise = new Promise((resolve,reject) => {
+            fetchEventSource(apiSetting.mjImageUrl,
+                {
+                    method: "POST",
+                    signal: ctrl.signal,
+                    headers: {
+                        'token': localStorage['user-token'],
+                        "content-type": "application/json"
+                    },
+                    body: JSON.stringify(requestData),
+                    onmessage(msg) {
+                        let responseData = msg.data;
+                        if(responseData){
+                            console.log(responseData);
+                            const data=JSON.parse(responseData);
+                            const taskId=data.task_id;
+                            if(data.code && data.detail){
+                                globalMessageApi.error(data.detail)
+                                reject(data.detail)
+                                return;
                             }
-                            obj.actions=data.actions;
-                            obj.image_id=data.image_id;
-                            obj.image_url=data.image_url;
-                            this.setImageByTaskId(taskId,obj);
+                            if(data.progress===100){
+                                resolve(data);
+                                let obj=self.getImageByTaskId(taskId) as ImageResponse;
+                                if(!obj){
+                                    self.data.push(Object.assign(data,{date:new Date(),
+                                        params:self.params,type:requestData.action,status:"success"}))
+                                }else{
+                                    obj.status="success";
+                                    obj.date=new Date();
+                                    obj.progress=100;
+                                    if(requestData.prompt){
+                                        obj.prompt=requestData.prompt;
+                                    }
+                                    obj.actions=data.actions;
+                                    obj.image_id=data.image_id;
+                                    obj.image_url=data.image_url;
+                                    self.setImageByTaskId(taskId,obj);
+                                }
+                            }else{
+                               let obj=self.getImageByTaskId(taskId);
+                               if(!obj){
+                                    let params:any={};
+                                    if(requestData.prompt){
+                                        params = Object.assign({},self.params);
+                                    }else if(requestData.image_id){
+                                        params=self.getImageByImageId(requestData.image_id)?.params;
+                                    }
+                                    self.data.push(Object.assign(data,{params:params,type:requestData.action,status:"process"}))
+                               }else{
+                                    obj.progress=data.progress;
+                               }
+                            }
                         }
-                    }else{
-                       let obj=this.getImageByTaskId(taskId);
-                       if(!obj){
-                            let params:any={};
-                            if(requestData.prompt){
-                                params = Object.assign({},this.params);
-                            }else if(requestData.image_id){
-                                params=this.getImageByImageId(requestData.image_id)?.params;
-                            }
-                            this.data.push(Object.assign(data,{params:params,type:requestData.action,status:"process"}))
-                       }else{
-                            obj.progress=data.progress;
-                       }
-                    }
-                }
-            }
-            }).then(() =>{
-                this.disableSubmit=false;
-                this.hasTask=false;
-                localStorage["image_data"]=JSON.stringify(this.data);
-                globalMessageApi.success(i18n.t<string>("Image generated successlly"),15);
-            }).catch(()=>{
-                this.disableSubmit=false;
-                this.hasTask=false;
-            });    
+                    }, onerror(e) {
+                        reject(e);
+                        ctrl.abort();
+                        throw e;
+                    }, openWhenHidden: true
+            });
+        });
+        promise.then(() =>{
+            this.disableSubmit=false;
+            this.hasTask=false;
+            localStorage["image_data"]=JSON.stringify(this.data);
+            globalMessageApi.success(i18n.t<string>("Image generated successlly"),15);
+        }).catch(()=>{
+            globalMessageApi.success(i18n.t<string>("Image generated failure."),15);
+            this.disableSubmit=false;
+            this.hasTask=false;
+        });  
+        return promise;
     }
 
 
@@ -368,7 +376,7 @@ class ImageData implements IImageData {
         }
         const requestData={
             prompt: promptStr,
-            action: 'generate'
+            size: this.params.size
         };
         return this.generateByData(requestData,globalMessageApi);
     }
