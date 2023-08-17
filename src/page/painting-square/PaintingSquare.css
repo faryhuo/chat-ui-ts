@@ -1,5 +1,6 @@
 .painting-square-page{
     padding: 20px;
+    overflow: auto;
 }
 .painting-square-page .painting-square-image-item{
     margin: 5px;

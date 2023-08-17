@@ -1,0 +1,38 @@
+.notice-messages{
+    max-width: 320px;
+    max-height: 480px;
+    overflow: auto;
+}
+.notice-messages .message-item:hover {
+    background-color: #e6f7ff;
+}
+.notice-messages .message-item {
+    padding: 10px;
+    border-radius: 10px;
+}
+.notice-messages .message-content {
+    font-weight: 600;
+}
+.notice-messages .message-read .message-content {
+    color:rgb(191 191 191);
+}
+.notice-messages .message-content {
+    color:#000
+}
+.notice-messages .message-date{
+    color:#d9d9d9;
+}
+
+.notice-messages .success-item{
+    color: green;
+}
+.notice-messages .error-item{
+    color: red;
+}
+
+.notice-messages .ant-list-item .ant-list-item-meta{
+    flex: 0 0 50px;
+}
+.notice-messages .content{
+    flex: 1;
+}

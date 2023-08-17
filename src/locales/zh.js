@@ -207,6 +207,7 @@ const config = {
     "In reference to the weight of the reference image, the higher the value, the greater the significance of the reference image."
     :"参考图权重，值越大，参考图的权重越大",
     "Click or drag file to this area to upload":"点击或拖拽一个图片到这里作为输入支持PNG和JPG格式",
-    "Painting Square":"绘画广场"
+    "Painting Square":"绘画广场",
+    "Image generated failure.":"图片生成失败"
 }
 export default config;

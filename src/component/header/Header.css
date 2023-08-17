@@ -9,7 +9,12 @@
 .menu-header .menu-list{
     flex: 1;
 }
-
+.menu-header .notices{
+    flex: 0 0 40px;
+    margin-right: 6px;
+    text-align: center;
+    padding: 10px;
+}
 .menu-header .login-user{
     flex: 0 0 40px;
     margin-right: 6px;

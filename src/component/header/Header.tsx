@@ -12,6 +12,7 @@ import {IMessage} from '../../store/MessageData';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faComments,faLaptopCode,faGear,faOutdent, faLinesLeaning,faImages,faPerson,faSignOut } from '@fortawesome/free-solid-svg-icons'
 import userProflie from '../../store/UserProfile';
+import Notice from '../notice/Notice';
 
 type IProps={
   config:IAppConfig;
@@ -135,6 +136,9 @@ const Header: React.FC<IProps> = observer(({store,config}) => {
       <Menu onClick={onClick} selectedKeys={[store.type]} mode="horizontal"
       items={getItems()} >
         </Menu>
+    </div>
+    <div className="notices">
+      <Notice></Notice>
     </div>
     <div className="login-user">
       {userProflie.isLogin?(

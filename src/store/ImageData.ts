@@ -6,12 +6,22 @@ import saveAs from 'file-saver';
 import i18n from "../utils/i18n";
 import apiSetting from "./APISetting";
 import { fetchEventSource } from "@microsoft/fetch-event-source";
+import noticeData from "./NoticeData";
+
+export interface IImageSharing{
+    urlBig:string;
+    urlSmall:string;
+    size:string;
+    prompt_full:string;
+    prompt:string;
+}
 
 export interface IImageData {
     imageSize: string;
     params:ImageParam;
     prompt:string;
     disableSubmit:boolean;
+    sharingData:IImageSharing[];
     setPrompt:(prompt:string)=>void;
     callImageAPI: (chatId: string, message: string) => Promise<any>
     changeImageSize: (size: string) => void;
@@ -55,6 +65,7 @@ class ImageData implements IImageData {
 
     imageSize = "256x256";
     disableSubmit=true;
+    sharingData:IImageSharing[]=[];
 
     params:ImageParam={
         size:"16:9",
@@ -286,6 +297,17 @@ class ImageData implements IImageData {
         return this.generateByData(requestData,globalMessageApi);    
     }
 
+    showErrorMsg(globalMessageApi:MessageInstance,msg:string){
+        const message=i18n.t<string>(msg);
+        globalMessageApi.error(message,15);
+        noticeData.addErrorMessage(message)
+    }
+    
+    showSuccessMsg(globalMessageApi:MessageInstance,msg:string){
+        const message=i18n.t<string>(msg);
+        globalMessageApi.success(message,15);
+        noticeData.addSuccessMessage(message)
+    }
 
     generateByData(requestData:{action?:string,prompt?:string,size?:string,image_id?:string},globalMessageApi:MessageInstance){
         this.disableSubmit=true;
@@ -293,6 +315,8 @@ class ImageData implements IImageData {
         setTimeout(()=>{ this.disableSubmit=false},60000);
         const ctrl = new AbortController();
         const self=this;
+        const message='Submit task successlly. you can go to other page first, I will tall you if done';
+        self.showSuccessMsg(globalMessageApi,message);
         const promise = new Promise((resolve,reject) => {
             fetchEventSource(apiSetting.mjImageUrl,
                 {
@@ -310,7 +334,7 @@ class ImageData implements IImageData {
                             const data=JSON.parse(responseData);
                             const taskId=data.task_id;
                             if(data.code && data.detail){
-                                globalMessageApi.error(data.detail)
+                                self.showErrorMsg(globalMessageApi,data.detail);
                                 reject(data.detail)
                                 return;
                             }
@@ -358,9 +382,11 @@ class ImageData implements IImageData {
             this.disableSubmit=false;
             this.hasTask=false;
             localStorage["image_data"]=JSON.stringify(this.data);
-            globalMessageApi.success(i18n.t<string>("Image generated successlly"),15);
+            const message="Image generated successlly";
+            self.showSuccessMsg(globalMessageApi,message);
         }).catch(()=>{
-            globalMessageApi.success(i18n.t<string>("Image generated failure."),15);
+            const message="Image generated failure.";
+            self.showErrorMsg(globalMessageApi,message);
             this.disableSubmit=false;
             this.hasTask=false;
         });  
@@ -369,7 +395,6 @@ class ImageData implements IImageData {
 
 
     generate(prompt:string,globalMessageApi:MessageInstance){
-        globalMessageApi.success(i18n.t<string>('Submit task successlly. you can go to other page first, I will tall you if done'),15);
         let promptStr=this.buildPromptByParams(prompt);
         if(this.params.imageUrl){
             promptStr=`< ${this.params.imageUrl} > ${promptStr}`;
@@ -384,6 +409,7 @@ class ImageData implements IImageData {
     constructor() {
         makeObservable(this, {
             imageSize: observable,
+            sharingData:observable,
             disableSubmit: observable,
             params: observable,
             prompt:observable,

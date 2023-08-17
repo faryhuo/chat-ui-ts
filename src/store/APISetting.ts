@@ -64,6 +64,7 @@ class APISetting implements IAPISetting {
     aiModelsUrl = `${this.host}/${this.userServiceName}/user/models`
     tokenUsageUrl = `${this.host}/${this.userServiceName}/user/models/usage`
     mjImageUrl = `${this.host}/${this.historyServiceName}/image`;
+    imageSharingUrl = `${this.host}/${this.historyServiceName}/image/all`;
 
 }
 const apiSetting = new APISetting()

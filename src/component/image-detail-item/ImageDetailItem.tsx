@@ -14,17 +14,13 @@ type IProps = {
   globalMessageApi: MessageInstance;
 }
 const ImageDetailItem: React.FC<IProps> = observer(({ data, globalMessageApi }) => {
-  const [messageApi, contextHolder] = message.useMessage();
 
   const { t } = useTranslation();
   const buttonSize = "small"
-  const success = () => {
-    messageApi.success(t('Submit task successlly. you can go to other page first, I will tall you if done'),15);
-  };
+
 
   const updateMJImage = (imageId: string, action: string) => {
     imageData.updateMJImage(imageId, action, globalMessageApi)
-    success();
   }
 
   const getDetailButtonByType = (actions: string[], imageId: string) => {
@@ -126,7 +122,9 @@ const ImageDetailItem: React.FC<IProps> = observer(({ data, globalMessageApi }) 
             status="active" strokeColor={{ '0%': '#108ee9', '100%': '#87d068' }} />
 }
 
-        {data.progress===100 && <Image src={data.image_url} width={imageData.getWidthBySize(data.params?.size)} height={imageData.getHeightBySize(data.params?.size)}></Image>}
+        {data.progress===100 && 
+        <Image src={data.image_url} width={imageData.getWidthBySize(data.params?.size)} 
+        height={imageData.getHeightBySize(data.params?.size)}></Image>}
         </div>
 
         <div className="image-detail-button">
@@ -137,7 +135,6 @@ const ImageDetailItem: React.FC<IProps> = observer(({ data, globalMessageApi }) 
         </div>
       </div>
     </Card>
-    {contextHolder}
   </div>)
 })
 
