@@ -12,6 +12,8 @@ export interface IImageSharing{
     urlBig:string;
     urlSmall:string;
     size:string;
+    width:number;
+    height:number;
     prompt_full:string;
     prompt:string;
 }
@@ -405,6 +407,8 @@ class ImageData implements IImageData {
         };
         return this.generateByData(requestData,globalMessageApi);
     }
+
+    
 
     constructor() {
         makeObservable(this, {

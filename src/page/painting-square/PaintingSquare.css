@@ -1,9 +1,73 @@
 .painting-square-page{
     padding: 20px;
-    overflow: auto;
 }
 .painting-square-page .painting-square-image-item{
     margin: 5px;
     border-radius: 5px;
-    border:1px solid var(--color-primary)
+    border:1px solid var(--color-primary);
+    overflow: hidden; 
+}
+.painting-square-page .painting-square-image-item .ant-image-img{
+    object-fit: cover;
+    transition: transform 0.3s;
+}
+.painting-square-page .painting-square-image-item .ant-image-img:hover{
+    transform: scale(1.1);
+}
+
+.painting-square-page .painting-square-image-item .ant-image:hover .ant-image-mask{
+    display: block;
+    transition: transform 0.3s;
+}
+
+.painting-square-page .painting-square-image-item .ant-image-mask{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: auto;
+    display: none;
+    margin: 10px;
+    padding: 5px;
+    max-height: 100px;
+    min-height: 40px;
+    overflow: hidden;
+    border-radius: 10px;
+    opacity: 1;
+}
+.painting-square-page .painting-square-image-item .image-mask{
+    display: flex;
+    width: 100%;
+}
+.image-mask .image-mask-content{
+    flex:1;
+}
+
+.image-mask .image-mask-btn{
+    flex: 0 0 30px;
+    position: relative;
+}
+.image-mask .image-mask-btn button{
+   position: absolute;
+   bottom: 0;
+   left: 0;
+   right: 0;
+   top: auto;
+}
+
+#scrollableDiv{
+    overflow: auto;
+}
+
+.painting-square-page .painting-actions{
+    display: flex;
+    width:100%;
+    box-sizing: border-box;
+    padding: 10px 10px;
+}
+.painting-square-page .painting-actions .actions-input{
+    flex:1;
+}
+.painting-square-page .painting-actions .actions-adjust{
+    flex:0 0 200px;
 }

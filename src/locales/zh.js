@@ -208,6 +208,8 @@ const config = {
     :"参考图权重，值越大，参考图的权重越大",
     "Click or drag file to this area to upload":"点击或拖拽一个图片到这里作为输入支持PNG和JPG格式",
     "Painting Square":"绘画广场",
-    "Image generated failure.":"图片生成失败"
+    "Image generated failure.":"图片生成失败",
+    "search by prompt":"prompt关键词搜索",
+    "Copy prompt successlly":"复制prompt成功"
 }
 export default config;
