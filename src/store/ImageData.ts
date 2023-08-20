@@ -131,21 +131,22 @@ class ImageData implements IImageData {
 
 
     getWidthBySize(size?:string){
-        if(size==="1:1"){
-            return 256;
-        }if(size==="1:2"){
-            return 256/2;
-        }else if(size==="4:3"){
-            return 256;
-        }else if(size==="3:4"){
-            return 256/4*3;
-        }else if(size==="16:9"){
-            return 256;
-        }else if(size==="9:16"){
-            return 256/16*9;
-        }else{
-            return 256;
-        }
+        // if(size==="1:1"){
+        //     return 256;
+        // }if(size==="1:2"){
+        //     return 256;
+        // }else if(size==="4:3"){
+        //     return 256*4/3;
+        // }else if(size==="3:4"){
+        //     return 256;
+        // }else if(size==="16:9"){
+        //     return 256*16/9;
+        // }else if(size==="9:16"){
+        //     return 256;
+        // }else{
+        //     return 256;
+        // }
+        return 256
     }
 
     getImageByTaskId(taskId:string){
@@ -168,15 +169,15 @@ class ImageData implements IImageData {
         if(size==="1:1"){
             return 256;
         }if(size==="1:2"){
-            return 256;
+            return 256*2;
         }else if(size==="4:3"){
             return 256/4*3;
         }else if(size==="3:4"){
-            return 256;
+            return 256*4/3;
         }else if(size==="16:9"){
             return 256/16*9;
         }else if(size==="9:16"){
-            return 256;
+            return 256*16/9;
         }else{
             return 256;
         }

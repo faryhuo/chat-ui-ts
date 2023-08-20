@@ -108,7 +108,7 @@ const PaintingSquare:React.FC<IProps> = ()=>{
         endMessage={<Divider plain>It is all, nothing more 🤐</Divider>}
         scrollableTarget="scrollableDiv"
       > 
-      <List grid={{gutter:0}} dataSource={data} renderItem={(item) => (
+      <List  dataSource={data} renderItem={(item) => (
       <div className="painting-square-image-item" style={{width:item.width,height:item.height}}>
             <Image src={item.urlSmall} 
             width={item.width} 
