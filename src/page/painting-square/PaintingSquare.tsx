@@ -1,8 +1,9 @@
-import { faCopy } from '@fortawesome/free-solid-svg-icons';
+import { faCopy, faDownload } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { List,Image, Skeleton, Divider, Button, message, Input } from 'antd';
+import { Image, Card, Button, message } from 'antd';
+import Masonry from 'masonry-layout'
 import React, { useEffect, useState } from 'react';
-import InfiniteScroll from 'react-infinite-scroll-component';
+import VirtualList from 'rc-virtual-list';
 import apiSetting from '../../store/APISetting';
 import imageData, { IImageSharing } from '../../store/ImageData';
 import copy from 'copy-to-clipboard';
@@ -16,7 +17,7 @@ const PaintingSquare:React.FC<IProps> = ()=>{
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<IImageSharing[]>([]);
   const [total, setTotal] = useState<number>(10);
-  const [page, setPage] = useState<number>(0);
+  const [offset, setOffset] = useState<number>(0);
   const [messageApi, contextHolder] = message.useMessage();
   const { t } = useTranslation();
   const [prompt, setPrompt] = useState<string>("");
@@ -28,13 +29,13 @@ const PaintingSquare:React.FC<IProps> = ()=>{
       return;
     }
     setLoading(true);
-    fetch(`${apiSetting.imageSharingUrl}?page=${page}&pageSize=${pageSize}&prompt=${decodeURI(prompt)}`)
+    fetch(`${apiSetting.imageSharingUrl}?offset=${offset}&pageSize=${pageSize}&prompt=${decodeURI(prompt)}`)
       .then((res) => {return res.json()})
       .then((body) => {
-        setPage(page+1);
         setTotal(body.data.total);
         const responseData=body.data.data as IImageSharing[];
         if(responseData){
+          setOffset(offset+responseData.length);
           responseData.forEach((item) => {
             item.width=imageData.getWidthBySize(item.size);
             item.height=imageData.getHeightBySize(item.size);
@@ -46,12 +47,13 @@ const PaintingSquare:React.FC<IProps> = ()=>{
       })
       .catch(() => {
         setLoading(false);
+      }).finally(()=>{
+        advanceWidth();
       });
   };
 
 
   const changePrompt=(prompt:string)=>{
-    setPage(0);
     setPrompt(prompt);
     console.log(timeoutObj);
     if(timeoutObj!==null){
@@ -68,10 +70,9 @@ const PaintingSquare:React.FC<IProps> = ()=>{
   }, []);
 
 
-  const copyPrompt=(e:any,prompt:string)=>{
+  const copyPrompt=(prompt:string)=>{
     copy(prompt)
     messageApi.success(t("Copy prompt successlly"),5);
-    e.stopPropagation();
   }
 
   const getMask=(prompt:string)=>{
@@ -80,13 +81,33 @@ const PaintingSquare:React.FC<IProps> = ()=>{
         <div className="image-mask-content">
           {prompt}
         </div>
-        <div className="image-mask-btn">
-          <Button size={'small'}
-          type='default'
-          onClick={(e)=>copyPrompt(e,prompt)}
-          icon={<FontAwesomeIcon icon={faCopy}></FontAwesomeIcon>}></Button>
-        </div>
       </div>)
+  }
+
+  const advanceWidth = () => {
+    // new Masonry(节点, 配置)
+    setTimeout(()=>{
+      new Masonry(document.querySelector('.painting-square-image-items') as any, {
+        itemSelector: '.painting-square-image-item-wrapper', // 要布局的网格元素
+        columnWidth: 300,  // 获取节点 可以自动计算每列的宽度
+        fitWidth: true, // 设置网格容器宽度等于网格宽度
+      })
+    },0)
+  }
+
+  const ContainerHeight = window.innerHeight-91;
+
+
+  const onScroll = (e: React.UIEvent<HTMLElement, UIEvent>) => {
+    console.log(e.currentTarget.scrollHeight - e.currentTarget.scrollTop);
+    if (e.currentTarget.scrollHeight - e.currentTarget.scrollTop === ContainerHeight) {
+      loadMoreData();
+    }
+  };
+  const buttonStyle = {
+    width: "100%",
+    fontSize: "14px",
+    color:"#000"
   }
 
 
@@ -100,26 +121,40 @@ const PaintingSquare:React.FC<IProps> = ()=>{
         </div>
         <div className="actions-adjust"></div>
       </div> */}
-        <InfiniteScroll
-        dataLength={data.length}
-        next={()=>{loadMoreData()}}
-        hasMore={data.length < total}
-        loader={<Skeleton avatar paragraph={{ rows: 1 }} active />}
-        endMessage={<Divider plain>It is all, nothing more 🤐</Divider>}
-        scrollableTarget="scrollableDiv"
-      > 
-      <List  dataSource={data} renderItem={(item) => (
-      <div className="painting-square-image-item" style={{width:item.width,height:item.height}}>
-            <Image src={item.urlSmall} 
-            width={item.width} 
-            height={item.height} 
-            preview={
-              {src:item.urlBig,
-              mask:getMask(item.prompt)}
-            }
-            ></Image>
-          </div>)}></List>
-      </InfiniteScroll>
+       <div className="painting-square-image-items">
+      <VirtualList
+        data={data}
+        height={ContainerHeight}
+        itemKey="urlBig"
+        onScroll={onScroll}
+      >
+         {(item) => (
+            item.visible!==false && <div className="painting-square-image-item-wrapper">
+              <Card className="painting-square-image-item" 
+              actions={[
+                <Button icon={<FontAwesomeIcon icon={faCopy} />}
+                  style={buttonStyle} type="link" onClick={() => { copyPrompt(item.prompt); }}>
+                  &nbsp;{t('copy prompt')}</Button>,
+                <Button  style={buttonStyle}
+                onClick={()=>imageData.downloadImage(item.urlBig)} type="link"
+                icon={<FontAwesomeIcon icon={faDownload} />}>{t('download')}</Button>
+            
+              ]}>
+              <Image src={item.urlSmall} 
+                  width={item.width} 
+                  height={item.height} 
+                  fallback={"https://image-1257149217.cos.ap-guangzhou.myqcloud.com/error/404.png"}
+                  onError={()=>item.visible=false}
+                  preview={
+                    {src:item.urlBig,
+                    mask:getMask(item.prompt)}
+                  }
+                  ></Image>
+                  </Card>
+                </div>)
+         }
+      </VirtualList>
+      </div>
         {contextHolder}
       </div>
     )

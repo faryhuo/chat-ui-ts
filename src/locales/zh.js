@@ -210,6 +210,7 @@ const config = {
     "Painting Square":"绘画广场",
     "Image generated failure.":"图片生成失败",
     "search by prompt":"prompt关键词搜索",
-    "Copy prompt successlly":"复制prompt成功"
+    "Copy prompt successlly":"复制prompt成功",
+    "copy prompt":"复制提示词"
 }
 export default config;

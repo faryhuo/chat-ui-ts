@@ -24,7 +24,7 @@ const Notice: React.FC<IProps> = observer(() => {
   const content = (
     <div className="notice-messages">
       <List dataSource={noticeData.messages.slice().reverse()} renderItem={(message, index) => {
-        return (<List.Item className={"message-item"+message.isRead?" message-read":""} key={index}
+        return (<List.Item className={"message-item"+ (message.isRead?" message-read":"")} key={index}
         onMouseMove={()=>{noticeData.read(index)}}
         >
           <List.Item.Meta

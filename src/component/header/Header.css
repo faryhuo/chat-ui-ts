@@ -1,6 +1,5 @@
 .menu-header{
     display: flex;
-    overflow: auto;
 }
 .menu-header .action-list{
     flex: 0 0 32px;
@@ -8,6 +7,7 @@
 }
 .menu-header .menu-list{
     flex: 1;
+    overflow: auto;
 }
 .menu-header .notices{
     flex: 0 0 40px;

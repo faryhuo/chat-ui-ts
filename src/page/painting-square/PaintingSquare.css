@@ -6,6 +6,7 @@
     border-radius: 5px;
     border:1px solid var(--color-primary);
     overflow: hidden; 
+    box-shadow: 0 4px 6px -1px #ccc, 0 2px 4px -2px #ccc;
 }
 .painting-square-page .painting-square-image-item .ant-image-img{
     object-fit: cover;
@@ -70,4 +71,9 @@
 }
 .painting-square-page .painting-actions .actions-adjust{
     flex:0 0 200px;
+}
+
+
+.painting-square-page .painting-square-image-items .painting-square-image-item .ant-card-body{
+    padding: 8px;
 }

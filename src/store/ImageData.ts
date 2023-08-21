@@ -9,6 +9,7 @@ import { fetchEventSource } from "@microsoft/fetch-event-source";
 import noticeData from "./NoticeData";
 
 export interface IImageSharing{
+    visible:boolean;
     urlBig:string;
     urlSmall:string;
     size:string;
