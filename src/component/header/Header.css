@@ -7,7 +7,8 @@
 }
 .menu-header .menu-list{
     flex: 1;
-    overflow: auto;
+    overflow-x: auto;
+    overflow-y: hidden;
 }
 .menu-header .notices{
     flex: 0 0 40px;

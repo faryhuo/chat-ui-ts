@@ -1,4 +1,4 @@
-import { faCopy, faDownload } from '@fortawesome/free-solid-svg-icons';
+import { faCloudArrowDown, faCopy, faDownload, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import { Image, Card, Button, message, Divider, Skeleton } from 'antd';
 import Masonry from 'masonry-layout'
 import React, { useEffect, useState } from 'react';
@@ -23,7 +23,7 @@ const PaintingSquare: React.FC<IProps> = () => {
   const [prompt, setPrompt] = useState<string>("");
   const [timeoutObj, setTimeoutObj] = useState<any>(null);
 
-  const pageSize = 10;
+  const pageSize = 30;
   const loadMoreData = () => {
     if (loading) {
       return;
@@ -95,21 +95,6 @@ const PaintingSquare: React.FC<IProps> = () => {
     }, 0)
   }
 
-  const ContainerHeight = window.innerHeight - 91;
-
-
-  const onScroll = (e: React.UIEvent<HTMLElement, UIEvent>) => {
-    console.log(e.currentTarget.scrollHeight - e.currentTarget.scrollTop);
-    if (e.currentTarget.scrollHeight - e.currentTarget.scrollTop === ContainerHeight) {
-      loadMoreData();
-    }
-  };
-  const buttonStyle = {
-    width: "100%",
-    fontSize: "14px",
-    color: "#000"
-  }
-
 
   return (
     <div className="painting-square-page" id="scrollableDiv">
@@ -135,13 +120,14 @@ const PaintingSquare: React.FC<IProps> = () => {
               <div key={index} className="painting-square-image-item-wrapper">
               <Card   className="painting-square-image-item"
                 actions={[
-                  <Button icon={<FontAwesomeIcon icon={faCopy} />}
-                    style={buttonStyle} type="link" onClick={() => { copyPrompt(item.prompt); }}>
-                    &nbsp;{t('copy prompt')}</Button>,
-                  <Button style={buttonStyle}
-                    onClick={() => imageData.downloadImage(item.urlBig)} type="link"
-                    icon={<FontAwesomeIcon icon={faDownload} />}>{t('download')}</Button>
-
+                  <Button icon={<FontAwesomeIcon size='lg'  icon={faCopy} />} title={t<string>('copy prompt')}
+                    className={"image-btn"} type="link" onClick={() => { copyPrompt(item.prompt); }}> </Button>,
+                  <Button className={"image-btn"}
+                    onClick={() => imageData.downloadImage(item.urlBig)} type="link"  title={t<string>('download')} style={{'color':"#209cd9"}}
+                    icon={<FontAwesomeIcon icon={faCloudArrowDown} size='lg'/>}></Button>,
+                  <Button className={"image-btn"}
+                       type="link" 
+                    icon={<FontAwesomeIcon icon={faThumbsUp} size='lg' />}></Button>
                 ]}>
                 <Image src={item.urlSmall}
                   width={item.width}

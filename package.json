@@ -4,7 +4,6 @@
   "private": false,
   "license": "mit",
   "dependencies": {
-    "@egjs/react-infinitegrid": "^4.10.1",
     "@fortawesome/fontawesome-svg-core": "^6.4.0",
     "@fortawesome/free-solid-svg-icons": "^6.4.0",
     "@fortawesome/react-fontawesome": "^0.2.0",
@@ -30,7 +29,6 @@
     "mobx-react-lite": "^3.4.3",
     "rc-queue-anim": "^2.0.0",
     "rc-util": "^4.0.4",
-    "rc-virtual-list": "^3.10.4",
     "react": "^18.2.0",
     "react-colorful": "^5.6.1",
     "react-device-detect": "^2.2.3",

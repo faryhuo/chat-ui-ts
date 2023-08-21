@@ -77,3 +77,15 @@
 .painting-square-page .painting-square-image-items .painting-square-image-item .ant-card-body{
     padding: 8px;
 }
+
+.painting-square-page .painting-square-image-items .ant-card .ant-card-actions>li {
+    margin: 5px 0;
+}
+
+.painting-square-page .painting-square-image-items  .ant-card .ant-card-actions .image-btn {
+    width:100%;
+    color:#000;
+}
+.painting-square-page .painting-square-image-items  .ant-card .ant-card-actions .image-btn:hover {
+    scale: 1.2;
+}

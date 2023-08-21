@@ -71,7 +71,7 @@ class ImageData implements IImageData {
     sharingData:IImageSharing[]=[];
 
     params:ImageParam={
-        size:"16:9",
+        size:"1:1",
         model:"MJ",
         quality:"1",
         version:"5.2",
