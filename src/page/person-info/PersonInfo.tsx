@@ -29,21 +29,19 @@ const PersonInfo:React.FC<IProps> = ()=>{
       title: t('Input Token Usage'),
       dataIndex: 'inputTokenUsage',
       key:'inputTokenUsage',
-      responsive: ['lg'],
-      render: (val:number,record:ITokenUsage) => getTokenTemplate(val,record.inputTokenPrice),
+      responsive: ['lg']
     },
     {
       title: t('Output Token Usage'),
       dataIndex: 'outputTokenUsage',
       key:'outputTokenUsage',
-      responsive: ['lg'],
-      render: (val:number,record:ITokenUsage) => getTokenTemplate(val,record.outputTokenPrice),
+      responsive: ['lg']
     },
     {
       title: t('Total'),
       dataIndex: 'total',
       key:'total',
-      render: (total:number) => <span>$ {total.toFixed(4)}</span>,
+      render: (val:number,record:ITokenUsage) => <span>$ {(record.inputTokenFree+record.outputTokenFree).toFixed(4)}</span>,
     }
   ];
 
@@ -58,7 +56,7 @@ const PersonInfo:React.FC<IProps> = ()=>{
     if(data && data.length>0){
       let total=0;
       data.forEach(item=>{
-        total+=item.total;
+        total+=(item.inputTokenFree+item.outputTokenFree);
       })
       return total.toFixed(4);
     }else{

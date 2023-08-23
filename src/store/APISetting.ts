@@ -35,7 +35,6 @@ class APISetting implements IAPISetting {
     smsServiceName = "chat-sms-service"
 
     historyServiceName = "chat-history-service"
-    userFavoriteName = "chat-user-favorite-service"
 
     chatUrl = `${this.host}/${this.chatServiceName}/chat/v2/info`;
     chatStreamUrl = `${this.host}/${this.chatServiceName}/chat/v2/stream`;
@@ -56,13 +55,13 @@ class APISetting implements IAPISetting {
     historyUrl = `${this.host}/${this.historyServiceName}/history`
     sentSmsCodeUrl = `${this.host}/${this.smsServiceName}/sms/send/`
 
-    favoriteRoleUrl = `${this.host}/${this.userFavoriteName}/favorite/roles`
-    fetFavoriteChatUrl = `${this.host}/${this.userFavoriteName}/favorite/chats`
+    favoriteRoleUrl = `${this.host}/${this.userServiceName}/favorite/roles`
+    fetFavoriteChatUrl = `${this.host}/${this.userServiceName}/favorite/chats`
 
     sharingUrl = `${this.host}/${this.historyServiceName}/share`
 
     aiModelsUrl = `${this.host}/${this.userServiceName}/user/models`
-    tokenUsageUrl = `${this.host}/${this.userServiceName}/user/models/usage`
+    tokenUsageUrl = `${this.host}/${this.userServiceName}/token/usage`
     mjImageUrl = `${this.host}/${this.historyServiceName}/image`;
     imageSharingUrl = `${this.host}/${this.historyServiceName}/image/all`;
 

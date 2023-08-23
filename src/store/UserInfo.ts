@@ -6,9 +6,8 @@ export interface ITokenUsage {
     modelName: string;
     inputTokenUsage: number;
     outputTokenUsage: number;
-    inputTokenPrice: number;
-    outputTokenPrice: number;
-    total: number;
+    inputTokenFree: number;
+    outputTokenFree: number;
 }
 
 export interface IUserInfo {
@@ -37,7 +36,7 @@ class UserInfo implements IUserInfo {
     fetchTokenUsage() {
         return axios({
             method: "get",
-            url: apiSetting.tokenUsageUrl,
+            url: apiSetting.tokenUsageUrl+"/all",
             headers: {
                 'Content-Type': 'application/json;charset=UTF-8',
                 'token': userProflie.token

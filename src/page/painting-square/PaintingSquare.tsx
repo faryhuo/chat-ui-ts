@@ -1,4 +1,4 @@
-import { faCloudArrowDown, faCopy, faDownload, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
+import { faCloudArrowDown, faCopy, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import { Image, Card, Button, message, Divider, Skeleton } from 'antd';
 import Masonry from 'masonry-layout'
 import React, { useEffect, useState } from 'react';
@@ -21,7 +21,7 @@ const PaintingSquare: React.FC<IProps> = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const { t } = useTranslation();
   const [prompt, setPrompt] = useState<string>("");
-  const [timeoutObj, setTimeoutObj] = useState<any>(null);
+  // const [timeoutObj, setTimeoutObj] = useState<any>(null);
 
   const pageSize = 30;
   const loadMoreData = () => {
@@ -53,21 +53,21 @@ const PaintingSquare: React.FC<IProps> = () => {
   };
 
 
-  const changePrompt = (prompt: string) => {
-    setPrompt(prompt);
-    console.log(timeoutObj);
-    if (timeoutObj !== null) {
-      clearTimeout(timeoutObj);
-    }
-    setTimeoutObj(setTimeout(() => {
-      setData([]);
-      loadMoreData();
-    }, 1000));
-  }
+  // const changePrompt = (prompt: string) => {
+  //   setPrompt(prompt);
+  //   console.log(timeoutObj);
+  //   if (timeoutObj !== null) {
+  //     clearTimeout(timeoutObj);
+  //   }
+  //   setTimeoutObj(setTimeout(() => {
+  //     setData([]);
+  //     loadMoreData();
+  //   }, 1000));
+  // }
 
   useEffect(() => {
     loadMoreData();
-  }, []);
+  });
 
 
   const copyPrompt = (prompt: string) => {
@@ -109,43 +109,43 @@ const PaintingSquare: React.FC<IProps> = () => {
       <InfiniteScroll
         dataLength={data.length}
         next={() => { loadMoreData() }}
-        hasMore={data.length < total}
+        hasMore={(offset + 1) < total}
         loader={<Skeleton avatar paragraph={{ rows: 1 }} active />}
         endMessage={<Divider plain>It is all, nothing more 🤐</Divider>}
         scrollableTarget="scrollableDiv"
       >
         <div id="painting-square-image-items" className="painting-square-image-items">
           {
-            data.map((item,index) => (
+            data.map((item, index) => (
               <div key={index} className="painting-square-image-item-wrapper">
-              <Card   className="painting-square-image-item"
-                actions={[
-                  <Button icon={<FontAwesomeIcon size='lg'  icon={faCopy} />} title={t<string>('copy prompt')}
-                    className={"image-btn"} type="link" onClick={() => { copyPrompt(item.prompt); }}> </Button>,
-                  <Button className={"image-btn"}
-                    onClick={() => imageData.downloadImage(item.urlBig)} type="link"  title={t<string>('download')} style={{'color':"#209cd9"}}
-                    icon={<FontAwesomeIcon icon={faCloudArrowDown} size='lg'/>}></Button>,
-                  <Button className={"image-btn"}
-                       type="link" 
-                    icon={<FontAwesomeIcon icon={faThumbsUp} size='lg' />}></Button>
-                ]}>
-                <Image src={item.urlSmall}
-                  width={item.width}
-                  height={item.height}
-                  fallback={"https://image-1257149217.cos.ap-guangzhou.myqcloud.com/error/404.png"}
-                  onError={() => item.visible = false}
-                  preview={
-                    {
-                      src: item.urlBig,
-                      mask: getMask(item.prompt)
+                <Card className="painting-square-image-item"
+                  actions={[
+                    <Button icon={<FontAwesomeIcon size='lg' icon={faCopy} />} title={t<string>('copy prompt')}
+                      className={"image-btn"} type="link" onClick={() => { copyPrompt(item.prompt); }}> </Button>,
+                    <Button className={"image-btn"}
+                      onClick={() => imageData.downloadImage(item.urlBig)} type="link" title={t<string>('download')} style={{ 'color': "#209cd9" }}
+                      icon={<FontAwesomeIcon icon={faCloudArrowDown} size='lg' />}></Button>,
+                    <Button className={"image-btn"}
+                      type="link"
+                      icon={<FontAwesomeIcon icon={faThumbsUp} size='lg' />}></Button>
+                  ]}>
+                  <Image src={item.urlSmall}
+                    width={item.width}
+                    height={item.height}
+                    fallback={"https://image-1257149217.cos.ap-guangzhou.myqcloud.com/error/404.png"}
+                    onError={() => item.visible = false}
+                    preview={
+                      {
+                        src: item.urlBig,
+                        mask: getMask(item.prompt)
+                      }
                     }
-                  }
-                ></Image>
-              </Card>
+                  ></Image>
+                </Card>
               </div>
             ))
           }
-                      </div>
+        </div>
       </InfiniteScroll>
       {contextHolder}
     </div>
