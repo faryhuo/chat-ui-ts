@@ -25,7 +25,7 @@ const PaintingSquare: React.FC<IProps> = () => {
 
   const pageSize = 30;
   const loadMoreData = () => {
-    if (loading) {
+    if (loading || offset>=total) {
       return;
     }
     setLoading(true);
@@ -34,7 +34,7 @@ const PaintingSquare: React.FC<IProps> = () => {
       .then((body) => {
         setTotal(body.data.total);
         const responseData = body.data.data as IImageSharing[];
-        if (responseData) {
+        if (responseData && responseData.length>0) {
           setOffset(offset + responseData.length);
           responseData.forEach((item) => {
             item.width = imageData.getWidthBySize(item.size);
@@ -109,7 +109,7 @@ const PaintingSquare: React.FC<IProps> = () => {
       <InfiniteScroll
         dataLength={data.length}
         next={() => { loadMoreData() }}
-        hasMore={(offset + 1) < total}
+        hasMore={offset < total}
         loader={<Skeleton avatar paragraph={{ rows: 1 }} active />}
         endMessage={<Divider plain>It is all, nothing more 🤐</Divider>}
         scrollableTarget="scrollableDiv"
