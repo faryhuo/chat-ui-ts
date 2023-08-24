@@ -74,7 +74,7 @@ const SessionAtcionList: React.FC<IProps> = observer(({ store, config, onOpen })
       list.push(<RoleSelector key={3} store={store} roleList={roleList}></RoleSelector>);
       list.push(<Select key={4} style={{ width: 180 }}
         className="option-btn" onChange={(e) => store.setChatApiConfig("model", e)}
-        options={getModulesDataSource().map((item) => ({ label: item, value: item }))}
+        options={getModulesDataSource()}
         value={store.chatApiConfig.model}
         dropdownRender={(menu) => (
           <>

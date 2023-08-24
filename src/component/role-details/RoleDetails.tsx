@@ -141,7 +141,7 @@ const RoleDetails: React.FC<IProps> = observer(({ store, config, role, handleCan
         >
           <Form.Item label={t<string>("Model")} name="model" tooltip={t<string>("which models work with the Chat API.")}>
             <Select
-              options={chatConfig.chatModelList.map((item) => ({ label: item, value: item }))}
+              options={chatConfig.chatModelList}
             />
           </Form.Item>
           <Form.Item label={t<string>("max_tokens")} name="max_tokens" tooltip={t<string>("max length of GPT return")}>

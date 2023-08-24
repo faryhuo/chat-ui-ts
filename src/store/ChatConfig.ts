@@ -1,12 +1,16 @@
 import { makeObservable, observable, action } from "mobx";
 import userProflie from "./UserProfile";
 
+export interface IModelOptions {
+    value:Model;
+    label:string;
+}
 export interface IChatConfig {
     apiConfig: IChatAPIConfig;
     saveAPIConfig: (config: IChatAPIConfig) => void;
     switchStream: () => void;
     getAPIConfig: () => IChatAPIConfig;
-    chatModelList: Model[];
+    chatModelList: IModelOptions[];
     getMaxTokenByModel: (model: Model) => number;
 }
 
@@ -22,7 +26,7 @@ export interface IChatAPIConfig {
 
 type Model = "gpt-3.5-turbo" | "gpt-3.5-turbo-16k" |
     "gpt-3.5-turbo-0613" | "gpt-3.5-turbo-16k-0613"
-    | "gpt-4" | "gpt-4-0314" | "gpt-4-0613"
+    | "gpt-4" | "gpt-4-0314" | "gpt-4-0613" | "XunFei_1_5" | "XunFei_2" 
 
 class ChatConfig implements IChatConfig {
 
@@ -39,11 +43,24 @@ class ChatConfig implements IChatConfig {
         stream: true
     }
 
-    chatModelList: Model[] = ["gpt-3.5-turbo", "gpt-3.5-turbo-16k",
-        "gpt-3.5-turbo-0613", "gpt-3.5-turbo-16k-0613"
-        , "gpt-4", "gpt-4-0314", "gpt-4-0613"]
+    chatModelList: IModelOptions[] = [
+        {"label":"gpt-3.5-turbo","value":"gpt-3.5-turbo"},
+    {"label":"gpt-3.5-turbo-16k","value":"gpt-3.5-turbo-16k"},
+    {"label":"gpt-3.5-turbo-0613","value":"gpt-3.5-turbo-0613"},
+    {"label":"gpt-3.5-turbo-16k-0613","value":"gpt-3.5-turbo-16k-0613"},
+    {"label":"gpt-4","value":"gpt-4"},{"label":"gpt-4-0314","value":"gpt-4-0314"},
+    {"label":"gpt-4-0613","value":"gpt-4-0613"},
+    {"label":"讯飞星火1.5","value":"XunFei_1_5"},
+    {"label":"讯飞星火2.0","value":"XunFei_2"}]
 
-    sampleChatModelList: Model[] = ["gpt-3.5-turbo", "gpt-4"];
+
+        
+
+    sampleChatModelList: IModelOptions[] = [
+        {"label":"gpt-3.5-turbo","value":"gpt-3.5-turbo"},
+    {"label":"gpt-4","value":"gpt-4"},{"label":"gpt-4-0314","value":"gpt-4-0314"},
+    {"label":"讯飞星火1.5","value":"XunFei_1_5"},
+    {"label":"讯飞星火2.0","value":"XunFei_2"}]
 
     modelMaxTokenMap = {
         "gpt-3.5-turbo": 4096,
@@ -52,7 +69,9 @@ class ChatConfig implements IChatConfig {
         "gpt-3.5-turbo-16k-0613": 16384,
         "gpt-4": 8192,
         "gpt-4-0314": 8192,
-        "gpt-4-0613": 8192
+        "gpt-4-0613": 8192,
+        "XunFei_1_5":8192,
+        "XunFei_2":8192
     }
 
     modelMap = {
@@ -62,7 +81,9 @@ class ChatConfig implements IChatConfig {
         "gpt-3.5-turbo-16k-0613": "gpt-3.5-turbo-16k-0613",
         "gpt-4": "gpt-4",
         "gpt-4-0314": "gpt-4-0314",
-        "gpt-4-0613": "gpt-4-0613"
+        "gpt-4-0613": "gpt-4-0613",
+        "XunFei_1_5":"XunFei_1_5",
+        "XunFei_2":"XunFei_2"
     }
 
     getMaxTokenByModel(model: Model) {

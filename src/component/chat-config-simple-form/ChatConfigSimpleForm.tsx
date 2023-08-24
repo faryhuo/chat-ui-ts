@@ -44,7 +44,7 @@ const ChatConfigForm: React.FC<IProps> = ({ store, onClose }) => {
       >
         <Form.Item label={t<string>("Model")} name="model" tooltip={t<string>("which models work with the Chat API.")}>
           <Select onChange={(e) => store.setChatApiConfig("model", e)}
-            options={chatConfig.chatModelList.map((item) => ({ label: item, value: item }))}
+            options={chatConfig.chatModelList}
           />
         </Form.Item>
         <Form.Item label={t<string>("Choose a conversation style")} name="temperature"
