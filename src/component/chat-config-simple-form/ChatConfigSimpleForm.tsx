@@ -74,7 +74,7 @@ const ChatConfigForm: React.FC<IProps> = ({ store, onClose }) => {
           <InputNumber min={-2} max={2} onChange={(e) => store.setChatApiConfig("frequency_penalty", e as number)}></InputNumber>
         </Form.Item>
 
-        <Form.Item label={t<string>("smax_tokens")} name="max_tokens" tooltip={t<string>("max length of GPT return")}>
+        <Form.Item label={t<string>("max_tokens")} name="max_tokens" tooltip={t<string>("max length of GPT return")}>
           <InputNumber min={0} onChange={(e) => store.setChatApiConfig("max_tokens", e as any)}></InputNumber>
         </Form.Item>
       </Form>

@@ -21,11 +21,6 @@ export interface Ichoices {
     }
 }
 
-export interface IImage {
-    uri: string;
-    width: string | number;
-    height: string | number;
-}
 
 export interface ISessiondata {
     isSys: boolean;
@@ -60,7 +55,8 @@ export interface ISession {
     data: Array<ISessiondata>;
     chatConfig?: IChatAPIConfig;
     role?: number;
-    updateDate?: Date;
+    updateDate: Date;
+    isDone:boolean;
 }
 
 export interface IMessageListData {
@@ -110,6 +106,7 @@ export interface IMessage {
     regenerateResponse: () => void;
     callImageAPI: (chatId: string, message: string) => Promise<void>;
     getChatHistory: () => void;
+    getChatHistoryByChatId:(chatId: string)=> Promise<void>;
     loadDataFromlocalStore: () => void;
     checkChatId: (chatId: string) => string;
     latestMessage: string | undefined;
@@ -131,6 +128,8 @@ class MessageData implements IMessage {
     type = "chat"
     activeSession = "chat_" + new Date().getTime()
     session: Array<ISession> = [];
+
+    historyResult:Promise<void> | null=null;
 
     constructor() {
         makeObservable(this, {
@@ -352,7 +351,8 @@ class MessageData implements IMessage {
             edit: false,
             favorite: false,
             updateDate: new Date(),
-            chatConfig: Object.assign({},chatConfig.apiConfig)
+            chatConfig: Object.assign({},chatConfig.apiConfig),
+            isDone:true
         };
         this.session.push(sessionData);
         this.activeSession = chatId;
@@ -381,6 +381,7 @@ class MessageData implements IMessage {
             role: role.roleId,
             favorite: false,
             updateDate: new Date(),
+            isDone:true,
             chatConfig: role.setting ? role.setting :  Object.assign({},chatConfig.apiConfig)
         };
         this.session.push(sessionData);
@@ -556,8 +557,17 @@ class MessageData implements IMessage {
     }
 
     selectChat(chatId: string) {
-        this.activeSession = chatId;
-        this.hideLastData(chatId);
+        if(userProflie.token){
+            this.getChatHistory().then(()=>{
+                this.getChatHistoryByChatId(chatId).then(()=>{
+                    this.activeSession = chatId;
+                    this.hideLastData(chatId);
+                });
+            })
+        }else{
+            this.activeSession = chatId;
+            this.hideLastData(chatId);
+        }
     }
 
     changeRole(chatId: string, role: number | undefined) {
@@ -755,7 +765,7 @@ class MessageData implements IMessage {
         const session = this.getDataByChatId(chatId);
         if (session !== null) {
             const data = session.data;
-            if (data.length >= 2) {
+            if (data && data.length >= 2) {
                 const lastData = data.slice(0, data.length - 2);
                 lastData.forEach((item) => {
                     if (item.isDetails === null || item.isDetails === undefined) {
@@ -989,9 +999,52 @@ class MessageData implements IMessage {
         });
     }
 
+    promiseList:any={};
+
+    getChatHistoryByChatId(chatId:string){
+        if(this.promiseList[chatId]){
+            return this.promiseList[chatId];
+        }
+        const promise= new Promise((resolve,reject)=>{
+            // if(this.isDone(chatId)){
+            //     resolve(chatId);
+            //     return;
+            // }
+            if(!userProflie.token){
+                resolve(chatId);
+                return;
+            }
+            const queryUrl = config.api.historyUrl+"/"+chatId;
+            axios({
+                method: "get",
+                url: queryUrl,
+                headers: {
+                    'token': userProflie.token,
+                    'Content-Type': 'application/json;charset=UTF-8'
+                }
+            }
+            ).then((response) => {
+                if(response.data.statusCode===0){
+                    const data = response.data.data as ISession;
+                    this.setChatData(chatId,data);
+                    resolve(chatId);
+                }else{
+                    reject(chatId);
+                }
+            }).catch(()=>{
+                reject(chatId);
+            });
+        });
+        this.promiseList[chatId]=promise;
+        return promise;
+    }
+
     getChatHistory() {
+        if(this.historyResult){
+            return this.historyResult;
+        }
         const queryUrl = config.api.historyUrl;
-        return axios({
+        this.historyResult= axios({
             method: "get",
             url: queryUrl,
             headers: {
@@ -1019,6 +1072,7 @@ class MessageData implements IMessage {
                 }
             })
         });
+        return this.historyResult;
     }
 
     get systemText() {
@@ -1176,6 +1230,26 @@ class MessageData implements IMessage {
 
     setSession(session: ISession[]) {
         this.session = session;
+    }
+
+    isDone(chatId:string){
+        const currentSession= this.session.find(item=>item.chatId===chatId);
+        if(currentSession){
+            return currentSession.isDone;
+        }else{
+            return false;
+        }
+    }
+    
+    setChatData(chatId:string,sessionData:ISession) {
+        const currentSession= this.session.find(item=>item.chatId===chatId);
+        if(currentSession){
+            currentSession.data=sessionData.data;
+            currentSession.chatConfig=sessionData.chatConfig;
+            currentSession.isDone=true;
+        }else{
+            this.session.push(sessionData);
+        }
     }
 
     loadDataFromFile(file: Blob) {

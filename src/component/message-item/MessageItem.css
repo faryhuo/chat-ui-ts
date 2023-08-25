@@ -5,3 +5,7 @@
     max-height: 200px;
     overflow: hidden;
 }
+
+.message-item-system .chat-row{
+    min-width: 280px;
+}

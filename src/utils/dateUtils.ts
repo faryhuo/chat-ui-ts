@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 
 const formatShortDate = (date: string | number | dayjs.Dayjs | Date | null | undefined) => {
   const dateFormat = "MM-DD";
-  const timeFormat = "hh:mm:ss";
+  const timeFormat = "HH:mm:ss";
   const today = dayjs().startOf('day');
   const momentDate = dayjs(date)
   const isToday = momentDate.isSame(today, 'd')

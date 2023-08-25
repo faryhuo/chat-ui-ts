@@ -41,8 +41,10 @@ const ChatList: React.FC<IProps> = ({ store }) => {
   }
 
   const share = (chatId: string) => {
-    setOpen(true);
-    setCurrentChatId(chatId);
+    store.getChatHistoryByChatId(chatId).then(()=>{
+      setOpen(true);
+      setCurrentChatId(chatId);
+    });
   }
 
   const triggerFavorite = (chatId: string) => {
@@ -55,7 +57,9 @@ const ChatList: React.FC<IProps> = ({ store }) => {
     setCurrentChatId("");
   }
 
-  const dataSouce = store.sessionList.reverse();
+  const dataSouce = store.sessionList.sort((a, b) => {
+    return (b.date as any) - (a.date as any)
+  });
 
   const getButtonList = (item: ISessionMenu): MenuProps['items'] => {
     return [
@@ -134,9 +138,7 @@ const ChatList: React.FC<IProps> = ({ store }) => {
 
   const recnetDataSouce = dataSouce.filter(item => {
     return isSameDay(item.date);
-  }).sort((a, b) => {
-    return (b.date as any) - (a.date as any)
-  })
+  });
 
   const historyDataSouce = dataSouce.filter(item => {
     return !!!item.favorite && !isSameDay(item.date);
