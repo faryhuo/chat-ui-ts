@@ -32,10 +32,9 @@ const MessageItem : React.FC<IProps> =  observer(({content,title,type,text,index
 
     useEffect(() => {
         if(messagesEndRef?.current?.clientWidth){
-            console.log(messagesEndRef?.current?.clientWidth)
             setWidth(messagesEndRef?.current?.clientWidth-10);
         }
-    })
+    },[content])
 
 
     const editInput=()=> {

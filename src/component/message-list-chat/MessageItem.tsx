@@ -25,7 +25,7 @@ const scrollMessage=(messagesEndRef:any,open:boolean)=>{
   }
 }
 
-const debounceObj=debounce(scrollMessage,1000);
+const debounceObj=debounce(scrollMessage,300);
 
 const MessageItemChat : React.FC<IProps> = observer(({store,config,renderMessage}) => {
 
