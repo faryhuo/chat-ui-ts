@@ -54,7 +54,7 @@ const SessionAtcionList: React.FC<IProps> = observer(({ store, config, onOpen })
     if (moreModules) {
       return chatConfig.chatModelList;
     } else {
-      return chatConfig.sampleChatModelList;
+      return chatConfig.chatModelList.filter(item=>item.isMain);
     }
   }
 

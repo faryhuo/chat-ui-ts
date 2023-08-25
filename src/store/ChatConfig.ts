@@ -2,8 +2,10 @@ import { makeObservable, observable, action } from "mobx";
 import userProflie from "./UserProfile";
 
 export interface IModelOptions {
-    value:Model;
-    label:string;
+    value: Model;
+    label: string;
+    type: 'gpt' | 'xunfei';
+    isMain: boolean;
 }
 export interface IChatConfig {
     apiConfig: IChatAPIConfig;
@@ -26,7 +28,7 @@ export interface IChatAPIConfig {
 
 type Model = "gpt-3.5-turbo" | "gpt-3.5-turbo-16k" |
     "gpt-3.5-turbo-0613" | "gpt-3.5-turbo-16k-0613"
-    | "gpt-4" | "gpt-4-0314" | "gpt-4-0613" | "XunFei_1_5" | "XunFei_2" 
+    | "gpt-4" | "gpt-4-0314" | "gpt-4-0613" | "XunFei_1_5" | "XunFei_2"
 
 class ChatConfig implements IChatConfig {
 
@@ -44,23 +46,18 @@ class ChatConfig implements IChatConfig {
     }
 
     chatModelList: IModelOptions[] = [
-        {"label":"gpt-3.5-turbo","value":"gpt-3.5-turbo"},
-    {"label":"gpt-3.5-turbo-16k","value":"gpt-3.5-turbo-16k"},
-    {"label":"gpt-3.5-turbo-0613","value":"gpt-3.5-turbo-0613"},
-    {"label":"gpt-3.5-turbo-16k-0613","value":"gpt-3.5-turbo-16k-0613"},
-    {"label":"gpt-4","value":"gpt-4"},{"label":"gpt-4-0314","value":"gpt-4-0314"},
-    {"label":"gpt-4-0613","value":"gpt-4-0613"},
-    {"label":"讯飞星火1.5","value":"XunFei_1_5"},
-    {"label":"讯飞星火2.0","value":"XunFei_2"}]
-
+        { "label": "gpt-3.5-turbo", "value": "gpt-3.5-turbo", "type": "gpt", isMain: true },
+        { "label": "gpt-3.5-turbo-16k", "value": "gpt-3.5-turbo-16k", "type": "gpt", isMain: false },
+        { "label": "gpt-3.5-turbo-0613", "value": "gpt-3.5-turbo-0613", "type": "gpt", isMain: false },
+        { "label": "gpt-3.5-turbo-16k-0613", "value": "gpt-3.5-turbo-16k-0613", "type": "gpt", isMain: false },
+        { "label": "gpt-4", "value": "gpt-4", "type": "gpt", isMain: true },
+        { "label": "gpt-4-0314", "value": "gpt-4-0314", "type": "gpt", isMain: false },
+        { "label": "gpt-4-0613", "value": "gpt-4-0613", "type": "gpt", isMain: false },
+        { "label": "讯飞星火1.5", "value": "XunFei_1_5", "type": "xunfei", isMain: true },
+        { "label": "讯飞星火2.0", "value": "XunFei_2", "type": "xunfei", isMain: true }]
 
         
 
-    sampleChatModelList: IModelOptions[] = [
-        {"label":"gpt-3.5-turbo","value":"gpt-3.5-turbo"},
-    {"label":"gpt-4","value":"gpt-4"},{"label":"gpt-4-0314","value":"gpt-4-0314"},
-    {"label":"讯飞星火1.5","value":"XunFei_1_5"},
-    {"label":"讯飞星火2.0","value":"XunFei_2"}]
 
     modelMaxTokenMap = {
         "gpt-3.5-turbo": 4096,
@@ -70,8 +67,13 @@ class ChatConfig implements IChatConfig {
         "gpt-4": 8192,
         "gpt-4-0314": 8192,
         "gpt-4-0613": 8192,
-        "XunFei_1_5":8192,
-        "XunFei_2":8192
+        "XunFei_1_5": 8192,
+        "XunFei_2": 8192
+    }
+
+    getModelType(model:Model){
+       const type= this.chatModelList.find(item=>item.value===model)?.type
+       return type?type:'gpt';
     }
 
     modelMap = {
@@ -82,16 +84,16 @@ class ChatConfig implements IChatConfig {
         "gpt-4": "gpt-4",
         "gpt-4-0314": "gpt-4-0314",
         "gpt-4-0613": "gpt-4-0613",
-        "XunFei_1_5":"XunFei_1_5",
-        "XunFei_2":"XunFei_2"
+        "XunFei_1_5": "XunFei_1_5",
+        "XunFei_2": "XunFei_2"
     }
 
     getMaxTokenByModel(model: Model) {
-        return this.modelMaxTokenMap[model]
+        return this.modelMaxTokenMap[model];
     }
 
     isMaxTokenModel(model: Model) {
-        if (this.modelMap[model] === model) {
+        if (!this.modelMap[model] || this.modelMap[model] === model) {
             return true;
         } else {
             return false;
@@ -119,8 +121,8 @@ class ChatConfig implements IChatConfig {
             }
         }
     }
-    saveAPIConfigValue<K extends keyof IChatAPIConfig>(key:K,value:IChatAPIConfig[K]) {
-        this.apiConfig[key]=value;
+    saveAPIConfigValue<K extends keyof IChatAPIConfig>(key: K, value: IChatAPIConfig[K]) {
+        this.apiConfig[key] = value;
     }
 
 
@@ -134,16 +136,28 @@ class ChatConfig implements IChatConfig {
                 }
                 this.changeModel(config[item]);
             } else {
-                this.saveAPIConfigValue(item,config[item]);
+                this.saveAPIConfigValue(item, config[item]);
             }
         });
         localStorage.setItem(this.localConfigName, JSON.stringify(this.getAPIConfig()));
     }
     changeModel(model: Model) {
-        if (userProflie.token) {
+        const newType=this.getModelType(model);
+        const oldType=this.getModelType(this.apiConfig.model);
+        console.log(newType);
+        if(newType==='gpt'){
+            if (userProflie.token) {
+                this.apiConfig.model = model;
+            } else {
+                userProflie.openPage();
+                return;
+            }
+        }else{
+            this.apiConfig.stream=true;
             this.apiConfig.model = model;
-        } else {
-            userProflie.openPage();
+        }
+        if(oldType!==newType){
+            this.apiConfig.temperature=1;
         }
     }
     getAPIConfig() {

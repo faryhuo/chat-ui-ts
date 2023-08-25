@@ -614,9 +614,11 @@ class MessageData implements IMessage {
 
 
     setChatApiConfig<K extends keyof IChatAPIConfig>(key: K, value: IChatAPIConfig[K]) {
-        if (!userProflie.token && key === "model") {
-            userProflie.openPage();
-            return;
+        if (!userProflie.token && key === "model" && value) {
+            if((value as string).startsWith("gpt-4")){
+                userProflie.openPage();
+                return;
+            }
         }
         const { activeSession, session } = this;
         const sessionMatch = session.find(item => item.chatId === activeSession);
@@ -779,7 +781,6 @@ class MessageData implements IMessage {
         } else {
             return this.callChatAPIByHttp(chatId).then(() => {
                 this.hideLastData(chatId);
-
                 this.save(chatId);
             })
         }

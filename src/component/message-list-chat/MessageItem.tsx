@@ -9,12 +9,24 @@ import ActionBtnList from '../session-atcion-list/SessionAtcionList'
 import ChatConfigList from '../chat-config-list/ChatConfigList'
 import {IAppConfig} from '../../store/AppConfig';
 import {IMessage,ISessiondata} from '../../store/MessageData';
+import {debounce} from '../../utils/CommonUtils'
 
 type IProps={
   config:IAppConfig;
   store:IMessage;
   renderMessage:(item:ISessiondata,type:string,key:number)=> JSX.Element;
 }
+
+
+const scrollMessage=(messagesEndRef:any,open:boolean)=>{
+  console.log("scroll")
+  if(messagesEndRef && messagesEndRef.current && open===false){
+    messagesEndRef.current.scrollIntoView();
+  }
+}
+
+const debounceObj=debounce(scrollMessage,1000);
+
 const MessageItemChat : React.FC<IProps> = observer(({store,config,renderMessage}) => {
 
   const messagesEndRef =useRef<HTMLDivElement>(null);
@@ -28,20 +40,9 @@ const MessageItemChat : React.FC<IProps> = observer(({store,config,renderMessage
     setOpen(false);
   };
 
-  const scrollMessageTimeout = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(()=>{
-    const scrollMessage=()=>{
-      scrollMessageTimeout.current = null; 
-      if(messagesEndRef && messagesEndRef.current && open===false){
-        messagesEndRef.current.scrollIntoView();
-      }
-    }
-  
-    if(!scrollMessageTimeout.current){
-      scrollMessageTimeout.current = setTimeout(scrollMessage,200);
-    }
-
+    debounceObj(messagesEndRef,open);
   },[store.latestMessage,open])
 
 
