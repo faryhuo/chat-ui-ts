@@ -31,7 +31,7 @@ export interface IChatAPIConfig {
 type Model = "gpt-3.5-turbo" | "gpt-3.5-turbo-16k" |
     "gpt-3.5-turbo-0613" | "gpt-3.5-turbo-16k-0613"
     | "gpt-4" | "gpt-4-0314" | "gpt-4-0613" 
-    | "XunFei_1_5" | "XunFei_2" | "ernie-bot" | "ernie-bot-turbo"
+    | "spark-desk-1.5" | "spark-desk-2" | "ernie-bot" | "ernie-bot-turbo"
     | "qwen-v1" | "qwen-plus-v1"
 
 class ChatConfig implements IChatConfig {
@@ -58,8 +58,8 @@ class ChatConfig implements IChatConfig {
         { "label": "gpt-4", "value": "gpt-4", "channle": "gpt", isMain: true },
         { "label": "gpt-4-0314", "value": "gpt-4-0314", "channle": "gpt", isMain: false },
         { "label": "gpt-4-0613", "value": "gpt-4-0613", "channle": "gpt", isMain: false },
-        { "label": i18n.t<string>("SparkDesk 1.5"), "value": "XunFei_1_5", "channle": "xunfei", isMain: true },
-        { "label": i18n.t<string>("SparkDesk 2.0"), "value": "XunFei_2", "channle": "xunfei", isMain: true },
+        { "label": i18n.t<string>("SparkDesk 1.5"), "value": "spark-desk-1.5", "channle": "xunfei", isMain: true },
+        { "label": i18n.t<string>("SparkDesk 2.0"), "value": "spark-desk-2", "channle": "xunfei", isMain: true },
         { "label": i18n.t<string>("ernie-bot"), "value": "ernie-bot", "channle": "baidu", isMain: true },
         { "label": i18n.t<string>("ernie-bot-turbo"), "value": "ernie-bot-turbo", "channle": "baidu", isMain: true },
         { "label": i18n.t<string>("qwen-v1"), "value": "qwen-v1", "channle": "aliyun", isMain: true },
@@ -76,8 +76,8 @@ class ChatConfig implements IChatConfig {
         "gpt-4": 8192,
         "gpt-4-0314": 8192,
         "gpt-4-0613": 8192,
-        "XunFei_1_5": 8192,
-        "XunFei_2": 8192,
+        "spark-desk-1.5": 8192,
+        "spark-desk-2": 8192,
         "ernie-bot":2 * 1024,
         "ernie-bot-turbo":2 * 1024,
         "qwen-v1":1.5 * 1024,
@@ -97,8 +97,8 @@ class ChatConfig implements IChatConfig {
         "gpt-4": "gpt-4",
         "gpt-4-0314": "gpt-4-0314",
         "gpt-4-0613": "gpt-4-0613",
-        "XunFei_1_5": "XunFei_1_5",
-        "XunFei_2": "XunFei_2",
+        "spark-desk-1.5": "spark-desk-1.5",
+        "spark-desk-2": "spark-desk-2",
         "ernie-bot": "ernie-bot",
         "ernie-bot-turbo": "ernie-bot-turbo",
         "qwen-v1":"qwen-v1",
