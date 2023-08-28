@@ -78,10 +78,10 @@ class ChatConfig implements IChatConfig {
         "gpt-4-0613": 8192,
         "XunFei_1_5": 8192,
         "XunFei_2": 8192,
-        "ernie-bot":4096,
-        "ernie-bot-turbo":4096,
-        "qwen-v1":4096,
-        "qwen-plus-v1":8192
+        "ernie-bot":2 * 1024,
+        "ernie-bot-turbo":2 * 1024,
+        "qwen-v1":1.5 * 1024,
+        "qwen-plus-v1":6.5 * 1024
     }
 
     getModelChange(model:Model){
