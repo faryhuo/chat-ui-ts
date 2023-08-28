@@ -1,10 +1,11 @@
 import { makeObservable, observable, action } from "mobx";
+import i18n from "../utils/i18n";
 import userProflie from "./UserProfile";
 
 export interface IModelOptions {
     value: Model;
     label: string;
-    type: 'gpt' | 'xunfei';
+    channle: 'gpt' | 'xunfei';
     isMain: boolean;
 }
 export interface IChatConfig {
@@ -24,6 +25,7 @@ export interface IChatAPIConfig {
     frequency_penalty: number;
     max_tokens: number;
     stream?: boolean;
+    channle:string;
 }
 
 type Model = "gpt-3.5-turbo" | "gpt-3.5-turbo-16k" |
@@ -42,19 +44,20 @@ class ChatConfig implements IChatConfig {
         presence_penalty: 0,
         frequency_penalty: 0,
         max_tokens: 1024,
-        stream: true
+        stream: true,
+        channle:"gpt"
     }
 
     chatModelList: IModelOptions[] = [
-        { "label": "gpt-3.5-turbo", "value": "gpt-3.5-turbo", "type": "gpt", isMain: true },
-        { "label": "gpt-3.5-turbo-16k", "value": "gpt-3.5-turbo-16k", "type": "gpt", isMain: false },
-        { "label": "gpt-3.5-turbo-0613", "value": "gpt-3.5-turbo-0613", "type": "gpt", isMain: false },
-        { "label": "gpt-3.5-turbo-16k-0613", "value": "gpt-3.5-turbo-16k-0613", "type": "gpt", isMain: false },
-        { "label": "gpt-4", "value": "gpt-4", "type": "gpt", isMain: true },
-        { "label": "gpt-4-0314", "value": "gpt-4-0314", "type": "gpt", isMain: false },
-        { "label": "gpt-4-0613", "value": "gpt-4-0613", "type": "gpt", isMain: false },
-        { "label": "讯飞星火1.5", "value": "XunFei_1_5", "type": "xunfei", isMain: true },
-        { "label": "讯飞星火2.0", "value": "XunFei_2", "type": "xunfei", isMain: true }]
+        { "label": "gpt-3.5-turbo", "value": "gpt-3.5-turbo", "channle": "gpt", isMain: true },
+        { "label": "gpt-3.5-turbo-16k", "value": "gpt-3.5-turbo-16k", "channle": "gpt", isMain: false },
+        { "label": "gpt-3.5-turbo-0613", "value": "gpt-3.5-turbo-0613", "channle": "gpt", isMain: false },
+        { "label": "gpt-3.5-turbo-16k-0613", "value": "gpt-3.5-turbo-16k-0613", "channle": "gpt", isMain: false },
+        { "label": "gpt-4", "value": "gpt-4", "channle": "gpt", isMain: true },
+        { "label": "gpt-4-0314", "value": "gpt-4-0314", "channle": "gpt", isMain: false },
+        { "label": "gpt-4-0613", "value": "gpt-4-0613", "channle": "gpt", isMain: false },
+        { "label": i18n.t<string>("SparkDesk 1.5"), "value": "XunFei_1_5", "channle": "xunfei", isMain: true },
+        { "label": i18n.t<string>("SparkDesk 2.0"), "value": "XunFei_2", "channle": "xunfei", isMain: true }]
 
         
 
@@ -71,9 +74,9 @@ class ChatConfig implements IChatConfig {
         "XunFei_2": 8192
     }
 
-    getModelType(model:Model){
-       const type= this.chatModelList.find(item=>item.value===model)?.type
-       return type?type:'gpt';
+    getModelChange(model:Model){
+       const channel= this.chatModelList.find(item=>item.value===model)?.channle
+       return channel?channel:'gpt';
     }
 
     modelMap = {
@@ -142,10 +145,9 @@ class ChatConfig implements IChatConfig {
         localStorage.setItem(this.localConfigName, JSON.stringify(this.getAPIConfig()));
     }
     changeModel(model: Model) {
-        const newType=this.getModelType(model);
-        const oldType=this.getModelType(this.apiConfig.model);
-        console.log(newType);
-        if(newType==='gpt'){
+        const newChannel=this.getModelChange(model);
+        const oldChannel=this.getModelChange(this.apiConfig.model);
+        if(newChannel==='gpt'){
             if (userProflie.token) {
                 this.apiConfig.model = model;
             } else {
@@ -156,7 +158,8 @@ class ChatConfig implements IChatConfig {
             this.apiConfig.stream=true;
             this.apiConfig.model = model;
         }
-        if(oldType!==newType){
+        this.apiConfig.channle=newChannel;
+        if(oldChannel!==newChannel){
             this.apiConfig.temperature=1;
         }
     }

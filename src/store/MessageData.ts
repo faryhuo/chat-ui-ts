@@ -106,6 +106,7 @@ export interface IMessage {
     regenerateResponse: () => void;
     callImageAPI: (chatId: string, message: string) => Promise<void>;
     getChatHistory: () => void;
+    clearHistoryResult: () => void;
     getChatHistoryByChatId:(chatId: string)=> Promise<void>;
     loadDataFromlocalStore: () => void;
     checkChatId: (chatId: string) => string;
@@ -176,6 +177,10 @@ class MessageData implements IMessage {
             this.addSharingData();
         }
         //this.changeTypeByUrl();
+    }
+
+    clearHistoryResult(){
+        this.historyResult=null;
     }
 
     addSharingData() {
@@ -1098,8 +1103,8 @@ class MessageData implements IMessage {
         }
         let params = {
             messages: JSON.stringify(messageListData),
-            uuid: this.activeSession,
             model: model,
+            channel:this.chatApiConfig.channle?this.chatApiConfig.channle:'gpt',
             temperature: chatAPIConfig.temperature,
             top_p: chatAPIConfig.top_p,
             presence_penalty: chatAPIConfig.presence_penalty,

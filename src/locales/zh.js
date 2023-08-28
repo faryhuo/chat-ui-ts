@@ -211,6 +211,8 @@ const config = {
     "Image generated failure.":"图片生成失败",
     "search by prompt":"prompt关键词搜索",
     "Copy prompt successlly":"复制prompt成功",
-    "copy prompt":"复制提示词"
+    "copy prompt":"复制提示词",
+    "SparkDesk 1.5":"讯飞星火 1.5",
+    "SparkDesk 2.0":"讯飞星火 2.0"
 }
 export default config;

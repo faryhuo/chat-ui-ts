@@ -54,6 +54,7 @@ const LoginForm : React.FC<IProps>= observer(({login,handleCancel,config,store,u
     const onLogin = () => {
       if(forgetFlag){
         userProfile.resetPwd(userId,password,code).then(()=>{
+          store.clearHistoryResult();
           store.getChatHistory()
           handleCancel();
           success();
@@ -62,6 +63,7 @@ const LoginForm : React.FC<IProps>= observer(({login,handleCancel,config,store,u
         })
       }else{
         login(userId,password).then(()=>{
+          store.clearHistoryResult();
           store.getChatHistory()
           handleCancel();
           success();

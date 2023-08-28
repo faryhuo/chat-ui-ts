@@ -42,6 +42,7 @@ const SignUpForm : React.FC<IProps>= observer(({login,handleCancel,config,store,
 
     const onLogin = () => {
       userProfile.signup(userId,password,code).then(()=>{
+        store.clearHistoryResult();
         store.getChatHistory()
         handleCancel();
         success();
