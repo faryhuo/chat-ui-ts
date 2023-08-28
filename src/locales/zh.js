@@ -213,6 +213,10 @@ const config = {
     "Copy prompt successlly":"复制prompt成功",
     "copy prompt":"复制提示词",
     "SparkDesk 1.5":"讯飞星火 1.5",
-    "SparkDesk 2.0":"讯飞星火 2.0"
+    "SparkDesk 2.0":"讯飞星火 2.0",
+    "ernie-bot":"文心一言",
+    "ernie-bot-turbo":"文心一言 (turbo)",
+    "qwen-v1":"通义千问",
+    "qwen-plus-v1":"通义千问 plus"
 }
 export default config;

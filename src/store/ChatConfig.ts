@@ -5,7 +5,7 @@ import userProflie from "./UserProfile";
 export interface IModelOptions {
     value: Model;
     label: string;
-    channle: 'gpt' | 'xunfei';
+    channle: 'gpt' | 'xunfei' | 'baidu' | 'aliyun';
     isMain: boolean;
 }
 export interface IChatConfig {
@@ -25,12 +25,14 @@ export interface IChatAPIConfig {
     frequency_penalty: number;
     max_tokens: number;
     stream?: boolean;
-    channle:string;
+    channle?:string;
 }
 
 type Model = "gpt-3.5-turbo" | "gpt-3.5-turbo-16k" |
     "gpt-3.5-turbo-0613" | "gpt-3.5-turbo-16k-0613"
-    | "gpt-4" | "gpt-4-0314" | "gpt-4-0613" | "XunFei_1_5" | "XunFei_2"
+    | "gpt-4" | "gpt-4-0314" | "gpt-4-0613" 
+    | "XunFei_1_5" | "XunFei_2" | "ernie-bot" | "ernie-bot-turbo"
+    | "qwen-v1" | "qwen-plus-v1"
 
 class ChatConfig implements IChatConfig {
 
@@ -57,7 +59,11 @@ class ChatConfig implements IChatConfig {
         { "label": "gpt-4-0314", "value": "gpt-4-0314", "channle": "gpt", isMain: false },
         { "label": "gpt-4-0613", "value": "gpt-4-0613", "channle": "gpt", isMain: false },
         { "label": i18n.t<string>("SparkDesk 1.5"), "value": "XunFei_1_5", "channle": "xunfei", isMain: true },
-        { "label": i18n.t<string>("SparkDesk 2.0"), "value": "XunFei_2", "channle": "xunfei", isMain: true }]
+        { "label": i18n.t<string>("SparkDesk 2.0"), "value": "XunFei_2", "channle": "xunfei", isMain: true },
+        { "label": i18n.t<string>("ernie-bot"), "value": "ernie-bot", "channle": "baidu", isMain: true },
+        { "label": i18n.t<string>("ernie-bot-turbo"), "value": "ernie-bot-turbo", "channle": "baidu", isMain: true },
+        { "label": i18n.t<string>("qwen-v1"), "value": "qwen-v1", "channle": "aliyun", isMain: true },
+        { "label": i18n.t<string>("qwen-plus-v1"), "value": "qwen-plus-v1", "channle": "aliyun", isMain: true }]
 
         
 
@@ -71,7 +77,11 @@ class ChatConfig implements IChatConfig {
         "gpt-4-0314": 8192,
         "gpt-4-0613": 8192,
         "XunFei_1_5": 8192,
-        "XunFei_2": 8192
+        "XunFei_2": 8192,
+        "ernie-bot":4096,
+        "ernie-bot-turbo":4096,
+        "qwen-v1":4096,
+        "qwen-plus-v1":8192
     }
 
     getModelChange(model:Model){
@@ -88,7 +98,11 @@ class ChatConfig implements IChatConfig {
         "gpt-4-0314": "gpt-4-0314",
         "gpt-4-0613": "gpt-4-0613",
         "XunFei_1_5": "XunFei_1_5",
-        "XunFei_2": "XunFei_2"
+        "XunFei_2": "XunFei_2",
+        "ernie-bot": "ernie-bot",
+        "ernie-bot-turbo": "ernie-bot-turbo",
+        "qwen-v1":"qwen-v1",
+        "qwen-plus-v1":"qwen-plus-v1"
     }
 
     getMaxTokenByModel(model: Model) {
