@@ -91,7 +91,7 @@ const MessageItem : React.FC<IProps> =  observer(({content,title,type,text,index
     
 
     return (type === "user")?userInput:(
-        <div className="rce-container-mbox message-item-system"><div className="rce-mbox"><div className="rce-mbox-body">
+        <div style={{overflow:'auto'}} className="rce-container-mbox message-item-system"><div className="rce-mbox"><div className="rce-mbox-body">
             <div className="rce-mbox-title rce-mbox-title--clear"><span>{title ?title : "AI"}</span></div>
             <div className="rce-mbox-text left">{content}
                 {store && item && <MsgActionBtn store={store} index={index} item={item}></MsgActionBtn>}
