@@ -587,6 +587,8 @@ class MessageData implements IMessage {
                 item.role = role;
                 if (!role) {
                     item.chatName = "New Chat";
+                    this.data[0].text = this.systemText;
+                    this.data[0].isSys = true;
                 }
                 let chatName;
                 roleData.roles.forEach((sItem) => {

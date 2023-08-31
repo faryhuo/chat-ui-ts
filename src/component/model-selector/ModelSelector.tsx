@@ -9,8 +9,10 @@ import chatConfig from '../../store/ChatConfig';
 import { useState } from 'react';
 type IProps={
   store:IMessage;
+  onChange?:(e:any)=>void;
+  value?:string;
 }
-const ModelSelector:React.FC<IProps> = observer(({store})=>{
+const ModelSelector:React.FC<IProps> = observer(({store,onChange,value})=>{
   const [moreModules, setMoreModules] = useState(false);
 
     const {t} =useTranslation();
@@ -41,9 +43,9 @@ const ModelSelector:React.FC<IProps> = observer(({store})=>{
     }
   
     return (<Select  style={{ width: 180 }}
-      className="option-btn" onChange={(e) => store.setChatApiConfig("model", e)}
+      className="option-btn" onChange={(e) => onChange?onChange(e):store.setChatApiConfig("model", e as any)}
       options={getModulesDataSource()}
-      value={store.chatApiConfig.model}
+      value={value?value:store.chatApiConfig.model}
       dropdownRender={(menu) => (
         <>
           {menu}
