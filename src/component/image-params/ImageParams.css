@@ -36,3 +36,7 @@
 .image-params-wrapper .image-param-set .image-param-input{
     flex:1
 }
+
+.image-params-wrapper .image-iw-input{
+    padding-bottom: 20px;
+}

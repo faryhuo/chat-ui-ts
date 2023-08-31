@@ -3,13 +3,14 @@ import { useTranslation } from 'react-i18next';
 import { observer } from "mobx-react-lite";
 import { InboxOutlined } from '@ant-design/icons';
 
-import { Button, InputNumber, message, Radio, Select, Tooltip, Upload, Image, Slider, Row, Col } from 'antd';
+import { Button, InputNumber, message, Radio, Select, Tooltip, Upload, Image, Slider, Row, Col, Switch } from 'antd';
 import './ImageParams.css'
 import imageData from '../../store/ImageData';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faQuestion, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import apiSetting from '../../store/APISetting';
 import { RcFile } from 'antd/es/upload';
+import { compositionOptions, qualityOptions, style2Options, styleOptions } from './ParamOptions';
 
 type IProps = {
 }
@@ -18,34 +19,6 @@ const ImageParams: React.FC<IProps> = observer(() => {
 
   const { t } = useTranslation();
 
-
-  const options = [{
-    value: ".25",
-    label: "普通"
-  }, {
-    value: ".5",
-    label: "一般"
-  }, {
-    value: "1",
-    label: "高清"
-  }, {
-    value: "2",
-    label: "超高清"
-  }]
-
-  const styleOptions = [{
-    value: "",
-    label: t("default")
-  }, {
-    value: "expressive",
-    label: t("expressive")
-  }, {
-    value: "cute",
-    label: t("cute")
-  }, {
-    value: "scenic",
-    label: t("scenic")
-  }]
 
   const getVersionOptions = () => {
     if (imageData.params.model === "MJ") {
@@ -156,13 +129,13 @@ const ImageParams: React.FC<IProps> = observer(() => {
         options={getVersionOptions()}></Select>
 
     </div>
-    {imageData.params.model === "NIJI" && <div className="image-param-set">
+    {/* {imageData.params.model === "NIJI" && <div className="image-param-set">
       <div className="image-param-label">{t<string>("Style")} </div>
       <div className="image-param-input"><Select
         value={imageData.params.style} onChange={(e) => { imageData.updateParams("style", e) }}
-        options={styleOptions} style={{ width: '100%' }} ></Select></div></div>}
+        options={styleOptions} style={{ width: '100%' }} ></Select></div></div>} */}
 
-    {imageData.params.model === "MJ" && <div className="image-param-set">
+    {imageData.params.model === "MJ" && <><div className="image-param-set">
       <div className="image-param-label">{t<string>("Stylize")}
         <Tooltip placement="right" title="风格化：--stylize 或 --s，范围 1-1000
       参数释义：数值越高，画面表现也会更具丰富性和艺术性">
@@ -171,13 +144,38 @@ const ImageParams: React.FC<IProps> = observer(() => {
       </div><div className="image-param-input">
         <InputNumber style={{ width: '100%' }} min={1} max={1000} value={imageData.params.stylize}
           onChange={(e) => { imageData.updateParams("stylize", e ? e : 100) }}></InputNumber>
-      </div></div>}
+      </div></div>
+      <div className="image-param-set">
+      <div className="image-param-label">{t<string>("Raw")}
+        <Tooltip placement="right" title="减少 midjourney 的艺术加工，生成更摄影化的图片。例如：--style raw">
+          {questionBtn}
+        </Tooltip>
+      </div><div className="image-param-input">
+        <Switch  checked={!!imageData.params.raw}
+          onChange={(e) => { imageData.updateParams("raw", e) }}></Switch>
+      </div></div></>}
 
 
     <div className="image-param-set">
       <div className="image-param-label">{t<string>("Quality")} </div>
       <div className="image-param-input"><Select style={{ width: '100%' }} onChange={(e) => { imageData.updateParams("quality", e) }}
-        options={options} value={imageData.params.quality}></Select></div>
+        options={qualityOptions} value={imageData.params.quality}></Select></div>
+    </div>
+    
+    <div className="more-params">
+    
+      <div className="image-param-set">
+        <div className="image-param-label">{t<string>("Composition")} </div>
+        <div className="image-param-input"><Select allowClear style={{ width: '100%' }} onChange={(e) => { imageData.updateParams("composition", e) }}
+          options={compositionOptions} value={imageData.params.composition}></Select></div>
+      </div>
+
+      <div className="image-param-set">
+        <div className="image-param-label">{t<string>("Style")} </div>
+        <div className="image-param-input"><Select allowClear style={{ width: '100%' }} onChange={(e) => { imageData.updateParams("style", e) }}
+          options={style2Options} value={imageData.params.style}></Select></div>
+      </div>
+
     </div>
 
     <div className="image-param-set">

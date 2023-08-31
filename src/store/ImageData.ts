@@ -7,6 +7,8 @@ import i18n from "../utils/i18n";
 import apiSetting from "./APISetting";
 import { fetchEventSource } from "@microsoft/fetch-event-source";
 import noticeData from "./NoticeData";
+import { containsChineseCharacters } from "../utils/CommonUtils";
+import style from "react-syntax-highlighter/dist/esm/styles/hljs/a11y-dark";
 
 export interface IImageSharing{
     visible:boolean;
@@ -62,6 +64,9 @@ export interface ImageParam {
     style?:string;
     noNeedEle?:string;
     imageUrl?:string;
+    raw?:boolean;
+    composition:string;
+    chineseStyle:string;
 }
 
 class ImageData implements IImageData {
@@ -80,7 +85,10 @@ class ImageData implements IImageData {
         style:"",
         noNeedEle:"",
         iw:1,
-        imageUrl:""
+        raw:false,
+        imageUrl:"",
+        composition:"",
+        chineseStyle:""
     }
 
     updateParams<K extends keyof ImageParam>(key:K, value:ImageParam[K]){
@@ -102,7 +110,7 @@ class ImageData implements IImageData {
         }
     }
 
-    transaction(prompt:string){
+    async transactionPrompt(prompt:string){
         const queryUrl = apiSetting.chatUrl;
         const messageListData=[{
             role:"system",content:"请帮我把中文转换成Midjourney能识别的英文单词"
@@ -115,19 +123,24 @@ class ImageData implements IImageData {
             max_tokens: 150,
             stream: false
         }
-        return axios({
+        const  response= await axios({
             method: "post",
             url: queryUrl,
             headers: {
                 'Content-Type': 'application/json;charset=UTF-8'
             },
             data: JSON.stringify(params)
-        }).then((response)=>{
-            const choices = response.data.data.choices;
-            if(choices && choices[0] && choices[0].message){
-                this.prompt=choices[0].message.content;
-            }
         })
+        const choices = response.data.data.choices;
+        if(choices && choices[0] && choices[0].message){
+            return choices[0].message.content;
+        }else{
+            return prompt;
+        }
+    }
+
+    async transaction(prompt:string){
+        this.prompt=await this.transactionPrompt(prompt);
     }
 
 
@@ -199,9 +212,13 @@ class ImageData implements IImageData {
             });
       }
 
-    buildPromptByParams(prompt:string){
-        const params = this.getParamsByPrompt(prompt);
-        return `${prompt} ${params.join(" ")}`;
+    async buildPromptByParams(prompt:string){
+        const params =await this.getParamsByPrompt(prompt);
+        let val=prompt;
+        if(containsChineseCharacters(prompt)){
+            val=await this.transactionPrompt(prompt);
+        }
+        return `${val} ${params.join(" ")}`;
     }
 
 
@@ -229,25 +246,43 @@ class ImageData implements IImageData {
     }]
 
 
-    getParamsByPrompt(prompt: string) {
-        const { size, stylize, model, quality, chaos, version, style, noNeedEle, iw, imageUrl } = this.params;
+    async getParamsByPrompt(prompt: string) {
+        const { size, stylize, model, quality, chaos, version, noNeedEle, iw, imageUrl,raw,composition,style} = this.params;
         let modelVersion = "";
         let modelStyle = "";
         const params = [];
+
+        if(composition){
+            params.push(`,${composition} `)
+        }
+        if(style){
+            params.push(`,${style} `)
+        }
+
+        //
         if (model === "MJ") {
             modelVersion = `--v ${version}`;
             if (stylize) {
                 modelStyle = `--s ${stylize}`;
             }
+            if (raw) {
+                modelStyle = `--style raw ${modelStyle}`;
+            }else{
+
+            }
         } else if (model === "NIJI") {
             modelVersion = `--niji ${version}`;
-            if (style) {
-                modelStyle = `--style ${style}`;
-            }
+            // if (style) {
+            //     modelStyle = `--style ${style}`;
+            // }
         }
         let noNeedEleStr = "";
         if (noNeedEle) {
-            noNeedEleStr = `--no ${noNeedEle}`;
+            let val=noNeedEle;
+            if(containsChineseCharacters(noNeedEle)){
+                val=await this.transactionPrompt(noNeedEle);
+            }
+            noNeedEleStr = `--no ${val}`;
         }
         const arr = prompt.split(" ");
         if (!arr.includes("--v") || !arr.includes("--niji")) {
@@ -398,8 +433,8 @@ class ImageData implements IImageData {
     }
 
 
-    generate(prompt:string,globalMessageApi:MessageInstance){
-        let promptStr=this.buildPromptByParams(prompt);
+    async generate(prompt:string,globalMessageApi:MessageInstance){
+        let promptStr=await this.buildPromptByParams(prompt);
         if(this.params.imageUrl){
             promptStr=`< ${this.params.imageUrl} > ${promptStr}`;
         }
