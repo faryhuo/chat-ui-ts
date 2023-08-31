@@ -214,9 +214,12 @@ const config = {
     "copy prompt":"复制提示词",
     "SparkDesk 1.5":"讯飞星火 1.5",
     "SparkDesk 2.0":"讯飞星火 2.0",
+    "spark-desk-1.5":"讯飞星火 1.5",
+    "spark-desk-2":"讯飞星火 2.0",
     "ernie-bot":"文心一言",
     "ernie-bot-turbo":"文心一言 (turbo)",
     "qwen-v1":"通义千问",
-    "qwen-plus-v1":"通义千问 plus"
+    "qwen-plus-v1":"通义千问 plus",
+    "got a unknow exception. please re-try":"未知异常,请尝试重新生成"
 }
 export default config;

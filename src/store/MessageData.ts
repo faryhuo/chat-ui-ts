@@ -275,13 +275,15 @@ class MessageData implements IMessage {
     }
 
     changeMessage(rowIndex: number, msgIndex: number) {
-        this.data[rowIndex].choices = this.data[rowIndex].history[msgIndex];
+        this.data[rowIndex].choices = this.data[rowIndex].history[msgIndex].data;
+        this.data[rowIndex].title= this.data[rowIndex].history[msgIndex].title;
         this.data[rowIndex].currentIndex = msgIndex;
     }
 
     regenerateResponse() {
         const oldMsg = this.data.pop();
         let chatId = this.activeSession + "";
+        const currentModel=this.getModelNameByChatId(chatId);
         this.disableType(chatId);
         try {
             this.callChatAPINotSave(chatId).then(() => {
@@ -289,11 +291,13 @@ class MessageData implements IMessage {
                     if (item.chatId === chatId) {
                         const lastData = item.data[item.data.length - 1];
                         if (oldMsg && !oldMsg.history) {
-                            lastData.history = [oldMsg?.choices];
+                            const historyItem={data:oldMsg?.choices,title:oldMsg.title}
+                            lastData.history = [historyItem];
                         } else {
                             lastData.history = oldMsg?.history;
                         }
-                        lastData.history.push(lastData.choices);
+                        const historyItem={data:lastData.choices,title:currentModel}
+                        lastData.history.push(historyItem);
                         lastData.currentIndex = lastData.history.length - 1;
                         this.save(chatId);
                     }
@@ -617,6 +621,15 @@ class MessageData implements IMessage {
             sessionMatch.data = [];
         }
     }
+    getModelNameByChatId(chatId: string): string {
+        let { session } = this;
+        const sessionMatch = i18n.t<string>(session.find(item => item.chatId === chatId)?.chatConfig?.model as any);
+        if (sessionMatch) {
+            return sessionMatch
+        } else {
+            return "gpt-3.5-turbo";
+        }
+    }
     getChatInfoByChatId(chatId: string): ISession | null {
         let { session } = this;
         const sessionMatch = session.find(item => item.chatId === chatId);
@@ -873,6 +886,7 @@ class MessageData implements IMessage {
             isSys: true,
             stream: true,
             end: false,
+            title:this.getModelNameByChatId(chatId),
             choices: [{ message: { content: "" } }]
         }
         const ctrl = new AbortController();
@@ -940,7 +954,7 @@ class MessageData implements IMessage {
 
     _fetchSSEErrorHandle(resolve: (value: unknown) => void, chatId: string) {
         resolve(false);
-        this.appendData("got a unknow exception. please re-try", chatId);
+        this.appendData(i18n.t<string>("got a unknow exception. please re-try"), chatId);
         this.endStream(chatId);
         this.enableType(chatId);
     }

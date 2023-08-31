@@ -2,6 +2,7 @@
     padding: 50px;
     background-color: #f0f0f0;
     margin: 20px;
+    overflow: auto;
 }
 .person-info-container .token-usage{
 

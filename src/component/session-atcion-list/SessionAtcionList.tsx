@@ -1,15 +1,14 @@
 import React from 'react';
-import { Select, Button, Segmented, Popconfirm, Divider } from 'antd';
+import { Button, Segmented, Popconfirm } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { observer } from "mobx-react-lite";
 import { IAppConfig } from '../../store/AppConfig';
 import { IMessage } from '../../store/MessageData';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrashCan, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import RoleSelector from '../role-selector/RoleSelector';
-import chatConfig from "../../store/ChatConfig";
 import './SessionActionList.css';
-import { useState } from 'react';
+import ModelSelector from '../model-selector/ModelSelector';
 type IProps = {
   config: IAppConfig;
   store: IMessage;
@@ -18,7 +17,6 @@ type IProps = {
 const SessionAtcionList: React.FC<IProps> = observer(({ store, config, onOpen }) => {
 
   const { t } = useTranslation();
-  const [moreModules, setMoreModules] = useState(false);
   const options = [
     t('Precise'),
     t('Balanced'),
@@ -50,13 +48,6 @@ const SessionAtcionList: React.FC<IProps> = observer(({ store, config, onOpen })
     }
   }
 
-  const getModulesDataSource = () => {
-    if (moreModules) {
-      return chatConfig.chatModelList;
-    } else {
-      return chatConfig.chatModelList.filter(item=>item.isMain);
-    }
-  }
 
   const changeType = (e: any) => {
     const index = options.indexOf(e);
@@ -72,20 +63,7 @@ const SessionAtcionList: React.FC<IProps> = observer(({ store, config, onOpen })
       list.push(<Button className="option-btn" key={1} onClick={onOpen}>{t("More")}</Button>);
       !config.isMobile && list.push(<Segmented key={2} value={getSelectedItem()} onChange={changeType} style={{ marginRight: 10 }} options={options} />);
       list.push(<RoleSelector key={3} store={store} roleList={roleList}></RoleSelector>);
-      list.push(<Select key={4} style={{ width: 180 }}
-        className="option-btn" onChange={(e) => store.setChatApiConfig("model", e)}
-        options={getModulesDataSource()}
-        value={store.chatApiConfig.model}
-        dropdownRender={(menu) => (
-          <>
-            {menu}
-            <Divider style={{ margin: '8px 0' }} />
-            <Button onClick={() => setMoreModules(!moreModules)} style={{ width: '100%' }} icon={<FontAwesomeIcon
-              icon={faSearch} />} type="text">
-              &nbsp;{t<string>(!moreModules ? "All" : "Main")}
-            </Button>
-          </>)}
-      />);
+      list.push(<ModelSelector key={4} store={store}></ModelSelector> );
     }
     list.push(<Popconfirm
       key={6}

@@ -41,11 +41,13 @@ const ChatShare: React.FC<IProps> = ()=>{
         })
     },[]);
 
+    const language=(window?.navigator?.language==='en-US'?"Start a new session":"开始新的聊天");
+
     return (
     <div className="message-share-page">            
         {content}
         <div className="action-btn" >
-            {!!uuid && <Button onClick={start} type='primary'>Start a new session</Button>}
+            {!!uuid && <Button onClick={start} type='primary'>{language}</Button>}
         </div>
     </div>)
 }

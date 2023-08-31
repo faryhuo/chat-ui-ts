@@ -5,7 +5,7 @@ import userProflie from "./UserProfile";
 export interface IModelOptions {
     value: Model;
     label: string;
-    channle: 'gpt' | 'xunfei' | 'baidu' | 'aliyun';
+    channle: 'gpt' | 'xunfei' | 'baidu' | 'aliyun' |'google';
     isMain: boolean;
 }
 export interface IChatConfig {
@@ -32,7 +32,7 @@ type Model = "gpt-3.5-turbo" | "gpt-3.5-turbo-16k" |
     "gpt-3.5-turbo-0613" | "gpt-3.5-turbo-16k-0613"
     | "gpt-4" | "gpt-4-0314" | "gpt-4-0613" 
     | "spark-desk-1.5" | "spark-desk-2" | "ernie-bot" | "ernie-bot-turbo"
-    | "qwen-v1" | "qwen-plus-v1"
+    | "qwen-v1" | "qwen-plus-v1" | "palm"
 
 class ChatConfig implements IChatConfig {
 
@@ -63,7 +63,8 @@ class ChatConfig implements IChatConfig {
         { "label": i18n.t<string>("ernie-bot"), "value": "ernie-bot", "channle": "baidu", isMain: true },
         { "label": i18n.t<string>("ernie-bot-turbo"), "value": "ernie-bot-turbo", "channle": "baidu", isMain: false },
         { "label": i18n.t<string>("qwen-v1"), "value": "qwen-v1", "channle": "aliyun", isMain: true },
-        { "label": i18n.t<string>("qwen-plus-v1"), "value": "qwen-plus-v1", "channle": "aliyun", isMain: false }]
+        { "label": i18n.t<string>("qwen-plus-v1"), "value": "qwen-plus-v1", "channle": "aliyun", isMain: false },
+        { "label": "palm", "value": "palm", "channle": "google", isMain: true}]
 
         
 
@@ -78,10 +79,11 @@ class ChatConfig implements IChatConfig {
         "gpt-4-0613": 8192,
         "spark-desk-1.5": 8192,
         "spark-desk-2": 8192,
-        "ernie-bot":1.5 * 1024,
-        "ernie-bot-turbo":1.5 * 1024,
+        "ernie-bot":2 * 1024,
+        "ernie-bot-turbo":2 * 1024,
         "qwen-v1":1.5 * 1024,
-        "qwen-plus-v1":6.5 * 1024
+        "qwen-plus-v1":6.5 * 1024,
+        "palm":4096
     }
 
     getModelChange(model:Model){
@@ -102,7 +104,8 @@ class ChatConfig implements IChatConfig {
         "ernie-bot": "ernie-bot",
         "ernie-bot-turbo": "ernie-bot-turbo",
         "qwen-v1":"qwen-v1",
-        "qwen-plus-v1":"qwen-plus-v1"
+        "qwen-plus-v1":"qwen-plus-v1",
+        "palm":"palm"
     }
 
     getMaxTokenByModel(model: Model) {
