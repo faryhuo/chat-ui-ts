@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faQuestion, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import apiSetting from '../../store/APISetting';
 import { RcFile } from 'antd/es/upload';
-import { compositionOptions, qualityOptions, style2Options, styleOptions } from './ParamOptions';
+import { compositionOptions, environmentOptions, lightOptions, qualityOptions, style2Options, styleOptions } from './ParamOptions';
 
 type IProps = {
 }
@@ -176,6 +176,18 @@ const ImageParams: React.FC<IProps> = observer(() => {
           options={style2Options} value={imageData.params.style}></Select></div>
       </div>
 
+      <div className="image-param-set">
+        <div className="image-param-label">{t<string>("Light")} </div>
+        <div className="image-param-input"><Select allowClear style={{ width: '100%' }} onChange={(e) => { imageData.updateParams("light", e) }}
+          options={lightOptions} value={imageData.params.light}></Select></div>
+      </div>
+
+
+      <div className="image-param-set">
+        <div className="image-param-label">{t<string>("Environment")} </div>
+        <div className="image-param-input"><Select allowClear style={{ width: '100%' }} onChange={(e) => { imageData.updateParams("environment", e) }}
+          options={environmentOptions} value={imageData.params.environment}></Select></div>
+      </div>
     </div>
 
     <div className="image-param-set">

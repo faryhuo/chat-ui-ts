@@ -222,6 +222,8 @@ const config = {
     "qwen-plus-v1":"通义千问 plus",
     "got a unknow exception. please re-try":"未知异常,请尝试重新生成",
     "Raw":"摄影化",
-    "Composition":"构图"
+    "Composition":"构图",
+    "Light":"调色灯光",
+    "Environment":"环境"
 }
 export default config;

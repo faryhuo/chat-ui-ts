@@ -8,7 +8,6 @@ import apiSetting from "./APISetting";
 import { fetchEventSource } from "@microsoft/fetch-event-source";
 import noticeData from "./NoticeData";
 import { containsChineseCharacters } from "../utils/CommonUtils";
-import style from "react-syntax-highlighter/dist/esm/styles/hljs/a11y-dark";
 
 export interface IImageSharing{
     visible:boolean;
@@ -67,6 +66,8 @@ export interface ImageParam {
     raw?:boolean;
     composition:string;
     chineseStyle:string;
+    light:string;
+    environment:string;
 }
 
 class ImageData implements IImageData {
@@ -88,7 +89,9 @@ class ImageData implements IImageData {
         raw:false,
         imageUrl:"",
         composition:"",
-        chineseStyle:""
+        chineseStyle:"",
+        light:"",
+        environment:""
     }
 
     updateParams<K extends keyof ImageParam>(key:K, value:ImageParam[K]){
@@ -247,7 +250,7 @@ class ImageData implements IImageData {
 
 
     async getParamsByPrompt(prompt: string) {
-        const { size, stylize, model, quality, chaos, version, noNeedEle, iw, imageUrl,raw,composition,style} = this.params;
+        const { size, stylize, model, quality, chaos, version, noNeedEle, iw, imageUrl,raw,composition,style,light,environment} = this.params;
         let modelVersion = "";
         let modelStyle = "";
         const params = [];
@@ -257,6 +260,12 @@ class ImageData implements IImageData {
         }
         if(style){
             params.push(`,${style} `)
+        }
+        if(light){
+            params.push(`,${light} `)
+        }
+        if(environment){
+            params.push(`,${environment} `)
         }
 
         //
