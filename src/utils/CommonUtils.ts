@@ -14,3 +14,9 @@ export const debounce: DebounceFunction<(...args: any[]) => void> = (func, delay
         }, delay);
     };
 };
+
+
+export function containsChineseCharacters(str:string) {
+    const reg = /[\u4e00-\u9fa5]/; // 匹配中文字符的正则表达式
+    return reg.test(str);
+}
