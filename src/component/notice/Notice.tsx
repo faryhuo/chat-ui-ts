@@ -44,7 +44,7 @@ const Notice: React.FC<IProps> = observer(() => {
     setOpen(newOpen);
   };
   return (<div className="notices-wrapper">
-    <Popover placement="bottomRight" title={false} content={content}
+    <Popover placement="bottom" title={false} content={content}
       trigger="click"
       open={open}
       onOpenChange={handleOpenChange}>
