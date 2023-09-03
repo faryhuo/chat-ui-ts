@@ -27,3 +27,15 @@
     --tw-text-opacity: 1;
     font-size: 14px;
 }
+
+@media only screen and (max-width: 468px){
+    .image-details-action-list button{
+        margin: 3px;
+    }
+    .image-header-action-list button{
+        margin: 3px;
+    }
+    .image-details-action-list-title{
+        width:40px;
+    }
+}

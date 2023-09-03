@@ -94,6 +94,7 @@ const Image: React.FC<IProps> = ({ config, globalMessageApi }) => {
                 }}>
               </List>
             </div>
+            <div className="image-page-foot"></div>
           </Content>
         </Layout>
       </Layout>

@@ -2,7 +2,7 @@
     background: rgb(248 248 248);
     padding: 10px;
     position: relative;
-    overflow: auto;
+    flex:1;
 }
 .ai-image-page-content{
     background: #fff;
@@ -40,6 +40,7 @@
     right: 0;
     top:0;
     left: 0;
+    overflow: auto;
 }
 
 .ai-image-page>.ant-layout{
@@ -52,16 +53,24 @@
     width: 100%;
     
 }
-.ant-layout .ai-image-page-content-main{
-    position: absolute;
-    bottom:0;
-    right: 0;
-    top:380px;
-    left: 0;
-    padding: 20px;
-    overflow: auto;
+.image-page-foot{
+    height: 20px;
 }
-
+@media only screen and (max-width: 468px) {
+    .ai-image-page>.ant-layout aside.ant-layout-sider{
+        flex:1 !important;
+        width: 100% !important;
+        min-width: auto !important;
+        box-sizing: border-box;
+    }
+    section.ant-layout.ai-image-page-content{
+        flex:1;
+        box-sizing: border-box;
+    }
+    .icp_link{
+        display: none;
+    }
+}
 @media only screen and (min-width: 768px) {
     .ant-layout.ai-image-page-content{
         width: 100%;
@@ -81,6 +90,9 @@
     .ai-image-page>.ant-layout{
         flex-direction: row;
     }
+    .ai-image-page{
+        overflow: hidden;
+    }
     .ai-image-page .ai-image-page-wrapper{
         position: absolute;
         bottom:0;
@@ -98,6 +110,9 @@
         top:0;
         left: 0;
         padding: 20px;
+        overflow: auto;
+    }
+    .ai-image-page .ant-layout-sider {
         overflow: auto;
     }
 }
