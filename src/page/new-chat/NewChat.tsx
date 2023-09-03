@@ -5,6 +5,9 @@ import {IAppConfig} from '../../store/AppConfig';
 import {IMessage} from '../../store/MessageData';
 import RoleConfigPage from '../role-config/RoleConfig';
 import { useTranslation } from 'react-i18next';
+import ModelSelector from '../../component/model-selector/ModelSelector';
+import chatConfig from '../../store/ChatConfig';
+import { observer } from 'mobx-react-lite';
 
 type IProps={
   config:IAppConfig;
@@ -29,7 +32,13 @@ const NewChat: React.FC<IProps> = ({store,config})=>{
       <div  className="new-chat-title">
         <h1>{t<string>('Choose a conversation style and role to start')}</h1>
       </div>
-
+      <div className="new-chat-model">
+        <div className="label-wrapper">{t("Model")} : </div>
+        <div className="input-wrapper">
+        <ModelSelector store={store} value={chatConfig.apiConfig.model}
+        onChange={(e)=>chatConfig.changeModel(e)}></ModelSelector>
+        </div>
+      </div>
         <div className="just-start">
           <Button onClick={addChat} type="primary" style={{width:200}} size="large">{t<string>('Just Start')}</Button>
           <Button onClick={addRole} style={{width:200,marginLeft:20}} size="large">{t<string>('Go to Role Management')}</Button>
@@ -40,4 +49,4 @@ const NewChat: React.FC<IProps> = ({store,config})=>{
     </div>)
 }
 
-export default NewChat;
+export default observer(NewChat);

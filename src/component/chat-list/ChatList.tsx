@@ -145,7 +145,7 @@ const ChatList: React.FC<IProps> = ({ store }) => {
   })
 
   const favoriteDataSouce = dataSouce.filter(item => {
-    return !!item.favorite && !isSameDay(item.date);
+    return !!item.favorite;
   })
 
   const renderList = (source: ISessionMenu[]) => {

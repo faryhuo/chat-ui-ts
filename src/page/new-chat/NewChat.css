@@ -7,6 +7,18 @@
     margin-top: 50px;
     margin-bottom: 20px;
 }
+.new-chat-page .input-wrapper,.label-wrapper{
+    display: inline-block;
+}
+
+.new-chat-page .label-wrapper{
+   font-size: 16px;
+   margin-right: 20px;
+}
+.new-chat-page .new-chat-model{
+    text-align: center;
+    margin-bottom: 20px;
+}
 .new-chat-page .just-start{
     text-align: center;
     margin-bottom: 20px;

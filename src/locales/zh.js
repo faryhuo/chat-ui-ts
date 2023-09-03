@@ -62,7 +62,7 @@ const config = {
     "Text Language": "文本语言",
     "Base Configuration": "基础配置",
     "Chat API Configuration": "ChatGPT API 配置",
-    "Model":"训练模型",
+    "Model":"对话模型",
     "Image Size":"图片尺寸",
     "Code Style":"代码风格",
     "New Chat":"新会话",
