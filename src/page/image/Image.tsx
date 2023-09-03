@@ -18,8 +18,8 @@ type IProps = {
 const listLayout = {
   xs: 1,
   sm: 1,
-  md: 2,
-  lg: 2,
+  md: 1,
+  lg: 1,
   xl: 2,
   xxl: 4,
 };

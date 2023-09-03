@@ -40,8 +40,8 @@ const NewChat: React.FC<IProps> = ({store,config})=>{
         </div>
       </div>
         <div className="just-start">
-          <Button onClick={addChat} type="primary" style={{width:200}} size="large">{t<string>('Just Start')}</Button>
-          <Button onClick={addRole} style={{width:200,marginLeft:20}} size="large">{t<string>('Go to Role Management')}</Button>
+          <Button onClick={addChat} type="primary"   size="large">{t<string>('Just Start')}</Button>
+          <Button onClick={addRole} size="large">{t<string>('Go to Role Management')}</Button>
         </div>
         <div className="role-list">
           <RoleConfigPage readonly={true} config={config} store={store}></RoleConfigPage>

@@ -28,7 +28,7 @@
     font-size: 14px;
 }
 
-@media only screen and (max-width: 468px){
+@media only screen and (max-width: 412px){
     .image-details-action-list button{
         margin: 3px;
     }

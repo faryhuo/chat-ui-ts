@@ -23,9 +23,25 @@
     text-align: center;
     margin-bottom: 20px;
 }
+.new-chat-page .just-start button{
+    width:200px;
+    margin-left: 20px;
+}
 .new-chat-page .role-config-page{
     background-image: none;
 }
 .new-chat-page .role-config-page .role-list-wrapper{
     background-color: rgba(0, 0, 0, 0);
+}
+
+
+@media only screen and (max-width: 412px){
+    .new-chat-page .just-start{
+        padding: 20px;
+    }
+    .new-chat-page .just-start button{
+        width:100%;
+        margin-bottom: 10px;
+        margin-left: 0;
+    }
 }
