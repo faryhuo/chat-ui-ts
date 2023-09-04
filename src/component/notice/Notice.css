@@ -1,7 +1,16 @@
 .notice-messages{
-    max-width: 320px;
-    max-height: 480px;
+    width: 320px;
+}
+.notice-messages .notice-list-content{
+    max-height: 420px;
     overflow: auto;
+}
+.notice-messages .action-btn-list{
+    padding: 10px;
+    box-sizing: border-box;
+}
+.notice-messages .action-btn-list button{
+    width:50%;
 }
 .notice-messages .message-item:hover {
     background-color: #e6f7ff;

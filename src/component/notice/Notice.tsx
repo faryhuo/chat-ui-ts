@@ -1,17 +1,21 @@
 import { useState } from 'react';
-import {  Badge, List, Popover } from 'antd';
+import {  Badge, Button, List, Popover, Tabs } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleCheck, faCircleExclamation, faEnvelope } from '@fortawesome/free-solid-svg-icons'
 import { observer } from "mobx-react-lite";
-import noticeData from '../../store/NoticeData';
+import noticeData, { INoticeMessage } from '../../store/NoticeData';
 import { formatShortDate } from '../../utils/dateUtils';
 import './Notice.css'
+import { useTranslation } from 'react-i18next';
 type IProps = {
 }
 const Notice: React.FC<IProps> = observer(() => {
 
+  const { t } = useTranslation();
+
   const [open, setOpen] = useState(false);
 
+  const [type, setType] = useState("success");
 
   const getAvatorByType = (type: string) => {
     const icon = type === "success" ? faCircleCheck : faCircleExclamation;
@@ -21,9 +25,25 @@ const Notice: React.FC<IProps> = observer(() => {
   }
 
 
+  const getDataSource=():INoticeMessage[]=>{
+    return noticeData.messages.slice().reverse().filter(message=>message.type===type)
+  }
+
   const content = (
     <div className="notice-messages">
-      <List dataSource={noticeData.messages.slice().reverse()} renderItem={(message, index) => {
+      <Tabs
+      onChange={(e)=>setType(e)}
+      type="card"
+      items={[{
+        label:t("Message"),
+        key:"success"
+      },{
+        label:t("Error message"),
+        key:"error"
+      }]}
+    />
+    <div className="notice-list-content">
+    <List dataSource={getDataSource()} renderItem={(message, index) => {
         return (<List.Item className={"message-item"+ (message.isRead?" message-read":"")} key={index}
         onMouseMove={()=>{noticeData.read(index)}}
         >
@@ -37,6 +57,13 @@ const Notice: React.FC<IProps> = observer(() => {
         </List.Item>)
       }}>
       </List>
+    </div> 
+    <div className="action-btn-list">
+      <Button onClick={() => { noticeData.readAll() }}>
+        &nbsp;{t('Read all')}</Button>
+        <Button onClick={() => { noticeData.clearAll() }}>
+        &nbsp;{t('Clear all')}</Button>
+      </div>
     </div>
   )
 

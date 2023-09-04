@@ -224,6 +224,8 @@ const config = {
     "Raw":"摄影化",
     "Composition":"构图",
     "Light":"调色灯光",
-    "Environment":"环境"
+    "Environment":"环境",
+    "Read all":"全部已读",
+    "Error message":"错误信息"
 }
 export default config;

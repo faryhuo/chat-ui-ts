@@ -74,6 +74,10 @@ class NoticeData implements INoticeData {
         localStorage.setItem(this.localConfigName,JSON.stringify(this.messages));
     }
 
+    clearAll(){
+        this.messages=[];
+        localStorage.setItem(this.localConfigName,JSON.stringify(this.messages));
+    }
 
 }
 
