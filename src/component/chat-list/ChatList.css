@@ -1,5 +1,12 @@
 .session-list-wrapper{
     padding: 0 5px;
+    position: absolute;
+    bottom: 0;
+    top:0;
+    right: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
 }
 .session-list-wrapper .session-list-item.selected{
     color: #fff;
@@ -65,4 +72,41 @@
 }
 .chat-session-action-button{
     width:100px
+}
+
+.session-list-wrapper .session-list{
+    flex: 1;
+    height: 100%;
+    overflow: auto;
+}
+.session-list-wrapper .model-amount{
+    flex: 0 0 64px;
+    margin: 2px;
+    margin-top: 7px;
+    border: 1px solid #d9d9d9;;
+    border-radius: 5px;
+}
+
+.session-list-wrapper .model-amount .amount-content{
+    margin-top: 15px;
+    display: flex;
+}
+
+.amount-content .amount-left{
+    flex: 0 0 120px;
+    text-align: center;
+    font-weight: 600;
+}
+.amount-content .amount-right{
+    flex: 1;
+    padding-left: 10px;
+}
+
+.amount-content .amount-right .amount-item{
+    display: flex;
+}
+
+
+.amount-item .amount-title{
+    flex: 0 0 85px;
 }

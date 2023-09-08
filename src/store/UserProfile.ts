@@ -176,6 +176,7 @@ class UserProflie implements IUserProflie {
 
     constructor() {
         makeObservable(this, {
+            token: observable,
             userId: observable,
             userName: observable,
             premission: observable,

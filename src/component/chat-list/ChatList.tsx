@@ -7,18 +7,21 @@ import { Input, Modal } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { IMessage, ISessionMenu } from '../../store/MessageData';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPaintbrush, faTrashCan, faCheck, faShare, faStar, faTools } from '@fortawesome/free-solid-svg-icons'
+import { faPaintbrush, faTrashCan, faCheck, faShare, faStar, faTools, faAdd, faWallet } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ChatShareSteps from '../chat-share-steps/ChatShareSteps';
 import QueueAnim from 'rc-queue-anim';
 import { formatShortDate, isSameDay } from '../../utils/dateUtils';
+import userModelLimit from '../../store/UserModelLimit';
+import {IUserProflie} from '../../store/UserProfile';
 type IProps = {
-  store: IMessage
+  store: IMessage;
+  userProflie:IUserProflie
 }
 
 
-const ChatList: React.FC<IProps> = ({ store }) => {
+const ChatList: React.FC<IProps> = ({ store,userProflie }) => {
 
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
@@ -153,13 +156,64 @@ const ChatList: React.FC<IProps> = ({ store }) => {
       {source.map((item: ISessionMenu) => renderItem(item))}
     </QueueAnim>;
   }
+
+  const clearHistoryButton=(<Popconfirm
+    placement="right"
+    title={t('Message')}
+    description={t('Are you want to clear the history.')}
+    onConfirm={(e) => {}}
+    okText={t<string>("Yes")}
+    cancelText={t<string>("No")}
+  >
+
+  <Button size='small' style={{width:'100%'}} icon={<FontAwesomeIcon icon={faTrashCan} />}>
+      &nbsp; {t('Clear all history')}
+  </Button>
+  </Popconfirm>)
+
+  useEffect(()=>{
+    userProflie.token && userModelLimit.fetchUsage(userProflie.token)
+  },[userProflie.token])
+
   return (<div className="session-list-wrapper">
-      <Divider>{t('Recent')}</Divider>
-      {renderList(recnetDataSouce)}
-      <Divider>{t('Favorite')}</Divider>
-      {renderList(favoriteDataSouce)}
-      <Divider>{t('History')}</Divider>
-      {renderList(historyDataSouce)}
+      <div className="session-list">
+        <Divider>{t('Recent')}</Divider>
+        {renderList(recnetDataSouce)}
+        <Divider>{t('Favorite')}</Divider>
+        {renderList(favoriteDataSouce)}
+        <Divider>{t('History')}</Divider>
+          <div style={{padding:5}}>
+                    {clearHistoryButton}
+          </div>
+        {renderList(historyDataSouce)}
+      </div>
+      <div className="model-amount">
+        <div className="amount-content">
+          <div className="amount-left">
+          <span><FontAwesomeIcon style={{color:"#faad14"}} icon={faWallet}/> {t('GPT 4 Amount')}</span>
+          </div>
+          <div  className="amount-right">
+            <div className="amount-item">
+              <div className="amount-title">
+                <span>{t('Used')} : </span>
+              </div>
+              <div className="amount-value">
+              {userModelLimit.gptUsage.usedAmount}
+              </div>
+            </div>
+            <div className="amount-item">
+              <div className="amount-title">
+                <span>{t('Remaining')} : </span>
+              </div>
+              <div className="amount-value">
+              {userModelLimit.gptUsage.remainingAmount}
+              <Button style={{marginLeft:5}} size='small' icon={<FontAwesomeIcon icon={faAdd}></FontAwesomeIcon>}/>
+              </div>
+            </div>
+          </div>
+              
+        </div>
+      </div>
       <Modal
         open={open}
         title={t<string>("Share History")}

@@ -226,6 +226,12 @@ const config = {
     "Light":"调色灯光",
     "Environment":"环境",
     "Read all":"全部已读",
-    "Error message":"错误信息"
+    "Error message":"错误信息",
+    "GPT 4 Amount":"GPT 4 额度",
+    "Used":"已使用",
+    "Remaining":"剩余",
+    "Clear all history":"清除历史记录",
+    "Are you want to clear the history.":"确定要清除历史记录吗？",
+    "Clear all":"清除全部"
 }
 export default config;

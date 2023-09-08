@@ -12,7 +12,7 @@ import zhCN from 'antd/locale/zh_CN';
 import enUS from 'antd/locale/en_US';
 import {ConfigProvider, message } from 'antd';
 import { IProps } from 'rc-queue-anim';
-
+import userProflie from '../../store/UserProfile';
 const Main:React.FC<IProps> = ()=>{
     const [messageApi, contextHolder] = message.useMessage();
 
@@ -40,7 +40,7 @@ const Main:React.FC<IProps> = ()=>{
                     <div className="chat-content">
                         {appConfig.isSlowLeftMenuFlag &&
                         <div className="chat-left-content">
-                            <ChatList store={messageData}></ChatList>
+                            <ChatList store={messageData} userProflie={userProflie}></ChatList>
                         </div>}
                         <div className="chat-right-content">
                             <Routes messageData={messageData} appConfig={appConfig} 
