@@ -35,10 +35,10 @@ const Notice: React.FC<IProps> = observer(() => {
       onChange={(e)=>setType(e)}
       type="card"
       items={[{
-        label:t("Message"),
+        label:<Badge size="small" count={noticeData.messages.filter(message=>message.type==='success' && !message.isRead).length}><span style={{padding:5}}>{t("Message")}</span></Badge>,
         key:"success"
       },{
-        label:t("Error message"),
+        label: <Badge size="small" count={noticeData.messages.filter(message=>message.type==='error' && !message.isRead).length}><span style={{padding:5}}>{t("Error message")}</span></Badge>,
         key:"error"
       }]}
     />

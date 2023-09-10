@@ -6,13 +6,15 @@ import { observer } from "mobx-react-lite"
 import { Button, Input, Layout, List } from 'antd';
 import ImageParams from '../../component/image-params/ImageParams';
 import ImageDetailItem from '../../component/image-detail-item/ImageDetailItem';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { MessageInstance } from 'antd/es/message/interface';
 import { useTranslation } from 'react-i18next';
 import imageData from '../../store/ImageData';
+import { IUserProflie } from '../../store/UserProfile';
 type IProps = {
   config: IAppConfig;
   globalMessageApi: MessageInstance;
+  userProflie: IUserProflie;
 }
 
 const listLayout = {
@@ -25,7 +27,7 @@ const listLayout = {
 };
 
 const { Sider, Content } = Layout;
-const Image: React.FC<IProps> = ({ config, globalMessageApi }) => {
+const Image: React.FC<IProps> = ({ globalMessageApi,userProflie }) => {
 
   const { t } = useTranslation();
 
@@ -35,6 +37,12 @@ const Image: React.FC<IProps> = ({ config, globalMessageApi }) => {
   const generate = () => {
     ImageData.generate(imageData.prompt, globalMessageApi)
   }
+
+  useEffect(()=>{
+    if(userProflie.token){
+      ImageData.fetchData(userProflie.token)
+    }
+  },[userProflie.token])
 
   const getDataSouce = () => {
     return ImageData.data.concat([]).reverse()

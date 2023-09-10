@@ -7,10 +7,11 @@ import { Button, InputNumber, message, Radio, Select, Tooltip, Upload, Image, Sl
 import './ImageParams.css'
 import imageData from '../../store/ImageData';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faQuestion, faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { faAdd, faQuestion, faTrashCan, faWallet } from '@fortawesome/free-solid-svg-icons';
 import apiSetting from '../../store/APISetting';
 import { RcFile } from 'antd/es/upload';
 import { compositionOptions, environmentOptions, lightOptions, qualityOptions, style2Options, styleOptions } from './ParamOptions';
+import userModelLimit from '../../store/UserModelLimit';
 
 type IProps = {
 }
@@ -266,6 +267,40 @@ const ImageParams: React.FC<IProps> = observer(() => {
         </Col>
       </Row>
     </div>
+
+    <div className="model-amount">
+        <div className="amount-content">
+          <div className="amount-left">
+          <span><FontAwesomeIcon style={{color:"#faad14"}} icon={faWallet}/> {t('AI Image Amount')}</span>
+          <Button style={{marginLeft:10}} size='small' icon={<FontAwesomeIcon icon={faAdd}></FontAwesomeIcon>}/>
+          </div>
+          <div  className="amount-right">
+            <div className="amount-item">
+              <div className="amount-title">
+                <span>{t('Standard mode')} : </span>
+              </div>
+              <div className="amount-value">
+              {userModelLimit.mjStandardUsage.remainingAmount}
+              </div>
+            </div>
+            <div className="amount-item">
+              <div className="amount-title">
+                <span>{t('Fast mode')} : </span>
+              </div>
+              <div className="amount-value">
+              {userModelLimit.mjFastUsage.remainingAmount}
+              
+              </div>
+            </div>
+          </div>
+              
+        </div>
+      </div>
+
+      <div className="end">
+
+      </div>
+
   </div>)
 })
 

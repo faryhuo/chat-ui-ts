@@ -1,5 +1,7 @@
 .image-params-wrapper .ant-radio-button-wrapper{
-    width: 115px;
+    width: 110px;
+    font-size: 13px;
+    padding-inline: 10px;
 }
 .image-model-icon{
     width: 128px;
@@ -37,6 +39,38 @@
     flex:1
 }
 
-.image-params-wrapper .image-iw-input{
-    padding-bottom: 20px;
+.image-params-wrapper .model-amount{
+    flex: 0 0 64px;
+    margin: 2px;
+    margin-top: 7px;
+    padding: 5px;
+    border: 1px solid #d9d9d9;;
+    border-radius: 5px;
+}
+
+.image-params-wrapper .model-amount .amount-content{
+    margin-top: 15px;
+    display: flex;
+}
+
+.amount-content .amount-left{
+    flex: 0 0 120px;
+    text-align: center;
+    font-weight: 600;
+}
+.amount-content .amount-right{
+    flex: 1;
+    padding-left: 10px;
+}
+
+.amount-content .amount-right .amount-item{
+    display: flex;
+}
+
+
+.image-params-wrapper .amount-item .amount-title{
+    flex: 0 0 110px;
+}
+.image-params-wrapper .end{
+    height: 30px;
 }

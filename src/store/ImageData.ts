@@ -36,6 +36,7 @@ export interface IImageData {
     getWidthBySize:(size:string)=>number;
     getHeightBySize:(size:string)=>number;
     downloadImage:(url: string)=>void;
+    fetchData:(token:string)=>void;
 }
 
 
@@ -247,6 +248,25 @@ class ImageData implements IImageData {
         "date":new Date(),
         "status":"success"
     }]
+
+    fetchData(token:string){
+        fetch(apiSetting.mjImageUrl,{
+            headers:{
+                token:token
+            }
+        }).then((res)=>res.json()).then((responseData)=>{
+            const data=responseData.data as any[];
+            data.forEach((item)=>{
+                item.progress=100;
+                item.image_url=item.urlBig;
+                item.status="success";
+                item.params={
+                    size:item.size
+                };
+            })
+            this.data=data;
+        })
+    }
 
 
     async getParamsByPrompt(prompt: string) {
@@ -467,7 +487,8 @@ class ImageData implements IImageData {
             changeImageSize: action,
             updateParams:action,
             changeNoNeedEle:action,
-            setPrompt:action
+            setPrompt:action,
+            fetchData:action.bound
         })
         if(localStorage["image_data"]){
             this.data=JSON.parse(localStorage["image_data"]);

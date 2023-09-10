@@ -30,6 +30,42 @@ class UserModelLimit implements IUserModelLimit {
         
     }
 
+    get mjStandardUsage(){
+        const defaultUsage:IModelUsage= {
+            enable:true,
+            modelName:"mj",
+            remainingAmount:0,
+            usedAmount:0
+        };
+        if(!this.usage.length){
+            return defaultUsage;
+        }
+        const result= this.usage.find(item=>item.modelName==='mj');
+        if(result){
+            return result;
+        }else{
+            return defaultUsage;
+        }
+    }
+
+    get mjFastUsage(){
+        const defaultUsage:IModelUsage= {
+            enable:true,
+            modelName:"mj_fast",
+            remainingAmount:0,
+            usedAmount:0
+        };
+        if(!this.usage.length){
+            return defaultUsage;
+        }
+        const result= this.usage.find(item=>item.modelName==='mj_fast');
+        if(result){
+            return result;
+        }else{
+            return defaultUsage;
+        }
+    }
+
     get gptUsage(){
         const defaultUsage:IModelUsage= {
             enable:true,

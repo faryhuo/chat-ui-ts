@@ -232,6 +232,11 @@ const config = {
     "Remaining":"剩余",
     "Clear all history":"清除历史记录",
     "Are you want to clear the history.":"确定要清除历史记录吗？",
-    "Clear all":"清除全部"
+    "Clear all":"清除全部",
+    "Time":"时间",
+    "use":"使用",
+    "AI Image Amount":"绘画额度",
+    "Standard mode":"标准模式",
+    "Fast mode":"快速模式"
 }
 export default config;

@@ -10,6 +10,7 @@ import {IMessage} from '../../store/MessageData';
 import asyncComponent  from '../../component/async-component/AsyncComponent';
 import NewChat from '../new-chat/NewChat';
 import { MessageInstance } from 'antd/es/message/interface';
+import userProflie from '../../store/UserProfile';
 
 
 
@@ -92,7 +93,7 @@ const AppRoutes:React.FC<IProps> = ({messageData,appConfig,messageApi})=>{
     {
         pageList.map((item,index)=>{
             const AppComponent:any=item.component;
-            return (<Route  key={index} path={item.path} Component={(props)=><AppComponent key={index} {...item.props}{...props} globalMessageApi={messageApi} store={messageData} config={appConfig}></AppComponent>} >
+            return (<Route  key={index} path={item.path} Component={(props)=><AppComponent key={index} {...item.props}{...props} globalMessageApi={messageApi} userProflie={userProflie} store={messageData} config={appConfig}></AppComponent>} >
                 </Route>)
         })
     }
