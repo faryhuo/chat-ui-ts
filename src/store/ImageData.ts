@@ -263,6 +263,7 @@ class ImageData implements IImageData {
                 item.params={
                     size:item.size
                 };
+                item.image_id=item.imageId
             })
             this.data=data;
         })
@@ -367,13 +368,13 @@ class ImageData implements IImageData {
 
     showErrorMsg(globalMessageApi:MessageInstance,msg:string){
         const message=i18n.t<string>(msg);
-        globalMessageApi.error(message,15);
+        globalMessageApi.error(message,5);
         noticeData.addErrorMessage(message)
     }
     
     showSuccessMsg(globalMessageApi:MessageInstance,msg:string){
         const message=i18n.t<string>(msg);
-        globalMessageApi.success(message,15);
+        globalMessageApi.success(message,5);
         noticeData.addSuccessMessage(message)
     }
 
