@@ -53,6 +53,7 @@ class APISetting implements IAPISetting {
     publicKeyUrl = `${this.host}/${this.userServiceName}/user/rsapubkey`
     userInfoUrl = `${this.host}/${this.userServiceName}/user/user-info`
     historyUrl = `${this.host}/${this.historyServiceName}/history`
+
     sentSmsCodeUrl = `${this.host}/${this.smsServiceName}/sms/send/`
 
     favoriteRoleUrl = `${this.host}/${this.userServiceName}/favorite/roles`

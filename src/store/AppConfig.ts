@@ -73,8 +73,8 @@ class AppConfig implements IAppConfig {
         return isMobile ? "vertical" : "horizontal"
     }
 
-    colorPrimary = '#87e8de'
-    textLanguage = "zh";
+    colorPrimary = '#41dfec'
+    textLanguage = (navigator.language?navigator.language:"zh").substr(0,2);
     language = "zh_cn";
     accent = "mandarin";
 

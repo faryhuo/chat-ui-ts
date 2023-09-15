@@ -1020,6 +1020,21 @@ class MessageData implements IMessage {
         });
     }
 
+    updateChatHistory(chatId: string,chatName:string) {
+        const queryUrl = config.api.historyUrl+"/"+chatId+"?chatName="+encodeURI(chatName);
+        const chatObj=this.session.find(item => item.chatId === chatId);;
+        if(chatObj){
+            axios({
+                method: "put",
+                url: queryUrl,
+                headers: {
+                    'token': userProflie.token,
+                    'Content-Type': 'application/json;charset=UTF-8'
+                }
+            });
+        }
+    }
+
     promiseList:any={};
 
     getChatHistoryByChatId(chatId:string){
@@ -1229,13 +1244,17 @@ class MessageData implements IMessage {
         this.session.forEach((item) => {
             if (item.chatId === chatId) {
                 item.edit = status;
+                if(status===false){
+                    if (userProflie.isLogin && userProflie.token && item.chatName) {
+                        this.updateChatHistory(chatId,item.chatName);
+                    }else{
+                        this.saveSessionToLocal();
+                    }
+                }
             } else {
                 item.edit = false;
             }
         });
-        if (status === false) {
-            this.save(chatId);
-        }
     }
 
     get currentChatName() {

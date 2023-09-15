@@ -18,7 +18,11 @@ class Payment implements IPayment {
     }
 
     async getAlipayQRCode(){
-        const response= await fetch("https://fary.chat:8409/payment/alipay");
+        const response= await fetch("https://fary.chat:8409/payment/alipay/qrcode",{
+            headers:{
+                token:localStorage["user-token"]
+            }
+        });
         if (!response.ok) {
             //创造一个错误类型
             throw new Error("");
