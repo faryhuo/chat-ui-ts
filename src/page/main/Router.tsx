@@ -62,7 +62,7 @@ const pageList=[{
     path:"/sd",
     component:AsyncFrame,
     props:{
-        src:"https://e152ddfadd87f15ffb.gradio.live"
+        src:"http://sd.fc-stable-diffusion-plus.1730559332177295.cn-shenzhen.fc.devsapp.net/?spm=5176.fcnext.0.0.406c78c8xNTZfY"
     },
 },{
     path:"/",

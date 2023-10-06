@@ -30,11 +30,11 @@ const Header: React.FC<IProps> = observer(({store,config}) => {
       key: 'chat',
       icon: <FontAwesomeIcon icon={faComments} />
     },
-    // {
-    //   label: <Link to="/sd">{t('Stable Diffusion')}</Link>,
-    //   key: 'sd',
-    //   icon: <FontAwesomeIcon icon={faImages} />
-    // },
+    {
+      label: <Link to="/sd">{t('Stable Diffusion')}</Link>,
+      key: 'sd',
+      icon: <FontAwesomeIcon icon={faImages} />
+    },
     {
       label: <Link to="/image">{t('Image')}</Link>,
       key: 'image',

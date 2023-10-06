@@ -9,7 +9,7 @@ import ActionBtnList from '../session-atcion-list/SessionAtcionList'
 import ChatConfigList from '../chat-config-list/ChatConfigList'
 import {IAppConfig} from '../../store/AppConfig';
 import {IMessage,ISessiondata} from '../../store/MessageData';
-import {debounce} from '../../utils/CommonUtils'
+import {throttle} from '../../utils/CommonUtils'
 
 type IProps={
   config:IAppConfig;
@@ -25,7 +25,7 @@ const scrollMessage=(messagesEndRef:any,open:boolean)=>{
   }
 }
 
-const debounceObj=debounce(scrollMessage,300);
+const throttleObj=throttle(scrollMessage,300);
 
 const MessageItemChat : React.FC<IProps> = observer(({store,config,renderMessage}) => {
 
@@ -42,7 +42,7 @@ const MessageItemChat : React.FC<IProps> = observer(({store,config,renderMessage
 
 
   useEffect(()=>{
-    debounceObj(messagesEndRef,open);
+    throttleObj(messagesEndRef,open);
   },[store.latestMessage,open])
 
 
