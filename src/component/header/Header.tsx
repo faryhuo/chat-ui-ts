@@ -31,7 +31,7 @@ const Header: React.FC<IProps> = observer(({store,config}) => {
       icon: <FontAwesomeIcon icon={faComments} />
     },
     {
-      label: <Link to="/sd">{t('Stable Diffusion')}</Link>,
+      label: <a href="http://sd.fary.chat" target="_blank">{t('Stable Diffusion')}</a>,
       key: 'sd',
       icon: <FontAwesomeIcon icon={faImages} />
     },

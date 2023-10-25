@@ -31,8 +31,8 @@ export interface IChatAPIConfig {
 type Model = "gpt-3.5-turbo" | "gpt-3.5-turbo-16k" |
     "gpt-3.5-turbo-0613" | "gpt-3.5-turbo-16k-0613"
     | "gpt-4" | "gpt-4-0314" | "gpt-4-0613" 
-    | "spark-desk-1.5" | "spark-desk-2" | "ernie-bot" | "ernie-bot-turbo"
-    | "qwen-v1" | "qwen-plus-v1" | "palm"
+    | "spark-desk-1.5" | "spark-desk-2" | "ernie-bot" | "ernie-bot-4" | "ernie-bot-turbo"
+    | "qwen-turbo" | "qwen-plus" | "palm"
 
 class ChatConfig implements IChatConfig {
 
@@ -60,10 +60,11 @@ class ChatConfig implements IChatConfig {
         { "label": "gpt-4-0613", "value": "gpt-4-0613", "channle": "gpt", isMain: false },
         { "label": i18n.t<string>("SparkDesk 1.5"), "value": "spark-desk-1.5", "channle": "xunfei", isMain: true },
         { "label": i18n.t<string>("SparkDesk 2.0"), "value": "spark-desk-2", "channle": "xunfei", isMain: true },
+        { "label": i18n.t<string>("ernie-bot-4"), "value": "ernie-bot-4", "channle": "baidu", isMain: true },
         { "label": i18n.t<string>("ernie-bot"), "value": "ernie-bot", "channle": "baidu", isMain: true },
         { "label": i18n.t<string>("ernie-bot-turbo"), "value": "ernie-bot-turbo", "channle": "baidu", isMain: false },
-        { "label": i18n.t<string>("qwen-v1"), "value": "qwen-v1", "channle": "aliyun", isMain: true },
-        { "label": i18n.t<string>("qwen-plus-v1"), "value": "qwen-plus-v1", "channle": "aliyun", isMain: false },
+        { "label": i18n.t<string>("qwen-turbo"), "value": "qwen-turbo", "channle": "aliyun", isMain: true },
+        { "label": i18n.t<string>("qwen-plus"), "value": "qwen-plus", "channle": "aliyun", isMain: false },
         { "label": "palm", "value": "palm", "channle": "google", isMain: true}]
 
         
@@ -79,10 +80,11 @@ class ChatConfig implements IChatConfig {
         "gpt-4-0613": 8192,
         "spark-desk-1.5": 8192,
         "spark-desk-2": 8192,
-        "ernie-bot":2 * 1024,
-        "ernie-bot-turbo":2 * 1024,
-        "qwen-v1":1.5 * 1024,
-        "qwen-plus-v1":6.5 * 1024,
+        "ernie-bot":4 * 1024,
+        "ernie-bot-4":4 * 1024,
+        "ernie-bot-turbo":8 * 1024,
+        "qwen-turbo":6 * 1024,
+        "qwen-plus":6 * 1024,
         "palm":4096
     }
 
@@ -102,9 +104,10 @@ class ChatConfig implements IChatConfig {
         "spark-desk-1.5": "spark-desk-1.5",
         "spark-desk-2": "spark-desk-2",
         "ernie-bot": "ernie-bot",
+        "ernie-bot-4": "ernie-bot-4",
         "ernie-bot-turbo": "ernie-bot-turbo",
-        "qwen-v1":"qwen-v1",
-        "qwen-plus-v1":"qwen-plus-v1",
+        "qwen-turbo":"qwen-turbo",
+        "qwen-plus":"qwen-plus",
         "palm":"palm"
     }
 
@@ -164,7 +167,7 @@ class ChatConfig implements IChatConfig {
     changeModel(model: Model) {
         const newChannel=this.getModelChange(model);
         const oldChannel=this.getModelChange(this.apiConfig.model);
-        if(newChannel==='gpt'){
+        if(newChannel==='gpt' && model.startsWith('gpt-4')){
             if (userProflie.token) {
                 this.apiConfig.model = model;
             } else {
