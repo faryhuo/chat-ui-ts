@@ -656,6 +656,10 @@ class MessageData implements IMessage {
             if (!sessionMatch.chatConfig) {
                 sessionMatch.chatConfig = Object.assign({}, chatConfig.getAPIConfig());
             }
+            if(key === "model"){
+                const newChannel=chatConfig.getModelChange(value as any);
+                sessionMatch.chatConfig['channle'] = newChannel;
+            }
             sessionMatch.chatConfig[key] = value;
         }
     }
@@ -1132,10 +1136,11 @@ class MessageData implements IMessage {
             }
             chatTokens = this.encodeChat(messageListData);
         }
+        const channle=chatConfig.getModelChange(model);
         let params = {
             messages: JSON.stringify(messageListData),
             model: model,
-            channel:this.chatApiConfig.channle?this.chatApiConfig.channle:'gpt',
+            channel:channle,
             temperature: chatAPIConfig.temperature,
             top_p: chatAPIConfig.top_p,
             presence_penalty: chatAPIConfig.presence_penalty,
