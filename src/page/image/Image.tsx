@@ -38,6 +38,10 @@ const Image: React.FC<IProps> = ({ globalMessageApi,userProflie }) => {
     ImageData.generate(imageData.prompt, globalMessageApi)
   }
 
+  useEffect(() => {
+    document.title = "Midjourney";
+  }, []);
+
   useEffect(()=>{
     if(userProflie.token){
       ImageData.fetchData(userProflie.token)

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { observer } from "mobx-react"
 import { Card,Collapse} from 'antd';
 import {BaseConfigForm,ChatConfigForm,ConfigActionBtn} from '../../component';
@@ -17,6 +17,11 @@ const ConfigPage:React.FC<IProps> = observer(({config,store})=>{
 
   const { Panel } = Collapse;
   const { t } = useTranslation();
+
+  useEffect(() => {
+    document.title = "Setting";
+  },[]);
+  
   const {id}=useParams();
     return (
       <div className="config-container" >

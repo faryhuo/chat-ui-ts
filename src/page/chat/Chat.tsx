@@ -25,7 +25,9 @@ const Chat: React.FC<IProps> = ({store,config})=>{
             store.selectChat(chatId);
         }
     },[chatId,store])
-
+    useEffect(() => {
+        document.title = "AI Chat";
+      }, []);
     return (
     <div className="message-page">
     <div className="message-list" style={{bottom:btnHeight}}>                

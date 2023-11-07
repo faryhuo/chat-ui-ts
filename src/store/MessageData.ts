@@ -25,6 +25,7 @@ export interface Ichoices {
 export interface ISessiondata {
     isSys: boolean;
     isDefault?: boolean;
+    isError: boolean;
     isEdit?: boolean;
     isDetails?: boolean;
     hasShowDetails?: boolean;
@@ -341,6 +342,7 @@ class MessageData implements IMessage {
         if (config.isSlowMsg4AddChat) {
             let tmp: ISessiondata = {
                 isSys: true,
+                isError:false,
                 isDefault: true
             };
             if (this.type === "chat") {
@@ -376,6 +378,7 @@ class MessageData implements IMessage {
         if (config.isSlowMsg4AddChat) {
             let tmp: ISessiondata = {
                 isSys: false,
+                isError:false,
                 isDefault: true
             };
             tmp.text = role.description;
@@ -723,6 +726,7 @@ class MessageData implements IMessage {
         }
         this.addData({
             isSys: true,
+            isError:true,
             title: "Error",
             text: msg
         }, chatId);
@@ -739,6 +743,7 @@ class MessageData implements IMessage {
             for (let index in images) {
                 let msg = {
                     isSys: true,
+                    isError:false,
                     type: "image",
                     image: {
                         uri: images[index].url ? images[index].url : "data:image/png;base64," + images[index].b64_json,
@@ -838,6 +843,7 @@ class MessageData implements IMessage {
         let self = this;
         let msgItem: ISessiondata = {
             isSys: true,
+            isError:false,
             stream: true,
             end: false,
             choices: [{ message: { content: "" } }]
@@ -890,6 +896,7 @@ class MessageData implements IMessage {
         let self = this;
         let msgItem: ISessiondata = {
             isSys: true,
+            isError:false,
             stream: true,
             end: false,
             title:this.getModelNameByChatId(chatId),
@@ -996,6 +1003,7 @@ class MessageData implements IMessage {
             const choices = response.data.data.choices;
             let msg = {
                 isSys: true,
+                isError:false,
                 choices: choices
             }
             this.addData(msg, chatId);
@@ -1189,6 +1197,9 @@ class MessageData implements IMessage {
         }
         this.data.forEach((item) => {
             if (item.isDefault) {
+                return true;
+            }
+            if(item.isError){
                 return true;
             }
             const msg = { role: "", content: "" };

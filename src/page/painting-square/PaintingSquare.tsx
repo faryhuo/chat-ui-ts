@@ -66,8 +66,9 @@ const PaintingSquare: React.FC<IProps> = () => {
   // }
 
   useEffect(() => {
+    document.title = "Painting Square";
     loadMoreData();
-  });
+  },[]);
 
 
   const copyPrompt = (prompt: string) => {

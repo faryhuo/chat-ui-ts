@@ -28,9 +28,10 @@ export interface IChatAPIConfig {
     channle?:string;
 }
 
-type Model = "gpt-3.5-turbo" | "gpt-3.5-turbo-16k" |
-    "gpt-3.5-turbo-0613" | "gpt-3.5-turbo-16k-0613"
-    | "gpt-4" | "gpt-4-0314" | "gpt-4-0613" 
+type Model = "gpt-3.5-turbo" | "gpt-3.5-turbo-16k" 
+    | "gpt-3.5-turbo-1106" 
+    | "gpt-4"  | "gpt-4-1106-preview"
+   | "gpt-4-vision-preview"
     | "spark-desk-1.5" | "spark-desk-2" | "ernie-bot" | "ernie-bot-4" | "ernie-bot-turbo"
     | "qwen-turbo" | "qwen-plus" | "palm"
 
@@ -52,12 +53,11 @@ class ChatConfig implements IChatConfig {
 
     chatModelList: IModelOptions[] = [
         { "label": "gpt-3.5-turbo", "value": "gpt-3.5-turbo", "channle": "gpt", isMain: true },
+        { "label": "gpt-3.5-turbo-1106", "value": "gpt-3.5-turbo-1106", "channle": "gpt", isMain: true },
         { "label": "gpt-3.5-turbo-16k", "value": "gpt-3.5-turbo-16k", "channle": "gpt", isMain: false },
-        { "label": "gpt-3.5-turbo-0613", "value": "gpt-3.5-turbo-0613", "channle": "gpt", isMain: false },
-        { "label": "gpt-3.5-turbo-16k-0613", "value": "gpt-3.5-turbo-16k-0613", "channle": "gpt", isMain: false },
         { "label": "gpt-4", "value": "gpt-4", "channle": "gpt", isMain: true },
-        { "label": "gpt-4-0314", "value": "gpt-4-0314", "channle": "gpt", isMain: false },
-        { "label": "gpt-4-0613", "value": "gpt-4-0613", "channle": "gpt", isMain: false },
+        { "label": "gpt-4-turbo", "value": "gpt-4-1106-preview", "channle": "gpt", isMain: true },
+        { "label": "gpt-4-turbo-vision", "value": "gpt-4-vision-preview", "channle": "gpt", isMain: false },
         { "label": i18n.t<string>("SparkDesk 1.5"), "value": "spark-desk-1.5", "channle": "xunfei", isMain: true },
         { "label": i18n.t<string>("SparkDesk 2.0"), "value": "spark-desk-2", "channle": "xunfei", isMain: true },
         { "label": i18n.t<string>("ernie-bot-4"), "value": "ernie-bot-4", "channle": "baidu", isMain: true },
@@ -73,11 +73,10 @@ class ChatConfig implements IChatConfig {
     modelMaxTokenMap = {
         "gpt-3.5-turbo": 4096,
         "gpt-3.5-turbo-16k": 16384,
-        "gpt-3.5-turbo-0613": 4096,
-        "gpt-3.5-turbo-16k-0613": 16384,
+        "gpt-3.5-turbo-1106":16384,
         "gpt-4": 8192,
-        "gpt-4-0314": 8192,
-        "gpt-4-0613": 8192,
+        "gpt-4-1106-preview":12 * 1024,
+        "gpt-4-vision-preview":12 * 1024,
         "spark-desk-1.5": 8192,
         "spark-desk-2": 8192,
         "ernie-bot":4 * 1024,
@@ -95,12 +94,11 @@ class ChatConfig implements IChatConfig {
 
     modelMap = {
         "gpt-3.5-turbo": "gpt-3.5-turbo-16k",
+        "gpt-3.5-turbo-1106": "gpt-3.5-turbo-1106",
         "gpt-3.5-turbo-16k": "gpt-3.5-turbo-16k",
-        "gpt-3.5-turbo-0613": "gpt-3.5-turbo-16k-0613",
-        "gpt-3.5-turbo-16k-0613": "gpt-3.5-turbo-16k-0613",
         "gpt-4": "gpt-4",
-        "gpt-4-0314": "gpt-4-0314",
-        "gpt-4-0613": "gpt-4-0613",
+        "gpt-4-1106-preview":"gpt-4-1106-preview",
+        "gpt-4-vision-preview":"gpt-4-vision-preview",
         "spark-desk-1.5": "spark-desk-1.5",
         "spark-desk-2": "spark-desk-2",
         "ernie-bot": "ernie-bot",

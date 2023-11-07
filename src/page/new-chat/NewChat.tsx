@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {Button} from 'antd';
 import './NewChat.css';
 import {IAppConfig} from '../../store/AppConfig';
@@ -21,6 +21,12 @@ const NewChat: React.FC<IProps> = ({store,config})=>{
     const chatId=store.addChat();
     window.location.hash=`#/chat/${chatId}`;
   }
+
+  useEffect(() => {
+    document.title = "AI Chat";
+  }, []);
+
+
   const addRole=()=>{
     window.location.hash="/config/4";
   }
