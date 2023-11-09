@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import {Button} from 'antd';
+import {Button, Modal} from 'antd';
 import './NewChat.css';
 import {IAppConfig} from '../../store/AppConfig';
 import {IMessage} from '../../store/MessageData';
@@ -8,7 +8,10 @@ import { useTranslation } from 'react-i18next';
 import ModelSelector from '../../component/model-selector/ModelSelector';
 import chatConfig from '../../store/ChatConfig';
 import { observer } from 'mobx-react-lite';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faQuestion } from '@fortawesome/free-solid-svg-icons';
+import ModelDesc from '../../component/model-description/ModelDesc';
+import { useState } from 'react';
 type IProps={
   config:IAppConfig;
   store:IMessage;
@@ -21,6 +24,14 @@ const NewChat: React.FC<IProps> = ({store,config})=>{
     const chatId=store.addChat();
     window.location.hash=`#/chat/${chatId}`;
   }
+
+  const [isModalOpen,setModalOpen]= useState(false);
+
+  const questionBtn = (<Button
+    shape="circle"
+    onClick={()=>setModalOpen(true)}
+    style={{ backgroundColor: "#f0f0f0", marginLeft: 10 }}
+    size="small" icon={<FontAwesomeIcon icon={faQuestion}></FontAwesomeIcon>}></Button>);
 
   useEffect(() => {
     document.title = "AI Chat";
@@ -43,6 +54,13 @@ const NewChat: React.FC<IProps> = ({store,config})=>{
         <div className="input-wrapper">
         <ModelSelector store={store} value={chatConfig.apiConfig.model}
         onChange={(e)=>chatConfig.changeModel(e)}></ModelSelector>
+
+      {questionBtn}   
+      <Modal title="Model Description" open={isModalOpen} 
+      onCancel={()=>setModalOpen(false)}
+      footer={false}>
+        <ModelDesc/>
+      </Modal>
         </div>
       </div>
         <div className="just-start">

@@ -24,19 +24,19 @@ const ModelSelector:React.FC<IProps> = observer(({store,onChange,value})=>{
         datasource= chatConfig.chatModelList.filter(item=>item.isMain);
       }
       const options=[{
-        label:"GPT",
+        label:t('gpt'),
         options: datasource.filter(item=>item.channle==="gpt")
       },{
-        label:"百度",
+        label:t('baidu'),
         options: datasource.filter(item=>item.channle==="baidu")
       },{
-        label:"Google",
+        label:t('google'),
         options: datasource.filter(item=>item.channle==="google")
       },{
-        label:"科大讯飞",
+        label:t('xunfei'),
         options: datasource.filter(item=>item.channle==="xunfei")
       },{
-        label:"阿里巴巴",
+        label:t('aliyun'),
         options: datasource.filter(item=>item.channle==="aliyun")
       }]
       return options;

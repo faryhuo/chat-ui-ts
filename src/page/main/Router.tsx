@@ -27,6 +27,7 @@ const AsyncConfigPage= asyncComponent(() => import ('../config/Config'));
 const AsyncPersonInfoPage= asyncComponent(() => import ('../person-info/PersonInfo'));
  const AsyncImage= asyncComponent(() => import ('../image/Image'));
  const AsyncPaintingSquare= asyncComponent(() => import ('../painting-square/PaintingSquare'));
+ const AsyncFeedback= asyncComponent(() => import ('../feedback/Feedback'));
 
 const pageList=[{
     path:"/chat/:chatId",
@@ -75,6 +76,10 @@ const pageList=[{
 },{
     path:"/person",
     component:AsyncPersonInfoPage,
+    exact:true
+},{
+    path:"/feedback",
+    component:AsyncFeedback,
     exact:true
 }];
 

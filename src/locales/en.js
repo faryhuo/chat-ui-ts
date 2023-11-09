@@ -38,6 +38,11 @@ const config= {
     "image":{"Select":"Select"},
     "Chat":"Chat",
     "Image":"Image",
-    "Config":"Config"
+    "Config":"Config",
+    "gpt":"GPT",
+    "xunfei":"XUN FEI",
+    "baidu":"BAI DU",
+    "aliyun":"ALI YUN",
+    "google":"Google"
 }
 export default config;

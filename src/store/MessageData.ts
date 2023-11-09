@@ -9,6 +9,7 @@ import imageData from "./ImageData";
 import saveAs from 'file-saver';
 import { Location } from "react-router-dom";
 import chatConfig, { IChatAPIConfig } from "./ChatConfig";
+import apiSetting from "./APISetting";
 
 let encodeFun: any
 import('gpt-tokenizer').then(({ encode }) => {
@@ -117,6 +118,7 @@ export interface IMessage {
     changeTypeByUrl: (location: Location) => void;
     share: (node: any) => Promise<void>;
     chatApiConfig: IChatAPIConfig;
+    speech:(msg:string,voice:string)=>any;
     setChatApiConfig: <K extends keyof IChatAPIConfig>(key: K, value: IChatAPIConfig[K]) => void;
 }
 
@@ -182,6 +184,11 @@ class MessageData implements IMessage {
 
     clearHistoryResult(){
         this.historyResult=null;
+    }
+
+    speech(msg:string,voice:string){
+        const apiUrl = `${apiSetting.audioUrl}?input=${encodeURI(msg)}&voice=${voice?voice:'alloy'}`;
+        return apiUrl;
     }
 
     addSharingData() {

@@ -75,16 +75,33 @@ class ChatConfig implements IChatConfig {
         "gpt-3.5-turbo-16k": 16384,
         "gpt-3.5-turbo-1106":16384,
         "gpt-4": 8192,
-        "gpt-4-1106-preview":12 * 1024,
-        "gpt-4-vision-preview":12 * 1024,
+        "gpt-4-1106-preview":128000,
+        "gpt-4-vision-preview":128000,
         "spark-desk-1.5": 8192,
         "spark-desk-2": 8192,
-        "ernie-bot":4 * 1024,
-        "ernie-bot-4":4 * 1024,
-        "ernie-bot-turbo":8 * 1024,
-        "qwen-turbo":6 * 1024,
-        "qwen-plus":6 * 1024,
+        "ernie-bot":4096,
+        "ernie-bot-4":4096,
+        "ernie-bot-turbo":8192,
+        "qwen-turbo":6144,
+        "qwen-plus":6144,
         "palm":4096
+    }
+
+    modelTrainingDate={
+        "gpt-3.5-turbo": 'Sep 2021',
+        "gpt-3.5-turbo-16k": 'Sep 2021',
+        "gpt-3.5-turbo-1106":'Sep 2021',
+        "gpt-4": 'Sep 2021',
+        "gpt-4-1106-preview":'Apr 2023',
+        "gpt-4-vision-preview":'Apr 2023',
+        "spark-desk-1.5": 'Now',
+        "spark-desk-2": 'Now',
+        "ernie-bot":'Now',
+        "ernie-bot-4":'Now',
+        "ernie-bot-turbo":'Now',
+        "qwen-turbo":'Sep 2021',
+        "qwen-plus":'Sep 2021',
+        "palm":''
     }
 
     getModelChange(model:Model){

@@ -38,6 +38,7 @@ class APISetting implements IAPISetting {
 
     chatUrl = `${this.host}/${this.chatServiceName}/chat/v2/info`;
     chatStreamUrl = `${this.host}/${this.chatServiceName}/chat/v2/stream`;
+    audioUrl = `${this.host}/${this.chatServiceName}/audio/speech`;
 
     imageUrl = `${this.host}/${this.chatServiceName}/image/v2/info`;
     editsUrl = `${this.host}/${this.chatServiceName}/edits/v2/info`;
@@ -63,6 +64,7 @@ class APISetting implements IAPISetting {
 
     aiModelsUrl = `${this.host}/${this.userServiceName}/user/models`
     tokenUsageUrl = `${this.host}/${this.userServiceName}/token/usage`
+    feedbackUrl = `${this.host}/${this.userServiceName}/feedback`
     mjImageUrl = `${this.host}/${this.historyServiceName}/image`;
     imageSharingUrl = `${this.host}/${this.historyServiceName}/image/all`;
     modelAmountUrl = `${this.host}/${this.userServiceName}/user/models/limit/`

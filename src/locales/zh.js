@@ -238,6 +238,21 @@ const config = {
     "use":"使用",
     "AI Image Amount":"绘画额度",
     "Standard mode":"标准模式",
-    "Fast mode":"快速模式"
+    "Fast mode":"快速模式",
+    "gpt":"GPT",
+    "xunfei":"科大讯飞",
+    "baidu":"百度",
+    "aliyun":"阿里巴巴",
+    "google":"Google",
+    "Max Support Lenght":"最大支持字数",
+    "Training Date":"知识库截止时间",
+    "Feedback":"反馈",
+    "Feedback Type":"反馈类型",
+    "Feedback Content":"反馈内容",
+    "Contact Information":"联系方式",
+    "Submit":"提交",
+    "Fault":"故障",
+    "Suggestion":"建议",
+    "Complaints":"投诉",
 }
 export default config;

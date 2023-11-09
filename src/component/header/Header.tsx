@@ -10,7 +10,7 @@ import {IAppConfig} from '../../store/AppConfig';
 import {IMessage} from '../../store/MessageData';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faComments,faLaptopCode,faGear,faOutdent, faLinesLeaning,faImages,faPerson,faSignOut } from '@fortawesome/free-solid-svg-icons'
+import { faComments,faLaptopCode,faGear,faOutdent, faLinesLeaning,faImages,faPerson,faSignOut, faFeed, faMailReply } from '@fortawesome/free-solid-svg-icons'
 import userProflie from '../../store/UserProfile';
 import Notice from '../notice/Notice';
 
@@ -141,6 +141,9 @@ const Header: React.FC<IProps> = observer(({store,config}) => {
       <Menu onClick={onClick} selectedKeys={[store.type]} mode="horizontal"
       items={getItems()} >
         </Menu>
+    </div>
+    <div className="feedback">
+      <Link to="/feedback"><FontAwesomeIcon icon={faComments} />{t('Feedback')}</Link>
     </div>
     <div className="notices">
       <Notice></Notice>
