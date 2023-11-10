@@ -3,7 +3,7 @@ import './index.css';
 import './utils/i18n';
 //import reportWebVitals from './reportWebVitals';
 import Main from './page/main/Main';
-import { HashRouter as Router } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

@@ -17,7 +17,7 @@ const ChatShare: React.FC<IProps> = ()=>{
     const [uuid,setUUID] =useState<string | null>(null); 
 
     const start=()=>{
-        window.location.href=`${window.location.origin}/#/share/${uuid}`
+        window.location.href=`${window.location.origin}/share/${uuid}`
     }
 
     useEffect(()=>{

@@ -10,6 +10,7 @@ import { IMessage } from '../../store/MessageData';
 import './RoleListItem.css'
 import userProfile from '../../store/UserProfile';
 import classNames from 'classnames';
+import { useNavigate } from 'react-router-dom';
 
 
 type IProps = {
@@ -22,10 +23,11 @@ type IProps = {
 const RoleList: React.FC<IProps> = observer(({ config, role, store, edit, readonly }) => {
 
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   const useRole = (role: IRole) => {
     const chatId = store.addChatWithRole(role);
-    window.location.hash = `#/chat/${chatId}`;
+    navigate(`/chat/${chatId}`);
   }
 
   const onDelete = (roleId: number) => {

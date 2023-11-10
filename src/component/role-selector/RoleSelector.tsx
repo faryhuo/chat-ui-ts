@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import { observer } from "mobx-react-lite";
 import {IMessage} from '../../store/MessageData';
+import { useNavigate } from 'react-router-dom';
 type IProps={
   store:IMessage;
   roleList:any[];
@@ -12,10 +13,11 @@ type IProps={
 const RoleSelector:React.FC<IProps> = observer(({store,roleList})=>{
 
     const {t} =useTranslation();
+    const navigate = useNavigate(); // 获取 navigate 函数
 
 
     const addRole=()=>{
-      window.location.hash="/config/4";
+      navigate("/config/4");
     }
 
 

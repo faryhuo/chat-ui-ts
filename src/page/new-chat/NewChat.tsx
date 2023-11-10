@@ -12,6 +12,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faQuestion } from '@fortawesome/free-solid-svg-icons';
 import ModelDesc from '../../component/model-description/ModelDesc';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 type IProps={
   config:IAppConfig;
   store:IMessage;
@@ -19,13 +20,9 @@ type IProps={
 
 const NewChat: React.FC<IProps> = ({store,config})=>{
 
-  const addChat=()=>{
-    store.changeType("chat");
-    const chatId=store.addChat();
-    window.location.hash=`#/chat/${chatId}`;
-  }
 
   const [isModalOpen,setModalOpen]= useState(false);
+  const navigate = useNavigate(); // 获取 navigate 函数
 
   const questionBtn = (<Button
     shape="circle"
@@ -37,9 +34,13 @@ const NewChat: React.FC<IProps> = ({store,config})=>{
     document.title = "AI Chat";
   }, []);
 
-
+  const addChat=()=>{
+    store.changeType("chat");
+    const chatId=store.addChat();
+    navigate(`/chat/${chatId}`);
+  }
   const addRole=()=>{
-    window.location.hash="/config/4";
+    navigate("/config/4");
   }
   const {t} = useTranslation();
 

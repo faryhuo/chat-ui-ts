@@ -7,7 +7,7 @@ import userProflie, { USER_TOKEN_KEY } from "./UserProfile";
 import roleData, { IRoleData, IRole } from "./RoleData";
 import imageData from "./ImageData";
 import saveAs from 'file-saver';
-import { Location } from "react-router-dom";
+import { Location, NavigateFunction } from "react-router-dom";
 import chatConfig, { IChatAPIConfig } from "./ChatConfig";
 import apiSetting from "./APISetting";
 
@@ -76,7 +76,7 @@ export interface IMessage {
     localSessionName: string;
     activeSession: string;
     addChat: () => string;
-    newChat: () => void;
+    newChat: (navigate:NavigateFunction)=>void;
     addChatWithRole: (role: IRole) => string;
     endStream: (chatId: string) => void;
     triggerFavorite: (chatId: string) => void;
@@ -192,10 +192,10 @@ class MessageData implements IMessage {
     }
 
     addSharingData() {
-        if (!window.location.hash.startsWith("#/share")) {
+        if (!window.location.pathname.startsWith("/share")) {
             return;
         }
-        const uuidFromUrl = window.location.hash.replace("#/share/", "")
+        const uuidFromUrl = window.location.pathname.replace("/share/", "")
         if (!uuidFromUrl) {
             return;
         }
@@ -207,13 +207,14 @@ class MessageData implements IMessage {
             }
         })
         if (hasRecord) {
-            window.location.hash = `#/chat/${uuidFromUrl}`;
+            window.location.pathname = `/chat/${uuidFromUrl}`;
             return;
         }
         axios(config.api.sharingUrl + "/" + uuidFromUrl, {
             method: "get"
         }).then((response) => {
             const data: ISession = response.data.data;
+            console.log(data);
             if (data) {
                 data.chatId = uuidFromUrl;
                 data.updateDate = new Date();
@@ -221,7 +222,7 @@ class MessageData implements IMessage {
                 if (userProflie.isLogin) {
                     this.saveSessionToDB(uuidFromUrl)
                 }
-                window.location.hash = `/chat/${uuidFromUrl}`;
+                window.location.pathname = `/chat/${uuidFromUrl}`;
                 this.saveSessionToLocal();
             }
         })
@@ -333,10 +334,13 @@ class MessageData implements IMessage {
         this.saveSessionToDB(chatId)
     }
 
-    newChat() {
+    newChat(navigate:NavigateFunction) {
         if (this.type === "chat") {
             this.activeSession = "";
-            window.location.hash = "#/";
+            navigate("/chat");
+            if(config.isMobile){
+                config.isSlowLeftMenu=false;
+            }
         } else {
             this.addChat();
         }
@@ -586,6 +590,9 @@ class MessageData implements IMessage {
         }else{
             this.activeSession = chatId;
             this.hideLastData(chatId);
+        }
+        if(config.isMobile){
+            config.isSlowLeftMenu=false;
         }
     }
 

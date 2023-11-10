@@ -18,10 +18,15 @@
     padding-left: 0;
 }
 .menu-header .feedback{
-    flex: 0 0 60px;
+    flex: 0 0 70px;
     text-align: center;
     padding: 10px;
     padding-right: 5px;
+
+}
+.menu-header .feedback a{
+    text-decoration: none;
+    color: #000;
 }
 .menu-header .login-user{
     flex: 0 0 40px;

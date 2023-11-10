@@ -55,7 +55,7 @@ class ChatConfig implements IChatConfig {
         { "label": "gpt-3.5-turbo", "value": "gpt-3.5-turbo", "channle": "gpt", isMain: true },
         { "label": "gpt-3.5-turbo-1106", "value": "gpt-3.5-turbo-1106", "channle": "gpt", isMain: true },
         { "label": "gpt-3.5-turbo-16k", "value": "gpt-3.5-turbo-16k", "channle": "gpt", isMain: false },
-        { "label": "gpt-4", "value": "gpt-4", "channle": "gpt", isMain: true },
+        { "label": "gpt-4", "value": "gpt-4", "channle": "gpt", isMain: false },
         { "label": "gpt-4-turbo", "value": "gpt-4-1106-preview", "channle": "gpt", isMain: true },
         { "label": "gpt-4-turbo-vision", "value": "gpt-4-vision-preview", "channle": "gpt", isMain: false },
         { "label": i18n.t<string>("SparkDesk 1.5"), "value": "spark-desk-1.5", "channle": "xunfei", isMain: true },

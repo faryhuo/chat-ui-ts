@@ -5,12 +5,12 @@ import { useTranslation } from 'react-i18next';
 import React  from 'react';
 import userProfile from '../../store/UserProfile';
 import Account from '../../page/account-manager/Account';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {IAppConfig} from '../../store/AppConfig';
 import {IMessage} from '../../store/MessageData';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faComments,faLaptopCode,faGear,faOutdent, faLinesLeaning,faImages,faPerson,faSignOut, faFeed, faMailReply } from '@fortawesome/free-solid-svg-icons'
+import { faComments,faGear,faOutdent, faLinesLeaning,faImages,faPerson,faSignOut } from '@fortawesome/free-solid-svg-icons'
 import userProflie from '../../store/UserProfile';
 import Notice from '../notice/Notice';
 
@@ -23,6 +23,7 @@ const Header: React.FC<IProps> = observer(({store,config}) => {
 
   const { t } = useTranslation();
   const [messageApi, contextHolder] = message.useMessage();
+  const navigate = useNavigate(); // 获取 navigate 函数
 
   const items = [
     {
@@ -31,7 +32,7 @@ const Header: React.FC<IProps> = observer(({store,config}) => {
       icon: <FontAwesomeIcon icon={faComments} />
     },
     {
-      label: <a href="http://sd.fary.chat" target="_blank">{t('Stable Diffusion')}</a>,
+      label: <a href="http://sd.fary.chat" target="_blank" rel="noreferrer">{t('Stable Diffusion')}</a>,
       key: 'sd',
       icon: <FontAwesomeIcon icon={faImages} />
     },
@@ -106,7 +107,7 @@ const Header: React.FC<IProps> = observer(({store,config}) => {
   };
 
   const goToPersonPage = () => {
-    window.location.hash="#/person";
+    navigate("/person");
   };
 
   const getButtonList=()=>{
