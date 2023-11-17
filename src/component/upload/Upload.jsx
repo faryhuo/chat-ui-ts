@@ -1,8 +1,8 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faKey } from '@fortawesome/free-solid-svg-icons'
+import { faUpload } from '@fortawesome/free-solid-svg-icons'
 import { Upload, message } from 'antd';
 
-const AppUpload = ({ store, config, callChatAPI, callImageAPI }) => {
+const AppUpload = ({ store, config}) => {
 
   const beforeUpload = (file) => {
     const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
@@ -25,22 +25,6 @@ const AppUpload = ({ store, config, callChatAPI, callImageAPI }) => {
     if (info.file.status === 'done') {
       // Get this url from response in real world.
       let fileName = info.file.response.data;
-      store.addData({
-        type: "image",
-        image: {
-          uri: `${config.imageUploadUrl}/${fileName}`,
-          width: 256,
-          height: 256
-        },
-        isUser: true
-      });
-      let chatId = store.activeSession + "";
-      if (store.type === "chat") {
-        callChatAPI(chatId);
-      } else if (store.type === "image") {
-        const queryUrl = `${config.variationsImageUrl}?image=${fileName}&uuid=${store.activeSession}&size=${config.imageSize}`;
-        callImageAPI(chatId, queryUrl);
-      }
     }
   };
 
@@ -53,7 +37,7 @@ const AppUpload = ({ store, config, callChatAPI, callImageAPI }) => {
       onChange={handleChange}
       style={{ width: 20 }}
     >
-      <FontAwesomeIcon icon={faKey} />
+      <FontAwesomeIcon icon={faUpload} />
     </Upload></div>)
 }
 

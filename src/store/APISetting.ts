@@ -33,6 +33,7 @@ class APISetting implements IAPISetting {
     chatConfigServiceName = "chat-config-service"
     userServiceName = "chat-user-service"
     smsServiceName = "chat-sms-service"
+    payServiceName = "chat-pay-service"
 
     historyServiceName = "chat-history-service"
 
@@ -53,6 +54,7 @@ class APISetting implements IAPISetting {
 
     publicKeyUrl = `${this.host}/${this.userServiceName}/user/rsapubkey`
     userInfoUrl = `${this.host}/${this.userServiceName}/user/user-info`
+    userWsUrl = `${this.host}/${this.userServiceName}/user/ws/login`
     historyUrl = `${this.host}/${this.historyServiceName}/history`
 
     sentSmsCodeUrl = `${this.host}/${this.smsServiceName}/sms/send/`
@@ -67,7 +69,11 @@ class APISetting implements IAPISetting {
     feedbackUrl = `${this.host}/${this.userServiceName}/feedback`
     mjImageUrl = `${this.host}/${this.historyServiceName}/image`;
     imageSharingUrl = `${this.host}/${this.historyServiceName}/image/all`;
-    modelAmountUrl = `${this.host}/${this.userServiceName}/user/models/limit/`
+    modelAmountUrl = `${this.host}/${this.userServiceName}/user/models/limit/`;
+
+    paymentUrl=`${this.host}/${this.payServiceName}/payment/alipay/pay`
+    modelsUrl = `${this.host}/${this.chatConfigServiceName}/models`;
+
 }
 const apiSetting = new APISetting()
 export default apiSetting;

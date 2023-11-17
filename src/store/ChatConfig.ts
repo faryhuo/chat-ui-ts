@@ -1,12 +1,18 @@
+import axios from "axios";
 import { makeObservable, observable, action } from "mobx";
 import i18n from "../utils/i18n";
+import apiSetting from "./APISetting";
 import userProflie from "./UserProfile";
 
 export interface IModelOptions {
-    value: Model;
+    value: string;
     label: string;
-    channle: 'gpt' | 'xunfei' | 'baidu' | 'aliyun' |'google';
+    channle: string;
     isMain: boolean;
+    maxToken: number;
+    description?: string;
+    maxModelId?: string;
+    trainingDate?: string;
 }
 export interface IChatConfig {
     apiConfig: IChatAPIConfig;
@@ -14,11 +20,12 @@ export interface IChatConfig {
     switchStream: () => void;
     getAPIConfig: () => IChatAPIConfig;
     chatModelList: IModelOptions[];
-    getMaxTokenByModel: (model: Model) => number;
+    getMaxTokenByModel: (model: string) => number;
+    getTrainingDate: (model: string) => string;
 }
 
 export interface IChatAPIConfig {
-    model: Model;
+    model: string;
     temperature: number;
     top_p?: number;
     presence_penalty: number;
@@ -28,12 +35,16 @@ export interface IChatAPIConfig {
     channle?:string;
 }
 
-type Model = "gpt-3.5-turbo" | "gpt-3.5-turbo-16k" 
-    | "gpt-3.5-turbo-1106" 
-    | "gpt-4"  | "gpt-4-1106-preview"
-   | "gpt-4-vision-preview"
-    | "spark-desk-1.5" | "spark-desk-2" | "ernie-bot" | "ernie-bot-4" | "ernie-bot-turbo"
-    | "qwen-turbo" | "qwen-plus" | "palm"
+interface IChatAPIResponse {
+    modelId: string;
+    maxToken: number;
+    channel: string;
+    description?: string;
+    maxModelId: string;
+    trainingDate?: string;
+    main:boolean;
+}
+
 
 class ChatConfig implements IChatConfig {
 
@@ -51,104 +62,47 @@ class ChatConfig implements IChatConfig {
         channle:"gpt"
     }
 
-    chatModelList: IModelOptions[] = [
-        { "label": "gpt-3.5-turbo", "value": "gpt-3.5-turbo", "channle": "gpt", isMain: true },
-        { "label": "gpt-3.5-turbo-1106", "value": "gpt-3.5-turbo-1106", "channle": "gpt", isMain: true },
-        { "label": "gpt-3.5-turbo-16k", "value": "gpt-3.5-turbo-16k", "channle": "gpt", isMain: false },
-        { "label": "gpt-4", "value": "gpt-4", "channle": "gpt", isMain: false },
-        { "label": "gpt-4-turbo", "value": "gpt-4-1106-preview", "channle": "gpt", isMain: true },
-        { "label": "gpt-4-turbo-vision", "value": "gpt-4-vision-preview", "channle": "gpt", isMain: false },
-        { "label": i18n.t<string>("SparkDesk 1.5"), "value": "spark-desk-1.5", "channle": "xunfei", isMain: true },
-        { "label": i18n.t<string>("SparkDesk 2.0"), "value": "spark-desk-2", "channle": "xunfei", isMain: true },
-        { "label": i18n.t<string>("ernie-bot-4"), "value": "ernie-bot-4", "channle": "baidu", isMain: true },
-        { "label": i18n.t<string>("ernie-bot"), "value": "ernie-bot", "channle": "baidu", isMain: true },
-        { "label": i18n.t<string>("ernie-bot-turbo"), "value": "ernie-bot-turbo", "channle": "baidu", isMain: false },
-        { "label": i18n.t<string>("qwen-turbo"), "value": "qwen-turbo", "channle": "aliyun", isMain: true },
-        { "label": i18n.t<string>("qwen-plus"), "value": "qwen-plus", "channle": "aliyun", isMain: false },
-        { "label": "palm", "value": "palm", "channle": "google", isMain: true}]
+    chatModelList: IModelOptions[] = [];
 
-        
-
-
-    modelMaxTokenMap = {
-        "gpt-3.5-turbo": 4096,
-        "gpt-3.5-turbo-16k": 16384,
-        "gpt-3.5-turbo-1106":16384,
-        "gpt-4": 8192,
-        "gpt-4-1106-preview":128000,
-        "gpt-4-vision-preview":128000,
-        "spark-desk-1.5": 8192,
-        "spark-desk-2": 8192,
-        "ernie-bot":4096,
-        "ernie-bot-4":4096,
-        "ernie-bot-turbo":8192,
-        "qwen-turbo":6144,
-        "qwen-plus":6144,
-        "palm":4096
-    }
-
-    modelTrainingDate={
-        "gpt-3.5-turbo": 'Sep 2021',
-        "gpt-3.5-turbo-16k": 'Sep 2021',
-        "gpt-3.5-turbo-1106":'Sep 2021',
-        "gpt-4": 'Sep 2021',
-        "gpt-4-1106-preview":'Apr 2023',
-        "gpt-4-vision-preview":'Apr 2023',
-        "spark-desk-1.5": 'Now',
-        "spark-desk-2": 'Now',
-        "ernie-bot":'Now',
-        "ernie-bot-4":'Now',
-        "ernie-bot-turbo":'Now',
-        "qwen-turbo":'Sep 2021',
-        "qwen-plus":'Sep 2021',
-        "palm":''
-    }
-
-    getModelChange(model:Model){
+    getModelChange(model:string){
        const channel= this.chatModelList.find(item=>item.value===model)?.channle
        return channel?channel:'gpt';
     }
 
-    modelMap = {
-        "gpt-3.5-turbo": "gpt-3.5-turbo-16k",
-        "gpt-3.5-turbo-1106": "gpt-3.5-turbo-1106",
-        "gpt-3.5-turbo-16k": "gpt-3.5-turbo-16k",
-        "gpt-4": "gpt-4",
-        "gpt-4-1106-preview":"gpt-4-1106-preview",
-        "gpt-4-vision-preview":"gpt-4-vision-preview",
-        "spark-desk-1.5": "spark-desk-1.5",
-        "spark-desk-2": "spark-desk-2",
-        "ernie-bot": "ernie-bot",
-        "ernie-bot-4": "ernie-bot-4",
-        "ernie-bot-turbo": "ernie-bot-turbo",
-        "qwen-turbo":"qwen-turbo",
-        "qwen-plus":"qwen-plus",
-        "palm":"palm"
+
+    getMaxTokenByModel(model: string):number {
+        const maxToken= this.chatModelList.find((item)=>item.value===model)?.maxToken;
+        return maxToken?maxToken:4*1024;
     }
 
-    getMaxTokenByModel(model: Model) {
-        return this.modelMaxTokenMap[model];
-    }
-
-    isMaxTokenModel(model: Model) {
-        if (!this.modelMap[model] || this.modelMap[model] === model) {
+    isMaxTokenModel(model: string) {
+        const maxTokenModel= this.chatModelList.find((item)=>item.value===model)?.maxModelId;
+        if (!maxTokenModel) {
+            return true;
+        }if (maxTokenModel===model) {
             return true;
         } else {
             return false;
         }
     }
 
-    getMaxTokenModel(model: Model): Model {
-        return this.modelMap[model] as Model;
+    getMaxTokenModel(model: string): string {
+        const maxTokenModel= this.chatModelList.find((item)=>item.value===model)?.maxModelId;
+        return maxTokenModel?maxTokenModel:"";
     }
 
+    getTrainingDate(model: string): string {
+        const trainingDate= this.chatModelList.find((item)=>item.value===model)?.trainingDate;
+        return trainingDate?trainingDate:"";
+    }
 
     constructor() {
         makeObservable(this, {
             apiConfig: observable,
             chatModelList: observable,
             saveAPIConfig: action,
-            switchStream: action
+            switchStream: action,
+            fetchData: action.bound
         })
         if (localStorage[this.localConfigName]) {
             try {
@@ -158,7 +112,41 @@ class ChatConfig implements IChatConfig {
                 console.log(e);
             }
         }
+        this.fetchData();
     }
+
+    fetchData() {
+        this.chatModelList=[];
+        axios({
+            method: "get",
+            url: apiSetting.modelsUrl + `?uuid=${new Date().getTime()}`,
+            headers: {
+                'Content-Type': 'application/json;charset=UTF-8'
+            }
+        }
+        ).then((response) => {
+            if (response.data) {
+                const data = response.data;
+                if (data.data) {
+                    const repData=data.data as IChatAPIResponse[];
+                    repData.forEach((item)=>{
+                        const obj:IModelOptions={
+                            channle:item.channel,
+                            label:i18n.t(item.modelId),
+                            value:item.modelId,
+                            isMain:item.main,
+                            description:item.description,
+                            maxToken:item.maxToken,
+                            trainingDate:item.trainingDate,
+                            maxModelId:item.maxModelId?item.maxModelId:item.maxModelId
+                        }
+                        this.chatModelList.push(obj);
+                    })
+                }
+            }
+        });
+    }
+
     saveAPIConfigValue<K extends keyof IChatAPIConfig>(key: K, value: IChatAPIConfig[K]) {
         this.apiConfig[key] = value;
     }
@@ -179,7 +167,7 @@ class ChatConfig implements IChatConfig {
         });
         localStorage.setItem(this.localConfigName, JSON.stringify(this.getAPIConfig()));
     }
-    changeModel(model: Model) {
+    changeModel(model:string) {
         const newChannel=this.getModelChange(model);
         const oldChannel=this.getModelChange(this.apiConfig.model);
         if(newChannel==='gpt' && model.startsWith('gpt-4')){

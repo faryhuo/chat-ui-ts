@@ -11,7 +11,10 @@ const root = ReactDOM.createRoot(
 root.render(
   <Router>
     <Main></Main>
-    <a className='icp_link' target='blank' href='https://beian.miit.gov.cn/#/Integrated/index'>粤ICP备2023068902号-1</a>
+    <div className="icp_link">
+      <a target='blank' href='https://docs.qq.com/doc/DSGlBTkhEaWNHRlFF'>免责声明</a> &nbsp;
+      <a target='blank' href='https://beian.miit.gov.cn/#/Integrated/index'>粤ICP备2023068902号-1</a>
+    </div>
   </Router>
 );
 

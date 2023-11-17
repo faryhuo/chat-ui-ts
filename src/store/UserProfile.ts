@@ -3,6 +3,7 @@ import config from './AppConfig';
 import axios from 'axios';
 import JSEncrypt from 'jsencrypt';
 import i18n from 'i18next';
+import apiSetting from "./APISetting";
 
 const USER_TOKEN_KEY = "user-token"
 
@@ -50,6 +51,22 @@ class UserProflie implements IUserProflie {
     closePage() {
         this.pageOpen = false;
     }
+
+    getQRCode(){
+        const appId="wx9c2b92a723dc3e4b";
+        const redirectUri=apiSetting.userWsUrl;
+        const WxLoginLogin:any = window;
+        new WxLoginLogin.WxLogin({
+            self_redirect:false,
+            id:"login_container", 
+            appid:appId, 
+            scope: "snsapi_login", 
+            redirect_uri:redirectUri,
+            state: 'init', // 随机字符串
+            style: 'black'
+        });
+    }
+
 
 
     login(userId: string, password: string) {
@@ -189,6 +206,7 @@ class UserProflie implements IUserProflie {
             fetchModulesData: action.bound,
             loginByToken: action.bound
         })
+
         this.fetchModulesData().then(() => {
             this.modules.forEach((item => {
                 if (item.enable) {

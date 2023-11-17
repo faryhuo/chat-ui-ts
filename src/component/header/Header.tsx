@@ -41,11 +41,11 @@ const Header: React.FC<IProps> = observer(({store,config}) => {
       key: 'image',
       icon: <FontAwesomeIcon icon={faImages} />
     },
-    {
-      label: <Link to="/painting_square">{t('Painting Square')}</Link>,
-      key: 'painting_square',
-      icon: <FontAwesomeIcon icon={faImages} />
-    },
+    // {
+    //   label: <Link to="/painting_square">{t('Painting Square')}</Link>,
+    //   key: 'painting_square',
+    //   icon: <FontAwesomeIcon icon={faImages} />
+    // },
     // {
     //   label: <Link to="/creation">{t('Creation')}</Link>,
     //   key: 'creation',

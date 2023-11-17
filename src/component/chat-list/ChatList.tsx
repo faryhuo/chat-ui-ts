@@ -15,6 +15,7 @@ import QueueAnim from 'rc-queue-anim';
 import { formatShortDate, isSameDay } from '../../utils/dateUtils';
 import userModelLimit from '../../store/UserModelLimit';
 import {IUserProflie} from '../../store/UserProfile';
+import Payment from '../../page/payment/Payment';
 type IProps = {
   store: IMessage;
   userProflie:IUserProflie
@@ -25,6 +26,8 @@ const ChatList: React.FC<IProps> = ({ store,userProflie }) => {
 
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
+  const [paymentOpen, setPaymentOpen] = useState(false);
+
   const [currentChatId, setCurrentChatId] = useState<string>("");
 
   const buttonSize = "small"
@@ -58,6 +61,10 @@ const ChatList: React.FC<IProps> = ({ store,userProflie }) => {
   const handleCancel = () => {
     setOpen(false);
     setCurrentChatId("");
+  }
+
+  const handlePaymentCancel = () => {
+    setPaymentOpen(false);
   }
 
   const dataSouce = store.sessionList.sort((a, b) => {
@@ -206,7 +213,7 @@ const ChatList: React.FC<IProps> = ({ store,userProflie }) => {
               </div>
               <div className="amount-value">
               {userModelLimit.gptUsage.remainingAmount}
-              <Button style={{marginLeft:5}} size='small' icon={<FontAwesomeIcon icon={faAdd}></FontAwesomeIcon>}/>
+              <Button onClick={()=>{setPaymentOpen(true)}} style={{marginLeft:5}} size='small' icon={<FontAwesomeIcon icon={faAdd}></FontAwesomeIcon>}/>
               </div>
             </div>
           </div>
@@ -222,6 +229,16 @@ const ChatList: React.FC<IProps> = ({ store,userProflie }) => {
         width={900}
       >
       <ChatShareSteps sessionData={store.getChatInfoByChatId(currentChatId) as any}></ChatShareSteps>
+    </Modal>
+    <Modal
+        open={paymentOpen}
+        title={false}
+        onCancel={handlePaymentCancel}
+        footer={false}
+        destroyOnClose={true}
+        width={900}
+      >
+       <Payment></Payment>
     </Modal>
   </div>);
 };

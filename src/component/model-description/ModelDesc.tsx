@@ -36,7 +36,8 @@ const ModelDesc:React.FC<IProps> = ()=>{
       const data:any=[];
       chatConfig.chatModelList.forEach(item =>{
         const obj={model:item.label,length:chatConfig.getMaxTokenByModel(item.value),
-        channel:item.channle,date:chatConfig.modelTrainingDate[item.value]}
+        channel:item.channle,
+        date:chatConfig.getTrainingDate(item.value)}
         data.push(obj);
         channelObj[item.channle]=t(item.channle);
       })
@@ -50,7 +51,7 @@ const ModelDesc:React.FC<IProps> = ()=>{
       const data:any=[];
       chatConfig.chatModelList.forEach(item =>{
         const obj={model:item.label,length:chatConfig.getMaxTokenByModel(item.value),
-          channel:item.channle,date:chatConfig.modelTrainingDate[item.value]}
+          channel:item.channle,date:chatConfig.getTrainingDate(item.value)}
         data.push(obj);
       })
       setDataSource(data.filter((item: { channel: any; })=>{

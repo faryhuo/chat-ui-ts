@@ -1,28 +1,93 @@
 import React from 'react';
 import './Payment.css';
-import PaymentStore from '../../store/Payment'
-import { QRCode } from 'antd';
-import { useState } from 'react';
+import { Button, Card, Form, InputNumber, message, Radio } from 'antd';
 import { useEffect } from 'react';
+import apiSetting from '../../store/APISetting';
+import { useTranslation } from 'react-i18next';
+import axios from 'axios';
+import userProflie from '../../store/UserProfile';
+import { isMobile } from 'react-device-detect';
 
 type IProps={
 }
 
 const Payment:React.FC<IProps> = ()=>{
 
-    const [qrcode,setQRCode] = useState("");
+   const { t } = useTranslation();
+   const [form] = Form.useForm();
+   const [messageApi, contextHolder] = message.useMessage();
+ 
+   useEffect(() => {
+     document.title = "Payment";
+   }, []);
+ 
+   const submit = () => {
+     form.validateFields().then(() => {
+       const requestJson = form.getFieldsValue();
+       if(!userProflie.token){
+         messageApi.error(t("please login first."));
+         userProflie.openPage();
+          return;
+       }
+       if(requestJson.type==="zhifubao"){
+          axios.get(apiSetting.paymentUrl+`?goodsName=${requestJson.goods}&num=${requestJson.num}&isMobile=${isMobile}`,{
+            headers: {
+               'token': userProflie.token,
+           } 
+         }).then((response)=>{
+            console.log(response)
+            if(response.data && response.data && response.data.success){
+               window.open()?.document.write(response.data.data);
+            }
+            
+          })
+       }else{
+          messageApi.error("Not support this method.")
+       }
+     })
+   }
+ 
+   return (
+     <div className="payment-page-container">
+       <Card>
+         <Form
+           form={form}
+           initialValues={{goods:"gpt4",type:"zhifubao",num:10}}
+           labelCol={{ span: 8 }}
+           wrapperCol={{ span: 16 }}
+         >
+           <Form.Item label={t<string>("Goods")} rules={[{ required: true }]}
+             name="goods"  >
+             <Radio.Group>
+               <Radio.Button value="gpt4">{t('GPT 4')}</Radio.Button>
+               <Radio.Button value="mj">{t('AI Image')}</Radio.Button>
+             </Radio.Group>
+           </Form.Item>
 
-    useEffect(()=>{
-       PaymentStore.getAlipayQRCode().then((qr)=>{
-         setQRCode(qr);
-       })
+           <Form.Item  wrapperCol={{ offset: isMobile?0:8, span: 16 }}>
+            <label>{t('Price :  0.3/count')}</label>
+           </Form.Item>
 
-    },[])
-
-    return (
-    <div className="Payment-page-container">
-       <QRCode value={qrcode}></QRCode>
-    </div>)
+           <Form.Item label={t<string>("count")} rules={[{ required: true }]}
+             name="num">
+              <InputNumber min={1} max={1000} defaultValue={10}  step={1}/>
+           </Form.Item>
+ 
+           <Form.Item label={t<string>("pay method")} rules={[{ required: true }]}
+             name="type">
+             <Radio.Group>
+               <Radio value="zhifubao">{t('zhifubao')}</Radio>
+               {/* <Radio value="weixin">{t('weixin')}</Radio> */}
+             </Radio.Group>
+           </Form.Item>
+            
+           <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+             <Button type="primary" onClick={submit}>{t('Submit')}</Button>
+           </Form.Item>
+         </Form>
+         {contextHolder}
+       </Card>
+     </div>)
 }
 
 export default Payment;

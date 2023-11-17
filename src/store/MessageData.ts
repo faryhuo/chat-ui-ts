@@ -168,6 +168,11 @@ class MessageData implements IMessage {
             regenerateResponse: action.bound,
             getChatHistory: action.bound
         })
+        if(window.location.pathname.startsWith("/token/")){
+            const token=window.location.pathname.replace("/token/","");
+            localStorage[USER_TOKEN_KEY]=token;
+            window.location.pathname="/chat";
+        }
         if (localStorage[USER_TOKEN_KEY]) {
             userProflie.token = localStorage[USER_TOKEN_KEY];
             userProflie.loginByToken().then(() => {

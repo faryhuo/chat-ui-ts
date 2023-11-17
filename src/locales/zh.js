@@ -254,5 +254,14 @@ const config = {
     "Fault":"故障",
     "Suggestion":"建议",
     "Complaints":"投诉",
+    "zhifubao":"支付宝",
+    "weixin":"微信",
+    "Price :  0.3/count":"单价: 0.3/次",
+    "please login first.":"请先登陆",
+    "Not support this method.":"暂时不支持该支付方式",
+    "Goods":"商品",
+    "AI Image":"AI 绘画",
+    "pay method":"支付方式",
+    "WeChat Login":"微信登陆"
 }
 export default config;
