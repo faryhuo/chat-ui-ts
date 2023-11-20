@@ -72,7 +72,7 @@ class APISetting implements IAPISetting {
     modelAmountUrl = `${this.host}/${this.userServiceName}/user/models/limit/`;
 
     paymentUrl=`${this.host}/${this.payServiceName}/payment/alipay/pay`
-    modelsUrl = `${this.host}/${this.chatConfigServiceName}/models`;
+    modelsUrl = `${this.host}/${this.chatConfigServiceName}/models/activity`;
 
 }
 const apiSetting = new APISetting()

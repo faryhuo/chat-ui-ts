@@ -31,11 +31,11 @@ const Header: React.FC<IProps> = observer(({store,config}) => {
       key: 'chat',
       icon: <FontAwesomeIcon icon={faComments} />
     },
-    {
-      label: <a href="http://sd.fary.chat" target="_blank" rel="noreferrer">{t('Stable Diffusion')}</a>,
-      key: 'sd',
-      icon: <FontAwesomeIcon icon={faImages} />
-    },
+    // {
+    //   label: <a href="http://sd.fary.chat" target="_blank" rel="noreferrer">{t('Stable Diffusion')}</a>,
+    //   key: 'sd',
+    //   icon: <FontAwesomeIcon icon={faImages} />
+    // },
     {
       label: <Link to="/image">{t('Image')}</Link>,
       key: 'image',

@@ -8,13 +8,14 @@ type IProps={
   config:IAppConfig;
   store:IMessage;
   readonly?:boolean
+  all:boolean
 }
 
 
-const RoleConfig:React.FC<IProps> = observer(({config,store,readonly})=>{
+const RoleConfig:React.FC<IProps> = observer(({config,store,readonly,all})=>{
   return (
   <div className="role-config-page">
-    <RoleList readonly={!!readonly} config={config} store={store}></RoleList>
+    <RoleList all={all} readonly={!!readonly} config={config} store={store}></RoleList>
   </div>)
 });
 

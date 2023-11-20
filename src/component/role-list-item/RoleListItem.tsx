@@ -48,7 +48,7 @@ const RoleList: React.FC<IProps> = observer(({ config, role, store, edit, readon
     <Button icon={<FontAwesomeIcon icon={faLightbulb} />}
       style={buttonStyle} type="link" onClick={() => { useRole(role); }}>
       &nbsp;{t('Use')}</Button>,
-    <Button icon={<FontAwesomeIcon icon={faEdit} />}
+     role.isGlobal===false && <Button icon={<FontAwesomeIcon icon={faEdit} />}
       onClick={() => { edit(role); }}
       style={buttonStyle} type="link">&nbsp;{t('Edit')}</Button>,
   ];
@@ -58,7 +58,7 @@ const RoleList: React.FC<IProps> = observer(({ config, role, store, edit, readon
       style={{ marginRight: 10 }} onClick={() => roleData.triggerFavorite(role)}
       type={role.favorite ? "primary" : "default"} />
 
-    <Popconfirm
+    {role.isGlobal===false && <Popconfirm
       placement="bottom"
       title={t('Message')}
       description={t('Are you want to delete the role.')}
@@ -68,7 +68,7 @@ const RoleList: React.FC<IProps> = observer(({ config, role, store, edit, readon
       cancelText={t<string>("No")}
     >
       <Button shape="circle" icon={<FontAwesomeIcon icon={faTrash} />} />
-    </Popconfirm>
+    </Popconfirm>}
   </div>;
 
   return (<div className={classNames("role-list-item-wrapper", { "readonly": !!readonly })}>

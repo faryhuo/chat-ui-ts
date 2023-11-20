@@ -16,8 +16,9 @@ type IProps={
   config:IAppConfig;
   store:IMessage;
   readonly:boolean;
+  all:boolean;
 }
-const RoleList:React.FC<IProps> = observer(({config,store,readonly})=>{
+const RoleList:React.FC<IProps> = observer(({config,store,readonly,all})=>{
 
   const {t} =useTranslation();
   const [open,setOpen]=useState(false);
@@ -26,7 +27,13 @@ const RoleList:React.FC<IProps> = observer(({config,store,readonly})=>{
   const [pageSize,setPageSize]=useState(10);
   const [token,setToken]=useState("");
 
-  const data = roleData.currentRoles;
+  const data = roleData.currentRoles.filter(item=>{
+    if(all){
+      return true;
+    }else{
+      return !item.isGlobal;
+    }
+  });
 
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -90,7 +97,7 @@ const RoleList:React.FC<IProps> = observer(({config,store,readonly})=>{
     <Radio.Group value={roleData.currentTag} buttonStyle="solid" 
     onChange={(e)=>{changeTag(e.target.value)}}>
       {
-        roleData.currentTags.map((tag,index)=>(
+        roleData.getCurrentTags(all).map((tag,index)=>(
           <Radio.Button  key={index} value={tag}>{t<string>("tags."+tag)}</Radio.Button>)
         )
       }

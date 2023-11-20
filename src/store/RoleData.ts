@@ -23,6 +23,7 @@ export interface IRole {
     setting?: IChatAPIConfig;
     isCustomSetting: boolean;
     language: string;
+    isGlobal: boolean;
 }
 
 const favorite = "favorite";
@@ -125,13 +126,18 @@ class RoleData implements IRoleData {
     }
 
 
-    get currentTags() {
+    getCurrentTags(all:boolean) {
         const tags: string[] = [];
         tags.push("all");
         tags.push(favorite);
         this.roles.forEach((role) => {
             if (!!(role.roleName) && !!(role.description)) {
                 if (role.tags && role.tags.length) {
+                    if(!all){
+                        if(role.isGlobal){
+                            return;
+                        }
+                    }
                     role.tags.forEach(tag => {
                         if (!tags.includes(tag)) {
                             tags.push(tag);
@@ -142,6 +148,7 @@ class RoleData implements IRoleData {
         });
         return tags;
     }
+
 
     // loadRolesInLocal(){
     //     prompts.forEach((item)=>{
@@ -190,7 +197,8 @@ class RoleData implements IRoleData {
             method: "get",
             url: config.api.chatRoleUrl + `?language=${config.textLanguage}&uuid=${new Date().getTime()}`,
             headers: {
-                'Content-Type': 'application/json;charset=UTF-8'
+                'Content-Type': 'application/json;charset=UTF-8',
+                'token': localStorage['user-token'],
             }
         }
         ).then((response) => {
@@ -261,7 +269,8 @@ class RoleData implements IRoleData {
                 method: "post",
                 url: config.api.chatRoleUrl,
                 headers: {
-                    'Content-Type': 'application/json;charset=UTF-8'
+                    'Content-Type': 'application/json;charset=UTF-8',
+                    "token":userProflie.token
                 },
                 data: JSON.stringify(role)
             }).then((response) => {
@@ -303,7 +312,8 @@ class RoleData implements IRoleData {
                 method: "delete",
                 url: `${config.api.chatRoleUrl}/${roleId}`,
                 headers: {
-                    'Content-Type': 'application/json;charset=UTF-8'
+                    'Content-Type': 'application/json;charset=UTF-8',
+                    "token":userProflie.token
                 }
             }).then((response) => {
                 const data = response.data;

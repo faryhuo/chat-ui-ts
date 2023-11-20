@@ -4,10 +4,10 @@ import APISetting from './APISetting';
 import { MessageInstance } from "antd/es/message/interface";
 import saveAs from 'file-saver';
 import i18n from "../utils/i18n";
-import apiSetting from "./APISetting";
 import { fetchEventSource } from "@microsoft/fetch-event-source";
 import noticeData from "./NoticeData";
 import { containsChineseCharacters } from "../utils/CommonUtils";
+import userProflie from "./UserProfile";
 
 export interface IImageSharing{
     visible:boolean;
@@ -115,7 +115,7 @@ class ImageData implements IImageData {
     }
 
     async transactionPrompt(prompt:string){
-        const queryUrl = apiSetting.chatUrl;
+        const queryUrl = APISetting.chatUrl;
         const messageListData=[{
             role:"system",content:"请帮我把中文转换成Midjourney能识别的英文单词"
         },{
@@ -250,7 +250,7 @@ class ImageData implements IImageData {
     }]
 
     fetchData(token:string){
-        fetch(apiSetting.mjImageUrl,{
+        fetch(APISetting.mjImageUrl,{
             headers:{
                 token:token
             }
@@ -353,7 +353,8 @@ class ImageData implements IImageData {
             method: "post",
             url: queryUrl,
             headers: {
-                'Content-Type': 'application/json;charset=UTF-8'
+                'Content-Type': 'application/json;charset=UTF-8',
+                "token":userProflie.token
             }
         });
     }
@@ -387,7 +388,7 @@ class ImageData implements IImageData {
         const message='Submit task successlly. you can go to other page first, I will tall you if done';
         self.showSuccessMsg(globalMessageApi,message);
         const promise = new Promise((resolve,reject) => {
-            fetchEventSource(apiSetting.mjImageUrl,
+            fetchEventSource(APISetting.mjImageUrl,
                 {
                     method: "POST",
                     signal: ctrl.signal,

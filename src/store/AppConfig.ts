@@ -3,13 +3,11 @@ import IatRecorder from '../utils/IatRecorder';
 import i18n from '../utils/i18n';
 import { isMobile } from 'react-device-detect';
 import apiSetting, { IAPISetting } from "./APISetting";
-import imageData, { IImageData } from "./ImageData";
 import { FormLayout } from "antd/es/form/Form";
 
 export interface IAppConfig {
     version: string;
     style: string;
-    image: IImageData;
     localConfigName: string;
     isSlowLeftMenu: boolean;
     colorPrimary: string;
@@ -57,7 +55,6 @@ class AppConfig implements IAppConfig {
     isSlowLeftMenu = isMobile ? false : true;
     isMobile = isMobile;
     api = apiSetting
-    image = imageData;
 
 
     // get weChatQRCode() {

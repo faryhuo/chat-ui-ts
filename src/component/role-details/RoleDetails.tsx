@@ -72,6 +72,7 @@ const RoleDetails: React.FC<IProps> = observer(({ store, config, role, handleCan
       } else {
         let newRole: IRole = {
           roleId: -1,
+          isGlobal:false,
           roleName: "",
           description: "",
           tags: tags,
@@ -118,7 +119,7 @@ const RoleDetails: React.FC<IProps> = observer(({ store, config, role, handleCan
 
   const getTagOptions = () => {
     const options: { value: string; label: string; }[] = [];
-    RoleData.currentTags.forEach((item) => {
+    RoleData.getCurrentTags(true).forEach((item) => {
       if (item === "favorite" || item === "all") {
         return;
       }

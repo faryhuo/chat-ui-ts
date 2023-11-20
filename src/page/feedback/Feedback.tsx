@@ -2,6 +2,7 @@ import { Button, Card, Form, Input, message, Radio } from 'antd';
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import apiSetting from '../../store/APISetting';
+import userProflie from '../../store/UserProfile';
 import './Feedback.css'
 type IProps = {
 }
@@ -23,7 +24,8 @@ const Feedback: React.FC<IProps> = () => {
       fetch(apiSetting.feedbackUrl, {
         method: 'post',
         headers: {
-          'Content-Type': 'application/json;charset=UTF-8'
+          'Content-Type': 'application/json;charset=UTF-8',
+          "token":userProflie.token
         },
         body: JSON.stringify(requestJson)
       }).then(response => { console.log(response); return response.json() })

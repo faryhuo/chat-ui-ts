@@ -1,5 +1,6 @@
 import { makeObservable, observable , action, computed } from "mobx";
 import apiSetting from "./APISetting";
+import userProflie from "./UserProfile";
 
 
 export interface IPayment{

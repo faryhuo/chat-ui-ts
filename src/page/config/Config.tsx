@@ -41,7 +41,7 @@ const ConfigPage:React.FC<IProps> = observer(({config,store})=>{
               </Card>
             </Panel>
             <Panel header={t<string>("Roles management")} key="4">
-              <RoleConfigPage readonly={false}  config={config} store={store}></RoleConfigPage>
+              <RoleConfigPage all={false} readonly={false}  config={config} store={store}></RoleConfigPage>
             </Panel>
             <div>
               <ConfigActionBtn store={store}></ConfigActionBtn>
