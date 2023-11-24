@@ -35,7 +35,7 @@ const ConfigPage:React.FC<IProps> = observer(({config,store})=>{
               <BaseConfigForm config={config}></BaseConfigForm>
               </Card>
             </Panel>
-            <Panel header={t<string>("Chat API Configuration")} key="2">
+            <Panel header={t<string>("Chat Model Setting")} key="2">
               <Card>
               <ChatConfigForm config={config}></ChatConfigForm>
               </Card>

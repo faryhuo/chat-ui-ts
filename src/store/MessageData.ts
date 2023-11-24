@@ -10,6 +10,7 @@ import saveAs from 'file-saver';
 import { Location, NavigateFunction } from "react-router-dom";
 import chatConfig, { IChatAPIConfig } from "./ChatConfig";
 import apiSetting from "./APISetting";
+import userModelLimit from "./UserModelLimit";
 
 let encodeFun: any
 import('gpt-tokenizer').then(({ encode }) => {
@@ -589,6 +590,8 @@ class MessageData implements IMessage {
             this.getChatHistory().then(()=>{
                 this.getChatHistoryByChatId(chatId).then(()=>{
                     this.activeSession = chatId;
+                    const currentData=this.getChatInfoByChatId(chatId);
+                    userModelLimit.getModelUsage(currentData?.chatConfig?.model as string);
                     this.hideLastData(chatId);
                 });
             })
@@ -666,10 +669,14 @@ class MessageData implements IMessage {
 
 
     setChatApiConfig<K extends keyof IChatAPIConfig>(key: K, value: IChatAPIConfig[K]) {
-        if (!userProflie.token && key === "model" && value) {
-            if((value as string).startsWith("gpt-4")){
-                userProflie.openPage();
-                return;
+        if(key === "model" && value){
+            if (!userProflie.token) {
+                if((value as string).startsWith("gpt-4")){
+                    userProflie.openPage();
+                    return;
+                }
+            }else{
+                userModelLimit.getModelUsage(value as string);
             }
         }
         const { activeSession, session } = this;
@@ -833,6 +840,7 @@ class MessageData implements IMessage {
     callChatAPI(chatId: string) {
         if (chatConfig.getAPIConfig().stream) {
             return this.callChatAPIByStreamByPost(chatId).then(() => {
+                userModelLimit.getCurrentModelUsage();
                 this.hideLastData(chatId);
                 this.save(chatId);
             })

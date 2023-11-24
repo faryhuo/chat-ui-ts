@@ -2,6 +2,7 @@ import axios from "axios";
 import { makeObservable, observable, action } from "mobx";
 import i18n from "../utils/i18n";
 import apiSetting from "./APISetting";
+import userModelLimit from "./UserModelLimit";
 import userProflie from "./UserProfile";
 
 export interface IModelOptions {
@@ -170,6 +171,7 @@ class ChatConfig implements IChatConfig {
     changeModel(model:string) {
         const newChannel=this.getModelChange(model);
         const oldChannel=this.getModelChange(this.apiConfig.model);
+        userModelLimit.getModelUsage(model);
         if(newChannel==='gpt' && model.startsWith('gpt-4')){
             if (userProflie.token) {
                 this.apiConfig.model = model;

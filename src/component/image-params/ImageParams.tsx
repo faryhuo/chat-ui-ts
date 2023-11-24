@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAdd, faQuestion, faTrashCan, faWallet } from '@fortawesome/free-solid-svg-icons';
 import apiSetting from '../../store/APISetting';
 import { RcFile } from 'antd/es/upload';
-import { compositionOptions, environmentOptions, lightOptions, qualityOptions, style2Options, styleOptions } from './ParamOptions';
+import { compositionOptions, environmentOptions, lightOptions, qualityOptions, style2Options } from './ParamOptions';
 import userModelLimit from '../../store/UserModelLimit';
 
 type IProps = {
@@ -280,7 +280,7 @@ const ImageParams: React.FC<IProps> = observer(() => {
                 <span>{t('Standard mode')} : </span>
               </div>
               <div className="amount-value">
-              {userModelLimit.mjStandardUsage.remainingAmount}
+              {userModelLimit.usage.remainingAmount}
               </div>
             </div>
             <div className="amount-item">
@@ -288,7 +288,7 @@ const ImageParams: React.FC<IProps> = observer(() => {
                 <span>{t('Fast mode')} : </span>
               </div>
               <div className="amount-value">
-              {userModelLimit.mjFastUsage.remainingAmount}
+              {userModelLimit.usage.remainingAmount}
               
               </div>
             </div>

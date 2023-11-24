@@ -7,15 +7,14 @@ import { Input, Modal } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { IMessage, ISessionMenu } from '../../store/MessageData';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPaintbrush, faTrashCan, faCheck, faShare, faStar, faTools, faAdd, faWallet } from '@fortawesome/free-solid-svg-icons'
+import { faPaintbrush, faTrashCan, faCheck, faShare, faStar, faTools } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import ChatShareSteps from '../chat-share-steps/ChatShareSteps';
 import QueueAnim from 'rc-queue-anim';
 import { formatShortDate, isSameDay } from '../../utils/dateUtils';
-import userModelLimit from '../../store/UserModelLimit';
 import {IUserProflie} from '../../store/UserProfile';
-import Payment from '../../page/payment/Payment';
+import ModelAmount from '../model-amount/ModelAmount';
 type IProps = {
   store: IMessage;
   userProflie:IUserProflie
@@ -26,7 +25,6 @@ const ChatList: React.FC<IProps> = ({ store,userProflie }) => {
 
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
-  const [paymentOpen, setPaymentOpen] = useState(false);
 
   const [currentChatId, setCurrentChatId] = useState<string>("");
 
@@ -63,9 +61,6 @@ const ChatList: React.FC<IProps> = ({ store,userProflie }) => {
     setCurrentChatId("");
   }
 
-  const handlePaymentCancel = () => {
-    setPaymentOpen(false);
-  }
 
   const dataSouce = store.sessionList.sort((a, b) => {
     return (b.date as any) - (a.date as any)
@@ -177,9 +172,6 @@ const ChatList: React.FC<IProps> = ({ store,userProflie }) => {
   </Button>
   </Popconfirm>)
 
-  useEffect(()=>{
-    userProflie.token && userModelLimit.fetchUsage(userProflie.token)
-  },[userProflie.token])
 
   return (<div className="session-list-wrapper">
       <div className="session-list">
@@ -193,33 +185,7 @@ const ChatList: React.FC<IProps> = ({ store,userProflie }) => {
           </div>
         {renderList(historyDataSouce)}
       </div>
-      <div className="model-amount">
-        <div className="amount-content">
-          <div className="amount-left">
-          <span><FontAwesomeIcon style={{color:"#faad14"}} icon={faWallet}/> {t('GPT 4 Amount')}</span>
-          </div>
-          <div  className="amount-right">
-            <div className="amount-item">
-              <div className="amount-title">
-                <span>{t('Used')} : </span>
-              </div>
-              <div className="amount-value">
-              {userModelLimit.gptUsage.usedAmount}
-              </div>
-            </div>
-            <div className="amount-item">
-              <div className="amount-title">
-                <span>{t('Remaining')} : </span>
-              </div>
-              <div className="amount-value">
-              {userModelLimit.gptUsage.remainingAmount}
-              <Button onClick={()=>{setPaymentOpen(true)}} style={{marginLeft:5}} size='small' icon={<FontAwesomeIcon icon={faAdd}></FontAwesomeIcon>}/>
-              </div>
-            </div>
-          </div>
-              
-        </div>
-      </div>
+      <ModelAmount></ModelAmount>
       <Modal
         open={open}
         title={t<string>("Share History")}
@@ -229,16 +195,6 @@ const ChatList: React.FC<IProps> = ({ store,userProflie }) => {
         width={900}
       >
       <ChatShareSteps sessionData={store.getChatInfoByChatId(currentChatId) as any}></ChatShareSteps>
-    </Modal>
-    <Modal
-        open={paymentOpen}
-        title={false}
-        onCancel={handlePaymentCancel}
-        footer={false}
-        destroyOnClose={true}
-        width={900}
-      >
-       <Payment></Payment>
     </Modal>
   </div>);
 };
