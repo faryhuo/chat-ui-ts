@@ -1,46 +1,25 @@
-# Getting Started with Create React App
+# ChatGPT-ALL-AI-Web
+本项目基于使用ChatGPT的项目
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# 示例网站
+<a href="https://fary.chat/" target="_blank" title="示例网站">点击这里查看示例网站</a>
 
-## Available Scripts
 
-In the project directory, you can run:
+## 主要功能
+- [x] 完整的 Markdown 支持：LaTex 公式、Mermaid 流程图、代码高亮等等
+- [x] 精心设计的 UI，响应式设计，支持自定义主题
+- [x] 支持流式响应
+- [x] 数据可以保存在用户浏览器本地或者服务器
+- [x] 支持微信和手机号码登陆
+- [x] Midjourney AI 绘画功能
+- [x] 预制角色功能，方便地创建、分享和调试你的个性化对话
+- [x] 海量的内置 prompt 列表
+- [x] 支持文言一心，星火大模型，ChatGPT,通义千问，PLAM
+- [x] 多国语言支持
 
-### `npm start`
+## 下一步计划
+- [ ] 清除历史记录功能
+- [ ] 完善支付功能
+- [ ] 根据选择模型变换参数
+- [ ] 支持其他语言 (繁体中文,日文)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).

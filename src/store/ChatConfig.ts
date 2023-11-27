@@ -14,6 +14,7 @@ export interface IModelOptions {
     description?: string;
     maxModelId?: string;
     trainingDate?: string;
+    callTimerPrice:number;
 }
 export interface IChatConfig {
     apiConfig: IChatAPIConfig;
@@ -23,6 +24,7 @@ export interface IChatConfig {
     chatModelList: IModelOptions[];
     getMaxTokenByModel: (model: string) => number;
     getTrainingDate: (model: string) => string;
+    getCallTimerPrice: (model: string) => number;
 }
 
 export interface IChatAPIConfig {
@@ -44,6 +46,7 @@ interface IChatAPIResponse {
     maxModelId: string;
     trainingDate?: string;
     main:boolean;
+    callTimerPrice:number;
 }
 
 
@@ -85,6 +88,11 @@ class ChatConfig implements IChatConfig {
         } else {
             return false;
         }
+    }
+
+    getCallTimerPrice(model: string):number {
+        const callTimerPrice= this.chatModelList.find((item)=>item.value===model)?.callTimerPrice;
+        return callTimerPrice?callTimerPrice:0.3;
     }
 
     getMaxTokenModel(model: string): string {
@@ -139,6 +147,7 @@ class ChatConfig implements IChatConfig {
                             description:item.description,
                             maxToken:item.maxToken,
                             trainingDate:item.trainingDate,
+                            callTimerPrice:item.callTimerPrice,
                             maxModelId:item.maxModelId?item.maxModelId:item.maxModelId
                         }
                         this.chatModelList.push(obj);

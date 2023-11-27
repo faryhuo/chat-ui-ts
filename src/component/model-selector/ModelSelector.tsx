@@ -14,11 +14,12 @@ import aliyunIcon from '../../icon/aliyun-icon.svg';
 import googleIcon from '../../icon/google-icon.png';
 
 type IProps={
-  store:IMessage;
+  store?:IMessage;
   onChange?:(e:any)=>void;
   value?:string;
+  isPayment?:boolean
 }
-const ModelSelector:React.FC<IProps> = observer(({store,onChange,value})=>{
+const ModelSelector:React.FC<IProps> = observer(({store,onChange,value,isPayment})=>{
   const [moreModules, setMoreModules] = useState(false);
 
     const {t} =useTranslation();
@@ -30,9 +31,21 @@ const ModelSelector:React.FC<IProps> = observer(({store,onChange,value})=>{
     const getModulesDataSource = () => {
       let datasource;
       if (moreModules) {
-        datasource = chatConfig.chatModelList;
+        datasource = chatConfig.chatModelList.filter(item=>{
+          if(isPayment===true){
+            return item.callTimerPrice>0;
+          }else{
+            return true;
+          }
+        });
       } else {
-        datasource= chatConfig.chatModelList.filter(item=>item.isMain);
+        datasource= chatConfig.chatModelList.filter(item=>{
+          if(isPayment===true){
+            return item.callTimerPrice>0 && item.isMain;
+          }else{
+            return item.isMain;
+          }
+        });
       }
       const options=[{
         label:getIcon(t('gpt'),gptIcon),
@@ -52,11 +65,18 @@ const ModelSelector:React.FC<IProps> = observer(({store,onChange,value})=>{
       }]
       return options;
     }
+
+
+    const changeEvent=(model:string)=>{
+      if(isPayment!==true){
+        store?.setChatApiConfig("model", model);
+      }
+    }
   
     return (<Select  style={{ width: 180 }}
-      className="option-btn" onChange={(e) => onChange?onChange(e):store.setChatApiConfig("model", e as any)}
+      className="option-btn" onChange={(e) => onChange?onChange(e):changeEvent(e as string)}
       options={getModulesDataSource()}
-      value={value?value:store.chatApiConfig.model}
+      value={value?value:store?.chatApiConfig.model}
       dropdownRender={(menu) => (
         <>
           {menu}

@@ -7,6 +7,8 @@ import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import userProflie from '../../store/UserProfile';
 import { isMobile } from 'react-device-detect';
+import ModelSelector from '../../component/model-selector/ModelSelector';
+import chatConfig from '../../store/ChatConfig';
 
 type IProps={
 }
@@ -16,7 +18,8 @@ const Payment:React.FC<IProps> = ()=>{
    const { t } = useTranslation();
    const [form] = Form.useForm();
    const [messageApi, contextHolder] = message.useMessage();
- 
+   let goods = Form.useWatch('goods', form);
+
    useEffect(() => {
      document.title = "Payment";
    }, []);
@@ -52,20 +55,17 @@ const Payment:React.FC<IProps> = ()=>{
        <Card>
          <Form
            form={form}
-           initialValues={{goods:"gpt4",type:"zhifubao",num:10}}
+           initialValues={{type:"zhifubao",num:10}}
            labelCol={{ span: 8 }}
            wrapperCol={{ span: 16 }}
          >
            <Form.Item label={t<string>("Goods")} rules={[{ required: true }]}
              name="goods"  >
-             <Radio.Group>
-               <Radio.Button value="gpt4">{t('GPT 4')}</Radio.Button>
-               <Radio.Button value="mj">{t('AI Image')}</Radio.Button>
-             </Radio.Group>
+              <ModelSelector isPayment={true}></ModelSelector>
            </Form.Item>
 
            <Form.Item  wrapperCol={{ offset: isMobile?0:8, span: 16 }}>
-            <label>{t('Price :  0.3/count')}</label>
+            <label>{t('Price : ')}{chatConfig.getCallTimerPrice(goods)}{t('/count')}</label>
            </Form.Item>
 
            <Form.Item label={t<string>("count")} rules={[{ required: true }]}
