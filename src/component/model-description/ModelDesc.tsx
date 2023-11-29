@@ -11,7 +11,7 @@ const ModelDesc:React.FC<IProps> = ()=>{
     const columns = [
       {
         title: t('Model'),
-        dataIndex: 'model',
+        dataIndex: 'model'
       },
       {
         title: t('Description'),
@@ -20,11 +20,11 @@ const ModelDesc:React.FC<IProps> = ()=>{
       },
       {
         title: t('Max Support Lenght'),
-        dataIndex: 'length'
+        dataIndex: 'length',
       },
       {
         title: t('Training Date'),
-        dataIndex: 'date'
+        dataIndex: 'date',
       }
     ];
 
@@ -45,7 +45,7 @@ const ModelDesc:React.FC<IProps> = ()=>{
         return item.channel==="gpt";
       }) as any)
      setChannel(channelObj);
-    },[])
+    },[t])
 
     const onChange=(key:any)=>{
       const data:any=[];
@@ -64,14 +64,14 @@ const ModelDesc:React.FC<IProps> = ()=>{
       <Card>
       <Radio.Group defaultValue="gpt">
           {
-            Object.keys(channel).map((key)=>{
-              return <Radio.Button key={key} value={key} onChange={(e)=>onChange(e.target.value)}>{channel[key]}</Radio.Button>
+            Object.keys(channel).map((key,index)=>{
+              return <Radio.Button key={index} value={key} onChange={(e)=>onChange(e.target.value)}>{channel[key]}</Radio.Button>
             })
           }
         </Radio.Group>
       </Card>
       <Card>
-        <Table columns={columns as any} dataSource={dataSource}  pagination={false}/>
+        <Table rowKey={"model"} columns={columns as any} dataSource={dataSource}  pagination={false}/>
       </Card>
     </div>)
 }

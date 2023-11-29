@@ -60,16 +60,16 @@ const BaseConfigForm: React.FC<IProps> = ({ config }) => {
     >
       <Form.Item label={t<string>("Style")} name="style">
         <Radio.Group>
-          <Radio.Button value="chat">Style 1</Radio.Button>
-          <Radio.Button value="antd">Style 2</Radio.Button>
+          <Radio.Button key={1} value="chat">Style 1</Radio.Button>
+          <Radio.Button key={2} value="antd">Style 2</Radio.Button>
         </Radio.Group>
       </Form.Item>
       <Form.Item label={t<string>("Text Language")} name="textLanguage">
         <Radio.Group>
-          <Radio.Button value="en">English</Radio.Button>
-          <Radio.Button value="zh">中文(简体)</Radio.Button>
-          <Radio.Button value="zh_tw">中文 (繁體)</Radio.Button>
-          <Radio.Button value="ja">日本語</Radio.Button>
+          <Radio.Button key={1} value="en">English</Radio.Button>
+          <Radio.Button key={2} value="zh">中文(简体)</Radio.Button>
+          <Radio.Button key={3} value="zh_tw">中文 (繁體)</Radio.Button>
+          <Radio.Button key={4} value="ja">日本語</Radio.Button>
 
         </Radio.Group>
       </Form.Item>

@@ -70,7 +70,7 @@ const PersonInfo:React.FC<IProps> = ()=>{
       <Divider></Divider>
       <div className="token-usage">
         <h3>{t('Token Usage')}</h3>
-        <Table columns={columns} dataSource={userInfo.tokenUsage} pagination={false} bordered={true}/>
+        <Table rowKey={"modelName"}  columns={columns} dataSource={userInfo.tokenUsage} pagination={false} bordered={true}/>
         <div className="total">
         <span>{t('Sum')} :   $ {getTotal()}</span>
         </div>

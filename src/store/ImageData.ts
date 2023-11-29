@@ -125,7 +125,8 @@ class ImageData implements IImageData {
             messages: JSON.stringify(messageListData),
             uuid: new Date().getTime(),
             max_tokens: 150,
-            stream: false
+            stream: false,
+            channel:"gpt"
         }
         const  response= await axios({
             method: "post",

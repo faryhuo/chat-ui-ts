@@ -64,20 +64,21 @@ const Payment:React.FC<IProps> = ()=>{
               <ModelSelector isPayment={true}></ModelSelector>
            </Form.Item>
 
-           <Form.Item  wrapperCol={{ offset: isMobile?0:8, span: 16 }}>
+           <Form.Item name="price"  wrapperCol={{ offset: isMobile?0:8, span: 16 }}>
             <label>{t('Price : ')}{chatConfig.getCallTimerPrice(goods)}{t('/count')}</label>
            </Form.Item>
 
            <Form.Item label={t<string>("count")} rules={[{ required: true }]}
              name="num">
-              <InputNumber min={1} max={1000} defaultValue={10}  step={1}/>
+              <InputNumber min={1} max={1000}  step={1}/>
            </Form.Item>
  
            <Form.Item label={t<string>("pay method")} rules={[{ required: true }]}
              name="type">
              <Radio.Group>
-               <Radio value="zhifubao">{t('zhifubao')}</Radio>
-               {/* <Radio value="weixin">{t('weixin')}</Radio> */}
+               <Radio key={1} value="zhifubao">{t('zhifubao')}</Radio>
+               <Radio key={2} value="weixin">{t('weixin')}</Radio>
+               <Radio key={3} value="paypal">{t('paypal')}</Radio>
              </Radio.Group>
            </Form.Item>
             
