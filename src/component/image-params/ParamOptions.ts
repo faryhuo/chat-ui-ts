@@ -121,23 +121,23 @@ export const compositionOptions=[
 
   export const qualityOptions = [{
     value: ".25",
-    label: "普通"
+    label: t("Standard")
   }, {
     value: ".5",
-    label: "一般"
+    label: t("Normal")
   }, {
     value: "1",
-    label: "高清"
+    label: t("High Definition")
   }, {
     value: "2",
-    label: "超高清"
+    label: t("Ultra High Definition")
   }]
 
 
 
   export const styleOptions = [{
     value: "",
-    label: i18next.t("default")
+    label: t("default")
   }, {
     value: "expressive",
     label: t("expressive")

@@ -14,11 +14,6 @@ const PersonInfo:React.FC<IProps> = ()=>{
 
   const { t } = useTranslation();
 
-
-  const getTokenTemplate=(val:number,price:number)=>{
-    return (<><span>{(val/1000).toFixed(2)} K</span> &nbsp;&nbsp;&nbsp; <span>({t('price')} : ${price} / 1K tokens)</span></>)
-  }
-
   const columns: ColumnsType<ITokenUsage>  = [
     {
       title: t('Model Name'),

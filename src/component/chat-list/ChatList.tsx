@@ -158,11 +158,22 @@ const ChatList: React.FC<IProps> = ({ store,userProflie }) => {
     </QueueAnim>;
   }
 
+  const clearHistory=()=>{
+    const idList:string[]=[];
+    historyDataSouce.forEach(item=>{
+      idList.push(item.key);
+    })
+    if(idList.length===0){
+      return;
+    }
+    store.clearHistoryChat(idList)
+  }
+
   const clearHistoryButton=(<Popconfirm
     placement="right"
     title={t('Message')}
     description={t('Are you want to clear the history.')}
-    onConfirm={(e) => {}}
+    onConfirm={clearHistory}
     okText={t<string>("Yes")}
     cancelText={t<string>("No")}
   >

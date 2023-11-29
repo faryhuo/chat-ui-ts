@@ -109,6 +109,7 @@ export interface IMessage {
     regenerateResponse: () => void;
     callImageAPI: (chatId: string, message: string) => Promise<void>;
     getChatHistory: () => void;
+    clearHistoryChat:(chatIdList:string[])=> void;
     clearHistoryResult: () => void;
     getChatHistoryByChatId:(chatId: string)=> Promise<void>;
     loadDataFromlocalStore: () => void;
@@ -534,6 +535,7 @@ class MessageData implements IMessage {
         data.push(newChat);
         this.saveSessionToLocal();
     }
+    
 
 
     clear(chatId: string) {
@@ -551,8 +553,29 @@ class MessageData implements IMessage {
             this.activeSession = "";
         }
         //this.session.splice(deletedItem,1)
-        this.saveSessionToLocal();
-        this.deleteSessionById(chatId);
+        if(userProflie.isLogin){
+            this.deleteSessionById(chatId);
+        }else{
+            this.saveSessionToLocal();
+        }
+    }
+
+    clearHistoryChat(chatIdList:string[]){
+        if(userProflie.isLogin){
+            const queryUrl = config.api.historyUrl;
+            return axios({
+                method: "delete",
+                url: queryUrl,
+                headers: {
+                    'token': userProflie.token,
+                    'Content-Type': 'application/json;charset=UTF-8'
+                },data:{
+                    chatIdList:chatIdList
+                }
+            })
+        }else{
+            chatIdList.forEach(chatId=>this.clear(chatId))
+        }
     }
 
     deleteSessionById(chatId: string) {
@@ -1149,6 +1172,8 @@ class MessageData implements IMessage {
         });
         return this.historyResult;
     }
+
+    
 
     get systemText() {
         return this.role ? roleData.getContentByRole(this.role) : i18n.t<string>("Type something to search on ChatGPT")

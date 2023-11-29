@@ -1,4 +1,4 @@
-const config = {
+{
     "tags":{
         "all":"全部",
         "favorite":"收藏",
@@ -48,7 +48,7 @@ const config = {
     "Export":"导出聊天记录",
     "Import":"加载聊天记录",
     "Reset":"清空数据",
-    "frequency_penalty":"频率惩罚度 (frequency_penalty)",
+    "frequency_penalty":"频率惩罚度",
     "Color Primary":"主题颜色",
     "Choose a conversation style":"选择一个内容生成偏向",
     "Choose a conversation style and role to start":"选择你希望AI扮演的角色和聊天风格",
@@ -96,10 +96,10 @@ const config = {
     "Balanced":"平衡",
     "Creative":"创新",
     "Regenerate":"重新生成",
-    "presence_penalty":"话题新鲜度 (presence_penalty)",
-    "temperature":"随机性 (temperature)",
-    "max_tokens":"单次回复限制 (max_tokens)",
-    "top_p":"核采样 (top_p)",
+    "presence_penalty":"话题新鲜度",
+    "temperature":"随机性",
+    "max_tokens":"单次回复限制",
+    "top_p":"核采样",
     "User name / Phone number":"用户名 / 手机号码",
     "SMS Code":"验证码",
     "Sent SMS code":"发送验证码",
@@ -263,6 +263,20 @@ const config = {
     "Goods":"商品",
     "AI Image":"AI 绘画",
     "pay method":"支付方式",
-    "WeChat Login":"微信登陆"
+    "WeChat Login":"微信登陆",
+    "mj.sample.input.message":"例如: A cute little cat (Midjourney对中文描述词有一定限制、我们建议您点击右侧翻译将您的描述词转为英文再进行提交、联想则是会将您的描述词交由GPT让其发挥想象空间为您在此基础创建更为详细的描述！)",
+    "What kind of image do you want to generate?":"你想生成什么图像?",
+    "Unnecessary elements":"不需要的元素",
+    "Please enter the elements you do not want in the image (e.g., if you are drawing a room, you can specify whether you want a bed below).":"请输入您不想在图像中出现的元素(例如，如果您正在画一个房间，您可以指定您是否想要一个床在下面)。"
+    ,"Click on the numbered button below to obtain an upgraded version (U: enlarge the image for more details) or a modified version (V: variant based on this)": "点击下方的数字按钮获取升级版(U:放大图片以获得更多细节)或修改版(V:基于此的变体)",
+    "1:1 Avatar":"1:1 头像",
+    "1:2 Mobile Wallpaper":"1:2 手机壁纸",
+    "4:3 Article Illustration":"4:3 文章配图",
+    "3:4 Product illustration":"3:4 商品插画",
+    "16:9 Computer Wallpaper":"16:9 电脑壁纸",
+    "9:16 Promotional Poster":"9:16 宣传海报",
+    "Standard":"普通",
+    "Normal":"一般",
+    "High Definition":"高清",
+    "Ultra High Definition":"超高清"
 }
-export default config;

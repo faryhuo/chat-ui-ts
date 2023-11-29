@@ -21,6 +21,10 @@ const CodeEditConfigForm : React.FC<IProps> = ({config})=>{
     let temperature = Form.useWatch('temperature', form);
     let top_p = Form.useWatch('top_p', form);
 
+    /**
+     * Displays a success message using the message API.
+     * The message indicates that an update operation was successful.
+     */
     const success = () => {
       messageApi.open({
         type: 'success',

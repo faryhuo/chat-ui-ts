@@ -102,12 +102,12 @@ const ImageParams: React.FC<IProps> = observer(() => {
     </div>
     <div className="image-param-set image-param-input">
       <Radio.Group value={imageData.params.size} onChange={(e) => { imageData.updateParams("size", e.target.value) }}>
-        <Radio.Button value="1:1">头像1:1</Radio.Button>
-        <Radio.Button value="1:2">手机壁纸1:2</Radio.Button>
-        <Radio.Button value="4:3">文章配图4:3</Radio.Button>
-        <Radio.Button value="3:4">小红书3:4</Radio.Button>
-        <Radio.Button value="16:9">电脑壁纸16:9</Radio.Button>
-        <Radio.Button value="9:16">宣传海报9:16</Radio.Button>
+        <Radio.Button value="1:1">{t('1:1 Avatar')}</Radio.Button>
+        <Radio.Button value="1:2">{t('1:2 Mobile Wallpaper')}</Radio.Button>
+        <Radio.Button value="4:3">{t('4:3 Article Illustration')}</Radio.Button>
+        <Radio.Button value="3:4">{t('3:4 Product illustration')}</Radio.Button>
+        <Radio.Button value="16:9">{t('16:9 Computer Wallpaper')}</Radio.Button>
+        <Radio.Button value="9:16">{t('9:16 Promotional Poster')}</Radio.Button>
       </Radio.Group>
     </div>
     <div className="image-param-set image-param-label">

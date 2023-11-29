@@ -1,4 +1,4 @@
-const config= {
+{
     "tags":{
         "all":"All",
         "favorite":"Favorite",
@@ -43,6 +43,12 @@ const config= {
     "xunfei":"XUN FEI",
     "baidu":"BAI DU",
     "aliyun":"ALI YUN",
-    "google":"Google"
+    "google":"Google",
+    "mj.sample.input.message":"For example: A cut little cat.",
+    "1:1 Avatar":"1:1",
+    "1:2 Mobile Wallpaper":"1:2",
+    "4:3 Article Illustration":"4:3",
+    "3:4 Product illustration":"3:4",
+    "16:9 Computer Wallpaper":"16:9",
+    "9:16 Promotional Poster":"9:16"
 }
-export default config;

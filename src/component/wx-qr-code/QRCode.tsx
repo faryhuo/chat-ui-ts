@@ -9,7 +9,6 @@ const QRCode:React.FC<IProps> = observer(()=>{
     useEffect(()=>{
       setTimeout(()=>{
         userProflie.getQRCode();
-        console.log("f");
       });
     })
     

@@ -12,7 +12,6 @@ export interface INoticeData {
     messages:INoticeMessage[];
 }
 
-
 class NoticeData implements INoticeData {
 
     messages:INoticeMessage[]=[]
