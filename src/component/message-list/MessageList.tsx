@@ -64,14 +64,13 @@ class MessageList extends Component<IProps> {
 
     getMessageByContent(arr: any[]) {
         let contents = arr.concat();
-        let repList = [contents.pop()];
         let list = [];
-        if (contents && repList.length > 0) {
-            for (let i = 0; i < repList.length; i++) {
-                const item=repList[i];
+        if (contents && contents.length > 0) {
+            for (let i = 0; i < contents.length; i++) {
+                const item=contents[i];
                 if(item.type==="text"){
                     list.push(<Markdown key={i} content={item.text.value}></Markdown>)
-                }else if(item.type="image_file"){
+                }else if(item.type==="image_file"){
                     list.push(<Image src={item.image_file.url}></Image>)
                 }
             }
