@@ -23,9 +23,23 @@ class MessageList extends Component<IProps> {
         if (item.text) {
             return <div className={classs}><pre style={{ maxWidth: 700, margin: 0, whiteSpace: 'break-spaces' }}>{item.text}</pre>
             </div>
+        }if (item.content) {
+            return this.renderSysChat4Content(item.content, classs);
         } else {
             return this.renderSysChat(item.choices, classs);
         }
+    }
+
+    renderSysChat4Content(content: any[], classs: string | undefined) {
+        if (!content || !content.length) {
+            return <div></div>
+        }
+        let list = this.getMessageByContent(content);
+        let i = 0;
+        return <div className={classs}>{list.map((item) => {
+            return (<div key={i}>{item}
+            </div>);
+        })}</div>;
     }
 
     renderSysChat(choices: Ichoices[] | null | undefined, classs: string | undefined) {
@@ -46,6 +60,23 @@ class MessageList extends Component<IProps> {
         }
         return <div><Image width={image.width} height={image.height}
             src={image.uri}></Image></div>;
+    }
+
+    getMessageByContent(arr: any[]) {
+        let contents = arr.concat();
+        let repList = [contents.pop()];
+        let list = [];
+        if (contents && repList.length > 0) {
+            for (let i = 0; i < repList.length; i++) {
+                const item=repList[i];
+                if(item.type==="text"){
+                    list.push(<Markdown key={i} content={item.text.value}></Markdown>)
+                }else if(item.type="image_file"){
+                    list.push(<Image src={item.image_file.url}></Image>)
+                }
+            }
+        }
+        return list;
     }
 
 

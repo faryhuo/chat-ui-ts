@@ -33,6 +33,7 @@ export interface ISessiondata {
     hasShowDetails?: boolean;
     text?: string;
     choices?: Ichoices[] | null;
+    content?: any[];
     stream?: boolean;
     end?: boolean;
     history?: any;
@@ -60,12 +61,15 @@ export interface ISession {
     role?: number;
     updateDate: Date;
     isDone:boolean;
+    assistant_id?:string;
+    threadId?:string;
 }
 
 export interface IMessageListData {
     role: string;
     content: string;
     name?: string;
+    file_ids?:string[]
 }
 
 
@@ -562,7 +566,7 @@ class MessageData implements IMessage {
 
     clearHistoryChat(chatIdList:string[]){
         if(userProflie.isLogin){
-            const queryUrl = config.api.historyUrl;
+            const queryUrl = config.api.historyUrl+"/";
             return axios({
                 method: "delete",
                 url: queryUrl,
@@ -861,7 +865,15 @@ class MessageData implements IMessage {
     }
 
     callChatAPI(chatId: string) {
-        if (chatConfig.getAPIConfig().stream) {
+        const chatData=this.getChatInfoByChatId(chatId);
+        if(!chatData){
+            return;
+        }
+        if(chatData?.chatConfig?.model==="gpt-all-tool"){
+            return this.callAssisantAPI(chatId).then(() => {
+                this.saveSessionToLocal();
+            })
+        }else if (chatData?.chatConfig?.stream) {
             return this.callChatAPIByStreamByPost(chatId).then(() => {
                 userModelLimit.getCurrentModelUsage();
                 this.hideLastData(chatId);
@@ -1063,6 +1075,47 @@ class MessageData implements IMessage {
             });
     }
 
+    callAssisantAPI(chatId: string) {
+        const params = this.getAssistantParams(chatId);
+        const queryUrl = "https://fary.chat:8555/chat-service-2/assistants"
+        return axios({
+            method: "post",
+            url: queryUrl,
+            headers: {
+                'token': userProflie.token,
+                'Content-Type': 'application/json;charset=UTF-8'
+            },
+            data: JSON.stringify(params)
+        }
+        ).then((response) => {
+            this.enableType(chatId);
+            if (response.data.error) {
+                this.handleAPIError(response.data.error, chatId);
+                return;
+            }
+            if (response.data.data.error) {
+                this.handleAPIError(response.data.data.error, chatId);
+                return;
+            }
+            const content = response.data.data.content;
+            const threadId=response.data.data.thread_id;
+            const chatObj=this.getChatInfoByChatId(chatId);
+            if(chatObj && threadId){
+                chatObj.threadId=threadId;
+            }
+            let msg = {
+                isSys: true,
+                isError:false,
+                content: content
+            }
+            this.addData(msg, chatId);
+        }
+            , (err) => {
+                this.handleAPIError(err, chatId);
+            });
+    }
+
+
     saveChatHistory(chatId: string) {
         const queryUrl = config.api.historyUrl;
         this.session.forEach((item) => {
@@ -1179,6 +1232,18 @@ class MessageData implements IMessage {
         return this.role ? roleData.getContentByRole(this.role) : i18n.t<string>("Type something to search on ChatGPT")
     }
 
+
+    getAssistantParams(chatId:string){
+        let messageListData = this.getMessageListData();
+
+        
+        return {
+            messages:messageListData,
+            assistant_id:"asst_pbM93jEndLMj4vRzOv3i61Vb",
+            thread_id:this.getChatInfoByChatId(chatId)?.threadId
+        }
+    }
+
     getChatParams() {
         const chatAPIConfig = this.chatApiConfig;
         let messageListData = this.getMessageListData();
@@ -1254,7 +1319,7 @@ class MessageData implements IMessage {
             if(item.isError){
                 return true;
             }
-            const msg = { role: "", content: "" };
+            const msg = { role: "", content: "",file_ids:[] };
             if (item.isSys) {
                 msg.role = "assistant";
                 let content = "";
@@ -1262,6 +1327,13 @@ class MessageData implements IMessage {
                     for (let i = 0; i < item.choices.length; i++) {
                         if (item.choices[i].message && item.choices[i].message.content) {
                             content += item.choices[i].message.content;
+                        }
+                    }
+                }else if (item.content && item.content) {
+                    msg.role="user";
+                    for (let i = 0; i < item.content.length; i++) {
+                        if (item.content[i].text && item.content[i].text.value) {
+                            content += item.content[i].text.value;
                         }
                     }
                 }

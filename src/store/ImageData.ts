@@ -117,7 +117,7 @@ class ImageData implements IImageData {
     async transactionPrompt(prompt:string){
         const queryUrl = APISetting.chatUrl;
         const messageListData=[{
-            role:"system",content:"请帮我把中文转换成Midjourney能识别的英文单词"
+            role:"system",content:"请帮我把我输入的语言转换成Midjourney能识别的英文单词"
         },{
             role:"user",content:prompt
         }];
