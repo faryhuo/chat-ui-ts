@@ -83,7 +83,7 @@ const ModelSelector:React.FC<IProps> = observer(({store,onChange,value,isPayment
           <Divider style={{ margin: '8px 0' }} />
           <Button onClick={() => setMoreModules(!moreModules)} style={{ width: '100%' }} icon={<FontAwesomeIcon
             icon={faSearch} />} type="text">
-            &nbsp;{t<string>(!moreModules ? "All" : "Main")}
+            &nbsp;{t(!moreModules ? "All" : "Main")}
           </Button>
         </>)}>
         </Select>)

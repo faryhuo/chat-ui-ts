@@ -95,12 +95,12 @@ const SendInput: React.FC<IProps> = observer(({ store, config }) => {
       style={{ height: 120, marginBottom: 24 }}
       onChange={(e) => typeInput(e)}
       value={input}
-      placeholder={t<string>("Type your code here") as string}
+      placeholder={t("Type your code here") as string}
     />
     <Search
       value={message}
-      placeholder={t<string>("Instructions") as string}
-      enterButton={t<string>("Sent")}
+      placeholder={t("Instructions") as string}
+      enterButton={t("Sent")}
       size="large"
       disabled={store.isType === false}
       onChange={(e) => typeMsg(e)}

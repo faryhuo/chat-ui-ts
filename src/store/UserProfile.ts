@@ -95,10 +95,10 @@ class UserProflie implements IUserProflie {
                         localStorage[USER_TOKEN_KEY] = this.token;
                         resolve(this.token)
                     } else if (response.data.errors.message) {
-                        const errorMsg = i18n.t<string>("api." + response.data.errors.message);
+                        const errorMsg = i18n.t("api." + response.data.errors.message);
                         reject(errorMsg)
                     } else {
-                        reject(i18n.t<string>("Fail to login"));
+                        reject(i18n.t("Fail to login"));
                     }
                 });
             })
@@ -128,10 +128,10 @@ class UserProflie implements IUserProflie {
                         this.login(userId, password);
                         resolve(response.data.data)
                     } else if (response.data.errors.message) {
-                        const errorMsg = i18n.t<string>("api." + response.data.errors.message);
+                        const errorMsg = i18n.t("api." + response.data.errors.message);
                         reject(errorMsg)
                     } else {
-                        reject(i18n.t<string>("Fail to Reset password"));
+                        reject(i18n.t("Fail to Reset password"));
                     }
                 });
             })
@@ -161,7 +161,7 @@ class UserProflie implements IUserProflie {
                         this.login(userId, password);
                         resolve(response.data.data)
                     } else if (response.data.errors.message) {
-                        const errorMsg = i18n.t<string>("api." + response.data.errors.message);
+                        const errorMsg = i18n.t("api." + response.data.errors.message);
                         reject(errorMsg)
                     } else {
                         reject("Fail to signup");

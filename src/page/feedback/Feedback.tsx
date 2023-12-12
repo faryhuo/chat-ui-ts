@@ -49,7 +49,7 @@ const Feedback: React.FC<IProps> = () => {
           labelCol={{ span: 8 }}
           wrapperCol={{ span: 16 }}
         >
-          <Form.Item label={t<string>("Feedback Type")} rules={[{ required: true }]}
+          <Form.Item label={t("Feedback Type")} rules={[{ required: true }]}
             name="type"  >
             <Radio.Group>
               <Radio.Button value="Fault">{t('Fault')}</Radio.Button>
@@ -58,13 +58,13 @@ const Feedback: React.FC<IProps> = () => {
             </Radio.Group>
           </Form.Item>
 
-          <Form.Item label={t<string>("Feedback Content")} rules={[{ required: true }]}
+          <Form.Item label={t("Feedback Content")} rules={[{ required: true }]}
             name="description">
             <Input.TextArea autoSize={{ minRows: 8 }}></Input.TextArea>
 
           </Form.Item>
 
-          <Form.Item label={t<string>("Contact Information")}
+          <Form.Item label={t("Contact Information")}
             name="contactInfo">
             <Input></Input>
 

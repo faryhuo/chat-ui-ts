@@ -6,7 +6,7 @@ import Markdown from "../markdown/Markdown";
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 import chatConfig, { IChatAPIConfig } from "../../store/ChatConfig";
-
+import { getMessageFromChoices } from "../../store/MessageData";
 type IProps = {
   data: ISessiondata[];
   topic: string;
@@ -41,7 +41,7 @@ const ChatHistorySharer: React.FC<IProps> = observer(({ data, topic, time }) => 
     <div className="sharer-review-page-message message-list-wrapper">
       {data.map((item, key) => {
         return item.isSys ? (<MessageItem index={key} item={item} type={"system"} key={key}
-          content={<Markdown content={item.choices?.length ? item.choices[0].message.content : item.text + ""} />}></MessageItem>) :
+          content={<Markdown content={item.choices?.length ? getMessageFromChoices(item.choices): item.text + ""} />}></MessageItem>) :
           (<MessageItem type={"user"} key={key} index={key} readonly={true}
             content={item.text}></MessageItem>)
       })}

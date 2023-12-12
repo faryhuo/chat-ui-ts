@@ -96,7 +96,7 @@ const ImageParams: React.FC<IProps> = observer(() => {
 
   return (<div className="image-params-wrapper">
     <div className="image-param-set image-param-label">
-      {t<string>("Image Size")}
+      {t("Image Size")}
       <Tooltip placement="right" title="生成图片尺寸比例">
         {questionBtn}        </Tooltip>
     </div>
@@ -111,7 +111,7 @@ const ImageParams: React.FC<IProps> = observer(() => {
       </Radio.Group>
     </div>
     <div className="image-param-set image-param-label">
-      {t<string>("Image model")}
+      {t("Image model")}
       <Tooltip placement="right" title={<span><span>MJ: 偏真实通用模型</span><br />
         <span>NIJI: 偏动漫风格、适用于二次元模型</span></span>}>
         {questionBtn}      </Tooltip>
@@ -125,19 +125,19 @@ const ImageParams: React.FC<IProps> = observer(() => {
     </div>
     <div className="image-param-set">
 
-      <div className="image-param-label">{t<string>("Version")} </div>
+      <div className="image-param-label">{t("Version")} </div>
       <Select style={{ width: '100%' }} className="image-param-input" value={imageData.params.version}
         options={getVersionOptions()}></Select>
 
     </div>
     {/* {imageData.params.model === "NIJI" && <div className="image-param-set">
-      <div className="image-param-label">{t<string>("Style")} </div>
+      <div className="image-param-label">{t("Style")} </div>
       <div className="image-param-input"><Select
         value={imageData.params.style} onChange={(e) => { imageData.updateParams("style", e) }}
         options={styleOptions} style={{ width: '100%' }} ></Select></div></div>} */}
 
     {imageData.params.model === "MJ" && <><div className="image-param-set">
-      <div className="image-param-label">{t<string>("Stylize")}
+      <div className="image-param-label">{t("Stylize")}
         <Tooltip placement="right" title="风格化：--stylize 或 --s，范围 1-1000
       参数释义：数值越高，画面表现也会更具丰富性和艺术性">
           {questionBtn}
@@ -147,7 +147,7 @@ const ImageParams: React.FC<IProps> = observer(() => {
           onChange={(e) => { imageData.updateParams("stylize", e ? e : 100) }}></InputNumber>
       </div></div>
       <div className="image-param-set">
-      <div className="image-param-label">{t<string>("Raw")}
+      <div className="image-param-label">{t("Raw")}
         <Tooltip placement="right" title="减少 midjourney 的艺术加工，生成更摄影化的图片。例如：--style raw">
           {questionBtn}
         </Tooltip>
@@ -158,7 +158,7 @@ const ImageParams: React.FC<IProps> = observer(() => {
 
 
     <div className="image-param-set">
-      <div className="image-param-label">{t<string>("Quality")} </div>
+      <div className="image-param-label">{t("Quality")} </div>
       <div className="image-param-input"><Select style={{ width: '100%' }} onChange={(e) => { imageData.updateParams("quality", e) }}
         options={qualityOptions} value={imageData.params.quality}></Select></div>
     </div>
@@ -166,26 +166,26 @@ const ImageParams: React.FC<IProps> = observer(() => {
     <div className="more-params">
     
       <div className="image-param-set">
-        <div className="image-param-label">{t<string>("Composition")} </div>
+        <div className="image-param-label">{t("Composition")} </div>
         <div className="image-param-input"><Select allowClear style={{ width: '100%' }} onChange={(e) => { imageData.updateParams("composition", e) }}
           options={compositionOptions} value={imageData.params.composition}></Select></div>
       </div>
 
       <div className="image-param-set">
-        <div className="image-param-label">{t<string>("Style")} </div>
+        <div className="image-param-label">{t("Style")} </div>
         <div className="image-param-input"><Select allowClear style={{ width: '100%' }} onChange={(e) => { imageData.updateParams("style", e) }}
           options={style2Options} value={imageData.params.style}></Select></div>
       </div>
 
       <div className="image-param-set">
-        <div className="image-param-label">{t<string>("Light")} </div>
+        <div className="image-param-label">{t("Light")} </div>
         <div className="image-param-input"><Select allowClear style={{ width: '100%' }} onChange={(e) => { imageData.updateParams("light", e) }}
           options={lightOptions} value={imageData.params.light}></Select></div>
       </div>
 
 
       <div className="image-param-set">
-        <div className="image-param-label">{t<string>("Environment")} </div>
+        <div className="image-param-label">{t("Environment")} </div>
         <div className="image-param-input"><Select allowClear style={{ width: '100%' }} onChange={(e) => { imageData.updateParams("environment", e) }}
           options={environmentOptions} value={imageData.params.environment}></Select></div>
       </div>
@@ -193,7 +193,7 @@ const ImageParams: React.FC<IProps> = observer(() => {
 
     <div className="image-param-set">
 
-      <div className="image-param-label">{t<string>("Chaos")}
+      <div className="image-param-label">{t("Chaos")}
         <Tooltip placement="right" 
         title={t("Value range: 0-100, - Chaos, or - c Chaos level, which can be understood as a space that allows AI to roam freely The smaller the value, the more reliable it is, with a default of 0 being the most accurate")}
         >

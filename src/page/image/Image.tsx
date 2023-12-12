@@ -67,7 +67,7 @@ const Image: React.FC<IProps> = ({ globalMessageApi,userProflie }) => {
             <div className="image-prompt-content">
               <Input.TextArea autoSize={{ minRows: 4 }} value={imageData.prompt} 
               onChange={(e) => imageData.setPrompt(e.target.value)}
-                placeholder={t<string>("mj.sample.input.message")}
+                placeholder={t("mj.sample.input.message")}
                 size="large">
               </Input.TextArea>
             </div>
@@ -77,7 +77,7 @@ const Image: React.FC<IProps> = ({ globalMessageApi,userProflie }) => {
             <div className="image-other-content">
               <Input.TextArea autoSize={{ minRows: 4 }} value={imageData.params.noNeedEle} 
               onChange={(e)=>imageData.changeNoNeedEle(e.target.value)}
-              placeholder={t<string>("Please enter the elements you do not want in the image (e.g., if you are drawing a room, you can specify whether you want a bed below).")}
+              placeholder={t("Please enter the elements you do not want in the image (e.g., if you are drawing a room, you can specify whether you want a bed below).")}
                 size="large">
               </Input.TextArea>
             </div>

@@ -29,7 +29,7 @@ const BaseConfigForm: React.FC<IProps> = ({ config }) => {
   const success = () => {
     messageApi.open({
       type: 'success',
-      content: t<string>('Updated success'),
+      content: t('Updated success'),
     });
   };
 
@@ -58,13 +58,13 @@ const BaseConfigForm: React.FC<IProps> = ({ config }) => {
       initialValues={config.getConfigJson()}
       style={{ padding: "10px" }}
     >
-      <Form.Item label={t<string>("Style")} name="style">
+      <Form.Item label={t("Style")} name="style">
         <Radio.Group>
           <Radio.Button key={1} value="chat">Style 1</Radio.Button>
           <Radio.Button key={2} value="antd">Style 2</Radio.Button>
         </Radio.Group>
       </Form.Item>
-      <Form.Item label={t<string>("Text Language")} name="textLanguage">
+      <Form.Item label={t("Text Language")} name="textLanguage">
         <Radio.Group>
           <Radio.Button key={1} value="en">English</Radio.Button>
           <Radio.Button key={2} value="zh">中文(简体)</Radio.Button>
@@ -73,16 +73,16 @@ const BaseConfigForm: React.FC<IProps> = ({ config }) => {
 
         </Radio.Group>
       </Form.Item>
-      <Form.Item label={t<string>("Color Primary")} valuePropName="color"
+      <Form.Item label={t("Color Primary")} valuePropName="color"
         name="colorPrimary">
         <HexColorPicker />
       </Form.Item>
-      {/* <Form.Item label={t<string>("Code Style")}
+      {/* <Form.Item label={t("Code Style")}
          rules={[{ required: true }]}
         tooltip={ruleMessage.required}  name="codeStyle">
           <CodeStyleInput ></CodeStyleInput>
         </Form.Item> */}
-      <Form.Item label={t<string>("Default Message")}
+      <Form.Item label={t("Default Message")}
         name="isSlowMsg4AddChat" valuePropName="checked">
         <Switch
           checkedChildren={<FontAwesomeIcon icon={faCheck} />}

@@ -48,7 +48,7 @@ const NewChat: React.FC<IProps> = ({store,config})=>{
     <div className="new-chat-page">
 
       <div  className="new-chat-title">
-        <h1>{t<string>('Choose a conversation style and role to start')}</h1>
+        <h1>{t('Choose a conversation style and role to start')}</h1>
       </div>
       <div className="new-chat-model">
         <div className="label-wrapper">{t("Model")} : </div>
@@ -65,8 +65,8 @@ const NewChat: React.FC<IProps> = ({store,config})=>{
         </div>
       </div>
         <div className="just-start">
-          <Button onClick={addChat} type="primary"   size="large">{t<string>('Just Start')}</Button>
-          <Button onClick={addRole} size="large">{t<string>('Go to Role Management')}</Button>
+          <Button onClick={addChat} type="primary"   size="large">{t('Just Start')}</Button>
+          <Button onClick={addRole} size="large">{t('Go to Role Management')}</Button>
         </div>
         <div className="role-list">
           <RoleConfigPage all={true} readonly={true} config={config} store={store}></RoleConfigPage>

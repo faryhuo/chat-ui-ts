@@ -91,7 +91,7 @@ const LoginForm : React.FC<IProps>= observer(({login,handleCancel,config,store,u
           let sec= 60;
           const timer= setInterval(()=>{
             sec--;
-            setSentSmsTitle(`${t<string>('resent after')} ${sec}s`);
+            setSentSmsTitle(`${t('resent after')} ${sec}s`);
             if(sec===0){
               setCodeSend(false);
               setSentSmsTitle("Sent SMS code");
@@ -119,14 +119,14 @@ const LoginForm : React.FC<IProps>= observer(({login,handleCancel,config,store,u
         onFinish={onLogin}
         style={{padding:"10px"}}
       >
-        <Form.Item label={t<string>("User name / Phone number")} name="userId"
+        <Form.Item label={t("User name / Phone number")} name="userId"
         rules={[{ required: true }]}
         tooltip={ruleMessage.required}>
           <Input       prefix={<FontAwesomeIcon icon={faUserShield} className="site-form-item-icon" />}
           ></Input>
         </Form.Item>
 
-        <Form.Item label={t<string>("Password")} name="password" 
+        <Form.Item label={t("Password")} name="password" 
         rules={[{ required: true }]}
         tooltip={ruleMessage.required}>
         <Input.Password  prefix={<FontAwesomeIcon icon={faKey}/>}
@@ -135,7 +135,7 @@ const LoginForm : React.FC<IProps>= observer(({login,handleCancel,config,store,u
         />
         </Form.Item>
         
-        {enableSMSCode && <Form.Item label={t<string>("SMS Code")} name="code" 
+        {enableSMSCode && <Form.Item label={t("SMS Code")} name="code" 
         rules={[{ required: true }]}
         tooltip={ruleMessage.required}>
         <Space.Compact>

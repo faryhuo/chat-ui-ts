@@ -79,14 +79,14 @@ const Markdown : React.FC<IProps>=observer(({content})=>{
          remarkPlugins={[RemarkMath, RemarkGfm, RemarkBreaks]}
          rehypePlugins={[RehypeRaw,RehypeKatex]}
          components={{
-             code({ node, inline, className, children, ...props }) {
+             code({ node, className, children, ...props }) {
                  const match = /language-(\w+)/.exec(className || '')
                  const { language, activeLang } = getLanguage(String(children))
                  const codeContent=String(children).replace(activeLang?activeLang:language, '');
                  if(match && match[1]==="mermaid"){
                      return <AsyncMermaid code={String(children)}></AsyncMermaid>
                  }
-                 return !inline ? (
+                 return match ? (
                     <div className={`mk-code-content`}>
                     <div className="mk-button-wrapper">
                     <span className="mk-title"></span>
@@ -94,13 +94,13 @@ const Markdown : React.FC<IProps>=observer(({content})=>{
                     <Button type="primary" 
                     onClick={()=>{copy(codeContent)}} icon={<FontAwesomeIcon icon={faCopy} />} size="small" >Copy</Button></span></div>
                      <SyntaxHighlighter
+                          {...props as any}
                          children={String(children).replace(/\n$/, '')}
                          //style={(CodeStyle  as any)[config.codeStyle]} 
                          style={a11yDark as any}
                          language={match?match[1]:"java"}
                          PreTag="div"
-                         {...props}
-                     />
+                     ></SyntaxHighlighter>
                      </div>
                  ) : (
                      <code className={className} {...props}>

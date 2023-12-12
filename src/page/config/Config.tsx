@@ -30,17 +30,17 @@ const ConfigPage:React.FC<IProps> = observer(({config,store})=>{
           </div>
           <div className="config-right-content">
           <Collapse defaultActiveKey={id}>
-            <Panel header={t<string>("Base Configuration")} key="1">
+            <Panel header={t("Base Configuration")} key="1">
             <Card>
               <BaseConfigForm config={config}></BaseConfigForm>
               </Card>
             </Panel>
-            <Panel header={t<string>("Chat Model Setting")} key="2">
+            <Panel header={t("Chat Model Setting")} key="2">
               <Card>
               <ChatConfigForm config={config}></ChatConfigForm>
               </Card>
             </Panel>
-            <Panel header={t<string>("Roles management")} key="4">
+            <Panel header={t("Roles management")} key="4">
               <RoleConfigPage all={false} readonly={false}  config={config} store={store}></RoleConfigPage>
             </Panel>
             <div>

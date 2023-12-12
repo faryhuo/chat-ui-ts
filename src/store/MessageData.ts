@@ -16,10 +16,19 @@ let encodeFun: any
 import('gpt-tokenizer').then(({ encode }) => {
     encodeFun = encode;
 })
+export interface MessageContent {
+    type: string;
+    text?: string;
+    image_url?:{
+        url: string;
+        detail:'low' | 'high' | 'auto'
+    }
+}
+
 
 export interface Ichoices {
     message: {
-        content: string;
+        content: MessageContent[] | string
     }
 }
 
@@ -39,6 +48,7 @@ export interface ISessiondata {
     history?: any;
     currentIndex?: number;
     title?: string;
+    file_ids?:string[];
 }
 
 export interface ISessionMenu {
@@ -67,7 +77,7 @@ export interface ISession {
 
 export interface IMessageListData {
     role: string;
-    content: string;
+    content: MessageContent[] | string;
     name?: string;
     file_ids?:string[]
 }
@@ -128,6 +138,32 @@ export interface IMessage {
     setChatApiConfig: <K extends keyof IChatAPIConfig>(key: K, value: IChatAPIConfig[K]) => void;
 }
 
+
+export function getMessageFromContent(content:MessageContent[] | string){
+    if(typeof content==='string'){
+        return content;
+    }else  if(typeof content==='object'){
+        let result="";
+        for(let i=0;i<content.length;i++){
+            if(content[i].text){
+                result=result+ content[i].text;
+            }else if(content[i].image_url){
+                result=result+ `[Image](${content[i].image_url?.url})`;
+            }
+        }
+        return result;
+    }else{
+        return "";
+    }
+}
+
+export function getMessageFromChoices(choices:Ichoices[] | null){
+    if(!!choices){
+        return getMessageFromContent(choices[0]?.message?.content);
+    }else{
+        return "";
+    }
+}
 
 class MessageData implements IMessage {
 
@@ -368,11 +404,11 @@ class MessageData implements IMessage {
                 isDefault: true
             };
             if (this.type === "chat") {
-                tmp.text = i18n.t<string>("Type something to search on ChatGPT");
+                tmp.text = i18n.t("Type something to search on ChatGPT");
             } else if (this.type === "image") {
-                tmp.text = i18n.t<string>("Type something to generate a image");
+                tmp.text = i18n.t("Type something to generate a image");
             } else if (this.type === "code") {
-                tmp.text = i18n.t<string>("Type the code and your requirement");
+                tmp.text = i18n.t("Type the code and your requirement");
             }
             data.push(tmp)
         }
@@ -677,7 +713,7 @@ class MessageData implements IMessage {
     }
     getModelNameByChatId(chatId: string): string {
         let { session } = this;
-        const sessionMatch = i18n.t<string>(session.find(item => item.chatId === chatId)?.chatConfig?.model as any);
+        const sessionMatch = i18n.t(session.find(item => item.chatId === chatId)?.chatConfig?.model as any);
         if (sessionMatch) {
             return sessionMatch
         } else {
@@ -888,7 +924,10 @@ class MessageData implements IMessage {
     }
 
     callChatAPINotSave(chatId: string) {
-        if (chatConfig.getAPIConfig().stream) {
+        const chatData=this.getChatInfoByChatId(chatId);
+        if(chatData?.chatConfig?.model==="gpt-all-tool"){
+            return this.callAssisantAPI(chatId);
+        }else if (chatConfig.getAPIConfig().stream) {
             return this.callChatAPIByStreamByPost(chatId);
         } else {
             return this.callChatAPIByHttp(chatId)
@@ -1029,7 +1068,7 @@ class MessageData implements IMessage {
 
     _fetchSSEErrorHandle(resolve: (value: unknown) => void, chatId: string) {
         resolve(false);
-        this.appendData(i18n.t<string>("got a unknow exception. please re-try"), chatId);
+        this.appendData(i18n.t("got a unknow exception. please re-try"), chatId);
         this.endStream(chatId);
         this.enableType(chatId);
     }
@@ -1229,12 +1268,44 @@ class MessageData implements IMessage {
     
 
     get systemText() {
-        return this.role ? roleData.getContentByRole(this.role) : i18n.t<string>("Type something to search on ChatGPT")
+        return this.role ? roleData.getContentByRole(this.role) : i18n.t("Type something to search on ChatGPT")
+    }
+
+    getMessageListData4Assistant(): IMessageListData[] {
+        const messages = [];
+        if (this.role) {
+            const contentSys = roleData.getContentByRole(this.role);
+            if (contentSys) {
+                messages.push({
+                    role: "user",
+                    content: contentSys
+                })
+            }
+        }
+        this.data.forEach((item) => {
+            if (item.isDefault) {
+                return true;
+            }
+            if(item.isError){
+                return true;
+            }
+            const msg = { role: "user", content: "",file_ids:item.file_ids?item.file_ids:[] };
+            if (!item.isSys) {
+                if (item.text) {
+                    msg.content = item.text;
+                }
+            }
+            if (msg.content) {
+                messages.push(msg);
+            }
+        });
+        return messages;
     }
 
 
+
     getAssistantParams(chatId:string){
-        let messageListData = this.getMessageListData();
+        let messageListData = this.getMessageListData4Assistant();
 
         
         return {
@@ -1282,7 +1353,7 @@ class MessageData implements IMessage {
         }
         const choices = this.data[this.data.length - 1].choices;
         if (choices && choices.length > 0) {
-            return choices[0]?.message?.content;
+            return getMessageFromContent(choices[0]?.message?.content);
         } else {
             return this.data[this.data.length - 1]?.text;
         }
@@ -1293,12 +1364,67 @@ class MessageData implements IMessage {
         messageListData.forEach(item => {
             tokenNum += 4;
             if (encodeFun != null) {
-                tokenNum += encodeFun(item.content).length;
+                if(typeof item.content==="string"){
+                    tokenNum += encodeFun(item.content).length;
+                }else if(typeof item.content==="object"){
+                    item.content.forEach((contentItem)=>{
+                        if(contentItem.text){
+                            tokenNum += encodeFun(contentItem.text).length;
+                        }else if(contentItem.image_url){
+                            if(contentItem.image_url?.detail==='low'){
+                                tokenNum += 65;
+                            }else{
+                                tokenNum += 129;
+                            }
+                        }
+                    });
+                }
                 tokenNum += encodeFun(item.role).length;
             }
         });
         tokenNum += 2;
         return tokenNum;
+    }
+
+    uploadFile(file: File, chatId: string) {
+        // const formData = new FormData();
+        // formData.append('file', file);
+        // const queryUrl = config.api.uploadFileUrl;
+        // return axios({
+        //     method: "post",
+        //     url: queryUrl,
+        //     headers: {
+        //         'token': userProflie.token,
+        //         'Content-Type': 'multipart/form-data'
+        //     },
+        //     data: formData
+        // }
+        // ).then((response) => {
+        //     const data = response.data;
+        //     if (data.error) {
+        //         this.handleAPIError(data.error, chatId);
+        //         return;
+        //     }
+        //     if (data.data.error) {
+        //         this.handleAPIError(data.data.error, chatId);
+        //         return;
+        //     }
+        //     const url = data.data.url;
+        //     let msg = {
+        //         isSys: false,
+        //         isError:false,
+        //         type: "image",
+        //         image: {
+        //             uri: url,
+        //             width: 256,
+        //             height: 256
+        //         }
+        //     }
+        //     this.addData(msg, chatId);
+        // }
+        //     , (err) => {
+        //         this.handleAPIError(err, chatId);
+        //     });
     }
 
     getMessageListData(): IMessageListData[] {
@@ -1319,23 +1445,12 @@ class MessageData implements IMessage {
             if(item.isError){
                 return true;
             }
-            const msg = { role: "", content: "",file_ids:[] };
+            const msg = { role: "", content: ""};
             if (item.isSys) {
                 msg.role = "assistant";
                 let content = "";
                 if (item.choices && item.choices) {
-                    for (let i = 0; i < item.choices.length; i++) {
-                        if (item.choices[i].message && item.choices[i].message.content) {
-                            content += item.choices[i].message.content;
-                        }
-                    }
-                }else if (item.content && item.content) {
-                    msg.role="user";
-                    for (let i = 0; i < item.content.length; i++) {
-                        if (item.content[i].text && item.content[i].text.value) {
-                            content += item.content[i].text.value;
-                        }
-                    }
+                    msg.content=item.choices[0].message.content as any;
                 }
                 msg.content = content;
             } else {

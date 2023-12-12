@@ -62,7 +62,7 @@ const SignUpForm : React.FC<IProps>= observer(({login,handleCancel,config,store,
     const onSentSMSCode=(e:any)=>{
       userProfile.checkUserIfExisting(userId).then((result)=>{
         if(result===false){
-          fail(t<string>("The phone no. is exsiting, please go to login."));
+          fail(t("The phone no. is exsiting, please go to login."));
           return;
         }
         setCodeSend(true);
@@ -112,7 +112,7 @@ const SignUpForm : React.FC<IProps>= observer(({login,handleCancel,config,store,
         onFinish={onLogin}
         style={{padding:"10px"}}
       >
-        <Form.Item label={t<string>("Phone number")} name="userId"
+        <Form.Item label={t("Phone number")} name="userId"
         rules={[{ required: true }]}
         tooltip={ruleMessage.required}>
           <Input       addonBefore={prefixSelector}
@@ -120,7 +120,7 @@ const SignUpForm : React.FC<IProps>= observer(({login,handleCancel,config,store,
         </Form.Item>
 
 
-        <Form.Item label={t<string>("Password")} name="password" 
+        <Form.Item label={t("Password")} name="password" 
         rules={[{ required: true }]}
         tooltip={ruleMessage.required}>
         <Input.Password  prefix={<FontAwesomeIcon icon={faKey}/>}
@@ -129,25 +129,25 @@ const SignUpForm : React.FC<IProps>= observer(({login,handleCancel,config,store,
         />
         </Form.Item>
 
-        <Form.Item label={t<string>("Re-Password")} name="password2" 
+        <Form.Item label={t("Re-Password")} name="password2" 
         rules={[{ required: true },({ getFieldValue }) => ({
           validator(_, value) {
             if (!value || getFieldValue('password') === value) {
               return Promise.resolve();
             }
             return Promise.reject(
-              new Error(t<string>('The two passwords that you entered do not match!')));
+              new Error(t('The two passwords that you entered do not match!')));
           },
         })]}
         tooltip={ruleMessage.required}>
         <Input.Password  prefix={<FontAwesomeIcon icon={faKey}/>}
-          placeholder={t<string>("re-input password")}
+          placeholder={t("re-input password")}
           visibilityToggle={{ visible: passwordVisible2, onVisibleChange: setPasswordVisible2 }}
         />
         </Form.Item>
 
         
-        <Form.Item label={t<string>("SMS Code")} name="code" 
+        <Form.Item label={t("SMS Code")} name="code" 
         rules={[{ required: true }]}
         tooltip={ruleMessage.required}>
         <Space.Compact>

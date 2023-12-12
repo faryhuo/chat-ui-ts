@@ -102,7 +102,7 @@ const PaintingSquare: React.FC<IProps> = () => {
       {/* <div className="painting-actions">
         <div className="actions-input">
           <Input value={prompt} onChange={(e)=>changePrompt(e.target.value)}
-          placeholder={t<string>("search by prompt")}
+          placeholder={t("search by prompt")}
           allowClear></Input>
         </div>
         <div className="actions-adjust"></div>
@@ -121,10 +121,10 @@ const PaintingSquare: React.FC<IProps> = () => {
               <div key={index} className="painting-square-image-item-wrapper">
                 <Card className="painting-square-image-item"
                   actions={[
-                    <Button icon={<FontAwesomeIcon size='lg' icon={faCopy} />} title={t<string>('copy prompt')}
+                    <Button icon={<FontAwesomeIcon size='lg' icon={faCopy} />} title={t('copy prompt')}
                       className={"image-btn"} type="link" onClick={() => { copyPrompt(item.prompt); }}> </Button>,
                     <Button className={"image-btn"}
-                      onClick={() => imageData.downloadImage(item.urlBig)} type="link" title={t<string>('download')} style={{ 'color': "#209cd9" }}
+                      onClick={() => imageData.downloadImage(item.urlBig)} type="link" title={t('download')} style={{ 'color': "#209cd9" }}
                       icon={<FontAwesomeIcon icon={faCloudArrowDown} size='lg' />}></Button>,
                     <Button className={"image-btn"}
                       type="link"

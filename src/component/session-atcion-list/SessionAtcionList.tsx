@@ -71,8 +71,8 @@ const SessionAtcionList: React.FC<IProps> = observer(({ store, config, onOpen })
       title={t('Message')}
       description={t('Are you want to delete the chat.')}
       onConfirm={(e) => clear(e)}
-      okText={t<string>("Yes")}
-      cancelText={t<string>("No")}
+      okText={t("Yes")}
+      cancelText={t("No")}
     >
       <Button
         icon={<FontAwesomeIcon icon={faTrashCan} />} size="small" />

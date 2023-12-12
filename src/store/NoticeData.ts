@@ -37,7 +37,7 @@ class NoticeData implements INoticeData {
 
     addSuccessMessage(msg:string){
         const message:INoticeMessage={
-            content:i18n.t<string>(msg),
+            content:i18n.t(msg),
             type:"success",
             date:new Date(),
             isRead:false
@@ -47,7 +47,7 @@ class NoticeData implements INoticeData {
 
     addErrorMessage(msg:string){
         const message:INoticeMessage={
-            content:i18n.t<string>(msg),
+            content:i18n.t(msg),
             type:"error",
             date:new Date(),
             isRead:false

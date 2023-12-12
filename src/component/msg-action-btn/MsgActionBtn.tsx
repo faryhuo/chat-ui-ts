@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlay, faRefresh, faStop } from '@fortawesome/free-solid-svg-icons'
 import { observer } from "mobx-react-lite";
-import { IMessage, ISessiondata } from '../../store/MessageData';
+import { IMessage, ISessiondata, getMessageFromContent } from '../../store/MessageData';
 import './MsgActionBtn.css';
 import { isMobile } from 'react-device-detect';
 type IProps = {
@@ -30,7 +30,7 @@ const MsgActionBtn: React.FC<IProps> = observer(({ store, item, index }) => {
 
   const handlePlay = () => {
     if (!audioSrc && item.choices && item.choices.length > 0) {
-      let audio = store.speech(item.choices[0]?.message?.content, voice)
+      let audio = store.speech(getMessageFromContent(item.choices[0]?.message?.content), voice)
       setIsPlaying(!isPlaying);
       setAudioSrc(audio);
     }
@@ -50,7 +50,7 @@ const MsgActionBtn: React.FC<IProps> = observer(({ store, item, index }) => {
           {isSlowRegenerateBtn() ? <Button onClick={store.regenerateResponse}
             icon={<FontAwesomeIcon icon={faRefresh} style={{ marginRight: 5 }}></FontAwesomeIcon>}>
             {t('Regenerate')}</Button> : <Button style={item.hasShowDetails === true ? {} : { "display": "none" }} type="link" className="msg-link-btn" onClick={showDetails}>
-            {item.isDetails === false ? t('Show All') : t<string>("Hide")}
+            {item.isDetails === false ? t('Show All') : t("Hide")}
           </Button>}
         </div>
       </div>

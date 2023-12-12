@@ -15,7 +15,7 @@ const ChatConfigList: React.FC<IProps> = observer(({ store, open, onClose }) => 
 
   return (<div>
     <Drawer
-      title={t<string>("API configuration")}
+      title={t("API configuration")}
       placement="right"
       closable={false}
       onClose={onClose}

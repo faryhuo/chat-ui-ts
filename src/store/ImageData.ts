@@ -369,13 +369,13 @@ class ImageData implements IImageData {
     }
 
     showErrorMsg(globalMessageApi:MessageInstance,msg:string){
-        const message=i18n.t<string>(msg);
+        const message=i18n.t(msg);
         globalMessageApi.error(message,5);
         noticeData.addErrorMessage(message)
     }
     
     showSuccessMsg(globalMessageApi:MessageInstance,msg:string){
-        const message=i18n.t<string>(msg);
+        const message=i18n.t(msg);
         globalMessageApi.success(message,5);
         noticeData.addSuccessMessage(message)
     }

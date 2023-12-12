@@ -97,8 +97,8 @@ const ChatList: React.FC<IProps> = ({ store,userProflie }) => {
           description={t('Are you want to delete the chat.')}
           onConfirm={(e) => clear(item.key, e)}
           onCancel={(e) => e?.stopPropagation()}
-          okText={t<string>("Yes")}
-          cancelText={t<string>("No")}
+          okText={t("Yes")}
+          cancelText={t("No")}
         >
           <Button onClick={(e) => e.stopPropagation()} className="chat-session-action-button"
             icon={<FontAwesomeIcon icon={faTrashCan} />} size={buttonSize}
@@ -174,8 +174,8 @@ const ChatList: React.FC<IProps> = ({ store,userProflie }) => {
     title={t('Message')}
     description={t('Are you want to clear the history.')}
     onConfirm={clearHistory}
-    okText={t<string>("Yes")}
-    cancelText={t<string>("No")}
+    okText={t("Yes")}
+    cancelText={t("No")}
   >
 
   <Button size='small' style={{width:'100%'}} icon={<FontAwesomeIcon icon={faTrashCan} />}>
@@ -199,7 +199,7 @@ const ChatList: React.FC<IProps> = ({ store,userProflie }) => {
       <ModelAmount></ModelAmount>
       <Modal
         open={open}
-        title={t<string>("Share History")}
+        title={t("Share History")}
         onCancel={handleCancel}
         footer={false}
         destroyOnClose={true}

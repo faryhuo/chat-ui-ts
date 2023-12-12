@@ -59,7 +59,7 @@ const Payment:React.FC<IProps> = ()=>{
            labelCol={{ span: 8 }}
            wrapperCol={{ span: 16 }}
          >
-           <Form.Item label={t<string>("Goods")} rules={[{ required: true }]}
+           <Form.Item label={t("Goods")} rules={[{ required: true }]}
              name="goods"  >
               <ModelSelector isPayment={true}></ModelSelector>
            </Form.Item>
@@ -68,12 +68,12 @@ const Payment:React.FC<IProps> = ()=>{
             <label>{t('Price : ')}{chatConfig.getCallTimerPrice(goods)}{t('/count')}</label>
            </Form.Item>
 
-           <Form.Item label={t<string>("count")} rules={[{ required: true }]}
+           <Form.Item label={t("count")} rules={[{ required: true }]}
              name="num">
               <InputNumber min={1} max={1000}  step={1}/>
            </Form.Item>
  
-           <Form.Item label={t<string>("pay method")} rules={[{ required: true }]}
+           <Form.Item label={t("pay method")} rules={[{ required: true }]}
              name="type">
              <Radio.Group>
                <Radio key={1} value="zhifubao">{t('zhifubao')}</Radio>

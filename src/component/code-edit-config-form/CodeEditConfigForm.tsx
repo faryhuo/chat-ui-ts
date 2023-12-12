@@ -28,7 +28,7 @@ const CodeEditConfigForm : React.FC<IProps> = ({config})=>{
     const success = () => {
       messageApi.open({
         type: 'success',
-        content: t<string>('Updated success'),
+        content: t('Updated success'),
       });
     };
 
@@ -54,18 +54,18 @@ const CodeEditConfigForm : React.FC<IProps> = ({config})=>{
         style={{padding:"10px"}}        
         initialValues={config.getCodeEditConfig()}
       >
-        <Form.Item label={t<string>("Model")} name="model" tooltip={t<string>("which models work with the Chat API.")}>
+        <Form.Item label={t("Model")} name="model" tooltip={t("which models work with the Chat API.")}>
               <Select
                 options={chatModelList.map((item) => ({ label: item, value: item }))}
               />
         </Form.Item>
 
-        <Form.Item label={t<string>("temperature")} name="temperature" 
-        tooltip={t<string>("What sampling temperature to use, between 0 and 2. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic.We generally recommend altering this or top_p but not both.")}>
+        <Form.Item label={t("temperature")} name="temperature" 
+        tooltip={t("What sampling temperature to use, between 0 and 2. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic.We generally recommend altering this or top_p but not both.")}>
           <InputNumber min={0} max={2}></InputNumber>
         </Form.Item>
 
-        <Form.Item label={t<string>("top_p")} name="top_p" tooltip={t<string>("An alternative to sampling with temperature, called nucleus sampling, where the model considers the results of the tokens with top_p probability mass. So 0.1 means only the tokens comprising the top 10% probability mass are considered. We generally recommend altering this or temperature but not both.")} >
+        <Form.Item label={t("top_p")} name="top_p" tooltip={t("An alternative to sampling with temperature, called nucleus sampling, where the model considers the results of the tokens with top_p probability mass. So 0.1 means only the tokens comprising the top 10% probability mass are considered. We generally recommend altering this or temperature but not both.")} >
           <InputNumber min={0} max={2} ></InputNumber>
         </Form.Item>
 

@@ -104,7 +104,7 @@ const SendButton: React.FC<IProps> = observer(({ store, config, setBtnHeight }) 
     <Space.Compact style={{ width: '100%' }}>
       <TextArea
         value={message}
-        placeholder={t<string>("Type here... (Shift + Enter = Line break)") as string}
+        placeholder={t("Type here... (Shift + Enter = Line break)") as string}
         size="large"
         onChange={(e) => typeMsg(e)}
         autoSize={{ minRows: minRow, maxRows: 8 }}

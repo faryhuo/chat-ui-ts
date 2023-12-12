@@ -64,8 +64,8 @@ const RoleList: React.FC<IProps> = observer(({ config, role, store, edit, readon
       description={t('Are you want to delete the role.')}
       onConfirm={(e) => onDelete(role.roleId)}
       onCancel={(e) => e?.stopPropagation()}
-      okText={t<string>("Yes")}
-      cancelText={t<string>("No")}
+      okText={t("Yes")}
+      cancelText={t("No")}
     >
       <Button shape="circle" icon={<FontAwesomeIcon icon={faTrash} />} />
     </Popconfirm>}

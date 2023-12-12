@@ -98,7 +98,7 @@ const RoleList:React.FC<IProps> = observer(({config,store,readonly,all})=>{
     onChange={(e)=>{changeTag(e.target.value)}}>
       {
         roleData.getCurrentTags(all).map((tag,index)=>(
-          <Radio.Button  key={index} value={tag}>{t<string>("tags."+tag)}</Radio.Button>)
+          <Radio.Button  key={index} value={tag}>{t("tags."+tag)}</Radio.Button>)
         )
       }
     </Radio.Group>
