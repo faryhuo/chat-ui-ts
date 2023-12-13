@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import { Button, Pagination, Select, Space } from 'antd';
+import { Button, Pagination, Space, message } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlay, faRefresh, faStop } from '@fortawesome/free-solid-svg-icons'
+import { faCopy, faDeleteLeft, faPlay, faRefresh, faStop } from '@fortawesome/free-solid-svg-icons'
 import { observer } from "mobx-react-lite";
-import { IMessage, ISessiondata, getMessageFromContent } from '../../store/MessageData';
+import { IMessage, ISessiondata, getMessageFromChoices } from '../../store/MessageData';
 import './MsgActionBtn.css';
 import { isMobile } from 'react-device-detect';
+import copy from 'copy-to-clipboard';
 type IProps = {
   store: IMessage;
   item: ISessiondata;
@@ -17,6 +18,7 @@ const MsgActionBtn: React.FC<IProps> = observer(({ store, item, index }) => {
   const { t } = useTranslation();
   const [audioSrc, setAudioSrc] = useState('');
   const [voice, setVoice] = useState('alloy');
+  const [messageApi, contextHolder] = message.useMessage();
 
   const [isPlaying, setIsPlaying] = useState(false);
 
@@ -30,11 +32,18 @@ const MsgActionBtn: React.FC<IProps> = observer(({ store, item, index }) => {
 
   const handlePlay = () => {
     if (!audioSrc && item.choices && item.choices.length > 0) {
-      let audio = store.speech(getMessageFromContent(item.choices[0]?.message?.content), voice)
+      store.speech(item, voice)
+      .then((audio) => {
+        setAudioSrc(audio);
+      })
       setIsPlaying(!isPlaying);
-      setAudioSrc(audio);
     }
   };
+
+  const copyText=()=>{
+    copy(getMessageFromChoices(item.choices));
+    messageApi.success(t('Copied'));
+  }
 
 
   return (
@@ -47,13 +56,36 @@ const MsgActionBtn: React.FC<IProps> = observer(({ store, item, index }) => {
             style={{ marginBottom: 5 }}
             current={(item.currentIndex ? item.currentIndex : 0) + 1} onChange={(page) => { store.changeMessage(index, page - 1) }} />
             : <></>}</div><div className="msg-sent-btn">
-          {isSlowRegenerateBtn() ? <Button onClick={store.regenerateResponse}
-            icon={<FontAwesomeIcon icon={faRefresh} style={{ marginRight: 5 }}></FontAwesomeIcon>}>
-            {t('Regenerate')}</Button> : <Button style={item.hasShowDetails === true ? {} : { "display": "none" }} type="link" className="msg-link-btn" onClick={showDetails}>
+          {isSlowRegenerateBtn() ?<div className='msg-item-buttons'>
+            <Button onClick={store.regenerateResponse} shape='circle' size='small'
+            icon={<FontAwesomeIcon icon={faRefresh}></FontAwesomeIcon> }>
+            </Button>
+            <Button onClick={copyText} shape='circle' size='small'
+            icon={<FontAwesomeIcon icon={faCopy}></FontAwesomeIcon> }>
+            </Button>
+            {!isPlaying ? <Button
+            shape="circle"
+            onClick={() => handlePlay()}
+            size="small" icon={<FontAwesomeIcon icon={faPlay}></FontAwesomeIcon>}></Button> :
+            <Button
+              shape="circle"
+              onClick={() => { setAudioSrc(''); setIsPlaying(false) }}
+              size="small" icon={<FontAwesomeIcon icon={faStop}></FontAwesomeIcon>}></Button>}
+            <Button   shape='circle' size='small'
+            icon={<FontAwesomeIcon icon={faDeleteLeft}></FontAwesomeIcon> }>
+            </Button>
+            </div>  : <Button style={item.hasShowDetails === true ? {} : { "display": "none" }} type="link" className="msg-link-btn" onClick={showDetails}>
             {item.isDetails === false ? t('Show All') : t("Hide")}
           </Button>}
         </div>
       </div>
+      <>
+      {contextHolder}
+      {audioSrc && <div style={{ display: isMobile ? 'none' : 'block' }}>
+          <Space wrap>
+            <audio src={audioSrc} controls={true} autoPlay={isPlaying} />
+          </Space>
+        </div>}</>
       {/* {item.choices && item.choices.length > 0 && <div>
         <Space wrap>
           音色:

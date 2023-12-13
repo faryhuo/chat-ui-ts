@@ -1,0 +1,8 @@
+.message-item-action-buttons{
+    padding: 10px;
+    position: absolute;
+    bottom: -35px;
+}
+.message-item-action-buttons button{
+    margin: 0 5px;
+}

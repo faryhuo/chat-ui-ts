@@ -14,7 +14,7 @@ import ChatConfigList from '../chat-config-list/ChatConfigList'
 type IProps = {
   config: IAppConfig;
   store: IMessage;
-  renderMessage: (item: ISessiondata, type: string, key: number) => JSX.Element;
+  renderMessage: (item: ISessiondata) => JSX.Element;
 }
 const { TextArea } = Input;
 
@@ -104,7 +104,7 @@ const messageItem2: React.FC<IProps> = observer(({ store, config, renderMessage 
                 spellCheck={true}
                 allowClear
               />
-                : renderMessage(item, store.type, key)}</div>
+                : renderMessage(item)}</div>
             </List.Item>
           })}
         </List>

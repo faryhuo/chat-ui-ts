@@ -30,3 +30,6 @@
     padding: 0;
     margin-right: 0;
 }
+.msg-item-buttons button{
+    margin-right:5px;
+}

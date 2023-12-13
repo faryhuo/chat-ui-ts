@@ -14,12 +14,11 @@ import {throttle} from '../../utils/CommonUtils'
 type IProps={
   config:IAppConfig;
   store:IMessage;
-  renderMessage:(item:ISessiondata,type:string,key:number)=> JSX.Element;
+  renderMessage:(item:ISessiondata)=> JSX.Element;
 }
 
 
 const scrollMessage=(messagesEndRef:any,open:boolean)=>{
-  console.log("scroll")
   if(messagesEndRef && messagesEndRef.current && open===false){
     messagesEndRef.current.scrollIntoView();
   }
@@ -54,8 +53,8 @@ const MessageItemChat : React.FC<IProps> = observer(({store,config,renderMessage
       <ScrollToBottom >
         <div>
           {store.data.map((item,key)=>{
-          return item.isSys?(<MessageItem index={key} store={store} item={item} type={"system"} key={key} content={renderMessage(item,store.type,key)}></MessageItem>):
-          (<MessageItem store={store} type={"user"} key={key} index={key}  text={item.text} content={renderMessage(item,store.type,key)}></MessageItem>)
+          return item.isSys?(<MessageItem index={key} store={store} item={item} type={"system"} key={key} content={renderMessage(item)}></MessageItem>):
+          (<MessageItem store={store} type={"user"} key={key} index={key}  text={item.text} content={renderMessage(item)}></MessageItem>)
           })}
           </div>
           <div ref={messagesEndRef}/>

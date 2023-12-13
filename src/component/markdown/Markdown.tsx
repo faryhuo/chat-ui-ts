@@ -1,6 +1,6 @@
 import ReactMarkdown from 'react-markdown';//引入
 import RemarkGfm from 'remark-gfm';// 划线、表、任务列表和直接url等的语法扩展
-import RehypeRaw from 'rehype-raw'// 解析标签，支持html语法
+// import RehypeRaw from 'rehype-raw'// 解析标签，支持html语法
 import RehypeKatex from "rehype-katex";//支持数学公式
 import RemarkMath from "remark-math";
 import RemarkBreaks from "remark-breaks";
@@ -71,28 +71,31 @@ const Markdown : React.FC<IProps>=observer(({content})=>{
 
     const AsyncMermaid = asyncComponent(() => import ("../mermaid/Mermaid"));
 
+    const copyCode=(content:string)=>{
+        const { language, activeLang } = getLanguage(content)
+         const codeContent=content.replace(activeLang?activeLang:language, '');
+         copy(codeContent)
+    }
  
     return(
         <ReactMarkdown
          className='markdown-body'
          children={content}
          remarkPlugins={[RemarkMath, RemarkGfm, RemarkBreaks]}
-         rehypePlugins={[RehypeRaw,RehypeKatex]}
+         rehypePlugins={[RehypeKatex]}
          components={{
              code({ node, className, children, ...props }) {
                  const match = /language-(\w+)/.exec(className || '')
-                 const { language, activeLang } = getLanguage(String(children))
-                 const codeContent=String(children).replace(activeLang?activeLang:language, '');
                  if(match && match[1]==="mermaid"){
                      return <AsyncMermaid code={String(children)}></AsyncMermaid>
                  }
-                 return match ? (
+                 return (match && match[1]) ? (
                     <div className={`mk-code-content`}>
                     <div className="mk-button-wrapper">
                     <span className="mk-title"></span>
                     <span className="mk-copy-button">
                     <Button type="primary" 
-                    onClick={()=>{copy(codeContent)}} icon={<FontAwesomeIcon icon={faCopy} />} size="small" >Copy</Button></span></div>
+                    onClick={()=>{copyCode(String(children))}} icon={<FontAwesomeIcon icon={faCopy} />} size="small" >Copy</Button></span></div>
                      <SyntaxHighlighter
                           {...props as any}
                          children={String(children).replace(/\n$/, '')}

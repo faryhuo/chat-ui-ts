@@ -32,6 +32,7 @@ class RoleData implements IRoleData {
     roles: IRole[] = [];
     currentTag = favorite;
 
+    
 
     constructor() {
         makeObservable(this, {
@@ -39,10 +40,22 @@ class RoleData implements IRoleData {
             filterBy: observable,
             currentTag: observable,
             search: action,
+            setRoles:action,
+            setRole:action,
             fetchData: action.bound
         })
         //this.loadRolesInLocal();
         this.fetchData();
+    }
+
+    setRoles(roles:IRole[]){
+        this.roles=roles;
+    }
+
+    setRole<K extends keyof IRole>(index:number,key: K, value: IRole[K]){
+        if(this.roles[index]){
+            this.roles[index][key]=value;
+        }
     }
 
     filterBy = "";
@@ -205,7 +218,7 @@ class RoleData implements IRoleData {
             if (response.data) {
                 const data = response.data;
                 if (data.data) {
-                    this.roles = data.data;
+                    this.setRoles(data.data);
                     this.fetchFavorite();
                 }
             }
@@ -230,8 +243,8 @@ class RoleData implements IRoleData {
                 const data = response.data;
                 if (data.data) {
                     const arr: number[] = data.data;
-                    this.roles.forEach(item => {
-                        item.favorite = arr.includes(item.roleId);
+                    this.roles.forEach((item,index) => {
+                        this.setRole(index,"favorite",arr.includes(item.roleId));
                     })
                 }
             }

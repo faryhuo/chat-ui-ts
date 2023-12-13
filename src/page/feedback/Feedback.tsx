@@ -19,8 +19,6 @@ const Feedback: React.FC<IProps> = () => {
   const submit = () => {
     form.validateFields().then(() => {
       const requestJson = form.getFieldsValue();
-      console.log(requestJson);
-
       fetch(apiSetting.feedbackUrl, {
         method: 'post',
         headers: {

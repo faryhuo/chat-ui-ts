@@ -401,7 +401,6 @@ class ImageData implements IImageData {
                     onmessage(msg) {
                         let responseData = msg.data;
                         if(responseData){
-                            console.log(responseData);
                             const data=JSON.parse(responseData);
                             const taskId=data.task_id;
                             if(data.code && data.detail){

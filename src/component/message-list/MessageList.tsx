@@ -18,7 +18,7 @@ type IProps = {
 class MessageList extends Component<IProps> {
 
 
-    renderMessage(item: ISessiondata, type: string, key: number) {
+    renderMessage(item: ISessiondata) {
         const classs = classNames({ "chat-row": true, "chat-row-hide": item?.isDetails === false && item?.hasShowDetails === true });
         if (item.text) {
             return <div className={classs}><pre style={{ maxWidth: 700, margin: 0, whiteSpace: 'break-spaces' }}>{item.text}</pre>
@@ -97,7 +97,7 @@ class MessageList extends Component<IProps> {
         const props = {
             store,
             config,
-            renderMessage: (item: any, type: any, key: any) => { return this.renderMessage(item, type, key) }
+            renderMessage: (item: ISessiondata) => { return this.renderMessage(item) }
 
         }
         if (this.props.config.style === "chat") {

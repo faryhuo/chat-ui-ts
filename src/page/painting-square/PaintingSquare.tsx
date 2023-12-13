@@ -20,8 +20,6 @@ const PaintingSquare: React.FC<IProps> = () => {
   const [offset, setOffset] = useState<number>(0);
   const [messageApi, contextHolder] = message.useMessage();
   const { t } = useTranslation();
-  const [prompt, setPrompt] = useState<string>("");
-  // const [timeoutObj, setTimeoutObj] = useState<any>(null);
 
   const pageSize = 30;
   const loadMoreData = () => {
@@ -29,7 +27,7 @@ const PaintingSquare: React.FC<IProps> = () => {
       return;
     }
     setLoading(true);
-    fetch(`${apiSetting.imageSharingUrl}?offset=${offset}&pageSize=${pageSize}&prompt=${decodeURI(prompt)}`)
+    fetch(`${apiSetting.imageSharingUrl}?offset=${offset}&pageSize=${pageSize}}`)
       .then((res) => { return res.json() })
       .then((body) => {
         setTotal(body.data.total);
@@ -99,14 +97,6 @@ const PaintingSquare: React.FC<IProps> = () => {
 
   return (
     <div className="painting-square-page" id="scrollableDiv">
-      {/* <div className="painting-actions">
-        <div className="actions-input">
-          <Input value={prompt} onChange={(e)=>changePrompt(e.target.value)}
-          placeholder={t("search by prompt")}
-          allowClear></Input>
-        </div>
-        <div className="actions-adjust"></div>
-      </div> */}
       <InfiniteScroll
         dataLength={data.length}
         next={() => { loadMoreData() }}

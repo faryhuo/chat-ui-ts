@@ -13,9 +13,11 @@ import apiSetting from "./APISetting";
 import userModelLimit from "./UserModelLimit";
 
 let encodeFun: any
-import('gpt-tokenizer').then(({ encode }) => {
-    encodeFun = encode;
-})
+setTimeout(()=>{
+    import('gpt-tokenizer').then(({ encode }) => {
+        encodeFun = encode;
+    })
+},2000)
 export interface MessageContent {
     type: string;
     text?: string;
@@ -49,6 +51,7 @@ export interface ISessiondata {
     currentIndex?: number;
     title?: string;
     file_ids?:string[];
+    audioId?:string;
 }
 
 export interface ISessionMenu {
@@ -134,7 +137,7 @@ export interface IMessage {
     changeTypeByUrl: (location: Location) => void;
     share: (node: any) => Promise<void>;
     chatApiConfig: IChatAPIConfig;
-    speech:(msg:string,voice:string)=>any;
+    speech:(item:ISessiondata,voice:string)=>Promise<string>;
     setChatApiConfig: <K extends keyof IChatAPIConfig>(key: K, value: IChatAPIConfig[K]) => void;
 }
 
@@ -214,6 +217,7 @@ class MessageData implements IMessage {
             const token=window.location.pathname.replace("/token/","");
             localStorage[USER_TOKEN_KEY]=token;
             window.location.pathname="/chat";
+            return;
         }
         if (localStorage[USER_TOKEN_KEY]) {
             userProflie.token = localStorage[USER_TOKEN_KEY];
@@ -233,8 +237,38 @@ class MessageData implements IMessage {
         this.historyResult=null;
     }
 
-    speech(msg:string,voice:string){
-        const apiUrl = `${apiSetting.audioUrl}?input=${encodeURI(msg)}&voice=${voice?voice:'alloy'}`;
+    createSpeech(msg:string,voice:string ):Promise<string>{
+        const params={
+            input:msg,
+            voice:voice?voice:'alloy'
+        };
+        const apiUrl = `${apiSetting.audioUrl}`;
+        return fetch(apiUrl,{
+            method:"post",
+            headers:{
+                "content-type": "application/json"
+            },
+            body:JSON.stringify(params)
+        }).then((response)=>{
+            return response.json()
+        }).then((data)=>{
+            return data.data;
+        })
+        
+    }
+
+    async speech(item:ISessiondata,voice:string):Promise<string>{
+        const msg=getMessageFromChoices(item.choices);
+        let msgId="";
+        if(item  && item.audioId){
+            msgId=item.audioId;
+        }else{
+            msgId=await this.createSpeech(msg,voice);
+            if(item && msgId){
+                item.audioId=msgId;
+            }
+        }
+        const apiUrl = `${apiSetting.audioUrl}?msgId=${encodeURI(msgId)}`;
         return apiUrl;
     }
 
