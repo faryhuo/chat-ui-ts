@@ -40,6 +40,7 @@ class APISetting implements IAPISetting {
     chatUrl = `${this.host}/${this.chatServiceName}/chat/v2/info`;
     chatStreamUrl = `${this.host}/${this.chatServiceName}/chat/v2/stream`;
     audioUrl = `${this.host}/${this.chatServiceName}/audio/speech`;
+    transcriptionsUrl = `${this.host}/${this.chatServiceName}/audio/transcriptions`;
 
     imageUrl = `${this.host}/${this.chatServiceName}/image/v2/info`;
     editsUrl = `${this.host}/${this.chatServiceName}/edits/v2/info`;

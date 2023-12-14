@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import './SendButton.css'
 import { IAppConfig } from '../../store/AppConfig';
 import { IMessage } from '../../store/MessageData';
+import {  getMediaStream, playAudio, stopAudio } from '../../utils/AudioUtils';
 
 type IProps = {
   config: IAppConfig;
@@ -24,41 +25,43 @@ const SendButton: React.FC<IProps> = observer(({ store, config, setBtnHeight }) 
   const [minRow, setMinRow] = useState(2);
 
   const [isStart, setStart] = useState(false);
-  const { iatRecorder } = config;
+
   const { t } = useTranslation();
   const btnRef = useRef(null);
   const resizeHeight = () => {
     setBtnHeight((btnRef?.current as any)?.getBoundingClientRect()?.height + 5);
 
   }
+  const [audioObj, setAudioObj] = useState(null);
+  const [timeObj, setTimeobj] = useState(null);
 
-  let timeObj: string | number | NodeJS.Timeout | undefined;
+
+  const closeAudio=()=>{
+    stopAudio(audioObj);
+    setStart(false);
+    setAudioObj(null);
+  }
+
   const convertMsg = () => {
+
     if (isStart) {
-      clearTimeout(timeObj);
-      iatRecorder.stop();
-      //AuditUtils.stop();
-      setStart(false);
+      if(timeObj){
+        clearTimeout(timeObj);
+        setTimeobj(null);
+      }
+      closeAudio();
     } else {
       setStart(true);
-      iatRecorder.start();
-      //AuditUtils.start();
-      timeObj = setTimeout(() => {
-        iatRecorder.stop();
-        //AuditUtils.stop();
-        setStart(false);
-      }, 60000);
+      getMediaStream().then((stream)=>{
+        setAudioObj(stream);
+        playAudio(stream,(data)=>{
+          //setMessage(data.text);
+          sentMsgToChat(data.text);
+        },closeAudio)
+      })
     }
+    
   }
-
-
-  iatRecorder.onTextChange = (text: string) => {
-    if (store.isType) {
-      setMessage(text);
-    }
-  }
-
-
 
   const sendMsg = (event: any) => {
     if (event.shiftKey && event.keyCode === 13) {
@@ -71,10 +74,12 @@ const SendButton: React.FC<IProps> = observer(({ store, config, setBtnHeight }) 
       return;
     }
     if (isStart) {
-      clearTimeout(timeObj);
-      iatRecorder.stop();
-      setStart(false);
+      return;
     }
+    sentMsgToChat(message)
+  }
+
+  const sentMsgToChat=(message)=>{
     let chatId = store.activeSession + "";
     chatId = store.checkChatId(chatId);
     store.addData({

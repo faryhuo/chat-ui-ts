@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Button, Pagination, Space, message } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -14,6 +14,7 @@ type IProps = {
   index: number;
 }
 const MsgActionBtn: React.FC<IProps> = observer(({ store, item, index }) => {
+  const audioRef : any = useRef(null);
 
   const { t } = useTranslation();
   const [audioSrc, setAudioSrc] = useState('');
@@ -31,10 +32,14 @@ const MsgActionBtn: React.FC<IProps> = observer(({ store, item, index }) => {
   }
 
   const handlePlay = () => {
-    if (!audioSrc && item.choices && item.choices.length > 0) {
+    if (item.choices && item.choices.length > 0) {
       store.speech(item, voice)
       .then((audio) => {
-        setAudioSrc(audio);
+        if(audioSrc===audio){
+          audioRef.current?.play();
+        }else{
+          setAudioSrc(audio);
+        }
       })
       setIsPlaying(!isPlaying);
     }
@@ -81,9 +86,9 @@ const MsgActionBtn: React.FC<IProps> = observer(({ store, item, index }) => {
       </div>
       <>
       {contextHolder}
-      {audioSrc && <div style={{ display: isMobile ? 'none' : 'block' }}>
+      {audioSrc && <div style={{ display: isMobile ? 'none' : 'none' }}>
           <Space wrap>
-            <audio src={audioSrc} controls={true} autoPlay={isPlaying} />
+            <audio ref={audioRef} src={audioSrc} controls={true} autoPlay={isPlaying} onEnded={()=>{setIsPlaying(false)}}/>
           </Space>
         </div>}</>
       {/* {item.choices && item.choices.length > 0 && <div>
