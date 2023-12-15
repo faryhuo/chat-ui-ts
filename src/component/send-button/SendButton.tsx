@@ -176,10 +176,10 @@ const SendButton: React.FC<IProps> = observer(({ store, config, setBtnHeight }) 
   return (<div ref={btnRef}>
     <Space.Compact style={{ width: '100%' }}>
       <div className="upload-btn-wrapper">
-      <Button className='upload-btn'  disabled={store.isType===false}  shape="circle"
+      {/* <Button className='upload-btn'  disabled={store.isType===false}  shape="circle"
           icon={
             <Upload store={store} config={config}   ></Upload>
-          }/>
+          }/> */}
       </div>
       {inputModel==='keyborad'?<TextArea
         value={message}
@@ -195,6 +195,8 @@ const SendButton: React.FC<IProps> = observer(({ store, config, setBtnHeight }) 
         {isStart && <span className='recorder-timer'><FontAwesomeIcon icon={faRecordVinyl}/>{recordStartime && recordEndTime && secondsToHMS(recordEndTime.getTime()-recordStartime.getTime())}</span>}
       <Button size='large' icon={<FontAwesomeIcon size='lg' icon={faMicrophone}/>} 
       onMouseDown={handleMouseDown}
+      onTouchStart={handleMouseDown}
+      onTouchEnd={handleMouseUp}
       onMouseUp={handleMouseUp}
       // onMouseLeave={handleMouseUp} // 处理鼠标在按钮上按住然后离开按钮的情况
       style={{width:'100%',height:'65px',color:isStart?'red':'black'}} 
