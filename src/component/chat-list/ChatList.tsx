@@ -113,7 +113,7 @@ const ChatList: React.FC<IProps> = ({ store,userProflie }) => {
       {!item.edit ? (
         <Link className="session-item-link" to={`/${store.type}/${item.key}`}>
           <div className="icon">
-            <Avatar src={icon} />
+            {/* <Avatar src={icon} /> */}
           </div>
           <div className="content">
             <div className="session-name">{item.name}</div>
