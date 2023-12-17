@@ -1,14 +1,14 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { observer } from "mobx-react-lite";
 import { useState } from 'react';
-import { Input, Space, Button } from 'antd';
+import { Input, Space, Button,message as messageApi } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPaperPlane, faBroom, faMicrophone, faThumbTack, faRecordVinyl, faKeyboard } from '@fortawesome/free-solid-svg-icons'
 import { useTranslation } from 'react-i18next';
 import './SendButton.css'
 import { IAppConfig } from '../../store/AppConfig';
 import { IMessage } from '../../store/MessageData';
-import {  getMediaStream, playAudio, stopAudio } from '../../utils/AudioUtils';
+import {  fetchAudio, getMediaStream, playAudio, stopAudio } from '../../utils/AudioUtils';
 import Upload from '../upload/Upload';
 
 type IProps = {
@@ -23,7 +23,7 @@ const { TextArea } = Input;
 const SendButton: React.FC<IProps> = observer(({ store, config, setBtnHeight }) => {
   const [message, setMessage] = useState("");
   const [minRow, setMinRow] = useState(2);
-
+  const [messageFun, contextHolder] = messageApi.useMessage();
   const [isStart, setStart] = useState(false);
 
   const { t } = useTranslation();
@@ -45,35 +45,13 @@ const SendButton: React.FC<IProps> = observer(({ store, config, setBtnHeight }) 
     setAudioObj(null);
   }
 
-  const convertMsg = () => {
-
-    if (isStart) {
-      if(timeObj){
-        clearTimeout(timeObj);
-        setTimeobj(null);
-      }
-      clearInterval(timerObj);
-      closeAudio();
-    } else {
-      setRecordStartime(new Date());
-      setStart(true);
-      timerObj=setInterval(()=>{
-        setRecordEndTime(new Date());
-      },100)
-      getMediaStream().then((stream)=>{
-        setAudioObj(stream);
-        playAudio(stream,(data)=>{
-          //setMessage(data.text);
-          if(data.text){
-            sentMsgToChat(data.text);
-          }else{
-
-          }
-        },closeAudio)
-      })
+  const getDuringTime=()=>{
+    if(!recordEndTime || !recordStartime){
+      return 0;
     }
-    
+    return recordEndTime.getTime()-recordStartime.getTime()
   }
+
 
 
   // const playAudio=()=>{
@@ -154,6 +132,35 @@ const SendButton: React.FC<IProps> = observer(({ store, config, setBtnHeight }) 
     })
   }
 
+  useEffect(()=>{
+    if (!isStart) {
+      if(timeObj){
+        clearTimeout(timeObj);
+        setTimeobj(null);
+      }
+      clearInterval(timerObj);
+      closeAudio();
+    } else {
+      setRecordStartime(new Date());
+      if(timerObj===null){
+        timerObj=setInterval(()=>{
+          setRecordEndTime(new Date());
+        },100)
+      }
+      getMediaStream().then((stream)=>{
+        setAudioObj(stream);
+        playAudio(stream,messageFun.error,(data)=>{
+          //setMessage(data.text);
+          if(data.text){
+            sentMsgToChat(data.text);
+          }else{
+
+          }
+        },closeAudio)
+      })
+    }
+  },[isStart])
+
   const typeMsg = (e: any) => {
     setMessage(e.target.value)
   }
@@ -164,13 +171,17 @@ const SendButton: React.FC<IProps> = observer(({ store, config, setBtnHeight }) 
   }
 
   const handleMouseDown = () => {
+    if(fetchAudio!=null){
+      return;
+    }
+    if (store.isType === false) {
+      return
+    }
     setStart(true);
-    convertMsg();
   };
 
   const handleMouseUp = () => {
     setStart(false);
-    convertMsg();
   };
 
   return (<div ref={btnRef}>
@@ -193,7 +204,7 @@ const SendButton: React.FC<IProps> = observer(({ store, config, setBtnHeight }) 
         allowClear
       />:<div className='recorder-input-wrapper'>
         {isStart && <span className='recorder-timer'><FontAwesomeIcon icon={faRecordVinyl}/>{recordStartime && recordEndTime && secondsToHMS(recordEndTime.getTime()-recordStartime.getTime())}</span>}
-      <Button size='large' icon={<FontAwesomeIcon size='lg' icon={faMicrophone}/>} 
+      <Button disabled={store.isType === false || fetchAudio!==null}  size='large' icon={<FontAwesomeIcon size='lg' icon={faMicrophone}/>} 
       onMouseDown={handleMouseDown}
       onTouchStart={handleMouseDown}
       onTouchEnd={handleMouseUp}
@@ -203,7 +214,7 @@ const SendButton: React.FC<IProps> = observer(({ store, config, setBtnHeight }) 
     >{t('Press and hold the button to record')}</Button></div>}
       <div className="sent-btn-actions"  >
         <Button disabled={store.isType === false} shape="circle" onClick={convertInputModel}
-          icon={isStart ? <FontAwesomeIcon icon={faKeyboard} /> : <FontAwesomeIcon icon={faMicrophone} />} />
+          icon={inputModel!=='keyborad' ? <FontAwesomeIcon icon={faKeyboard} /> : <FontAwesomeIcon icon={faMicrophone} />} />
         
         <Button className="resize-btn" shape="circle" icon={<FontAwesomeIcon icon={faBroom} />}
           onClick={() => { store.addChat() }}></Button>
@@ -214,6 +225,7 @@ const SendButton: React.FC<IProps> = observer(({ store, config, setBtnHeight }) 
         <Button className="resize-btn" shape="circle" onClick={resizeInput} icon={<FontAwesomeIcon icon={faThumbTack} />} />
       </div>
     </Space.Compact>
+    {contextHolder}
   </div>);
 });
 
