@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import './SendButton.css'
 import { IAppConfig } from '../../store/AppConfig';
 import { IMessage } from '../../store/MessageData';
-import { callTranscations, getMediaStream, mediaRecorder, playAudio, stopAudio } from '../../utils/AudioUtils';
+import { callTranscations, getMediaStream, playAudio, stopAudio } from '../../utils/AudioUtils';
 import Upload from '../upload/Upload';
 
 type IProps = {
@@ -19,7 +19,6 @@ type IProps = {
 
 
 const { TextArea } = Input;
-let audioObj=null;
 let isCancel=false;
 const SendButton: React.FC<IProps> = observer(({ store, config, setBtnHeight }) => {
   const [message, setMessage] = useState("");
@@ -42,10 +41,6 @@ const SendButton: React.FC<IProps> = observer(({ store, config, setBtnHeight }) 
 
   let timerObj = useRef(null);
 
-  const closeAudio = () => {
-    mediaRecorder && mediaRecorder.stop();
-    audioObj && stopAudio(audioObj);
-  }
 
 
   const convertInputModel = () => {
@@ -120,57 +115,59 @@ const SendButton: React.FC<IProps> = observer(({ store, config, setBtnHeight }) 
       }
       fetchAudio.current=false;
       setFetchAudioSate(false);
-      closeAudio();
+      stopAudio();
     } else {
       if (fetchAudio.current) {
         return;
       }
-      const startTime = new Date();
       fetchAudio.current=true;
       setFetchAudioSate(true);
       getMediaStream().then((stream) => {
-        audioObj=stream;
-        playAudio(stream).then((audio: any) => {
-          if (isCancel) {
-            isCancel=false;
-            fetchAudio.current=false;
-            setFetchAudioSate(false);
-            return;
-          }
-          if (new Date().getTime() - startTime.getTime() < 3000) {
-            messageFun.error(t('audio cannot less than 3s. please hold on button to record.'));
-            fetchAudio.current=false;
-            setFetchAudioSate(false);
-            return;
-          }
-          callTranscations(audio).then((data) => {
-            const json = JSON.parse(data.data);
-            if (json.text) {
-              sentMsgToChat(json.text);
-            } else {
-              messageFun.error(t('Audio to text failed'));
+        const startTime = new Date();
+        ((startTime)=>{
+          playAudio(stream).then((audio: any) => {
+            if (isCancel) {
+              isCancel=false;
+              fetchAudio.current=false;
+              setFetchAudioSate(false);
+              return;
             }
-          }).finally(() => {
+            if (new Date().getTime() - startTime.getTime() < 3000) {
+              messageFun.error(t('audio cannot less than 3s. please hold on button to record.'));
+              fetchAudio.current=false;
+              setFetchAudioSate(false);
+              return;
+            }
+            callTranscations(audio).then((data) => {
+              const json = JSON.parse(data.data);
+              if (json.text) {
+                sentMsgToChat(json.text);
+              } else {
+                messageFun.error(t('Audio to text failed'));
+              }
+            }).finally(() => {
+              fetchAudio.current=false;
+              setFetchAudioSate(false);
+            })
+          }, (errMsg) => {
             fetchAudio.current=false;
             setFetchAudioSate(false);
+            if (isCancel) {
+              isCancel=false;
+              return;
+            }
+            if (errMsg) {
+              messageFun.error(errMsg);
+            }
           })
-        }, (errMsg) => {
-          fetchAudio.current=false;
-          setFetchAudioSate(false);
-          if (isCancel) {
-            isCancel=false;
-            return;
+          if(!timeObj.current){
+            clearTimeout(timeObj.current)
           }
-          if (errMsg) {
-            messageFun.error(errMsg);
-          }
-        }).finally(() => {
-          closeAudio();
-        })
-        timeObj.current=setTimeout(() => {
-          mediaRecorder && mediaRecorder.stop();
-          stopAudio(stream);
-        },60000);
+          timeObj.current=setTimeout(() => {
+            setStart(false);
+            stopAudio();
+          },60000);
+        })(startTime)
       })
     }
   }
@@ -203,20 +200,23 @@ const SendButton: React.FC<IProps> = observer(({ store, config, setBtnHeight }) 
     setMinRow(minRow === 2 ? 9 : 2)
   }
 
-  const handleMouseDown = () => {
+  const startAudio = () => {
+
     if (store.isType === false) {
       return
     }
     if (fetchAudio.current) {
       return
     }
+    console.log("start duio")
     if(isStart===false){
       setStart(true);
       handleAudio(true);
     }
   };
 
-  const handleMouseUp = () => {
+  const endAuio = () => {
+    console.log("end duio")
     if(isStart===true){
       setStart(false);
       handleAudio(false);
@@ -243,14 +243,14 @@ const SendButton: React.FC<IProps> = observer(({ store, config, setBtnHeight }) 
         allowClear
       /> : <div className='recorder-input-wrapper'>
         {isStart && <span className='recorder-timer'><FontAwesomeIcon icon={faRecordVinyl} />{recordStartime && recordEndTime && secondsToHMS(recordEndTime.getTime() - recordStartime.getTime())}</span>}
-        <Button disabled={store.isType === false || fetchAudioState} size='large' icon={<FontAwesomeIcon size='lg' icon={faMicrophone} />}
-          onMouseDown={handleMouseDown}
-          onTouchStart={handleMouseDown}
-          onTouchEnd={handleMouseUp}
-          onMouseUp={handleMouseUp}
+        <Button className='audio-hold-btn'  size='large' icon={<FontAwesomeIcon size='lg' icon={faMicrophone} />}
+          onMouseDown={startAudio}
+          onTouchStart={startAudio}
+          onTouchEnd={endAuio}
+          onMouseUp={endAuio}
           onClick={(e)=>e.preventDefault()}
           // onMouseLeave={handleMouseUp} // 处理鼠标在按钮上按住然后离开按钮的情况
-          style={{ width: '100%', height: '65px', borderRadius: 20, color: isStart ? 'red' : 'black' }}
+          style={{ width: '100%', height: '65px', borderRadius: 20,background:(store.isType === false || fetchAudioState)?"#f0f0f0":"#fff", color: isStart ? 'red' : 'black' }}
         >{t('Press and hold the button to record')}</Button></div>}
       <div className="sent-btn-actions"  >
         <Button disabled={store.isType === false} shape="circle" onClick={convertInputModel}
@@ -267,14 +267,16 @@ const SendButton: React.FC<IProps> = observer(({ store, config, setBtnHeight }) 
     </Space.Compact>
     {contextHolder}
     {isStart && <div
-      onMouseUp={handleMouseUp}
-      onTouchEnd={handleMouseUp}
+      onMouseUp={endAuio}
+      onTouchEnd={endAuio}
+      onTouchStart={()=>isCancel=false}
       className='audio-wrapper'>
-      <div className="canvas-wrapper">
+      {/* <div className="canvas-wrapper">
         <canvas id='canvas'></canvas>
-      </div>
+      </div> */}
       <div className="audio-inputs">
         <Button shape='circle'
+          onTouchStart={()=>isCancel=true}
           onMouseEnter={() => { isCancel=true; }}
           onMouseLeave={() => { isCancel=false;}}
         >{t('Cancel')}</Button>

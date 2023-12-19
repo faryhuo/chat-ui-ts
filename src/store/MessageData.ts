@@ -636,16 +636,14 @@ class MessageData implements IMessage {
 
     clearHistoryChat(chatIdList:string[]){
         if(userProflie.isLogin){
-            const queryUrl = config.api.historyUrl+"/";
+            const queryUrl = config.api.historyUrl;
             return axios({
                 method: "delete",
                 url: queryUrl,
                 headers: {
                     'token': userProflie.token,
                     'Content-Type': 'application/json;charset=UTF-8'
-                },data:{
-                    chatIdList:chatIdList
-                }
+                },data:chatIdList
             })
         }else{
             chatIdList.forEach(chatId=>this.clear(chatId))
@@ -1480,11 +1478,15 @@ class MessageData implements IMessage {
                 return true;
             }
             const msg = { role: "", content: ""};
-            if (item.isSys) {
+                        if (item.isSys) {
                 msg.role = "assistant";
                 let content = "";
                 if (item.choices && item.choices) {
-                    msg.content=item.choices[0].message.content as any;
+                    for (let i = 0; i < item.choices.length; i++) {
+                        if (item.choices[i].message && item.choices[i].message.content) {
+                            content += item.choices[i].message.content;
+                        }
+                    }
                 }
                 msg.content = content;
             } else {

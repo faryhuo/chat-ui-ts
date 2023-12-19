@@ -357,7 +357,7 @@ class ImageData implements IImageData {
                 'Content-Type': 'application/json;charset=UTF-8',
                 "token":userProflie.token
             }
-        });
+        })
     }
 
     updateMJImage(imageId:string,action:string,globalMessageApi:MessageInstance){
@@ -402,6 +402,11 @@ class ImageData implements IImageData {
                         let responseData = msg.data;
                         if(responseData){
                             const data=JSON.parse(responseData);
+                            if(data.error){
+                                self.showErrorMsg(globalMessageApi,data.error);
+                                reject(data.error)
+                                return;
+                            }
                             const taskId=data.task_id;
                             if(data.code && data.detail){
                                 self.showErrorMsg(globalMessageApi,data.detail);
@@ -442,6 +447,7 @@ class ImageData implements IImageData {
                             }
                         }
                     }, onerror(e) {
+                        console.log(e);
                         reject(e);
                         ctrl.abort();
                         throw e;

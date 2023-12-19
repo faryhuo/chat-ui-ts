@@ -35,7 +35,11 @@ const Image: React.FC<IProps> = ({ globalMessageApi,userProflie }) => {
   const [pageSize, setPageSize] = useState(4);
 
   const generate = () => {
-    ImageData.generate(imageData.prompt, globalMessageApi)
+    if(!userProflie.isLogin){
+      userProflie.openPage();
+    }else{
+      ImageData.generate(imageData.prompt, globalMessageApi);
+    }
   }
 
   useEffect(() => {

@@ -1,8 +1,7 @@
-import { Avatar, Button, Divider, Popconfirm, Dropdown } from 'antd';
+import { Button, Divider, Popconfirm, Dropdown } from 'antd';
 import type { MenuProps } from 'antd';
 import './ChatList.css';
 import { observer } from "mobx-react-lite";
-import icon from './favicon-32x32.png';
 import { Input, Modal } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { IMessage, ISessionMenu } from '../../store/MessageData';
