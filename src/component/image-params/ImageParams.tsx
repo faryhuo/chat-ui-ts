@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { observer } from "mobx-react-lite";
 import { InboxOutlined } from '@ant-design/icons';
@@ -19,7 +19,17 @@ type IProps = {
 const ImageParams: React.FC<IProps> = observer(() => {
 
   const { t } = useTranslation();
+  const [mjCount,setMjCount] = React.useState(-1);
+  const [mjFastCount,setMjFastCount]=React.useState(-1);
 
+  useEffect(()=>{
+    userModelLimit.getMjCount("mj").then((count)=>{
+        setMjCount(count);
+    })
+    userModelLimit.getMjCount("mj-fast").then((count)=>{
+      setMjFastCount(count);
+  })
+  },[])
 
   const getVersionOptions = () => {
     if (imageData.params.model === "MJ") {
@@ -280,7 +290,7 @@ const ImageParams: React.FC<IProps> = observer(() => {
                 <span>{t('Standard mode')} : </span>
               </div>
               <div className="amount-value">
-              {userModelLimit.usage.remainingAmount}
+              {mjCount}
               </div>
             </div>
             <div className="amount-item">
@@ -288,8 +298,7 @@ const ImageParams: React.FC<IProps> = observer(() => {
                 <span>{t('Fast mode')} : </span>
               </div>
               <div className="amount-value">
-              {userModelLimit.usage.remainingAmount}
-              
+              {mjFastCount}
               </div>
             </div>
           </div>

@@ -8,6 +8,7 @@ export interface IUserModelLimit{
     usage:IModelUsage,
     getCurrentModelUsage:()=>void;
     getModelUsage:(model:string)=>void;
+    getMjCount:(model:string)=>Promise<number>;
 }
 export interface IModelUsage{
     enable: boolean;
@@ -42,6 +43,37 @@ class UserModelLimit implements IUserModelLimit {
     getCurrentModelUsage(){
         const model=this.usage.modelName
         this.getModelUsage(model);
+    }
+
+    getMjCount(model:string):Promise<number>{
+        const promise=new Promise<number>((resolve,reject)=>{
+            if(!userProflie.token){
+                reject()
+                return;
+            }
+            const queryUrl = apiSetting.modelAmountUrl+model+"?uuid"+new Date().getTime();
+            axios({
+                method: "get",
+                url: queryUrl,
+                headers: {
+                    'Content-Type': 'application/json;charset=UTF-8',
+                    'token': userProflie.token
+                }
+            }
+            ).then((response) => {
+                const data = response.data;
+                if (data.statusCode === 0 && data.data) {
+                    resolve(data.data.remainingAmount);
+                } else {
+                    reject()
+                }
+            });   
+        }) 
+        return promise;
+    }
+
+    getMjFastCount(){
+        return this.getModelUsage("mj");
     }
 
 
