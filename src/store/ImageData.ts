@@ -56,7 +56,7 @@ export interface ImageResponse {
 export interface ImageParam {
     size:string;
     version:string;
-    model:string;
+    model:"MJ" | "NIJI" | "DALL-E3";
     quality:string;
     chaos:number;
     iw:number;
@@ -93,6 +93,10 @@ class ImageData implements IImageData {
         chineseStyle:"",
         light:"",
         environment:""
+    }
+
+    get isMJModel(){
+        return this.params.model==="MJ" || this.params.model==='NIJI';
     }
 
     updateParams<K extends keyof ImageParam>(key:K, value:ImageParam[K]){

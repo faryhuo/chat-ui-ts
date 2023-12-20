@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Form, Switch, Radio, message } from 'antd';
+import { Button, Form, Switch, Radio, message, Select } from 'antd';
 import { observer } from "mobx-react"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faClose, faCheck } from '@fortawesome/free-solid-svg-icons'
@@ -25,7 +25,7 @@ const BaseConfigForm: React.FC<IProps> = ({ config }) => {
   let isSlowMsg4AddChat = Form.useWatch('isSlowMsg4AddChat', form);
   let colorPrimary = Form.useWatch('colorPrimary', form);
   let style = Form.useWatch('style', form);
-
+  let audioVoice = Form.useWatch('audioVoice', form);
   const success = () => {
     messageApi.open({
       type: 'success',
@@ -40,6 +40,7 @@ const BaseConfigForm: React.FC<IProps> = ({ config }) => {
       textLanguage: textLanguage,
       isSlowMsg4AddChat: isSlowMsg4AddChat,
       colorPrimary: colorPrimary,
+      audioVoice: audioVoice,
       style: style
     });
     success();
@@ -70,8 +71,18 @@ const BaseConfigForm: React.FC<IProps> = ({ config }) => {
           <Radio.Button key={2} value="zh">中文(简体)</Radio.Button>
           <Radio.Button key={3} value="zh_tw">中文 (繁體)</Radio.Button>
           <Radio.Button key={4} value="ja">日本語</Radio.Button>
-
         </Radio.Group>
+      </Form.Item>
+      <Form.Item label={t("Audio Style")} name="audioVoice">
+        <Select options={[
+          { value: 'alloy', label: 'alloy' },
+          { value: 'echo', label: 'echo' },
+          { value: 'fable', label: 'fable' },
+          { value: 'onyx', label: 'onyx' },
+          { value: 'nova', label: 'nova' },
+          { value: 'shimmer', label: 'shimmer' },
+        ]}
+        />
       </Form.Item>
       <Form.Item label={t("Color Primary")} valuePropName="color"
         name="colorPrimary">

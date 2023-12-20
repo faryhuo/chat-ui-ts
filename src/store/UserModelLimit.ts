@@ -48,7 +48,7 @@ class UserModelLimit implements IUserModelLimit {
     getMjCount(model:string):Promise<number>{
         const promise=new Promise<number>((resolve,reject)=>{
             if(!userProflie.token){
-                reject()
+                resolve(-1)
                 return;
             }
             const queryUrl = apiSetting.modelAmountUrl+model+"?uuid"+new Date().getTime();
@@ -65,16 +65,13 @@ class UserModelLimit implements IUserModelLimit {
                 if (data.statusCode === 0 && data.data) {
                     resolve(data.data.remainingAmount);
                 } else {
-                    reject()
+                    resolve(-1)
                 }
             });   
         }) 
         return promise;
     }
 
-    getMjFastCount(){
-        return this.getModelUsage("mj");
-    }
 
 
     getModelUsage(model:string){

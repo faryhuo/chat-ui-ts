@@ -1,5 +1,4 @@
 import { makeObservable, observable, computed, action } from "mobx";
-import IatRecorder from '../utils/IatRecorder';
 import i18n from '../utils/i18n';
 import { isMobile } from 'react-device-detect';
 import apiSetting, { IAPISetting } from "./APISetting";
@@ -12,8 +11,8 @@ export interface IAppConfig {
     isSlowLeftMenu: boolean;
     colorPrimary: string;
     textLanguage: string;
+    audioVoice:string;
     api: IAPISetting;
-    language: string;
     accent: string;
     // weChatQRCode: string;
     isSlowMsg4AddChat: boolean;
@@ -29,7 +28,6 @@ export interface IAppConfig {
     isMobile: boolean;
     clearConfig: () => void;
     clearHistory: () => void;
-    iatRecorder: any;
     formLayout: FormLayout ;
     isChinese: boolean;
     isEnglish: boolean;
@@ -42,11 +40,12 @@ export interface ICodeEditsAPIConfig {
     top_p: number;
 }
 
-type configKey="colorPrimary" | "textLanguage" | "language" | "accent" | "style" 
+type configKey="colorPrimary" | "textLanguage"  | "accent" | "style" 
 
 
 class AppConfig implements IAppConfig {
 
+    audioVoice="alloy"
     version = "3.2"
     style = "chat";
     localConfigName = `config_${this.version}`;
@@ -55,6 +54,7 @@ class AppConfig implements IAppConfig {
     isSlowLeftMenu = isMobile ? false : true;
     isMobile = isMobile;
     api = apiSetting
+    isSlowMsg4AddChat = true;
 
 
     // get weChatQRCode() {
@@ -72,20 +72,23 @@ class AppConfig implements IAppConfig {
 
     colorPrimary = '#41dfec'
     textLanguage = (navigator.language?navigator.language:"zh").substr(0,2);
-    language = "zh_cn";
     accent = "mandarin";
 
     get isChinese() {
         return this.textLanguage === "zh";
     }
+    
 
     get isEnglish() {
         return this.textLanguage === "en";
     }
 
-    isSlowMsg4AddChat = true;
+    getLanguage(){
+        return this.textLanguage;
+    }
 
-    iatRecorder = new IatRecorder({ language: this.language, accent: this.language } as any);
+
+    // iatRecorder = new IatRecorder({ language: this.language, accent: this.language } as any);
     get isSlowLeftMenuFlag() {
         return !this.hideMenuTypeList.includes(this.type) && this.isSlowLeftMenu;
     }
@@ -135,7 +138,7 @@ class AppConfig implements IAppConfig {
     setConfigData(configJson: IAppConfig) {
         let item: keyof IAppConfig;
         for (item in configJson) {
-            const configKey = ["colorPrimary", "textLanguage", "language", "accent", "style"]
+            const configKey = ["colorPrimary", "textLanguage", "language", "accent", "style","isSlowMsg4AddChat","audioVoice"]
             if (configKey.includes(item)) {
                 const key=item as configKey;
                 this.setConfig(key,configJson[key]);
@@ -156,8 +159,8 @@ class AppConfig implements IAppConfig {
 
 
     getConfigJson() {
-        const { language, accent, codeStyle, textLanguage, colorPrimary, style } = this;
-        return { language, accent, codeStyle, textLanguage, colorPrimary, style };
+        const {  accent, codeStyle, textLanguage, colorPrimary, style,isSlowMsg4AddChat,audioVoice } = this;
+        return {  accent, codeStyle, textLanguage, colorPrimary, style,isSlowMsg4AddChat,audioVoice };
     }
 
     saveCodeEditConfig(config: ICodeEditsAPIConfig) {

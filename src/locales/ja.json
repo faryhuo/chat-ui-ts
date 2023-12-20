@@ -266,11 +266,17 @@
     "1:2 Mobile Wallpaper":"1:2 モバイル壁紙",
     "4:3 Article Illustration":"4:3 記事挿画",
     "3:4 Product illustration":"3:4 商品イラスト",
+    "5:3 Article Illustration":"5:3 記事挿画",
+    "3:5 Product illustration":"3:5 商品イラスト",
     "16:9 Computer Wallpaper":"16:9 パソコン壁紙",
     "9:16 Promotional Poster":"9:16 宣伝ポスター",
     "Standard":"普通",
     "Normal":"一般",
     "High Definition":"ハイビジョン",
     "Ultra High Definition":"超高精細",
-    "Copied":"コピー済み"
+    "Copied":"コピー済み",
+    "Copy message": "Copy",
+    "Play audio": "オーディオを再生",
+    "Stop audio": "オーディオを停止",
+    "Delete message":"Delete"
 }

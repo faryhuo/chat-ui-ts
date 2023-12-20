@@ -264,11 +264,17 @@
     "1:2 Mobile Wallpaper":"1:2 手机壁纸",
     "4:3 Article Illustration":"4:3 文章配图",
     "3:4 Product illustration":"3:4 商品插畫",
+    "5:3 Article Illustration":"5:3 文章配图",
+    "3:5 Product illustration":"3:5 商品插畫",
     "16:9 Computer Wallpaper":"16:9 电脑壁纸",
     "9:16 Promotional Poster":"9:16 宣传海报",
     "Standard":"普通",
     "Normal":"一般",
     "High Definition":"高清",
     "Ultra High Definition":"超高清",
-    "Copied":"已复制"
+    "Copied":"已复制",
+    "Copy message":"复制",
+    "Play audio":"播放聲音",
+    "Stop audio":"停止播放",
+    "Delete message":"刪除信息"
 }

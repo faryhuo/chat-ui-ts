@@ -273,11 +273,22 @@
     "1:2 Mobile Wallpaper":"1:2 手机壁纸",
     "4:3 Article Illustration":"4:3 文章配图",
     "3:4 Product illustration":"3:4 商品插画",
+    "5:3 Article Illustration":"5:3 文章配图",
+    "3:5 Product illustration":"3:5 商品插画",
     "16:9 Computer Wallpaper":"16:9 电脑壁纸",
     "9:16 Promotional Poster":"9:16 宣传海报",
     "Standard":"普通",
     "Normal":"一般",
     "High Definition":"高清",
     "Ultra High Definition":"超高清",
-    "Copied":"已复制"
+    "Copied":"已复制",
+    "Copy message":"复制",
+    "Play audio":"播放声音",
+    "Stop audio":"停止播放",
+    "Delete message":"删除信息",
+    "Reduce the artistic processing during the intermediate stages to produce more photographically nuanced images. For instance: --style raw.":"减少 midjourney 的艺术加工，生成更摄影化的图片。例如：--style raw",
+    "Stylization: --stylize or --s, with a range of 1-1000.Parameter elucidation: A higher numerical value corresponds to a more enriched and artistic portrayal of the visual composition.":"风格化：--stylize 或 --s，范围 1-1000参数释义：数值越高，画面表现也会更具丰富性和艺术性",
+    "NIJI: Inclined towards an animated style, suitable for two-dimensional models.":"NIJI: 偏动漫风格、适用于二次元模型",
+    "MJ: A model inclined towards verisimilitude with universal applicability.":"MJ: 偏真实通用模型",
+    "Proportions of the generated image dimensions.":"生成图片尺寸比例"
 }

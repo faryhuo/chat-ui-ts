@@ -137,7 +137,7 @@ export interface IMessage {
     changeTypeByUrl: (location: Location) => void;
     share: (node: any) => Promise<void>;
     chatApiConfig: IChatAPIConfig;
-    speech:(item:ISessiondata,voice:string)=>Promise<string>;
+    speech:(item:ISessiondata)=>Promise<string>;
     setChatApiConfig: <K extends keyof IChatAPIConfig>(key: K, value: IChatAPIConfig[K]) => void;
 }
 
@@ -257,13 +257,13 @@ class MessageData implements IMessage {
         
     }
 
-    async speech(item:ISessiondata,voice:string):Promise<string>{
+    async speech(item:ISessiondata):Promise<string>{
         const msg=getMessageFromChoices(item.choices);
         let msgId="";
         if(item  && item.audioId){
             msgId=item.audioId;
         }else{
-            msgId=await this.createSpeech(msg,voice);
+            msgId=await this.createSpeech(msg,config.audioVoice);
             if(item && msgId){
                 item.audioId=msgId;
             }
