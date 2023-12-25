@@ -169,7 +169,7 @@ const ChatList: React.FC<IProps> = ({ store,userProflie }) => {
   }
 
   const clearHistoryButton=(<Popconfirm
-    placement="right"
+    placement="bottom"
     title={t('Message')}
     description={t('Are you want to clear the history.')}
     onConfirm={clearHistory}

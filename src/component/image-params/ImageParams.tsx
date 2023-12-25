@@ -34,6 +34,9 @@ const ImageParams: React.FC<IProps> = observer(() => {
   const getVersionOptions = () => {
     if (imageData.params.model === "MJ") {
       return [{
+        value: "6",
+        label: "6"
+      },{
         value: "5.2",
         label: "5.2"
       }, {

@@ -81,7 +81,7 @@ class ImageData implements IImageData {
         size:"1:1",
         model:"MJ",
         quality:"1",
-        version:"5.2",
+        version:"6",
         chaos:0,
         stylize:100,
         style:"",
@@ -102,7 +102,7 @@ class ImageData implements IImageData {
     updateParams<K extends keyof ImageParam>(key:K, value:ImageParam[K]){
         this.params[key]=value;
         if(key==="model"){
-            this.params.version=(value==="MJ"?"5.2":"5");
+            this.params.version=(value==="MJ"?"6":"5");
         }
     }
 
@@ -475,17 +475,68 @@ class ImageData implements IImageData {
 
 
     async generate(prompt:string,globalMessageApi:MessageInstance){
-        let promptStr=await this.buildPromptByParams(prompt);
-        if(this.params.imageUrl){
-            promptStr=`< ${this.params.imageUrl} > ${promptStr}`;
+        if(this.isMJModel){
+            let promptStr=await this.buildPromptByParams(prompt);
+            if(this.params.imageUrl){
+                promptStr=`< ${this.params.imageUrl} > ${promptStr}`;
+            }
+            const requestData={
+                prompt: promptStr,
+                size: this.params.size
+            };
+            return this.generateByData(requestData,globalMessageApi);
+        }else{
+            let promptStr= this.getPromptByParams4Dall(prompt);
+            const formData=new FormData();
+            formData.append("message",promptStr);
+            formData.append("size",this.getImageSizeForDall3())
+            fetch(APISetting.mjImageUrl+"/dall-3",{
+                method:"post",
+                body:formData,
+                headers:{
+                    token:userProflie.token
+                }
+            }).then((rep)=>rep.json())
+            .then(data=>{
+                console.log(data);
+            })
         }
-        const requestData={
-            prompt: promptStr,
-            size: this.params.size
-        };
-        return this.generateByData(requestData,globalMessageApi);
     }
 
+    getImageSizeForDall3(){
+        if(this.params.size==="1:1"){
+            return "1024x1024";
+        }else if(this.params.size==="5:3"){
+            return "1792x1024";
+        }else if(this.params.size==="3:5"){
+            return "1024x1792";
+        }else{
+            return "1024x1024";
+        }
+    }
+
+    getPromptByParams4Dall(prompt: string) {
+        const {noNeedEle,composition,style,light,environment} = this.params;
+        const params = [];
+        if(composition){
+            params.push(`,${composition} `)
+        }
+        if(style){
+            params.push(`,${style} `)
+        }
+        if(light){
+            params.push(`,${light} `)
+        }
+        if(environment){
+            params.push(`,${environment} `)
+        }
+        let noNeedEleStr = "";
+        if (noNeedEle) {
+            noNeedEleStr = `,(I won't drop those element in here (${noNeedEle}).`;
+            params.push(noNeedEleStr)
+        }
+        return prompt+params.join(" ");
+    }
     
 
     constructor() {
