@@ -92,14 +92,31 @@ const SendButton: React.FC<IProps> = observer(({ store, config, setBtnHeight }) 
   const sentMsgToChat = (message) => {
     let chatId = store.activeSession + "";
     chatId = store.checkChatId(chatId);
-    store.addData({
-      text: message
-    }, chatId)
-    if (store.type === "image") {
-      store.callImageAPI(chatId, message)
-    } else {
-      store.callChatAPI(chatId);
+    if(store.files.length){
+      const msgArr=[];
+      store.files.forEach(file=>{
+          msgArr.push({
+              image_url:{
+                  url:file
+              },
+              type:"image_url"
+          });
+      });
+      msgArr.push({
+        type:"text",
+        text:message
+      })
+      store.addData({
+        messageContent: msgArr
+      }, chatId);
+      store.setFiles([]);
+    }else{
+      store.addData({
+        text: message
+      }, chatId)
     }
+    store.callChatAPI(chatId);
+    
     store.disableType(chatId);
     setTimeout(() => {
       setMessage("");

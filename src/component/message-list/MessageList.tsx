@@ -19,17 +19,31 @@ class MessageList extends Component<IProps> {
 
 
     renderMessage(item: ISessiondata) {
+        console.log(item);
         const classs = classNames({ "chat-row": true, "chat-row-hide": item?.isDetails === false && item?.hasShowDetails === true });
         if (item.text) {
             return <div className={classs}><pre style={{ maxWidth: 700, margin: 0, whiteSpace: 'break-spaces' }}>{item.text}</pre>
             </div>
         }if (item.content) {
             return this.renderSysChat4Content(item.content, classs);
-        } else {
+        }if (item.messageContent) {
+            console.log(item.messageContent)
+            return this.renderSysChat4MsgContent(item.messageContent, classs);
+        }  else {
             return this.renderSysChat(item.choices, classs);
         }
     }
-
+    renderSysChat4MsgContent(content: any[], classs: string | undefined) {
+        if (!content || !content.length) {
+            return <div></div>
+        }
+        let list = this.getMessageByMessageContent(content);
+        let i = 0;
+        return <div className={classs}>{list.map((item) => {
+            return (<div key={i}>{item}
+            </div>);
+        })}</div>;
+    }
     renderSysChat4Content(content: any[], classs: string | undefined) {
         if (!content || !content.length) {
             return <div></div>
@@ -60,6 +74,22 @@ class MessageList extends Component<IProps> {
         }
         return <div><Image width={image.width} height={image.height}
             src={image.uri}></Image></div>;
+    }
+
+    getMessageByMessageContent(arr: any[]) {
+        let contents = arr.concat();
+        let list = [];
+        if (contents && contents.length > 0) {
+            for (let i = 0; i < contents.length; i++) {
+                const item=contents[i];
+                if(item.type==="text"){
+                    list.push(<Markdown key={i} content={item.text}></Markdown>)
+                }else if(item.type==="image_url"){
+                    list.push(<Image key={i}  width={512} src={item.image_url.url}></Image>)
+                }
+            }
+        }
+        return list;
     }
 
     getMessageByContent(arr: any[]) {

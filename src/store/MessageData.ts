@@ -43,6 +43,7 @@ export interface ISessiondata {
     isDetails?: boolean;
     hasShowDetails?: boolean;
     text?: string;
+    messageContent?:MessageContent[];
     choices?: Ichoices[] | null;
     content?: any[];
     stream?: boolean;
@@ -1512,28 +1513,8 @@ class MessageData implements IMessage {
                         text:item.text,
                         type:"text"
                     });
-                }
-                if(item.file_ids){
-                    item.file_ids.forEach(file=>{
-                        msg.content.push({
-                            image_url:{
-                                url:file
-                            },
-                            type:"image_url"
-                        });
-                    });
-                }
-                console.log(this.files)
-                if(this.files.length>0){
-                    this.files.forEach(file=>{
-                        msg.content.push({
-                            image_url:{
-                                url:file
-                            },
-                            type:"image_url"
-                        });
-                    });
-                    this.setFiles([]);
+                }else if(item.messageContent){
+                   msg.content=item.messageContent;
                 }
             }
             if (msg.content) {
