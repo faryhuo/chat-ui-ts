@@ -102,6 +102,8 @@ export interface IMessage {
     addData: (newChat: any, chatId: string) => void;
     clear: (chatId: string) => void;
     isType: boolean;
+    files:any[];
+    setFiles:(files:any)=>void;
     changeType: (type: string) => void;
     selectChat: (chatId: string) => void;
     changeRole: (chatId: string, role: number | undefined) => void;
@@ -178,11 +180,18 @@ class MessageData implements IMessage {
     activeSession = "chat_" + new Date().getTime()
     session: Array<ISession> = [];
 
+    files=[];
+
+    setFiles(files){
+        this.files=files;
+    }
+
     historyResult:Promise<void> | null=null;
 
     constructor() {
         makeObservable(this, {
             type: observable,
+            files: observable,
             session: observable,
             activeSession: observable,
             data: computed,
@@ -206,6 +215,7 @@ class MessageData implements IMessage {
             hasHistory: action,
             changeMessage: action,
             checkChatId: action,
+            setFiles:action,
             setChatApiConfig: action,
             loadDataFromFile: action.bound,
             reSentMsg: action.bound,
@@ -1466,7 +1476,10 @@ class MessageData implements IMessage {
             if (contentSys) {
                 messages.push({
                     role: "system",
-                    content: contentSys
+                    content:  [{
+                        text:contentSys,
+                        type:"text"
+                    }]
                 })
             }
         }
@@ -1477,7 +1490,7 @@ class MessageData implements IMessage {
             if(item.isError){
                 return true;
             }
-            const msg = { role: "", content: ""};
+            const msg = { role: "", content: []};
                         if (item.isSys) {
                 msg.role = "assistant";
                 let content = "";
@@ -1488,11 +1501,39 @@ class MessageData implements IMessage {
                         }
                     }
                 }
-                msg.content = content;
+                msg.content = [{
+                    text:content,
+                    type:"text"
+                }];
             } else {
                 msg.role = "user";
                 if (item.text) {
-                    msg.content = item.text;
+                    msg.content.push({
+                        text:item.text,
+                        type:"text"
+                    });
+                }
+                if(item.file_ids){
+                    item.file_ids.forEach(file=>{
+                        msg.content.push({
+                            image_url:{
+                                url:file
+                            },
+                            type:"image_url"
+                        });
+                    });
+                }
+                console.log(this.files)
+                if(this.files.length>0){
+                    this.files.forEach(file=>{
+                        msg.content.push({
+                            image_url:{
+                                url:file
+                            },
+                            type:"image_url"
+                        });
+                    });
+                    this.setFiles([]);
                 }
             }
             if (msg.content) {

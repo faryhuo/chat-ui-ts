@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite";
 import { useState } from 'react';
 import { Input, Space, Button, message as messageApi } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPaperPlane, faBroom, faMicrophone, faThumbTack, faRecordVinyl, faKeyboard } from '@fortawesome/free-solid-svg-icons'
+import { faPaperPlane, faBroom, faMicrophone, faThumbTack, faRecordVinyl, faKeyboard, faUpload } from '@fortawesome/free-solid-svg-icons'
 import { useTranslation } from 'react-i18next';
 import './SendButton.css'
 import { IAppConfig } from '../../store/AppConfig';
@@ -224,12 +224,13 @@ const SendButton: React.FC<IProps> = observer(({ store, config, setBtnHeight }) 
   };
 
   return (<div ref={btnRef}>
+
     <Space.Compact style={{ width: '100%' }}>
       {inputModel === 'keyboard' && <div className="upload-btn-wrapper">
-        <Button className='upload-btn' disabled={store.isType === false} shape="circle"
-          icon={
-            <Upload store={store} config={config}   ></Upload>
-          } />
+        <Upload store={store} config={config}>
+          <Button className='upload-btn' disabled={store.isType === false} shape="circle"
+          icon={<FontAwesomeIcon icon={faUpload}></FontAwesomeIcon>}></Button>
+        </Upload>
       </div>}
       {inputModel === 'keyboard' ? <TextArea
         value={message}
