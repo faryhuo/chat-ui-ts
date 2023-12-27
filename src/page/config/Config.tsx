@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { observer } from "mobx-react"
+import { observer } from "mobx-react-lite"
 import { Card, Collapse } from 'antd';
 import { BaseConfigForm, ChatConfigForm, ConfigActionBtn } from '../../component';
 import { useTranslation } from 'react-i18next';

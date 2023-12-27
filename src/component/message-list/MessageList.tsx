@@ -1,5 +1,4 @@
-import { Component } from 'react';
-import { observer } from "mobx-react"
+import { observer } from "mobx-react-lite"
 import { Image } from 'antd';
 import './MessageList.css';
 import Markdown from '../markdown/Markdown'
@@ -14,94 +13,87 @@ type IProps = {
     store: IMessage;
 }
 
+const MessageList: React.FC<IProps> = observer(({ store, config }) => {
 
-class MessageList extends Component<IProps> {
 
-
-    renderMessage(item: ISessiondata) {
-        console.log(item);
+    const renderMessage=(item: ISessiondata)=> {
         const classs = classNames({ "chat-row": true, "chat-row-hide": item?.isDetails === false && item?.hasShowDetails === true });
         if (item.text) {
             return <div className={classs}><pre style={{ maxWidth: 700, margin: 0, whiteSpace: 'break-spaces' }}>{item.text}</pre>
             </div>
         }if (item.content) {
-            return this.renderSysChat4Content(item.content, classs);
+            return renderSysChat4Content(item.content, classs);
         }if (item.messageContent) {
-            console.log(item.messageContent)
-            return this.renderSysChat4MsgContent(item.messageContent, classs);
+            return renderSysChat4MsgContent(item.messageContent, classs);
         }  else {
-            return this.renderSysChat(item.choices, classs);
+            return renderSysChat(item.choices, classs);
         }
     }
-    renderSysChat4MsgContent(content: any[], classs: string | undefined) {
+    const  renderSysChat4MsgContent=(content: any[], classs: string | undefined)=> {
         if (!content || !content.length) {
             return <div></div>
         }
-        let list = this.getMessageByMessageContent(content);
+        let list = getMessageByMessageContent(content);
         let i = 0;
         return <div className={classs}>{list.map((item) => {
-            return (<div key={i}>{item}
+            return (<div key={i++}>{item}
             </div>);
         })}</div>;
     }
-    renderSysChat4Content(content: any[], classs: string | undefined) {
+    const renderSysChat4Content=(content: any[], classs: string | undefined)=> {
         if (!content || !content.length) {
             return <div></div>
         }
-        let list = this.getMessageByContent(content);
+        let list = getMessageByContent(content);
         let i = 0;
         return <div className={classs}>{list.map((item) => {
-            return (<div key={i}>{item}
+            return (<div key={i++}>{item}
             </div>);
         })}</div>;
     }
 
-    renderSysChat(choices: Ichoices[] | null | undefined, classs: string | undefined) {
+    const renderSysChat=(choices: Ichoices[] | null | undefined, classs: string | undefined)=> {
         if (!choices || !choices.length) {
             return <div></div>
         }
-        let list = this.getMessage(choices);
+        let list = getMessage(choices);
         let i = 0;
         return <div className={classs}>{list.map((item) => {
-            return (<div key={i}>{item}
+            return (<div key={i++}>{item}
             </div>);
         })}</div>;
     }
 
-    renderSysImage(image: { width: string | number; height: string | number; uri: string; } | undefined) {
-        if (!image) {
-            return <div></div>
-        }
-        return <div><Image width={image.width} height={image.height}
-            src={image.uri}></Image></div>;
-    }
 
-    getMessageByMessageContent(arr: any[]) {
+
+    const getMessageByMessageContent=(arr: any[])=> {
         let contents = arr.concat();
         let list = [];
+        const width=config.isMobile?256:512;
         if (contents && contents.length > 0) {
             for (let i = 0; i < contents.length; i++) {
                 const item=contents[i];
                 if(item.type==="text"){
                     list.push(<Markdown key={i} content={item.text}></Markdown>)
                 }else if(item.type==="image_url"){
-                    list.push(<Image key={i}  width={512} src={item.image_url.url}></Image>)
+                    list.push(<Image key={i}  width={width} height={width} src={item.image_url.url}></Image>)
                 }
             }
         }
         return list;
     }
 
-    getMessageByContent(arr: any[]) {
+    const getMessageByContent=(arr: any[])=> {
         let contents = arr.concat();
         let list = [];
+        const width=config.isMobile?256:512;
         if (contents && contents.length > 0) {
             for (let i = 0; i < contents.length; i++) {
                 const item=contents[i];
                 if(item.type==="text"){
                     list.push(<Markdown key={i} content={item.text.value}></Markdown>)
                 }else if(item.type==="image_file"){
-                    list.push(<Image src={item.image_file.url}></Image>)
+                    list.push(<Image  width={width} height={width}  key={i} src={item.image_file.url}></Image>)
                 }
             }
         }
@@ -109,7 +101,7 @@ class MessageList extends Component<IProps> {
     }
 
 
-    getMessage(arr: any[]) {
+    const getMessage=(arr: any[])=> {
         let choices = arr.concat();
         let repList = [choices.pop()];
         let list = [];
@@ -122,17 +114,16 @@ class MessageList extends Component<IProps> {
         return list;
     }
 
-    getMessageItem() {
-        const { store, config } = this.props;
+    const getMessageItem=()=> {
         const props = {
             store,
             config,
-            renderMessage: (item: ISessiondata) => { return this.renderMessage(item) }
+            renderMessage: (item: ISessiondata) => { return renderMessage(item) }
 
         }
-        if (this.props.config.style === "chat") {
+        if (props.config.style === "chat") {
             return <MessageItemChat {...props} key={1}></MessageItemChat>
-        } else if (this.props.config.style === "antd") {
+        } else if (props.config.style === "antd") {
             return <MessageItem2 {...props} key={2}></MessageItem2>
         }
     }
@@ -140,12 +131,12 @@ class MessageList extends Component<IProps> {
 
 
 
-    render() {
-        return (<div className='message-list-wrapper' style={{ width: '100%', height: '100%', padding: 5, boxSizing: 'border-box' }} ref="messages">
-            {this.getMessageItem()}
-        </div>)
-    }
-}
+
+    return (<div className='message-list-wrapper' style={{ width: '100%', height: '100%', padding: 5, boxSizing: 'border-box' }}>
+        {getMessageItem()}
+    </div>)
+    
+});
 
 
-export default observer(MessageList);
+export default MessageList

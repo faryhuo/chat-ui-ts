@@ -68,7 +68,7 @@ const SignUpForm : React.FC<IProps>= observer(({login,handleCancel,config,store,
         setCodeSend(true);
         userProfile.sentSMSCode(userId).then((response)=>{
           const data=response.data.data;
-          if(data.success){
+          if(data.statusCode===0){
             let sec= 60;
             const timer= setInterval(()=>{
               sec--;

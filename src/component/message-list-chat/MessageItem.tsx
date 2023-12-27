@@ -2,7 +2,7 @@ import './main.css'
 import './MessageItem.css'
 import React, { useEffect,useRef,useState } from 'react';
 import {MessageItem} from '../index';
-import { observer } from "mobx-react"
+import { observer } from "mobx-react-lite"
 import { Card } from 'antd';
 import ScrollToBottom from 'react-scroll-to-bottom';
 import ActionBtnList from '../session-atcion-list/SessionAtcionList' 

@@ -39,7 +39,7 @@ const Payment:React.FC<IProps> = ()=>{
            } 
          }).then((response)=>{
             console.log(response)
-            if(response.data && response.data && response.data.success){
+            if(response.data && response.data && response.data.statusCode===0){
                window.open()?.document.write(response.data.data);
             }
             

@@ -1,16 +1,14 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUpload } from '@fortawesome/free-solid-svg-icons'
 import { Upload, UploadFile, message } from 'antd';
 import apiSetting from '../../store/APISetting';
 import {
   useSortable,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { useEffect, useRef, useState } from 'react';
 import React from 'react';
 import { observer } from 'mobx-react-lite';
 import { IMessage } from '../../store/MessageData';
 import { IAppConfig } from '../../store/AppConfig';
+import { useTranslation } from 'react-i18next';
 
 interface DraggableUploadListItemProps {
   originNode: React.ReactElement<any, string | React.JSXElementConstructor<any>>;
@@ -30,8 +28,7 @@ const DraggableUploadListItem = ({ originNode, file,index }: DraggableUploadList
     position:'absolute',
     top:-40-index*20
   };
-  console.log(index);
-
+ 
   return (
     <div
       ref={setNodeRef}
@@ -53,10 +50,20 @@ type IProps = {
   children:any
 }
 const AppUpload : React.FC<IProps> = observer(({store, config,children}) => {
+  const {t} = useTranslation();
 
-  const [fileList,setFileList]=useState([]);
+  const checkModel = () => {
+    const supportModels=["gemini-pro-vision","gpt-4-vision-preview"];
+    const currentModel=store.getChatInfoByChatId(store.activeSession).chatConfig.model;
+    if(!supportModels.includes(currentModel)){
+      message.error(t('Only support those models.') + `(${supportModels.join(",")})`);
+      return false;
+    }
+    return true;
+  };
 
-  const beforeUpload = (file) => {
+
+  const checkFileType = (file) => {
     const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
     if (!isJpgOrPng) {
       message.error('You can only upload JPG/PNG file!');
@@ -67,46 +74,43 @@ const AppUpload : React.FC<IProps> = observer(({store, config,children}) => {
       message.error('Image must smaller than 10MB!');
       return false;
     }
-    setFileList([...fileList,file]);
     return isJpgOrPng && isLt10M;
   };
 
 
   const handleChange = (info) => {
-    console.log(info);
-    if (info.file.status === 'uploading') {
-      return;
+    if(checkModel() && checkFileType(info.file)===true){
+      store.setFiles(info.fileList);
     }
-    if (info.file.status === 'done') {
-      // Get this url from response in real world.
-      console.log(info.file.response.data);
-      store.setFiles([...store.files,info.file.response.data]);
-      console.log(store.files);
-    }else if (info.file.status === 'removed') {
-      fileList.splice(fileList.indexOf(info.file),1)
-      setFileList(fileList.concat([]));
-      store.files.splice(fileList.indexOf(info.file),1)
-    }
+    // if (info.file.status === 'uploading') {
+    //   return;
+    // }
+    // if (info.file.status === 'done') {
+    //   // Get this url from response in real world.
+    //   console.log(info.file.response.data);
+    //   store.setFiles([...store.files,info.file]);
+    //   console.log(store.files);
+    // }else if (info.file.status === 'removed') {
+    //   store.files.splice(store.files.indexOf(info.file),1)
+    //   store.setFiles(store.files);
+    // }
   };
 
-  const uploadRef=useRef(null);
 
   return (<div style={{ display: "inline-block" }}>
     <Upload
-      ref={uploadRef}
       method="post"
-      fileList={fileList}
+      accept="image/*"
+      fileList={store.files}
       action={apiSetting.imageUploadUrl}
-      beforeUpload={beforeUpload}
       onChange={handleChange}
-      onDrop={(e) => {}}
       maxCount={3}
+      beforeUpload={(e)=>{console.log(e)}}
       style={{ width: 20 }}
       itemRender={(originNode, file,fileList) => (
         <DraggableUploadListItem originNode={originNode} file={file} index={fileList.indexOf(file)}/>
       )}
     >
-       
       {children}
     </Upload></div>)
 })

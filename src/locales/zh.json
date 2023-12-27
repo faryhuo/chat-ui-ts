@@ -214,6 +214,7 @@
     "copy prompt":"复制提示词",
     "SparkDesk 1.5":"讯飞星火 1.5",
     "SparkDesk 2.0":"讯飞星火 2.0",
+    "spark-desk-3":"讯飞星火 3.0",
     "spark-desk-1.5":"讯飞星火 1.5",
     "spark-desk-2":"讯飞星火 2.0",
     "ernie-bot":"文心一言",
@@ -290,5 +291,13 @@
     "Stylization: --stylize or --s, with a range of 1-1000.Parameter elucidation: A higher numerical value corresponds to a more enriched and artistic portrayal of the visual composition.":"风格化：--stylize 或 --s，范围 1-1000参数释义：数值越高，画面表现也会更具丰富性和艺术性",
     "NIJI: Inclined towards an animated style, suitable for two-dimensional models.":"NIJI: 偏动漫风格、适用于二次元模型",
     "MJ: A model inclined towards verisimilitude with universal applicability.":"MJ: 偏真实通用模型",
-    "Proportions of the generated image dimensions.":"生成图片尺寸比例"
+    "Proportions of the generated image dimensions.":"生成图片尺寸比例",
+    "please wait all files be uploaded":"请等待所有文件上传完成",
+    "Only support those models.":"只支持这些模型",
+    "gpt-4-1106-preview":"GPT 4.0 Turbo",
+    "gpt-4-vision-preview":"GPT 4.0 图像版",
+    "gpt-3.5-turbo":"GPT 3.5",
+    "gemini-pro":"Gemini Pro",
+    "gemini-pro-vision":"Gemini 图像版",
+    "Must be upload one image in current model.":"当前模型必须上传一张图片"
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form, Slider, Button, Switch } from 'antd';
-import { observer } from "mobx-react"
+import { observer } from "mobx-react-lite"
 import { Select } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { InputNumber } from 'antd';

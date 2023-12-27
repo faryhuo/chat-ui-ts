@@ -92,12 +92,20 @@ const SendButton: React.FC<IProps> = observer(({ store, config, setBtnHeight }) 
   const sentMsgToChat = (message) => {
     let chatId = store.activeSession + "";
     chatId = store.checkChatId(chatId);
+    if(store.getChatInfoByChatId(chatId).chatConfig.model==="gemini-pro-vision" && store.files.length===0){
+      messageApi.error(t('Must be upload one image in current model.'));
+      return;
+    }
     if(store.files.length){
       const msgArr=[];
       store.files.forEach(file=>{
+        if(!file.response.data){
+          messageApi.error(t('please wait all files be uploaded'));
+          return;
+        }
           msgArr.push({
               image_url:{
-                  url:file
+                  url:file.response.data
               },
               type:"image_url"
           });

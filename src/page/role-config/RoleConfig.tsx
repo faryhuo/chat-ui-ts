@@ -1,5 +1,5 @@
 import React from 'react';
-import { observer } from "mobx-react";
+import { observer } from "mobx-react-lite";
 import {RoleList} from '../../component';
 import "./RoleConfig.css";
 import {IAppConfig} from '../../store/AppConfig';

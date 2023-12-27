@@ -8,7 +8,7 @@ import {Button} from 'antd';
 import {IAppConfig} from '../../store/AppConfig';
 import {IMessage} from '../../store/MessageData';
 import './Chat.css'
-import { observer } from "mobx-react"
+import { observer } from "mobx-react-lite"
 import { useParams } from 'react-router-dom';
 
 type IProps={
