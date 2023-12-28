@@ -7,6 +7,7 @@ import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 import chatConfig, { IChatAPIConfig } from "../../store/ChatConfig";
 import { getMessageFromChoices } from "../../store/MessageData";
+import apiSetting from "../../store/APISetting";
 type IProps = {
   data: ISessiondata[];
   topic: string;
@@ -24,7 +25,7 @@ const ChatHistorySharer: React.FC<IProps> = observer(({ data, topic, time }) => 
         <div className="sharer-summary-web-info">
           <h2 style={{ margin: 5 }}>ChatGPT Web</h2>
           <span style={{ margin: 10 }}>
-            Url : <a href="https://fary.chat" style={{ color: '#fff' }}>fary.chat</a></span>
+            Url : <a href={apiSetting.host}style={{ color: '#fff' }}>fary.chat</a></span>
         </div>
         <div className="sharer-summary-params">
           <table>

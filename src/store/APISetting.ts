@@ -1,11 +1,11 @@
 export interface IAPISetting {
     version: string;
     host: string;
+    gateway:string;
     chatServiceName: string;
     chatConfigServiceName: string;
     userServiceName: string;
     smsServiceName: string;
-
     historyServiceName: string;
     chatUrl: string;
     chatStreamUrl: string;
@@ -18,7 +18,6 @@ export interface IAPISetting {
     moduleUrl: string;
     loginUrl: string;
     signUpUrl: string;
-
     publicKeyUrl: string;
     userInfoUrl: string;
     historyUrl: string;
@@ -28,7 +27,8 @@ export interface IAPISetting {
 class APISetting implements IAPISetting {
 
     version = "3.0"
-    host = "https://fary.chat/gateway"
+    host = "https://fary.chat";
+    gateway = "https://fary.chat:8555"
     chatServiceName = "chat-service"
     chatConfigServiceName = "chat-config-service"
     userServiceName = "chat-user-service"
@@ -37,44 +37,58 @@ class APISetting implements IAPISetting {
 
     historyServiceName = "chat-history-service"
 
-    chatUrl = `${this.host}/${this.chatServiceName}/chat/v2/info`;
-    chatStreamUrl = `${this.host}/${this.chatServiceName}/chat/v2/stream`;
-    audioUrl = `${this.host}/${this.chatServiceName}/audio/speech`;
-    transcriptionsUrl = `${this.host}/${this.chatServiceName}/audio/transcriptions`;
+    error:{
+        "404":"https://mj.fary.chat/error/404.png",
+        "500":"https://mj.fary.chat/error/404.png"
+    }
 
-    imageUrl = `${this.host}/${this.chatServiceName}/image/v2/info`;
-    editsUrl = `${this.host}/${this.chatServiceName}/edits/v2/info`;
-    imageEditUrl = `${this.host}/${this.chatServiceName}/image/v2/edit`;
-    variationsImageUrl = `${this.host}/${this.chatServiceName}/image/v2/variations`;
-    imageUploadUrl = `${this.host}/${this.historyServiceName}/image/upload`
-    chatRoleUrl = `${this.host}/${this.chatConfigServiceName}/config/chat-roles`
-    moduleUrl = `${this.host}/${this.chatConfigServiceName}/config/modules`
-    loginUrl = `${this.host}/${this.userServiceName}/user/user-tokens`
-    signUpUrl = `${this.host}/${this.userServiceName}/user/user`
-    checkUserIfExistingUrl = `${this.host}/${this.userServiceName}/user/user`
+    thridWebSite:{
 
-    publicKeyUrl = `${this.host}/${this.userServiceName}/user/rsapubkey`
-    userInfoUrl = `${this.host}/${this.userServiceName}/user/user-info`
-    userWsUrl = `${this.host}/${this.userServiceName}/user/ws/login`
-    historyUrl = `${this.host}/${this.historyServiceName}/history`
+    }
 
-    sentSmsCodeUrl = `${this.host}/${this.smsServiceName}/sms/send/`
+    chatUrl = `${this.gateway}/${this.chatServiceName}/chat/v2/info`;
+    assistantsUrl=`${this.gateway}/${this.chatServiceName}/assistants`;
+    chatStreamUrl = `${this.gateway}/${this.chatServiceName}/chat/v2/stream`;
+    audioUrl = `${this.gateway}/${this.chatServiceName}/audio/speech`;
+    transcriptionsUrl = `${this.gateway}/${this.chatServiceName}/audio/transcriptions`;
 
-    favoriteRoleUrl = `${this.host}/${this.userServiceName}/favorite/roles`
-    fetFavoriteChatUrl = `${this.host}/${this.userServiceName}/favorite/chats`
+    imageUrl = `${this.gateway}/${this.chatServiceName}/image/v2/info`;
+    editsUrl = `${this.gateway}/${this.chatServiceName}/edits/v2/info`;
+    imageEditUrl = `${this.gateway}/${this.chatServiceName}/image/v2/edit`;
+    variationsImageUrl = `${this.gateway}/${this.chatServiceName}/image/v2/variations`;
+    imageUploadUrl = `${this.gateway}/${this.historyServiceName}/image/upload`
+    chatRoleUrl = `${this.gateway}/${this.chatConfigServiceName}/config/chat-roles`
+    moduleUrl = `${this.gateway}/${this.chatConfigServiceName}/config/modules`
+    loginUrl = `${this.gateway}/${this.userServiceName}/user/user-tokens`
+    signUpUrl = `${this.gateway}/${this.userServiceName}/user/user`
+    checkUserIfExistingUrl = `${this.gateway}/${this.userServiceName}/user/user`
 
-    sharingUrl = `${this.host}/${this.historyServiceName}/share`
+    publicKeyUrl = `${this.gateway}/${this.userServiceName}/user/rsapubkey`
+    userInfoUrl = `${this.gateway}/${this.userServiceName}/user/user-info`
+    userWsUrl = `${this.gateway}/${this.userServiceName}/user/ws/login`
+    historyUrl = `${this.gateway}/${this.historyServiceName}/history`
 
-    aiModelsUrl = `${this.host}/${this.userServiceName}/user/models`
-    tokenUsageUrl = `${this.host}/${this.userServiceName}/token/usage`
-    feedbackUrl = `${this.host}/${this.userServiceName}/feedback`
-    mjImageUrl = `${this.host}/${this.historyServiceName}/image`;
-    imageSharingUrl = `${this.host}/${this.historyServiceName}/image/all`;
-    modelAmountUrl = `${this.host}/${this.userServiceName}/user/models/limit/`;
+    sentSmsCodeUrl = `${this.gateway}/${this.smsServiceName}/sms/send/`
 
-    paymentUrl=`${this.host}/${this.payServiceName}/payment/alipay/pay`
-    modelsUrl = `${this.host}/${this.chatConfigServiceName}/models/activity`;
+    favoriteRoleUrl = `${this.gateway}/${this.userServiceName}/favorite/roles`
+    fetFavoriteChatUrl = `${this.gateway}/${this.userServiceName}/favorite/chats`
 
+    sharingUrl = `${this.gateway}/${this.historyServiceName}/share`
+
+    aiModelsUrl = `${this.gateway}/${this.userServiceName}/user/models`
+    tokenUsageUrl = `${this.gateway}/${this.userServiceName}/token/usage`
+    feedbackUrl = `${this.gateway}/${this.userServiceName}/feedback`
+    mjImageUrl = `${this.gateway}/${this.historyServiceName}/image`;
+    imageSharingUrl = `${this.gateway}/${this.historyServiceName}/image/all`;
+    modelAmountUrl = `${this.gateway}/${this.userServiceName}/user/models/limit/`;
+
+    paymentUrl=`${this.gateway}/${this.payServiceName}/payment/alipay/pay`
+    
+    modelsUrl = `${this.gateway}/${this.chatConfigServiceName}/models/activity`;
+    maintenanceUrl =`${this.gateway}/${this.chatConfigServiceName}/sys/setting/maintenance`
+
+    websiteDoc='https://docs.qq.com/doc/DSGlBTkhEaWNHRlFF';
+    websiteICP='https://beian.miit.gov.cn/#/Integrated/index';
 }
 const apiSetting = new APISetting()
 export default apiSetting;

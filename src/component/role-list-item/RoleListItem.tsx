@@ -61,7 +61,7 @@ const RoleList: React.FC<IProps> = observer(({ config, role, store, edit, readon
     {role.isGlobal===false && <Popconfirm
       placement="bottom"
       title={t('Message')}
-      description={t('Are you want to delete the role.')}
+      description={t('Are you want to delete the role?')}
       onConfirm={(e) => onDelete(role.roleId)}
       onCancel={(e) => e?.stopPropagation()}
       okText={t("Yes")}

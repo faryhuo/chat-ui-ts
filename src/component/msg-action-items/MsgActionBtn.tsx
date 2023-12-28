@@ -7,6 +7,7 @@ import { observer } from "mobx-react-lite";
 import { IMessage, ISessiondata, getMessageFromContent } from '../../store/MessageData';
 import './MsgActionBtn.css';
 import { isMobile } from 'react-device-detect';
+import classNames from 'classnames';
 type IProps = {
   store: IMessage;
   item: ISessiondata;
@@ -16,17 +17,19 @@ const MsgActionBtn: React.FC<IProps> = observer(({ store, item }) => {
   const isSlowRegenerateBtn = () => {
     return (store.data.indexOf(item) === store.data.length - 1) && item.isDefault !== true && (item.stream ? item.end : true)
   }
+  
+  
 
 
   return (
     <>
-    {isSlowRegenerateBtn() && <div className="message-item-action-buttons" >
+    <div className={classNames("message-item-action-buttons",isSlowRegenerateBtn()?"message-item-action-buttons-show":"")}>
       <Button shape='circle'
       onClick={store.regenerateResponse} icon={<FontAwesomeIcon icon={faRefresh}></FontAwesomeIcon>}></Button>
       <Button shape='circle' icon={<FontAwesomeIcon icon={faCopy}></FontAwesomeIcon>}></Button>
       <Button shape='circle' icon={<FontAwesomeIcon icon={faPlay}></FontAwesomeIcon>}></Button>
       <Button shape='circle' icon={<FontAwesomeIcon icon={faDeleteLeft}></FontAwesomeIcon>}></Button>
-  </div>}
+  </div>
   </>
   );
 })

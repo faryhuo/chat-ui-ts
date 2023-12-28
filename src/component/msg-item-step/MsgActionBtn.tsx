@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Button, Pagination, Space, Tooltip, message } from 'antd';
+import { Button, Pagination, Popconfirm, Space, Tooltip, message } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCopy, faDeleteLeft, faPlay, faRefresh, faStop } from '@fortawesome/free-solid-svg-icons'
@@ -49,6 +49,10 @@ const MsgActionBtn: React.FC<IProps> = observer(({ store, item, index }) => {
     messageApi.success(t('Copied'));
   }
 
+  const deleteMessage = () => {
+    store.deleteMessage(store.activeSession+"",index);
+  }
+
 
   return (
     <>
@@ -60,12 +64,12 @@ const MsgActionBtn: React.FC<IProps> = observer(({ store, item, index }) => {
             style={{ marginBottom: 5 }}
             current={(item.currentIndex ? item.currentIndex : 0) + 1} onChange={(page) => { store.changeMessage(index, page - 1) }} />
             : <></>}</div><div className="msg-sent-btn">
-          {isSlowRegenerateBtn() ? <div className='msg-item-buttons'>
-            <Tooltip placement="top" title={t("Regenerate")}>
+          <div className='msg-item-buttons'>
+            {isSlowRegenerateBtn() &&<Tooltip placement="top" title={t("Regenerate")}>
               <Button onClick={store.regenerateResponse} shape='circle' size='small'
                 icon={<FontAwesomeIcon icon={faRefresh}></FontAwesomeIcon>}>
               </Button>
-            </Tooltip>
+            </Tooltip>}
             <Tooltip placement="top" title={t("Copy message")}>
               <Button onClick={copyText} shape='circle' size='small'
                 icon={<FontAwesomeIcon icon={faCopy}></FontAwesomeIcon>}>
@@ -87,11 +91,21 @@ const MsgActionBtn: React.FC<IProps> = observer(({ store, item, index }) => {
               </Tooltip>
             )}
            <Tooltip placement="top" title={t("Delete message")}>
-            <Button shape='circle' size='small'
-              icon={<FontAwesomeIcon icon={faDeleteLeft}></FontAwesomeIcon>}>
-            </Button>
+           <Popconfirm
+              placement="bottom"
+              title={t('Message')}
+              description={t('Are you want to delete the message?')}
+              onConfirm={deleteMessage}
+              onCancel={(e) => e?.stopPropagation()}
+              okText={t("Yes")}
+              cancelText={t("No")}>
+              <Button shape='circle' size='small' 
+                icon={<FontAwesomeIcon icon={faDeleteLeft}></FontAwesomeIcon>}>
+              </Button>
+            </Popconfirm>
            </Tooltip> 
-          </div> : <Button style={item.hasShowDetails === true ? {} : { "display": "none" }} type="link" className="msg-link-btn" onClick={showDetails}>
+          </div> 
+          {!isSlowRegenerateBtn() && <Button style={item.hasShowDetails === true ? {} : { "display": "none" }} type="link" className="msg-link-btn" onClick={showDetails}>
             {item.isDetails === false ? t('Show All') : t("Hide")}
           </Button>}
         </div>
@@ -103,40 +117,6 @@ const MsgActionBtn: React.FC<IProps> = observer(({ store, item, index }) => {
             <audio ref={audioRef} src={audioSrc} controls={true} autoPlay={isPlaying} onEnded={() => { setIsPlaying(false) }} />
           </Space>
         </div>}</>
-      {/* {item.choices && item.choices.length > 0 && <div>
-        <Space wrap>
-          音色:
-          <Select disabled={isPlaying}
-            defaultValue="alloy"
-            value={voice}
-            style={{ width: 120 }}
-            onChange={(e) => setVoice(e)}
-            options={[
-              { value: 'alloy', label: 'alloy' },
-              { value: 'echo', label: 'echo' },
-              { value: 'fable', label: 'fable' },
-              { value: 'onyx', label: 'onyx' },
-              { value: 'nova', label: 'nova' },
-              { value: 'shimmer', label: 'shimmer' },
-            ]}
-          />
-          {!isPlaying ? <Button
-            shape="circle"
-            onClick={() => handlePlay()}
-            style={{ backgroundColor: "#f0f0f0", marginLeft: 10 }}
-            size="small" icon={<FontAwesomeIcon icon={faPlay}></FontAwesomeIcon>}></Button> :
-            <Button
-              shape="circle"
-              onClick={() => { setAudioSrc(''); setIsPlaying(false) }}
-              style={{ backgroundColor: "#f0f0f0", marginLeft: 10 }}
-              size="small" icon={<FontAwesomeIcon icon={faStop}></FontAwesomeIcon>}></Button>}
-        </Space>
-        {audioSrc && <div style={{ display: isMobile ? 'none' : 'block' }}>
-          <Space wrap>
-            <audio src={audioSrc} controls={true} autoPlay={isPlaying} />
-          </Space>
-        </div>}
-      </div>} */}
     </>
   );
 })

@@ -95,6 +95,7 @@ export interface IMessage {
     localSessionName: string;
     activeSession: string;
     addChat: () => string;
+    deleteMessage:(chatId:string,index:number)=>void;
     newChat: (navigate:NavigateFunction)=>void;
     addChatWithRole: (role: IRole) => string;
     endStream: (chatId: string) => void;
@@ -134,6 +135,8 @@ export interface IMessage {
     getChatHistoryByChatId:(chatId: string)=> Promise<void>;
     loadDataFromlocalStore: () => void;
     checkChatId: (chatId: string) => string;
+    checkIsImageModel:(chatId: string) => boolean;
+    getSupportModelsText:()=>string;
     latestMessage: string | undefined;
     roleData: IRoleData;
     hideLastData: (chatId: string) => void;
@@ -215,6 +218,7 @@ class MessageData implements IMessage {
             changeRole: action,
             hasHistory: action,
             changeMessage: action,
+            deleteMessage:action,
             checkChatId: action,
             setFiles:action,
             setChatApiConfig: action,
@@ -408,6 +412,11 @@ class MessageData implements IMessage {
             this.enableType(chatId);
         }
         this.saveSessionToLocal();
+    }
+
+    deleteMessage(chatId:string,index:number){
+        this.getChatInfoByChatId(chatId).data.splice(index, 1);
+        this.save(chatId);
     }
 
 
@@ -892,6 +901,17 @@ class MessageData implements IMessage {
             });
     }
 
+    supportModels=["gemini-pro-vision","gpt-4-vision-preview"]
+
+    getSupportModelsText(){
+        return `( ${this.supportModels.map(item=>i18n.t(item))} )`
+    }
+
+    checkIsImageModel(chatId: string) {
+        const model=this.getChatInfoByChatId(chatId)?.chatConfig?.model;
+        return this.supportModels.includes(model);
+    }
+
     checkChatId(chatId: string) {
         if (chatId) {
             let ret = false;
@@ -1159,7 +1179,7 @@ class MessageData implements IMessage {
 
     callAssisantAPI(chatId: string) {
         const params = this.getAssistantParams(chatId);
-        const queryUrl = "https://fary.chat:8555/chat-service-2/assistants"
+        const queryUrl = apiSetting.assistantsUrl;
         return axios({
             method: "post",
             url: queryUrl,

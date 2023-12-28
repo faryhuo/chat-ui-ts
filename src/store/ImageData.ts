@@ -232,27 +232,7 @@ class ImageData implements IImageData {
 
 
 
-    data:ImageResponse[]=[{
-        "image_url": "https://midjourney.cdn.zhishuyun.com/attachments/1124768570157564029/1138095471592755230/charlesrobinson6451504_cat_id5138048_18edb79d-9791-42d6-bcc0-3f7611a1ff68.png",
-        "image_id": "1138095471592755230",
-        "progress": 100,
-        "actions": [
-            "upsample1",
-            "upsample2",
-            "upsample3",
-            "upsample4",
-            "reroll",
-            "variation1",
-            "variation2",
-            "variation3",
-            "variation4"
-        ],
-        "task_id": "7cb36efd-9b78-44b4-b547-eaeb3b2cb363",
-        "type":"generate",
-        "prompt":"cat",
-        "date":new Date(),
-        "status":"success"
-    }]
+    data:ImageResponse[]=[]
 
     fetchData(token:string){
         fetch(APISetting.mjImageUrl,{

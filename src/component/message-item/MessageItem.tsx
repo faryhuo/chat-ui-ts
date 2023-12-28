@@ -1,14 +1,14 @@
-import { Button,Input } from 'antd'
+import { Button,Input, Popconfirm, Tooltip } from 'antd'
 import config from '../../store/AppConfig';
 import './MessageItem.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPaintbrush, faTrashCan, faCheck, faCopy, faRefresh, faPlay, faDeleteLeft } from '@fortawesome/free-solid-svg-icons';
+import { faPaintbrush, faTrashCan, faCheck,  faDeleteLeft } from '@fortawesome/free-solid-svg-icons';
 import { IMessage, ISessiondata } from '../../store/MessageData';
 import MsgStep from '../msg-item-step/MsgActionBtn';
 import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';
 import { useEffect, useRef, useState } from 'react';
-import MsgActionBtn from '../msg-action-items/MsgActionBtn';
+import { useTranslation } from 'react-i18next';
 
 type IProps = {
     content: any;
@@ -29,6 +29,8 @@ const MessageItem: React.FC<IProps> = observer(({ content, title, type, text, in
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
     const [width, setWidth] = useState(330);
+
+    const { t } = useTranslation();
 
 
     useEffect(() => {
@@ -83,10 +85,25 @@ const MessageItem: React.FC<IProps> = observer(({ content, title, type, text, in
                         </div>)}</div>
                 <div className="rce-mbox-time non-copiable"></div></div>
             <svg className="rce-mbox-right-notch" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" ><path style={{ fill: config.colorPrimary + "a3", fillOpacity: 1 }} d="M0 0v20L20 0"></path></svg></div>
-        {readonly !== true && <div style={{ float: 'right' }}>
-            {!isEdit && <Button onClick={() => { editInput() }} shape="round" icon={<FontAwesomeIcon icon={faPaintbrush} />}  ></Button>}
-            {isEdit && <Button style={{ display: 'block', marginBottom: 5 }} onClick={() => { editAndResent() }} shape="round" icon={<FontAwesomeIcon icon={faCheck} />}  ></Button>}
-            {isEdit && <Button onClick={() => { cancel() }} shape="round" icon={<FontAwesomeIcon icon={faTrashCan} />}  ></Button>}
+        {readonly !== true && <div style={{ float: 'right',width:40 }}>
+            {!isEdit && <Button style={{marginBottom: 5 }} onClick={() => { editInput() }} shape='circle' icon={<FontAwesomeIcon icon={faPaintbrush} />}  ></Button>}
+            {!isEdit && <Tooltip placement="top" title={t("Delete message")}>
+                       <Popconfirm
+                          placement="bottom"
+                          title={t('Message')}
+                          description={t('Are you want to delete the message?')}
+                          onConfirm={()=>store.deleteMessage(store.activeSession+"",index)}
+                          onCancel={(e) => e?.stopPropagation()}
+                          okText={t("Yes")}
+                          cancelText={t("No")}>
+                          <Button shape='circle'
+                            icon={<FontAwesomeIcon icon={faDeleteLeft}></FontAwesomeIcon>}>
+                          </Button>
+                        </Popconfirm>
+                       </Tooltip>             
+            }
+            {isEdit && <Button style={{ display: 'block', marginBottom: 5 }} onClick={() => { editAndResent() }} shape="circle" icon={<FontAwesomeIcon icon={faCheck} />}  ></Button>}
+            {isEdit && <Button onClick={() => { cancel() }} shape="circle" icon={<FontAwesomeIcon icon={faTrashCan} />}  ></Button>}
         </div>}
     </div>)
 

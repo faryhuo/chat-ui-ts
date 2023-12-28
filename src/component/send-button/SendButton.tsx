@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { observer } from "mobx-react-lite";
 import { useState } from 'react';
-import { Input, Space, Button, message as messageApi } from 'antd';
+import { Input, Space, Button, message as messageApi, Tooltip } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPaperPlane, faBroom, faMicrophone, faThumbTack, faRecordVinyl, faKeyboard, faUpload } from '@fortawesome/free-solid-svg-icons'
 import { useTranslation } from 'react-i18next';
@@ -20,6 +20,8 @@ type IProps = {
 
 const { TextArea } = Input;
 let isCancel=false;
+let isText=false;
+
 const SendButton: React.FC<IProps> = observer(({ store, config, setBtnHeight }) => {
   const [message, setMessage] = useState("");
   const [minRow, setMinRow] = useState(2);
@@ -49,6 +51,7 @@ const SendButton: React.FC<IProps> = observer(({ store, config, setBtnHeight }) 
       setTimeout(() => {
         setInputModel('audio');
       });
+      getMediaStream();
     } else {
       setInputModel('keyboard');
     }
@@ -88,6 +91,7 @@ const SendButton: React.FC<IProps> = observer(({ store, config, setBtnHeight }) 
 
     return timeString;
   }
+
 
   const sentMsgToChat = (message) => {
     let chatId = store.activeSession + "";
@@ -145,6 +149,8 @@ const SendButton: React.FC<IProps> = observer(({ store, config, setBtnHeight }) 
       if (fetchAudio.current) {
         return;
       }
+      isCancel=false;
+      isText=false;
       fetchAudio.current=true;
       setFetchAudioSate(true);
       getMediaStream().then((stream) => {
@@ -158,14 +164,20 @@ const SendButton: React.FC<IProps> = observer(({ store, config, setBtnHeight }) 
               return;
             }
             if (new Date().getTime() - startTime.getTime() < 3000) {
-              messageFun.error(t('audio cannot less than 3s. please hold on button to record.'));
+              //messageFun.error(t('audio cannot less than 3s. please hold on button to record.'));
               fetchAudio.current=false;
               setFetchAudioSate(false);
               return;
             }
             callTranscations(audio).then((data) => {
-              const json = JSON.parse(data.data);
+              const json = data.data;
               if (json.text) {
+                if (isText) {
+                  isText=false;
+                  setInputModel('keyboard');
+                  setMessage(json.text);
+                  return;
+                }
                 sentMsgToChat(json.text);
               } else {
                 messageFun.error(t('Audio to text failed'));
@@ -251,10 +263,13 @@ const SendButton: React.FC<IProps> = observer(({ store, config, setBtnHeight }) 
   return (<div ref={btnRef}>
 
     <Space.Compact style={{ width: '100%' }}>
-      {inputModel === 'keyboard' && <div className="upload-btn-wrapper">
+      {inputModel === 'keyboard' &&    <div className="upload-btn-wrapper">
         <Upload store={store} config={config}>
-          <Button className='upload-btn' disabled={store.isType === false} shape="circle"
+        <Tooltip placement="top" title={t('Only support those models.') + store.getSupportModelsText()}>
+          <Button className='upload-btn' disabled={store.isType === false || !store.checkIsImageModel(store.activeSession)} shape="circle"
+          onClick={(e)=>{console.log(e)}}
           icon={<FontAwesomeIcon icon={faUpload}></FontAwesomeIcon>}></Button>
+         </Tooltip>
         </Upload>
       </div>}
       {inputModel === 'keyboard' ? <TextArea
@@ -273,6 +288,7 @@ const SendButton: React.FC<IProps> = observer(({ store, config, setBtnHeight }) 
           onMouseDown={startAudio}
           onTouchStart={startAudio}
           onTouchEnd={endAuio}
+          onTouchCancel={endAuio}
           onMouseUp={endAuio}
           onClick={(e)=>e.preventDefault()}
           // onMouseLeave={handleMouseUp} // 处理鼠标在按钮上按住然后离开按钮的情况
@@ -295,7 +311,7 @@ const SendButton: React.FC<IProps> = observer(({ store, config, setBtnHeight }) 
     {isStart && <div
       onMouseUp={endAuio}
       onTouchEnd={endAuio}
-      onTouchStart={()=>isCancel=false}
+      onTouchCancel={endAuio}
       className='audio-wrapper'>
       {/* <div className="canvas-wrapper">
         <canvas id='canvas'></canvas>
@@ -306,7 +322,11 @@ const SendButton: React.FC<IProps> = observer(({ store, config, setBtnHeight }) 
           onMouseEnter={() => { isCancel=true; }}
           onMouseLeave={() => { isCancel=false;}}
         >{t('Cancel')}</Button>
-        <Button shape='circle'>{t('Text')}</Button>
+        <Button shape='circle'
+         onTouchStart={()=>isText=true}
+         onMouseEnter={() => { isText=true; }}
+         onMouseLeave={() => { isText=false;}}
+        >{t('Text')}</Button>
       </div>
     </div>}
   </div>);

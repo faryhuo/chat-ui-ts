@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { observer } from "mobx-react-lite";
 import { InboxOutlined } from '@ant-design/icons';
 
-import { Button, InputNumber, message, Radio, Select, Tooltip, Upload, Image, Slider, Row, Col, Switch } from 'antd';
+import { Button, InputNumber, message, Radio, Select, Tooltip, Upload, Image, Slider, Row, Col, Switch, Modal } from 'antd';
 import './ImageParams.css'
 import imageData from '../../store/ImageData';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -12,6 +12,7 @@ import apiSetting from '../../store/APISetting';
 import { RcFile } from 'antd/es/upload';
 import { getCompositionOptions, getEnvironmentOptions, getLightOptions, qualityOptions, getStyle2Options } from './ParamOptions';
 import userModelLimit from '../../store/UserModelLimit';
+import Payment from '../../page/payment/Payment';
 
 type IProps = {
 }
@@ -19,9 +20,13 @@ type IProps = {
 const ImageParams: React.FC<IProps> = observer(() => {
 
   const { t } = useTranslation();
-  const [mjCount, setMjCount] = React.useState(-1);
-  const [mjFastCount, setMjFastCount] = React.useState(-1);
+  const [mjCount, setMjCount] = useState(-1);
+  const [mjFastCount, setMjFastCount] = useState(-1);
 
+  const [paymentOpen, setPaymentOpen] = useState(false);
+  const handlePaymentCancel = () => {
+    setPaymentOpen(false);
+  }
   useEffect(() => {
     userModelLimit.getMjCount("mj").then((count) => {
       setMjCount(count);
@@ -152,8 +157,7 @@ const ImageParams: React.FC<IProps> = observer(() => {
 
     {imageData.isMJModel && imageData.params.model === "MJ" && <><div className="image-param-set">
       <div className="image-param-label">{t("Stylize")}
-        <Tooltip placement="right" title={t(`Stylization: --stylize or --s, with a range of 1-1000.
-Parameter elucidation: A higher numerical value corresponds to a more enriched and artistic portrayal of the visual composition.`)}>
+        <Tooltip placement="right" title={t(`Stylization: --stylize or --s, with a range of 1-1000. Parameter elucidation: A higher numerical value corresponds to a more enriched and artistic portrayal of the visual composition.`)}>
           {questionBtn}
         </Tooltip>
       </div>
@@ -294,7 +298,7 @@ Parameter elucidation: A higher numerical value corresponds to a more enriched a
       <div className="amount-content">
         <div className="amount-left">
           <span><FontAwesomeIcon style={{ color: "#faad14" }} icon={faWallet} /> {t('AI Image Amount')}</span>
-          <Button style={{ marginLeft: 10 }} size='small' icon={<FontAwesomeIcon icon={faAdd}></FontAwesomeIcon>} />
+          <Button onClick={()=>{setPaymentOpen(true)}} style={{ marginLeft: 10 }} size='small' icon={<FontAwesomeIcon icon={faAdd}></FontAwesomeIcon>} />
         </div>
         <div className="amount-right">
           <div className="amount-item">
@@ -321,7 +325,16 @@ Parameter elucidation: A higher numerical value corresponds to a more enriched a
     <div className="end">
 
     </div>
-
+    <Modal
+      open={paymentOpen}
+      title={false}
+      onCancel={handlePaymentCancel}
+      footer={false}
+      destroyOnClose={true}
+      width={900}
+    >
+      <Payment type='image'></Payment>
+    </Modal>
   </div>)
 })
 

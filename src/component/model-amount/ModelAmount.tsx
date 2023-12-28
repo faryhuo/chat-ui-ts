@@ -53,7 +53,7 @@ const ModelAmount: React.FC<IProps> = observer(() => {
       destroyOnClose={true}
       width={900}
     >
-      <Payment></Payment>
+      <Payment type='chat'></Payment>
     </Modal>
   </div>)
 })

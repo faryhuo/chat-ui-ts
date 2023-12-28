@@ -62,7 +62,7 @@ export function playAudio(stream){
       const startDate=new Date()
       mediaRecorder.onstop = () => {
         if(new Date().getTime()-startDate.getTime()<3000){
-          reject(i18n.t('audio_too_short'));
+          reject(i18n.t('audio cannot less than 3s. please hold on button to record.'));
           return;
         }
         //source.disconnect();

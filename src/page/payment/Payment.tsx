@@ -11,9 +11,10 @@ import ModelSelector from '../../component/model-selector/ModelSelector';
 import chatConfig from '../../store/ChatConfig';
 
 type IProps={
+  type:'chat' | 'image';
 }
 
-const Payment:React.FC<IProps> = ()=>{
+const Payment:React.FC<IProps> = ({type})=>{
 
    const { t } = useTranslation();
    const [form] = Form.useForm();
@@ -61,11 +62,15 @@ const Payment:React.FC<IProps> = ()=>{
          >
            <Form.Item label={t("Goods")} rules={[{ required: true }]}
              name="goods"  >
-              <ModelSelector isPayment={true}></ModelSelector>
+              {type==='chat' && <ModelSelector isPayment={true}></ModelSelector>}
+              {type==='image' &&  <Radio.Group>
+               <Radio key={1} value="mj">{t('Standard mode')}</Radio>
+               {/* <Radio key={2} value="fast">{t('Fast mode')}</Radio> */}
+             </Radio.Group>}
            </Form.Item>
 
            <Form.Item name="price"  wrapperCol={{ offset: isMobile?0:8, span: 16 }}>
-            <label>{t('Price : ')}{chatConfig.getCallTimerPrice(goods)}{t('/count')}</label>
+            <label>{t('Price : ')}{type==='chat'?chatConfig.getCallTimerPrice(goods):0.15}{t('/count')}</label>
            </Form.Item>
 
            <Form.Item label={t("count")} rules={[{ required: true }]}

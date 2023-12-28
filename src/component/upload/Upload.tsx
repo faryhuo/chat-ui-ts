@@ -52,11 +52,9 @@ type IProps = {
 const AppUpload : React.FC<IProps> = observer(({store, config,children}) => {
   const {t} = useTranslation();
 
-  const checkModel = () => {
-    const supportModels=["gemini-pro-vision","gpt-4-vision-preview"];
-    const currentModel=store.getChatInfoByChatId(store.activeSession).chatConfig.model;
-    if(!supportModels.includes(currentModel)){
-      message.error(t('Only support those models.') + `(${supportModels.join(",")})`);
+  const checkModel = () => { 
+    if(!store.checkIsImageModel(store.activeSession+"")){
+      message.error(t('Only support those models.') + store.getSupportModelsText());
       return false;
     }
     return true;
@@ -79,7 +77,7 @@ const AppUpload : React.FC<IProps> = observer(({store, config,children}) => {
 
 
   const handleChange = (info) => {
-    if(checkModel() && checkFileType(info.file)===true){
+    if(checkFileType(info.file)===true){
       store.setFiles(info.fileList);
     }
     // if (info.file.status === 'uploading') {
@@ -105,7 +103,7 @@ const AppUpload : React.FC<IProps> = observer(({store, config,children}) => {
       action={apiSetting.imageUploadUrl}
       onChange={handleChange}
       maxCount={3}
-      beforeUpload={(e)=>{console.log(e)}}
+      
       style={{ width: 20 }}
       itemRender={(originNode, file,fileList) => (
         <DraggableUploadListItem originNode={originNode} file={file} index={fileList.indexOf(file)}/>

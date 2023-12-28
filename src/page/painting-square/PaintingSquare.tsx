@@ -123,7 +123,7 @@ const PaintingSquare: React.FC<IProps> = () => {
                   <Image src={item.urlSmall}
                     width={item.width}
                     height={item.height}
-                    fallback={"https://image-1257149217.cos.ap-guangzhou.myqcloud.com/error/404.png"}
+                    fallback={apiSetting.error[404]}
                     onError={() => item.visible = false}
                     preview={
                       {

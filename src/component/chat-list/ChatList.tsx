@@ -93,7 +93,7 @@ const ChatList: React.FC<IProps> = ({ store,userProflie }) => {
         label: (<Popconfirm
           placement="right"
           title={t('Message')}
-          description={t('Are you want to delete the chat.')}
+          description={t('Are you want to delete the chat?')}
           onConfirm={(e) => clear(item.key, e)}
           onCancel={(e) => e?.stopPropagation()}
           okText={t("Yes")}

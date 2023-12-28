@@ -89,7 +89,7 @@
     "Type your code here":"输入想要优化的代码",
     "Instructions":"你的需求",
     "Type the code and your requirement":"请输入要优化的代码还有你的需求",
-    "Are you want to delete the chat.":"你确定要删除这个会话吗",
+    "Are you want to delete the chat?":"你确定要删除这个会话吗",
     "Yes":"是",
     "No":"否",
     "Precise":"准确",
@@ -130,7 +130,7 @@
     "Remove":"移除",
     "Delete":"删除",
     "Go to Role Management":"角色管理",
-    "Are you want to delete the role.":"确定删除这个角色吗",
+    "Are you want to delete the role?":"确定删除这个角色吗",
     "Message":"消息",
     "History":"历史记录",
     "Recent":"最近的",
@@ -288,7 +288,7 @@
     "Stop audio":"停止播放",
     "Delete message":"删除信息",
     "Reduce the artistic processing during the intermediate stages to produce more photographically nuanced images. For instance: --style raw.":"减少 midjourney 的艺术加工，生成更摄影化的图片。例如：--style raw",
-    "Stylization: --stylize or --s, with a range of 1-1000.Parameter elucidation: A higher numerical value corresponds to a more enriched and artistic portrayal of the visual composition.":"风格化：--stylize 或 --s，范围 1-1000参数释义：数值越高，画面表现也会更具丰富性和艺术性",
+    "Stylization: --stylize or --s, with a range of 1-1000. Parameter elucidation: A higher numerical value corresponds to a more enriched and artistic portrayal of the visual composition.":"风格化：--stylize 或 --s，范围 1-1000参数释义：数值越高，画面表现也会更具丰富性和艺术性",
     "NIJI: Inclined towards an animated style, suitable for two-dimensional models.":"NIJI: 偏动漫风格、适用于二次元模型",
     "MJ: A model inclined towards verisimilitude with universal applicability.":"MJ: 偏真实通用模型",
     "Proportions of the generated image dimensions.":"生成图片尺寸比例",
@@ -299,5 +299,6 @@
     "gpt-3.5-turbo":"GPT 3.5",
     "gemini-pro":"Gemini Pro",
     "gemini-pro-vision":"Gemini 图像版",
-    "Must be upload one image in current model.":"当前模型必须上传一张图片"
+    "Must be upload one image in current model.":"当前模型必须上传一张图片",
+    "Are you want to delete the message?":"你确定要删除这条消息吗?"
 }
