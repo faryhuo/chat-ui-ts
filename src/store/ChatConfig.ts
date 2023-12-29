@@ -8,7 +8,7 @@ import userProflie from "./UserProfile";
 export interface IModelOptions {
     value: string;
     label: string;
-    channle: string;
+    channel: string;
     isMain: boolean;
     maxToken: number;
     description?: string;
@@ -35,7 +35,7 @@ export interface IChatAPIConfig {
     frequency_penalty: number;
     max_tokens: number;
     stream?: boolean;
-    channle?:string;
+    channel?:string;
 }
 
 interface IChatAPIResponse {
@@ -63,13 +63,13 @@ class ChatConfig implements IChatConfig {
         frequency_penalty: 0,
         max_tokens: 1024,
         stream: true,
-        channle:"gpt"
+        channel:"gpt"
     }
 
     chatModelList: IModelOptions[] = [];
 
     getModelChange(model:string){
-       const channel= this.chatModelList.find(item=>item.value===model)?.channle
+       const channel= this.chatModelList.find(item=>item.value===model)?.channel
        return channel?channel:'gpt';
     }
 
@@ -140,11 +140,11 @@ class ChatConfig implements IChatConfig {
                     const repData=data.data as IChatAPIResponse[];
                     repData.forEach((item)=>{
                         const obj:IModelOptions={
-                            channle:item.channel,
-                            label:i18n.t(item.modelId),
+                            channel:item.channel,
+                            label:i18n.t(`model.${item.channel}.${item.modelId}.name`),
                             value:item.modelId,
                             isMain:item.main,
-                            description:item.description,
+                            description:i18n.t(`model.${item.channel}.${item.modelId}.description`),
                             maxToken:item.maxToken,
                             trainingDate:item.trainingDate,
                             callTimerPrice:item.callTimerPrice,
@@ -192,7 +192,7 @@ class ChatConfig implements IChatConfig {
             this.apiConfig.stream=true;
             this.apiConfig.model = model;
         }
-        this.apiConfig.channle=newChannel;
+        this.apiConfig.channel=newChannel;
         if(oldChannel!==newChannel){
             this.apiConfig.temperature=1;
         }

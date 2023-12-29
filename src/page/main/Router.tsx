@@ -89,10 +89,13 @@ const AppRoutes:React.FC<IProps> = ({messageData,appConfig,messageApi})=>{
 
     const location = useLocation();
 
-
     useEffect(()=>{
-        messageData.changeTypeByUrl(location);
-    },[location,messageData])
+        if(location.pathname==="/" || location.pathname.startsWith("/chat")){
+            appConfig.setHasMenu(true);
+        }else{
+            appConfig.setHasMenu(false);
+        }
+    },[appConfig, location])
 
   return (<Routes>
     {

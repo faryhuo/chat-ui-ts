@@ -1,4 +1,68 @@
 {
+    "model": {
+      "gpt": {
+        "gpt-3.5-turbo": {
+          "name": "GPT-3.5",
+          "description": "GPT 3.5 模型\n內容：16K\n最快的模型，適合大多數日常任務"
+        },
+        "gpt-3.5-turbo-1106": {
+          "name": "GPT-3.5-1106",
+          "description": "GPT 3.5 模型\n內容：16K\n最快的模型，適合大多數日常任務"
+        },
+        "gpt-4-1106-preview": {
+          "name": "GPT 4.0 Turbo",
+          "description": "內容：128K\n最新的 GPT-4 模型，在所有 GPT-4 模型中內容最長"
+        },
+        "gpt-4-vision-preview": {
+          "name": "GPT 4.0 圖像版",
+          "description": "內容：128K\n最新的 GPT-4 模型，在所有 GPT-4 模型中內容最長\n具備圖像辨識功能"
+        }
+      },
+      "google": {
+        "gemini-pro": {
+          "name": "Gemini Pro",
+          "description": "內容：32K\nGoogle 最新的 Gemini 模型，專業版"
+        },
+        "gemini-pro-vision": {
+          "name": "Gemini 圖像版",
+          "description": "內容：12K\nGoogle 最新的 Gemini 模型，專業版\n具備圖像辨識功能，但不支援多輪對話"
+        }
+      },
+      "baidu": {
+        "ernie-bot-turbo": {
+          "name": "文心一言 4.0",
+          "description": "百度知識增強大型語言模型，提供全面、準確、快速的回應"
+        },
+        "ernie-bot-4": {
+          "name": "文心一言 4.0",
+          "description": "百度知識增強大型語言模型，提供全面、準確、快速的回應"
+        }
+      },
+      "aliyun": {
+        "qwen-plus": {
+          "name": "通義千問 Plus",
+          "description": "阿里雲的超大型語言模型，能夠生成高質量、連貫、有邏輯的文字內容"
+        },
+        "qwen-turbo": {
+          "name": "通義千問",
+          "description": "阿里雲的超大型語言模型，能夠生成高質量、連貫、有邏輯的文字內容"
+        }
+      },
+      "xunfei": {
+        "spark-desk-1.5": {
+          "name": "訊飛星火 1.5",
+          "description": "訊飛星火認知大模型，由科大訊飛推出，擁有跨領域的知識和語言理解能力"
+        },
+        "spark-desk-2": {
+          "name": "訊飛星火 2.0",
+          "description": "訊飛星火認知大模型，由科大訊飛推出，擁有跨領域的知識和語言理解能力"
+        },
+        "spark-desk-3": {
+          "name": "訊飛星火 3.0",
+          "description": "訊飛星火認知大模型，由科大訊飛推出，擁有跨領域的知識和語言理解能力"
+        }
+      }
+    },
     "tags": {
         "all": "全部",
         "favorite": "收藏",

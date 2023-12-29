@@ -15,16 +15,17 @@ const ModelDesc:React.FC<IProps> = ()=>{
       },
       {
         title: t('Description'),
-        dataIndex: 'desc',
-        responsive: ['lg']
+        dataIndex: 'desc'
       },
-      {
-        title: t('Max Support Lenght'),
-        dataIndex: 'length',
-      },
+      // {
+      //   title: t('Max Support Lenght'),
+      //   dataIndex: 'length',
+      //   responsive: ['lg']
+      // },
       {
         title: t('Training Date'),
         dataIndex: 'date',
+        responsive: ['lg']
       }
     ];
 
@@ -36,10 +37,10 @@ const ModelDesc:React.FC<IProps> = ()=>{
       const data:any=[];
       chatConfig.chatModelList.forEach(item =>{
         const obj={model:item.label,length:chatConfig.getMaxTokenByModel(item.value),
-        channel:item.channle,
+        channel:item.channel,desc:item.description,
         date:chatConfig.getTrainingDate(item.value)}
         data.push(obj);
-        channelObj[item.channle]=t(item.channle);
+        channelObj[item.channel]=t(item.channel);
       })
       setDataSource(data.filter((item:any)=>{
         return item.channel==="gpt";
@@ -51,7 +52,8 @@ const ModelDesc:React.FC<IProps> = ()=>{
       const data:any=[];
       chatConfig.chatModelList.forEach(item =>{
         const obj={model:item.label,length:chatConfig.getMaxTokenByModel(item.value),
-          channel:item.channle,date:chatConfig.getTrainingDate(item.value)}
+          channel:item.channel,date:chatConfig.getTrainingDate(item.value),
+        desc:item.description}
         data.push(obj);
       })
       setDataSource(data.filter((item: { channel: any; })=>{

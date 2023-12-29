@@ -49,19 +49,19 @@ const ModelSelector:React.FC<IProps> = observer(({store,onChange,value,isPayment
       }
       const options=[{
         label:getIcon(t('gpt'),gptIcon),
-        options: datasource.filter(item=>item.channle==="gpt")
+        options: datasource.filter(item=>item.channel==="gpt")
       },{
         label:getIcon(t('baidu'),baiduIcon),
-        options: datasource.filter(item=>item.channle==="baidu")
+        options: datasource.filter(item=>item.channel==="baidu")
       },{
         label:getIcon(t('google'),googleIcon),
-        options: datasource.filter(item=>item.channle==="google")
+        options: datasource.filter(item=>item.channel==="google")
       },{
         label:getIcon(t('xunfei'),xunfeiIcon),
-        options: datasource.filter(item=>item.channle==="xunfei")
+        options: datasource.filter(item=>item.channel==="xunfei")
       },{
         label:getIcon(t('aliyun'),aliyunIcon),
-        options: datasource.filter(item=>item.channle==="aliyun")
+        options: datasource.filter(item=>item.channel==="aliyun")
       }]
       return options;
     }

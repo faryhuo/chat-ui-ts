@@ -1,4 +1,68 @@
 {
+    "model": {
+        "gpt": {
+            "gpt-3.5-turbo": {
+                "name": "GPT-3.5",
+                "description": "The GPT 3.5 model\nContext: 16K\nFastest model, good for most day to day tasks"
+            },
+            "gpt-3.5-turbo-1106": {
+                "name": "GPT-3.5-1106",
+                "description": "The GPT 3.5 model\nContext: 16K\nFastest model, good for most day to day tasks"
+            },
+            "gpt-4-1106-preview": {
+                "name": "GPT 4.0 Turbo",
+                "description": "Context: 128K\nThe latest GPT-4 model with the longest context of all GPT-4 models"
+            },
+            "gpt-4-vision-preview": {
+                "name": "GPT 4.0 Vision",
+                "description": "Context: 128K\nThe latest GPT-4 model with the longest context of all GPT-4 models.\nWith image recognition capabilities"
+            }
+        },
+        "google": {
+            "gemini-pro": {
+                "name": "Gemini Pro",
+                "description": "Context: 32K\nGoogle's latest Gemini model, Pro version"
+            },
+            "gemini-pro-vision": {
+                "name": "Gemini Vision",
+                "description": "Context: 12K\nGoogle's latest Gemini model, Pro version\nWith image recognition capabilities, but doesn't support multi-turn conversations"
+            }
+        },
+        "baidu": {
+            "ernie-bot-turbo": {
+                "name": "Ernie Bot 4.0",
+                "description": "Baidu's knowledge-enhanced large language model, providing comprehensive, accurate, and fast responses"
+            },
+            "ernie-bot-4": {
+                "name": "Ernie Bot 4.0",
+                "description": "Baidu's knowledge-enhanced large language model, providing comprehensive, accurate, and fast responses"
+            }
+        },
+        "aliyun": {
+            "qwen-plus": {
+                "name": "Qwen Plus",
+                "description": "Alibaba's ultra-large language model capable of generating high-quality, coherent, and logical text content"
+            },
+            "qwen-turbo": {
+                "name": "Qwen",
+                "description": "Alibaba's ultra-large language model capable of generating high-quality, coherent, and logical text content"
+            }
+        },
+        "xunfei": {
+            "spark-desk-1.5": {
+                "name": "Spark Desk 1.5",
+                "description": "Spark Desk Cognitive Big Model, a new generation of cognitive intelligence big model launched by iFLYTEK, with cross-domain knowledge and language comprehension capabilities"
+            },
+            "spark-desk-2": {
+                "name": "Spark Desk 2.0",
+                "description": "Spark Desk Cognitive Big Model, a new generation of cognitive intelligence big model launched by iFLYTEK, with cross-domain knowledge and language comprehension capabilities"
+            },
+            "spark-desk-3": {
+                "name": "Spark Desk 3.0",
+                "description": "Spark Desk Cognitive Big Model, a new generation of cognitive intelligence big model launched by iFLYTEK, with cross-domain knowledge and language comprehension capabilities"
+            }
+        }
+    },
     "tags":{
         "all":"All",
         "favorite":"Favorite",

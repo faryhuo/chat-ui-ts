@@ -27,7 +27,7 @@ const listLayout = {
 };
 
 const { Sider, Content } = Layout;
-const Image: React.FC<IProps> = ({ globalMessageApi,userProflie }) => {
+const Image: React.FC<IProps> = ({ globalMessageApi,userProflie,config }) => {
 
   const { t } = useTranslation();
 
@@ -56,6 +56,7 @@ const Image: React.FC<IProps> = ({ globalMessageApi,userProflie }) => {
     return ImageData.data.concat([]).reverse()
   }
 
+ 
   return (
     <div className="ai-image-page">
       <Layout className="ai-image-page-wrapper">

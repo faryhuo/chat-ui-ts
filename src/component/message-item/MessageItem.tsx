@@ -87,7 +87,7 @@ const MessageItem: React.FC<IProps> = observer(({ content, title, type, text, in
             <svg className="rce-mbox-right-notch" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" ><path style={{ fill: config.colorPrimary + "a3", fillOpacity: 1 }} d="M0 0v20L20 0"></path></svg></div>
         {readonly !== true && <div style={{ float: 'right',width:40 }}>
             {!isEdit && <Button style={{marginBottom: 5 }} onClick={() => { editInput() }} shape='circle' icon={<FontAwesomeIcon icon={faPaintbrush} />}  ></Button>}
-            {!isEdit && <Tooltip placement="top" title={t("Delete message")}>
+            {!isEdit && <Tooltip placement="bottom" title={t("Delete message")}>
                        <Popconfirm
                           placement="bottom"
                           title={t('Message')}

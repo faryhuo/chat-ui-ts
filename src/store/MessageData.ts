@@ -7,7 +7,7 @@ import userProflie, { USER_TOKEN_KEY } from "./UserProfile";
 import roleData, { IRoleData, IRole } from "./RoleData";
 import imageData from "./ImageData";
 import saveAs from 'file-saver';
-import { Location, NavigateFunction } from "react-router-dom";
+import { NavigateFunction } from "react-router-dom";
 import chatConfig, { IChatAPIConfig } from "./ChatConfig";
 import apiSetting from "./APISetting";
 import userModelLimit from "./UserModelLimit";
@@ -140,7 +140,6 @@ export interface IMessage {
     latestMessage: string | undefined;
     roleData: IRoleData;
     hideLastData: (chatId: string) => void;
-    changeTypeByUrl: (location: Location) => void;
     share: (node: any) => Promise<void>;
     chatApiConfig: IChatAPIConfig;
     speech:(item:ISessiondata)=>Promise<string>;
@@ -245,7 +244,6 @@ class MessageData implements IMessage {
             this.loadDataFromlocalStore();
             this.addSharingData();
         }
-        //this.changeTypeByUrl();
     }
 
     clearHistoryResult(){
@@ -322,38 +320,6 @@ class MessageData implements IMessage {
                 this.saveSessionToLocal();
             }
         })
-    }
-
-    changeTypeByUrl(location: Location) {
-        const pathname = location.pathname;
-        let type = "chat";
-        if (pathname.startsWith("/chat")) {
-            type = "chat";
-        } else if (pathname.startsWith("/image")) {
-            type = "image";
-        } else if (pathname.startsWith("/painting_square")) {
-            type = "painting_square";
-        } else if (pathname.startsWith("/config")) {
-            type = "config";
-        } else {
-            const ctype = pathname.replace("/", "");
-            const types = ["sd", "code", "tips", "person"];
-            if (types.includes(ctype)) {
-                type = ctype;
-            }
-        }
-        
-        if (userProflie.premission.includes(type)) {
-            if (type !== this.type) {
-                this.changeType(type)
-            }
-        } else {
-            //userProflie.openPage();
-            //window.history.back();
-        }
-        if (type !== this.type) {
-            this.changeType(type)
-        }
     }
 
     loadDataFromlocalStore() {
@@ -436,20 +402,16 @@ class MessageData implements IMessage {
     }
 
     newChat(navigate:NavigateFunction) {
-        if (this.type === "chat") {
-            this.activeSession = "";
-            navigate("/chat");
-            if(config.isMobile){
-                config.isSlowLeftMenu=false;
-            }
-        } else {
-            this.addChat();
+        this.activeSession = "";
+        navigate("/chat");
+        if(config.isMobile){
+            config.isSlowLeftMenu=false;
         }
     }
 
     addChat() {
         const data: Array<ISessiondata> = [];
-
+        const modelConfig=Object.assign({},chatConfig.apiConfig);
         let chatId = this.type + new Date().getTime();
         if (config.isSlowMsg4AddChat) {
             let tmp: ISessiondata = {
@@ -457,13 +419,7 @@ class MessageData implements IMessage {
                 isError:false,
                 isDefault: true
             };
-            if (this.type === "chat") {
-                tmp.text = i18n.t("Type something to search on ChatGPT");
-            } else if (this.type === "image") {
-                tmp.text = i18n.t("Type something to generate a image");
-            } else if (this.type === "code") {
-                tmp.text = i18n.t("Type the code and your requirement");
-            }
+            tmp.text=i18n.t(`model.${modelConfig.channel}.${modelConfig.model}.description`)
             data.push(tmp)
         }
         const sessionData: ISession = {
@@ -474,7 +430,7 @@ class MessageData implements IMessage {
             edit: false,
             favorite: false,
             updateDate: new Date(),
-            chatConfig: Object.assign({},chatConfig.apiConfig),
+            chatConfig: modelConfig,
             isDone:true
         };
         this.session.push(sessionData);
@@ -553,6 +509,7 @@ class MessageData implements IMessage {
         if (chatData && chatData.data && chatData.data.length >= 1) {
             chatData.data[chatData.data.length - 1].end = true;
         }
+        chatData.isType=false;
     }
 
     triggerFavorite(chatId: string) {
@@ -600,6 +557,20 @@ class MessageData implements IMessage {
             if (text && data && choices && choices.length > 0) {
                 choices[0].message.content += text;
             }
+        }
+    }
+
+    appendErrorData(text: string, chatId: string) {
+        const chatData = this.getChatInfoByChatId(chatId);
+        if (chatData && chatData.data && chatData.data.length >= 1) {
+            const data = chatData.data;
+            const recrod=chatData.data[data.length - 1];
+            const choices = recrod.choices;
+            if (text && data && choices && choices.length > 0) {
+                choices[0].message.content = text;
+            }
+            recrod.title="Error"
+            recrod.isError=true;
         }
     }
 
@@ -692,12 +663,6 @@ class MessageData implements IMessage {
             return;
         }
         this.type = type;
-        config.changeType(type);
-        if (type === "code" || type === "image") {
-            if (this.sessionList.length) {
-                this.activeSession = this.sessionList[this.sessionList.length - 1].key;
-            }
-        }
     }
 
     selectChat(chatId: string) {
@@ -802,7 +767,7 @@ class MessageData implements IMessage {
             }
             if(key === "model"){
                 const newChannel=chatConfig.getModelChange(value as any);
-                sessionMatch.chatConfig['channle'] = newChannel;
+                sessionMatch.chatConfig['channel'] = newChannel;
             }
             sessionMatch.chatConfig[key] = value;
         }
@@ -970,7 +935,8 @@ class MessageData implements IMessage {
         }
         if(chatData?.chatConfig?.model==="gpt-all-tool"){
             return this.callAssisantAPI(chatId).then(() => {
-                this.saveSessionToLocal();
+                this.hideLastData(chatId);
+                this.save(chatId);
             })
         }else if (chatData?.chatConfig?.stream) {
             return this.callChatAPIByStreamByPost(chatId).then(() => {
@@ -1111,7 +1077,16 @@ class MessageData implements IMessage {
                                 errorMsg = errorMsg + data;
                                 return true;
                             } else {
-                                self.appendData(JSON.parse(data).choices[0].delta.content, chatId);
+                                const responseJson=JSON.parse(data);
+                                if(responseJson.error==="429"){
+                                    self.appendErrorData(i18n.t("Only 5 messages can be sent within 1 minute."), chatId)
+                                    resolve(true);
+                                    ctrl.abort();
+                                    self.endStream(chatId);
+                                    self.enableType(chatId);
+                                    return;
+                                }
+                                self.appendData(responseJson.choices[0].delta.content, chatId);
                             }
                         } catch (e) {
                             ctrl.abort();
@@ -1395,11 +1370,12 @@ class MessageData implements IMessage {
             }
             chatTokens = this.encodeChat(messageListData);
         }
-        const channle=chatConfig.getModelChange(model);
+        console.log(chatTokens);
+        const channel=chatConfig.getModelChange(model);
         let params = {
             messages: JSON.stringify(messageListData),
             model: model,
-            channel:channle,
+            channel:channel,
             temperature: chatAPIConfig.temperature,
             top_p: chatAPIConfig.top_p,
             presence_penalty: chatAPIConfig.presence_penalty,
@@ -1508,9 +1484,10 @@ class MessageData implements IMessage {
             if (item.isDefault) {
                 return true;
             }
-            if(item.isError){
+            if(item.isError || item.title==='Error'){
                 return true;
             }
+            console.log(item);
             const msg = { role: "", content: []};
                         if (item.isSys) {
                 msg.role = "assistant";

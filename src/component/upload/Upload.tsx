@@ -77,7 +77,12 @@ const AppUpload : React.FC<IProps> = observer(({store, config,children}) => {
 
 
   const handleChange = (info) => {
-    if(checkFileType(info.file)===true){
+    if (info.file.status === 'removed'){
+      store.setFiles(info.fileList);
+      return;
+    }
+
+    if(checkModel() && checkFileType(info.file)===true){
       store.setFiles(info.fileList);
     }
     // if (info.file.status === 'uploading') {

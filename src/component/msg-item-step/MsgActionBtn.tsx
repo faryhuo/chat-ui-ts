@@ -22,8 +22,14 @@ const MsgActionBtn: React.FC<IProps> = observer(({ store, item, index }) => {
 
   const [isPlaying, setIsPlaying] = useState(false);
 
+
+
+  const isShowBtn = () => {
+    return item.isDefault !== true && (item.stream ? item.end : true)
+  }
+
   const isSlowRegenerateBtn = () => {
-    return (store.data.indexOf(item) === store.data.length - 1) && item.isDefault !== true && (item.stream ? item.end : true)
+    return (store.data.indexOf(item) === store.data.length - 1) && isShowBtn();
   }
 
   const showDetails = () => {
@@ -70,6 +76,7 @@ const MsgActionBtn: React.FC<IProps> = observer(({ store, item, index }) => {
                 icon={<FontAwesomeIcon icon={faRefresh}></FontAwesomeIcon>}>
               </Button>
             </Tooltip>}
+            {isShowBtn() && <>
             <Tooltip placement="top" title={t("Copy message")}>
               <Button onClick={copyText} shape='circle' size='small'
                 icon={<FontAwesomeIcon icon={faCopy}></FontAwesomeIcon>}>
@@ -90,6 +97,8 @@ const MsgActionBtn: React.FC<IProps> = observer(({ store, item, index }) => {
                   size="small" icon={<FontAwesomeIcon icon={faStop}></FontAwesomeIcon>}></Button>
               </Tooltip>
             )}
+            </>
+            }
            <Tooltip placement="top" title={t("Delete message")}>
            <Popconfirm
               placement="bottom"

@@ -24,10 +24,10 @@ export interface IAppConfig {
     getCodeEditConfig: () => ICodeEditsAPIConfig;
     save: (config: any) => void;
     triggerMenu: () => void;
-    hideMenuTypeList: String[];
     isMobile: boolean;
     clearConfig: () => void;
     clearHistory: () => void;
+    setHasMenu:(flag:boolean)=>void;
     formLayout: FormLayout ;
     isChinese: boolean;
     isEnglish: boolean;
@@ -49,8 +49,7 @@ class AppConfig implements IAppConfig {
     version = "3.2"
     style = "chat";
     localConfigName = `config_${this.version}`;
-    type = "";
-    hideMenuTypeList = ["image","tips", "config", "sd", "share", "person","painting_square"]
+    hasMenu=true;
     isSlowLeftMenu = isMobile ? false : true;
     isMobile = isMobile;
     api = apiSetting
@@ -87,10 +86,14 @@ class AppConfig implements IAppConfig {
         return this.textLanguage;
     }
 
+    setHasMenu(flag:boolean){
+        this.hasMenu=flag;
+    }
+
 
     // iatRecorder = new IatRecorder({ language: this.language, accent: this.language } as any);
     get isSlowLeftMenuFlag() {
-        return !this.hideMenuTypeList.includes(this.type) && this.isSlowLeftMenu;
+        return this.hasMenu && this.isSlowLeftMenu;
     }
 
     codeStyle = "a11yDark";
@@ -106,13 +109,13 @@ class AppConfig implements IAppConfig {
     constructor() {
         makeObservable(this, {
             isSlowLeftMenu: observable,
-            type: observable,
+            hasMenu: observable,
             textLanguage: observable,
             style: observable,
             colorPrimary: observable,
             isSlowLeftMenuFlag: computed,
             triggerMenu: action,
-            changeType: action,
+            setHasMenu: action,
             save: action
         });
         if (localStorage[this.localConfigName]) {
@@ -127,9 +130,6 @@ class AppConfig implements IAppConfig {
         }
     }
 
-    changeType(type: string) {
-        this.type = type;
-    }
 
     setConfig(key:configKey,value:IAppConfig[configKey]){
         this[key]=value;

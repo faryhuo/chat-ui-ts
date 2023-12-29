@@ -34,7 +34,7 @@ class APISetting implements IAPISetting {
     userServiceName = "chat-user-service"
     smsServiceName = "chat-sms-service"
     payServiceName = "chat-pay-service"
-
+    health="/actuator/health";
     historyServiceName = "chat-history-service"
 
     error:{
@@ -46,11 +46,13 @@ class APISetting implements IAPISetting {
 
     }
 
+
     chatUrl = `${this.gateway}/${this.chatServiceName}/chat/v2/info`;
     assistantsUrl=`${this.gateway}/${this.chatServiceName}/assistants`;
     chatStreamUrl = `${this.gateway}/${this.chatServiceName}/chat/v2/stream`;
     audioUrl = `${this.gateway}/${this.chatServiceName}/audio/speech`;
     transcriptionsUrl = `${this.gateway}/${this.chatServiceName}/audio/transcriptions`;
+    
 
     imageUrl = `${this.gateway}/${this.chatServiceName}/image/v2/info`;
     editsUrl = `${this.gateway}/${this.chatServiceName}/edits/v2/info`;
@@ -86,6 +88,7 @@ class APISetting implements IAPISetting {
     
     modelsUrl = `${this.gateway}/${this.chatConfigServiceName}/models/activity`;
     maintenanceUrl =`${this.gateway}/${this.chatConfigServiceName}/sys/setting/maintenance`
+    noticeUrl =`${this.gateway}/${this.chatConfigServiceName}/notice`
 
     websiteDoc='https://docs.qq.com/doc/DSGlBTkhEaWNHRlFF';
     websiteICP='https://beian.miit.gov.cn/#/Integrated/index';
