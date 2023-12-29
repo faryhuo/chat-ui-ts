@@ -127,9 +127,9 @@ const ImageDetailItem: React.FC<IProps> = observer(({ data, globalMessageApi }) 
         height={imageData.getHeightBySize(data.params?.size)}></Image>}
         </div>
 
-        <div className="image-detail-button">
+        {data.actions && data.actions.length>0 && <div className="image-detail-button">
           {getDetailButtonByType(data.actions, data.image_id)}
-        </div>
+        </div>}
         <div className="image-generate-date">
           {t('Time')} &nbsp;:&nbsp; {getDateFormat(data.date)}
         </div>

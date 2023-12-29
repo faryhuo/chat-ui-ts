@@ -28,7 +28,7 @@ class APISetting implements IAPISetting {
 
     version = "3.0"
     host = "https://fary.chat";
-    gateway = "https://fary.chat:8555"
+    gateway = "https://fary.chat/gateway"
     chatServiceName = "chat-service"
     chatConfigServiceName = "chat-config-service"
     userServiceName = "chat-user-service"
@@ -86,6 +86,7 @@ class APISetting implements IAPISetting {
     
     modelsUrl = `${this.gateway}/${this.chatConfigServiceName}/models/activity`;
     maintenanceUrl =`${this.gateway}/${this.chatConfigServiceName}/sys/setting/maintenance`
+    noticeUrl =`${this.gateway}/${this.chatConfigServiceName}/notice`
 
     websiteDoc='https://docs.qq.com/doc/DSGlBTkhEaWNHRlFF';
     websiteICP='https://beian.miit.gov.cn/#/Integrated/index';

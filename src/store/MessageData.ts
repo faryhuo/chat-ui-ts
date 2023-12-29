@@ -1395,6 +1395,7 @@ class MessageData implements IMessage {
             }
             chatTokens = this.encodeChat(messageListData);
         }
+        console.log(chatTokens);
         const channle=chatConfig.getModelChange(model);
         let params = {
             messages: JSON.stringify(messageListData),

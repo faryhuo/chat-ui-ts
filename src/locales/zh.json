@@ -300,5 +300,7 @@
     "gemini-pro":"Gemini Pro",
     "gemini-pro-vision":"Gemini 图像版",
     "Must be upload one image in current model.":"当前模型必须上传一张图片",
-    "Are you want to delete the message?":"你确定要删除这条消息吗?"
+    "Are you want to delete the message?":"你确定要删除这条消息吗?",
+    "Audio Style":"音频风格",
+    "No longer displayed within 3 days":"3天内不再显示"
 }

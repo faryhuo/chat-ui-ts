@@ -13,6 +13,7 @@ import enUS from 'antd/locale/en_US';
 import {ConfigProvider, message } from 'antd';
 import { IProps } from 'rc-queue-anim';
 import userProflie from '../../store/UserProfile';
+import GlobalNotice from '../../component/global-notice/GlobalNotice';
 const Main:React.FC<IProps> = ()=>{
     const [messageApi, contextHolder] = message.useMessage();
 
@@ -48,6 +49,7 @@ const Main:React.FC<IProps> = ()=>{
                         </div>  
                     </div>  
                 </div>
+                <GlobalNotice></GlobalNotice>
             </div>
             {contextHolder}
         </ConfigProvider>)
