@@ -79,7 +79,7 @@ const Header: React.FC<IProps> = observer(({store,config}) => {
   }
 
   const onClick = (e: { key: string; }) => {
-    store.changeType(e.key);
+    config.setCurrentPath(e.key);
   };
 
   const login = (userId: string,password: string) => {
@@ -132,14 +132,14 @@ const Header: React.FC<IProps> = observer(({store,config}) => {
   return (
   <div className="menu-header">
     <div className="action-list">
-      {store.type==="chat" &&
+      {config.currentPath==="chat" &&
       <Button
           icon={config.isSlowLeftMenu?<FontAwesomeIcon icon={faOutdent} />:<FontAwesomeIcon rotation={180} icon={faOutdent}  />}
           onClick={()=>{config.triggerMenu()}}
         />}
     </div>
     <div className="menu-list">
-      <Menu onClick={onClick} selectedKeys={[store.type]} mode="horizontal"
+      <Menu onClick={onClick} selectedKeys={[config.currentPath]} mode="horizontal"
       items={getItems()} >
         </Menu>
     </div>

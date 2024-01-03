@@ -635,6 +635,11 @@ class MessageData implements IMessage {
                     'token': userProflie.token,
                     'Content-Type': 'application/json;charset=UTF-8'
                 },data:chatIdList
+            }).then((rep)=>{
+                if(rep.data.statusCode===0){
+                    this.clearHistoryResult();
+                    this.getChatHistory();
+                }
             })
         }else{
             chatIdList.forEach(chatId=>this.clear(chatId))

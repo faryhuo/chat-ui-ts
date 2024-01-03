@@ -92,8 +92,10 @@ const AppRoutes:React.FC<IProps> = ({messageData,appConfig,messageApi})=>{
     useEffect(()=>{
         if(location.pathname==="/" || location.pathname.startsWith("/chat")){
             appConfig.setHasMenu(true);
+            appConfig.setCurrentPath("chat");
         }else{
             appConfig.setHasMenu(false);
+            appConfig.setCurrentPath(location.pathname.replace("/",""));
         }
     },[appConfig, location])
 

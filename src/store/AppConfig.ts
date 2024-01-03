@@ -17,6 +17,8 @@ export interface IAppConfig {
     // weChatQRCode: string;
     isSlowMsg4AddChat: boolean;
     codeStyle: string;
+    currentPath:string;
+    setCurrentPath:(currentPath:string)=>void;
     codeEditConfig: ICodeEditsAPIConfig;
     isSlowLeftMenuFlag: boolean;
     getConfigJson: () => Object;
@@ -54,7 +56,11 @@ class AppConfig implements IAppConfig {
     isMobile = isMobile;
     api = apiSetting
     isSlowMsg4AddChat = true;
+    currentPath="chat";
 
+    setCurrentPath(currentPath:string){
+        this.currentPath=currentPath
+    }
 
     // get weChatQRCode() {
     //     const redirectUri = encodeURIComponent('fary.chat');
@@ -112,10 +118,12 @@ class AppConfig implements IAppConfig {
             hasMenu: observable,
             textLanguage: observable,
             style: observable,
+            currentPath:observable,
             colorPrimary: observable,
             isSlowLeftMenuFlag: computed,
             triggerMenu: action,
             setHasMenu: action,
+            setCurrentPath:action,
             save: action
         });
         if (localStorage[this.localConfigName]) {
