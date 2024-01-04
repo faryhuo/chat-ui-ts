@@ -368,5 +368,7 @@
     "Audio Style":"音频风格",
     "No longer displayed within 3 days":"3天内不再显示",
     "Only 5 messages can be sent within 1 minute.":"在1分钟内只能发送5次消息",
-    "translate":"翻译"
+    "translate":"翻译",
+    "Press and hold the button to record":"按住开始对话",
+    "audio cannot less than 3s. please hold on button to record.":"录音时间不能少于3s，请按住重新尝试"
 }

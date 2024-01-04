@@ -283,7 +283,7 @@ const SendButton: React.FC<IProps> = observer(({ store, config, setBtnHeight }) 
         spellCheck={true}
         allowClear
       /> : <div className='recorder-input-wrapper'>
-        {isStart && <span className='recorder-timer'><FontAwesomeIcon icon={faRecordVinyl} />{recordStartime && recordEndTime && secondsToHMS(recordEndTime.getTime() - recordStartime.getTime())}</span>}
+        {isStart && <span className='recorder-timer audio-hold-btn'><FontAwesomeIcon icon={faRecordVinyl} />{recordStartime && recordEndTime && secondsToHMS(recordEndTime.getTime() - recordStartime.getTime())}</span>}
         <Button className='audio-hold-btn'  size='large' icon={<FontAwesomeIcon size='lg' icon={faMicrophone} />}
           onMouseDown={startAudio}
           onTouchStart={startAudio}
@@ -293,7 +293,7 @@ const SendButton: React.FC<IProps> = observer(({ store, config, setBtnHeight }) 
           onClick={(e)=>e.preventDefault()}
           // onMouseLeave={handleMouseUp} // 处理鼠标在按钮上按住然后离开按钮的情况
           style={{ width: '100%', height: '65px', borderRadius: 20,background:(store.isType === false || fetchAudioState)?"#f0f0f0":"#fff", color: isStart ? 'red' : 'black' }}
-        >{t('Press and hold the button to record')}</Button></div>}
+        >{config.isMobile?"":t('Press and hold the button to record')}</Button></div>}
       <div className="sent-btn-actions"  >
         <Button disabled={store.isType === false} shape="circle" onClick={convertInputModel}
           icon={inputModel !== 'keyboard' ? <FontAwesomeIcon icon={faKeyboard} /> : <FontAwesomeIcon icon={faMicrophone} />} />
