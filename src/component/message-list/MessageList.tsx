@@ -16,7 +16,9 @@ type IProps = {
 
 export const renderMessage=(item: ISessiondata)=> {
     const classs = classNames({ "chat-row": true, "chat-row-hide": item?.isDetails === false && item?.hasShowDetails === true });
-    if (item.text) {
+    if (item.translateText && item.showTranslateText) {
+        return <div className={classs}><Markdown content={item.translateText}></Markdown></div>
+    }else if (item.text) {
         return <div className={classs}><pre style={{ maxWidth: 700, margin: 0, whiteSpace: 'break-spaces' }}>{item.text}</pre>
         </div>
     }if (item.content) {

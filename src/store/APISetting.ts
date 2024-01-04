@@ -52,7 +52,7 @@ class APISetting implements IAPISetting {
     chatStreamUrl = `${this.gateway}/${this.chatServiceName}/chat/v2/stream`;
     audioUrl = `${this.gateway}/${this.chatServiceName}/audio/speech`;
     transcriptionsUrl = `${this.gateway}/${this.chatServiceName}/audio/transcriptions`;
-    
+    translateUrl= `${this.gateway}/${this.chatServiceName}/translate/deepl`;
 
     imageUrl = `${this.gateway}/${this.chatServiceName}/image/v2/info`;
     editsUrl = `${this.gateway}/${this.chatServiceName}/edits/v2/info`;

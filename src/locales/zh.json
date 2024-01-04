@@ -367,5 +367,6 @@
     "Are you want to delete the message?":"你确定要删除这条消息吗?",
     "Audio Style":"音频风格",
     "No longer displayed within 3 days":"3天内不再显示",
-    "Only 5 messages can be sent within 1 minute.":"在1分钟内只能发送5次消息"
+    "Only 5 messages can be sent within 1 minute.":"在1分钟内只能发送5次消息",
+    "translate":"翻译"
 }

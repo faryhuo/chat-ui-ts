@@ -1,13 +1,16 @@
 import React, { useRef, useState } from 'react';
-import { Button, Pagination, Popconfirm, Space, Tooltip, message } from 'antd';
+import { Button, Pagination, Popconfirm, Space, Spin, Tooltip, message } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCopy, faDeleteLeft, faPlay, faRefresh, faStop } from '@fortawesome/free-solid-svg-icons'
+import { faCopy, faDeleteLeft, faLanguage, faPlay, faRefresh, faStop } from '@fortawesome/free-solid-svg-icons'
 import { observer } from "mobx-react-lite";
-import { IMessage, ISessiondata, getMessageFromChoices } from '../../store/MessageData';
+import { IMessage, ISessiondata, getMessageFromChoices, getMessageFromMessageContent } from '../../store/MessageData';
 import './MsgActionBtn.css';
 import { isMobile } from 'react-device-detect';
 import copy from 'copy-to-clipboard';
+import config from '../../store/AppConfig';
+import axios from 'axios';
+import apiSetting from '../../store/APISetting';
 type IProps = {
   store: IMessage;
   item: ISessiondata;
@@ -22,6 +25,8 @@ const MsgActionBtn: React.FC<IProps> = observer(({ store, item, index }) => {
 
   const [isPlaying, setIsPlaying] = useState(false);
 
+  const [translateLoading,setTranslateLoading]= useState(false);
+  const [audioLoading,setAudioLoading]= useState(false);
 
 
   const isShowBtn = () => {
@@ -38,6 +43,7 @@ const MsgActionBtn: React.FC<IProps> = observer(({ store, item, index }) => {
 
   const handlePlay = () => {
     if (item.choices && item.choices.length > 0) {
+      setAudioLoading(true);
       store.speech(item)
         .then((audio) => {
           if (audioSrc === audio) {
@@ -45,18 +51,63 @@ const MsgActionBtn: React.FC<IProps> = observer(({ store, item, index }) => {
           } else {
             setAudioSrc(audio);
           }
+        }).finally(()=>{
+          setTimeout(()=>{
+            setAudioLoading(false);
+            setIsPlaying(!isPlaying);
+          })
         })
-      setIsPlaying(!isPlaying);
     }
   };
 
+  const closePlay=() => { 
+    audioRef.current?.pause();
+    setIsPlaying(false);
+    setAudioLoading(false);
+  }
+
   const copyText = () => {
-    copy(getMessageFromChoices(item.choices));
+    let msg=getMessageFromChoices(item.choices);
+    if(item.translateText && item.showTranslateText){
+      msg=item.translateText;
+    }
+    copy(msg);
     messageApi.success(t('Copied'));
   }
 
   const deleteMessage = () => {
     store.deleteMessage(store.activeSession+"",index);
+  }
+
+  const translate=async (text:string,index:number)=>{
+    setTranslateLoading(true);
+    item.audioId="";
+    const record= store.getChatInfoByChatId(store.activeSession+"").data[index];
+    if(record.translateText){
+      record.showTranslateText=!record.showTranslateText;
+      setTranslateLoading(false);
+      return;
+    }
+    const translateText= await axios({
+      method: "post",
+      url: apiSetting.translateUrl,
+      headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+      }
+      ,data:JSON.stringify({
+        text:text,
+        targetLanguage:config.textLanguage
+      })
+    }).then((response)=>{
+      if(response.data.data && response.data.data.translations){
+        return response.data.data.translations[0].text;
+      }else{
+        return text;
+      }
+    });
+    setTranslateLoading(false);
+    record.translateText=translateText;
+    record.showTranslateText=true;
   }
 
 
@@ -86,17 +137,26 @@ const MsgActionBtn: React.FC<IProps> = observer(({ store, item, index }) => {
               <Tooltip placement="top" title={t("Play audio")}>
                 <Button
                   shape="circle"
+                  disabled={audioLoading}
                   onClick={() => handlePlay()}
-                  size="small" icon={<FontAwesomeIcon icon={faPlay}></FontAwesomeIcon>}></Button>
+                  size="small" icon={
+                    <Spin spinning={audioLoading} size='small'><FontAwesomeIcon icon={faPlay}></FontAwesomeIcon></Spin>}></Button>
               </Tooltip>
             ) : (
               <Tooltip placement="top" title={t("Stop audio")}>
                 <Button
                   shape="circle"
-                  onClick={() => { setAudioSrc(''); setIsPlaying(false) }}
-                  size="small" icon={<FontAwesomeIcon icon={faStop}></FontAwesomeIcon>}></Button>
+                  onClick={closePlay}
+                  size="small" icon={
+                    <Spin spinning={audioLoading} size='small'><FontAwesomeIcon icon={faStop}></FontAwesomeIcon></Spin>}></Button>
               </Tooltip>
             )}
+          {<Tooltip placement="top" title={t("translate")}>
+              <Button disabled={translateLoading} shape='circle' size='small' onClick={()=>translate(item.content?getMessageFromMessageContent(item.content):getMessageFromChoices(item.choices),index)}
+                icon={<Spin spinning={translateLoading} size='small'>
+                  <FontAwesomeIcon icon={faLanguage}></FontAwesomeIcon></Spin>}>
+              </Button>
+           </Tooltip> }
             </>
             }
            <Tooltip placement="top" title={t("Delete message")}>
@@ -123,7 +183,7 @@ const MsgActionBtn: React.FC<IProps> = observer(({ store, item, index }) => {
         {contextHolder}
         {audioSrc && <div style={{ display: isMobile ? 'none' : 'none' }}>
           <Space wrap>
-            <audio ref={audioRef} src={audioSrc} controls={true} autoPlay={isPlaying} onEnded={() => { setIsPlaying(false) }} />
+            <audio ref={audioRef} src={audioSrc} controls={true} autoPlay={isPlaying} onEnded={closePlay} />
           </Space>
         </div>}</>
     </>

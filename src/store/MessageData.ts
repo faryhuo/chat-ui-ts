@@ -53,6 +53,8 @@ export interface ISessiondata {
     title?: string;
     file_ids?:string[];
     audioId?:string;
+    translateText?: string;
+    showTranslateText?:boolean;
 }
 
 export interface ISessionMenu {
@@ -173,6 +175,16 @@ export function getMessageFromChoices(choices:Ichoices[] | null){
     }
 }
 
+export function getMessageFromMessageContent(messageContent:any[]){
+    let text="";
+    messageContent.forEach(item=>{
+        if(item.type==='text'){
+            text=text+item.text.value;
+        }
+    })
+    return text;
+}
+
 class MessageData implements IMessage {
 
 
@@ -271,7 +283,10 @@ class MessageData implements IMessage {
     }
 
     async speech(item:ISessiondata):Promise<string>{
-        const msg=getMessageFromChoices(item.choices);
+        let msg= getMessageFromChoices(item.choices);
+        if(item.translateText && item.showTranslateText){
+            msg=item.translateText;
+        }
         let msgId="";
         if(item  && item.audioId){
             msgId=item.audioId;

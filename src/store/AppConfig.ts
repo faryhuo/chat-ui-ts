@@ -80,7 +80,7 @@ class AppConfig implements IAppConfig {
     accent = "mandarin";
 
     get isChinese() {
-        return this.textLanguage === "zh";
+        return this.textLanguage === "zh" || this.textLanguage === "zh_tw";
     }
     
 

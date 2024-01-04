@@ -29,65 +29,66 @@ const AsyncPersonInfoPage= asyncComponent(() => import ('../person-info/PersonIn
  const AsyncPaintingSquare= asyncComponent(() => import ('../painting-square/PaintingSquare'));
  const AsyncFeedback= asyncComponent(() => import ('../feedback/Feedback'));
 
-const pageList=[{
-    path:"/chat/:chatId",
-    component:Chat
-},{
-    path:"/image",
-    component:AsyncImage
-},{
-    path:"/image",
-    component:AsyncImage
-},{
-    path:"/image/:chatId",
-    component:AsyncImage
-},
-{
-    path:"/painting_square",
-    component:AsyncPaintingSquare
-},
-// {
-//     path:"/code",
-//     component:AsyncCode
-// },
-{
-    path:"/config/:id",
-    component:AsyncConfigPage
-},{
-    path:"/tips",
-    component:AsyncFrame,
-    props:{
-        src:"https://newzone.top/chatgpt/"
-    },
-},{
-    path:"/sd",
-    component:AsyncFrame,
-    props:{
-        src:"http://sd.fc-stable-diffusion-plus.1730559332177295.cn-shenzhen.fc.devsapp.net/?spm=5176.fcnext.0.0.406c78c8xNTZfY"
-    },
-},{
-    path:"/",
-    component:NewChat,
-    exact:true
-},{
-    path:"/chat",
-    component:NewChat,
-    exact:true
-},{
-    path:"/person",
-    component:AsyncPersonInfoPage,
-    exact:true
-},{
-    path:"/feedback",
-    component:AsyncFeedback,
-    exact:true
-}];
-
 
 
 const AppRoutes:React.FC<IProps> = ({messageData,appConfig,messageApi})=>{
 
     const location = useLocation();
+
+    const pageList=[{
+        path:"/chat/:chatId",
+        component:Chat
+    },{
+        path:"/image",
+        component:AsyncImage
+    },{
+        path:"/image",
+        component:AsyncImage
+    },{
+        path:"/image/:chatId",
+        component:AsyncImage
+    },
+    {
+        path:"/painting_square",
+        component:AsyncPaintingSquare
+    },
+    // {
+    //     path:"/code",
+    //     component:AsyncCode
+    // },
+    {
+        path:"/config/:id",
+        component:AsyncConfigPage
+    },{
+        path:"/tips",
+        component:AsyncFrame,
+        props:{
+            src:"https://aishort.top/"+(appConfig.isChinese?'':(appConfig.textLanguage+"/"))
+        },
+    },{
+        path:"/sd",
+        component:AsyncFrame,
+        props:{
+            src:"http://sd.fc-stable-diffusion-plus.1730559332177295.cn-shenzhen.fc.devsapp.net/?spm=5176.fcnext.0.0.406c78c8xNTZfY"
+        },
+    },{
+        path:"/",
+        component:NewChat,
+        exact:true
+    },{
+        path:"/chat",
+        component:NewChat,
+        exact:true
+    },{
+        path:"/person",
+        component:AsyncPersonInfoPage,
+        exact:true
+    },{
+        path:"/feedback",
+        component:AsyncFeedback,
+        exact:true
+    }];
+    
 
     useEffect(()=>{
         if(location.pathname==="/" || location.pathname.startsWith("/chat")){

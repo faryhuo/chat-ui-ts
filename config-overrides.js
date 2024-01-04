@@ -1,5 +1,9 @@
 const { override,overrideDevServer  } = require("customize-cra");
 const rewireCompressionPlugin = require('react-app-rewire-compression-plugin');
+const {
+  setWebpackPublicPath,
+} = require('customize-cra')
+
 
 // 在这里进行自定义修改相关配置
 const replaceConfig = () => (config,env) => {
@@ -15,7 +19,7 @@ const replaceConfig = () => (config,env) => {
 const multipleEntry = require('react-app-rewire-multiple-entry')([{
   entry: './src/share.tsx',
   template: './public/share.html',
-  outPath: '/share.html',
+  outPath: '/share.html'
 }]);
 
 const addEntry = () => config => {
@@ -34,7 +38,8 @@ const addProxy = () => (configFunction) => {
 module.exports = {
   webpack: override(
       addEntry(),
-      replaceConfig()
+      replaceConfig(),
+      //setWebpackPublicPath('https://mj.fary.chat')
   ),
   devServer: overrideDevServer(
       addProxy()
