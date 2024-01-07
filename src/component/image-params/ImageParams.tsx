@@ -111,6 +111,11 @@ const ImageParams: React.FC<IProps> = observer(() => {
     "backgroundImage": 'url(' + require('./niji.png') + ')', backgroundSize: "cover",
     width: "128px"
   };
+  const dall3ButtonStyle = {
+    "backgroundImage": 'url(' + require('./gpt_image.jpg') + ')', backgroundSize: "contain",
+    width: "128px",
+    backgroundPosition: "center"
+  };
 
   return (<div className="image-params-wrapper">
     <div className="image-param-set image-param-label">
@@ -124,8 +129,8 @@ const ImageParams: React.FC<IProps> = observer(() => {
       <Radio.Group value={imageData.params.model} onChange={(e) => { imageData.updateParams("model", e.target.value) }}>
         <Radio.Button className='image-model-icon' value="MJ" style={mjButtonStyle}>Midjourney
         </Radio.Button>
-        <Radio.Button className='image-model-icon' value="NIJI" style={nijiButtonStyle}>Midjourney-NIJI</Radio.Button>
-        <Radio.Button className='image-model-icon' value="DALL-E3" style={nijiButtonStyle}>DALL-E3</Radio.Button>
+        <Radio.Button className='image-model-icon' value="NIJI" style={nijiButtonStyle}>MJ-NIJI</Radio.Button>
+        <Radio.Button className='image-model-icon' value="DALL-E3" style={dall3ButtonStyle}>DALL-E3</Radio.Button>
       </Radio.Group>
     </div>
     <div className="image-param-set image-param-label">

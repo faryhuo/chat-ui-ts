@@ -45,6 +45,7 @@
     left: 0;
     right: 0;
     text-align: center;
+    z-index: 100;
 }
 .audio-wrapper .canvas-wrapper #canvas{
     width: 250px;
@@ -61,7 +62,6 @@
     width: 80px;
     height: 80px;
     margin: 0 20px;
-    z-index: 1000;
 }
 .audio-wrapper .audio-inputs button:hover{
     background-color:  var(--color-primary);
