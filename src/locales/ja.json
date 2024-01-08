@@ -160,7 +160,7 @@
     "max_tokens": "単回答制限",
     "top_p": "核サンプリング",
     "User name / Phone number": "ユーザー名 / 電話番号",
-    "SMS Code": "SMSコード",
+    "CAPTCHA": "SMSコード",
     "Sent SMS code": "SMSコードを送信",
     "Reset Password": "パスワードをリセット",
     "Account Login": "アカウントログイン",

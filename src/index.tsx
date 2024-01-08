@@ -5,6 +5,7 @@ import './utils/i18n';
 import Main from './page/main/Main';
 import { BrowserRouter as Router } from 'react-router-dom';
 import apiSetting from './store/APISetting';
+import config from './store/AppConfig';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -12,10 +13,10 @@ const root = ReactDOM.createRoot(
 root.render(
   <Router>
     <Main></Main>
-    <div className="icp_link">
+    {config.textLanguage==='zh' && <div className="icp_link">
       <a target='blank' href={apiSetting.websiteDoc}>免责声明</a> &nbsp;
       <a target='blank' href={apiSetting.websiteICP}>粤ICP备2023068902号-1</a>
-    </div>
+    </div>}
   </Router>
 );
 

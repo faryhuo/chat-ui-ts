@@ -119,7 +119,7 @@ const LoginForm : React.FC<IProps>= observer(({login,handleCancel,config,store,u
         onFinish={onLogin}
         style={{padding:"10px"}}
       >
-        <Form.Item label={t("User name / Phone number")} name="userId"
+        <Form.Item label={t("User name")} name="userId"
         rules={[{ required: true }]}
         tooltip={ruleMessage.required}>
           <Input       prefix={<FontAwesomeIcon icon={faUserShield} className="site-form-item-icon" />}
@@ -135,7 +135,7 @@ const LoginForm : React.FC<IProps>= observer(({login,handleCancel,config,store,u
         />
         </Form.Item>
         
-        {enableSMSCode && <Form.Item label={t("SMS Code")} name="code" 
+        {enableSMSCode && <Form.Item label={t("CAPTCHA")} name="code" 
         rules={[{ required: true }]}
         tooltip={ruleMessage.required}>
         <Space.Compact>

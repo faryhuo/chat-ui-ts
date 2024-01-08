@@ -6,7 +6,7 @@ import {IMessage} from '../../store/MessageData';
 import {IUserProflie} from '../../store/UserProfile';
 import {IAppConfig} from '../../store/AppConfig';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faKey, faMailForward } from '@fortawesome/free-solid-svg-icons'
+import { faKey } from '@fortawesome/free-solid-svg-icons'
 import './SignUpForm.css'
 
 type IProps={
@@ -41,7 +41,7 @@ const SignUpForm : React.FC<IProps>= observer(({login,handleCancel,config,store,
     let code = Form.useWatch('code', form);
 
     const onLogin = () => {
-      userProfile.signup(userId,password,code,"email").then(()=>{
+      userProfile.signup(userId,password,code,"phone").then(()=>{
         store.clearHistoryResult();
         store.getChatHistory()
         handleCancel();
@@ -66,7 +66,7 @@ const SignUpForm : React.FC<IProps>= observer(({login,handleCancel,config,store,
           return;
         }
         setCodeSend(true);
-        userProfile.sentSMSCode(userId,).then((response)=>{
+        userProfile.sentSMSCode(userId).then((response)=>{
           const data=response.data.data;
           if(data.statusCode===0){
             let sec= 60;
@@ -92,6 +92,15 @@ const SignUpForm : React.FC<IProps>= observer(({login,handleCancel,config,store,
       "required":t('This is a required field')
     }
 
+    const prefixSelector = (
+      <Form.Item name="prefix" noStyle initialValue="86">
+        <Select style={{ width: 70 }}>
+          <Select.Option  value="86">+86</Select.Option>
+        </Select>
+      </Form.Item>
+    );
+
+
     return (
       <div>
         {contextHolder}      
@@ -101,10 +110,11 @@ const SignUpForm : React.FC<IProps>= observer(({login,handleCancel,config,store,
         onFinish={onLogin}
         style={{padding:"10px"}}
       >
-        <Form.Item label={t("Email Address")} name="userId"
+        <Form.Item label={t("Phone number")} name="userId"
         rules={[{ required: true }]}
         tooltip={ruleMessage.required}>
-          <Input prefix={<FontAwesomeIcon icon={faMailForward}/>} placeholder={t("input email address")} />
+          <Input       addonBefore={prefixSelector}
+          ></Input>
         </Form.Item>
 
 
@@ -135,7 +145,7 @@ const SignUpForm : React.FC<IProps>= observer(({login,handleCancel,config,store,
         </Form.Item>
 
         
-        <Form.Item label={t("SMS Code")} name="code" 
+        <Form.Item label={t("CAPTCHA")} name="code" 
         rules={[{ required: true }]}
         tooltip={ruleMessage.required}>
         <Space.Compact>

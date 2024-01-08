@@ -48,3 +48,9 @@ export function containsChineseCharacters(str:string) {
     const reg = /[\u4e00-\u9fa5]/; // 匹配中文字符的正则表达式
     return reg.test(str);
 }
+
+export function isPhoneNumber4China(input) {
+    // 此正则表达式匹配中国大陆地区的手机号码格式
+    const phoneNumberPattern = /^1[3456789]\d{9}$/;
+    return phoneNumberPattern.test(input);
+  }

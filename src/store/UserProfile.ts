@@ -4,6 +4,7 @@ import axios from 'axios';
 import JSEncrypt from 'jsencrypt';
 import i18n from 'i18next';
 import apiSetting from "./APISetting";
+import { isPhoneNumber4China } from "../utils/CommonUtils";
 
 const USER_TOKEN_KEY = "user-token"
 
@@ -21,7 +22,7 @@ export interface IUserProflie {
     token: string;
     logout: () => void;
     sentSMSCode: (phone: string) => Promise<any>;
-    signup: (userId: string, password: string, code: string) => Promise<any>;
+    signup: (userId: string, password: string, code: string, type:string) => Promise<any>;
     checkUserIfExisting: (userId: string) => Promise<any>;
     openPage: () => void;
     closePage: () => void;
@@ -43,6 +44,7 @@ class UserProflie implements IUserProflie {
     isLogin = false
     publicKey = "";
     token = "";
+    type = "email";
     modules: IModules[] = [];
     pageOpen = false;
     openPage() {
@@ -72,12 +74,14 @@ class UserProflie implements IUserProflie {
     login(userId: string, password: string) {
         this.userId = userId;
         this.password = password;
+        const type=isPhoneNumber4China(userId)?"phone":"email";
         const promise = new Promise((resolve, reject) => {
             this.getPulicKey().then(() => {
                 const queryUrl = config.api.loginUrl;
                 const params = {
-                    "phone": this.userId,
-                    "password": this.encrypt(this.password)
+                    "userId": userId,
+                    "password": this.encrypt(this.password),
+                    "type":type
                 };
                 axios({
                     method: "post",
@@ -107,13 +111,15 @@ class UserProflie implements IUserProflie {
     }
 
     resetPwd(userId: string, password: string, code: string) {
+        const type=isPhoneNumber4China(userId)?"phone":"email";
         const promise = new Promise((resolve, reject) => {
             this.getPulicKey().then(() => {
                 const queryUrl = config.api.signUpUrl;
                 const params = {
-                    "phone": userId,
+                    "userId": userId,
                     "password": this.encrypt(password),
-                    "smsCode": code
+                    "smsCode": code,
+                    "type":type
                 };
                 axios({
                     method: "put",
@@ -139,14 +145,15 @@ class UserProflie implements IUserProflie {
         return promise;
     }
 
-    signup(userId: string, password: string, code: string) {
+    signup(userId: string, password: string, code: string,type:string) {
         const promise = new Promise((resolve, reject) => {
             this.getPulicKey().then(() => {
                 const queryUrl = config.api.signUpUrl;
                 const params = {
-                    "phone": userId,
+                    "userId": userId,
                     "password": this.encrypt(password),
-                    "smsCode": code
+                    "smsCode": code,
+                    "type":type
                 };
                 axios({
                     method: "post",
@@ -296,15 +303,18 @@ class UserProflie implements IUserProflie {
     }
 
     sentSMSCode(phone: string) {
-        return axios({
-            method: "get",
-            url: config.api.sentSmsCodeUrl + phone,
-            headers: {
-                'Content-Type': 'application/json;charset=UTF-8',
-                'token': this.token
+        const type=isPhoneNumber4China(phone)?"phone":"email";
+        if(type==='phone'){
+            return axios({
+                method: "get",
+                url: config.api.sentSmsCodeUrl + phone,
+                headers: {
+                    'Content-Type': 'application/json;charset=UTF-8',
+                    'token': this.token
+                }
             }
+            );
         }
-        );
     }
 
 
