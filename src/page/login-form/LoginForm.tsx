@@ -83,9 +83,9 @@ const LoginForm : React.FC<IProps>= observer(({login,handleCancel,config,store,u
     }
 
 
-    const onSentSMSCode=(e:any)=>{
+    const onSentCode=(e:any)=>{
       setCodeSend(true);
-      userProfile.sentSMSCode(userId).then((response)=>{
+      userProfile.sentCode(userId).then((response)=>{
         const data=response.data.data;
         if(data.statusCode===0){
           let sec= 60;
@@ -94,7 +94,7 @@ const LoginForm : React.FC<IProps>= observer(({login,handleCancel,config,store,u
             setSentSmsTitle(`${t('resent after')} ${sec}s`);
             if(sec===0){
               setCodeSend(false);
-              setSentSmsTitle("Sent SMS code");
+              setSentSmsTitle("Sent");
               clearInterval(timer);
             }
           },1000);
@@ -102,6 +102,9 @@ const LoginForm : React.FC<IProps>= observer(({login,handleCancel,config,store,u
           setCodeSend(false);
           fail(data.message);
         }
+      }).catch((error)=>{
+        fail(t("fail to sent code"));
+        setCodeSend(false);
       });
       e.preventDefault();
     }
@@ -140,7 +143,7 @@ const LoginForm : React.FC<IProps>= observer(({login,handleCancel,config,store,u
         tooltip={ruleMessage.required}>
         <Space.Compact>
             <Input style={{marginRight:20}}></Input>
-            <Button style={{width:120,float:"right"}} onClick={onSentSMSCode} disabled={codeSend}>{t(sentSmsTitle)}</Button>
+            <Button style={{width:120,float:"right"}} onClick={onSentCode} disabled={codeSend}>{t(sentSmsTitle)}</Button>
          </Space.Compact>
         </Form.Item>}
         {!forgetFlag && <Form.Item>

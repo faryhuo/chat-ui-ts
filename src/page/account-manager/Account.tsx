@@ -6,6 +6,7 @@ import {IAppConfig} from '../../store/AppConfig';
 import AccountManageTab from '../../component/account-manage-tab/AccountManageTab';
 import LoginForm from '../login-form/LoginForm';
 import SignUpForm from '../sign-up-form/SignUpForm';
+import SignUpFormPhone from '../sign-up-form-phone/SignUpForm';
 
 type IProps={
   login:(userId:string,pwd:string)=>Promise<any>;
@@ -18,7 +19,9 @@ type IProps={
 const Account : React.FC<IProps>= observer(({login,handleCancel,config,store,userProfile})=>{
 
   const loginForm=<LoginForm config={config} store={store} userProfile={userProfile}  login={login} handleCancel={handleCancel}></LoginForm>;
-  const signUpForm=<SignUpForm config={config} store={store} userProfile={userProfile}  login={login} handleCancel={handleCancel}></SignUpForm>;
+  const signUpForm=config.textLanguage==='zh'?
+  <SignUpFormPhone config={config} store={store} userProfile={userProfile}  login={login} handleCancel={handleCancel}></SignUpFormPhone>:
+  <SignUpForm config={config} store={store} userProfile={userProfile}  login={login} handleCancel={handleCancel}></SignUpForm>;
   // const url=config.weChatQRCode;
     return (
       <div>

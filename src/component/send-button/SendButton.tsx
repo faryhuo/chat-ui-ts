@@ -96,7 +96,7 @@ const SendButton: React.FC<IProps> = observer(({ store, config, setBtnHeight }) 
   const sentMsgToChat = (message) => {
     let chatId = store.activeSession + "";
     chatId = store.checkChatId(chatId);
-    if(store.getChatInfoByChatId(chatId).chatConfig.model==="gemini-pro-vision" && store.files.length===0){
+    if(store.getChatInfoByChatId(chatId)?.chatConfig?.model==="gemini-pro-vision" && store.files.length===0){
       messageApi.error(t('Must be upload one image in current model.'));
       return;
     }

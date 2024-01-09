@@ -135,6 +135,7 @@ class AppConfig implements IAppConfig {
             }
         } else {
             document.documentElement.style.setProperty('--color-primary', this.colorPrimary);
+            i18n.changeLanguage(this.textLanguage);
         }
     }
 

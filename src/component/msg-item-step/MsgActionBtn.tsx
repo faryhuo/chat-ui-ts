@@ -82,7 +82,7 @@ const MsgActionBtn: React.FC<IProps> = observer(({ store, item, index }) => {
   const translate=async (text:string,index:number)=>{
     setTranslateLoading(true);
     item.audioId="";
-    const record= store.getChatInfoByChatId(store.activeSession+"").data[index];
+    const record= store.getChatInfoByChatId(store.activeSession+"")?.data[index];
     if(record.translateText){
       record.showTranslateText=!record.showTranslateText;
       setTranslateLoading(false);

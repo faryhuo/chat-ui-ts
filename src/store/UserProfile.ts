@@ -21,7 +21,7 @@ export interface IUserProflie {
     currentUser: string;
     token: string;
     logout: () => void;
-    sentSMSCode: (phone: string) => Promise<any>;
+    sentCode: (account: string) => Promise<any>;
     signup: (userId: string, password: string, code: string, type:string) => Promise<any>;
     checkUserIfExisting: (userId: string) => Promise<any>;
     openPage: () => void;
@@ -147,34 +147,40 @@ class UserProflie implements IUserProflie {
 
     signup(userId: string, password: string, code: string,type:string) {
         const promise = new Promise((resolve, reject) => {
-            this.getPulicKey().then(() => {
-                const queryUrl = config.api.signUpUrl;
-                const params = {
-                    "userId": userId,
-                    "password": this.encrypt(password),
-                    "smsCode": code,
-                    "type":type
-                };
-                axios({
-                    method: "post",
-                    url: queryUrl,
-                    headers: {
-                        'Content-Type': 'application/json;charset=UTF-8'
-                    },
-                    data: JSON.stringify(params)
+            this.checkUserIfExisting(userId).then((result)=>{
+                if(result){
+                  reject(i18n.t("The account is exsiting, please go to login."));
+                  return;
                 }
-                ).then((response) => {
-                    if (response.data.statusCode === 0 && response.data.data) {
-                        this.login(userId, password);
-                        resolve(response.data.data)
-                    } else if (response.data.errors.message) {
-                        const errorMsg = i18n.t("api." + response.data.errors.message);
-                        reject(errorMsg)
-                    } else {
-                        reject("Fail to signup");
+                this.getPulicKey().then(() => {
+                    const queryUrl = config.api.signUpUrl;
+                    const params = {
+                        "userId": userId,
+                        "password": this.encrypt(password),
+                        "smsCode": code,
+                        "type":type
+                    };
+                    axios({
+                        method: "post",
+                        url: queryUrl,
+                        headers: {
+                            'Content-Type': 'application/json;charset=UTF-8'
+                        },
+                        data: JSON.stringify(params)
                     }
-                });
-            })
+                    ).then((response) => {
+                        if (response.data.statusCode === 0 && response.data.data) {
+                            this.login(userId, password);
+                            resolve(response.data.data)
+                        } else if (response.data.errors.message) {
+                            const errorMsg = i18n.t("api." + response.data.errors.message);
+                            reject(errorMsg)
+                        } else {
+                            reject("Fail to signup");
+                        }
+                    });
+                })
+            });
         })
         return promise;
     }
@@ -302,15 +308,28 @@ class UserProflie implements IUserProflie {
         return promise;
     }
 
-    sentSMSCode(phone: string) {
-        const type=isPhoneNumber4China(phone)?"phone":"email";
+    sentCode(account: string) {
+        const type=isPhoneNumber4China(account)?"phone":"email";
         if(type==='phone'){
             return axios({
                 method: "get",
-                url: config.api.sentSmsCodeUrl + phone,
+                url: apiSetting.sentSmsCodeUrl + account,
                 headers: {
                     'Content-Type': 'application/json;charset=UTF-8',
                     'token': this.token
+                }
+            }
+            );
+        }else{
+            return axios({
+                method: "post",
+                url: apiSetting.sentEmailCodeUrl,
+                headers: {
+                    'Content-Type': 'application/json;charset=UTF-8',
+                    'token': this.token
+                },
+                params:{
+                    email:account
                 }
             }
             );

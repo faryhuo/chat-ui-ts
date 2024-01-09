@@ -61,24 +61,25 @@ const SignUpForm : React.FC<IProps>= observer(({login,handleCancel,config,store,
 
     const onSentSMSCode=(e:any)=>{
       userProfile.checkUserIfExisting(userId).then((result)=>{
-        if(result===false){
+        if(result){
           fail(t("The phone no. is exsiting, please go to login."));
           return;
         }
         setCodeSend(true);
-        userProfile.sentSMSCode(userId).then((response)=>{
+        let sec= 60;
+        const timer= setInterval(()=>{
+          sec--;
+          setSentSmsTitle(`resent after ${sec}s`);
+          if(sec===0){
+            setCodeSend(false);
+            setSentSmsTitle("Sent");
+            clearInterval(timer);
+          }
+        },1000);
+        userProfile.sentCode(userId).then((response)=>{
           const data=response.data.data;
-          if(data.statusCode===0){
-            let sec= 60;
-            const timer= setInterval(()=>{
-              sec--;
-              setSentSmsTitle(`resent after ${sec}s`);
-              if(sec===0){
-                setCodeSend(false);
-                setSentSmsTitle("Sent");
-                clearInterval(timer);
-              }
-            },1000);
+          if(data.success){
+            messageApi.success("sms code sent you phone.")
           }else if(data.message){
             setCodeSend(false);
             fail(data.message);

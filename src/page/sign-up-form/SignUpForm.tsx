@@ -1,12 +1,12 @@
 import React from 'react';
-import { Button,Input,Form,message,Space,Select} from 'antd';
+import { Button,Input,Form,message,Space} from 'antd';
 import { useTranslation } from 'react-i18next';
 import { observer } from "mobx-react-lite";
 import {IMessage} from '../../store/MessageData';
 import {IUserProflie} from '../../store/UserProfile';
 import {IAppConfig} from '../../store/AppConfig';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faKey, faMailForward } from '@fortawesome/free-solid-svg-icons'
+import { faKey, faMailBulk} from '@fortawesome/free-solid-svg-icons'
 import './SignUpForm.css'
 
 type IProps={
@@ -59,30 +59,36 @@ const SignUpForm : React.FC<IProps>= observer(({login,handleCancel,config,store,
     };
 
 
-    const onSentSMSCode=(e:any)=>{
+    const onSentCode=(e:any)=>{
+      if(form.getFieldError("userId").length>0){
+        return;
+      }
       userProfile.checkUserIfExisting(userId).then((result)=>{
-        if(result===false){
-          fail(t("The phone no. is exsiting, please go to login."));
+        if(result){
+          fail(t("The account is exsiting, please go to login."));
           return;
         }
         setCodeSend(true);
-        userProfile.sentSMSCode(userId,).then((response)=>{
+        let sec= 60;
+        const timer= setInterval(()=>{
+          sec--;
+          setSentSmsTitle(`resent after ${sec}s`);
+          if(sec===0){
+            setCodeSend(false);
+            setSentSmsTitle("Sent");
+            clearInterval(timer);
+          }
+        },1000);
+        userProfile.sentCode(userId).then((response)=>{
           const data=response.data.data;
           if(data.statusCode===0){
-            let sec= 60;
-            const timer= setInterval(()=>{
-              sec--;
-              setSentSmsTitle(`resent after ${sec}s`);
-              if(sec===0){
-                setCodeSend(false);
-                setSentSmsTitle("Sent");
-                clearInterval(timer);
-              }
-            },1000);
+            messageApi.success(t("Sent code to your email success"));
           }else if(data.message){
             setCodeSend(false);
             fail(data.message);
           }
+        }).catch(()=>{
+          setCodeSend(false);
         });
       })
       e.preventDefault();
@@ -102,9 +108,10 @@ const SignUpForm : React.FC<IProps>= observer(({login,handleCancel,config,store,
         style={{padding:"10px"}}
       >
         <Form.Item label={t("Email Address")} name="userId"
-        rules={[{ required: true }]}
+        rules={[{ required: true },{type:"email"}]}
         tooltip={ruleMessage.required}>
-          <Input prefix={<FontAwesomeIcon icon={faMailForward}/>} placeholder={t("input email address")} />
+          <Input prefix={<FontAwesomeIcon icon={faMailBulk}/>}
+           placeholder={t("input email address")} />
         </Form.Item>
 
 
@@ -135,12 +142,13 @@ const SignUpForm : React.FC<IProps>= observer(({login,handleCancel,config,store,
         </Form.Item>
 
         
-        <Form.Item label={t("SMS Code")} name="code" 
+        <Form.Item label={t("Code")} name="code" 
         rules={[{ required: true }]}
         tooltip={ruleMessage.required}>
         <Space.Compact>
             <Input style={{marginRight:20}}></Input>
-            <Button style={{width:120,float:"right"}} onClick={onSentSMSCode} disabled={codeSend}>{t(sentSmsTitle)}</Button>
+            <Button style={{width:120,float:"right"}} 
+            onClick={onSentCode} disabled={codeSend}>{t(sentSmsTitle)}</Button>
          </Space.Compact>
         </Form.Item>
         

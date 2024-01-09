@@ -71,6 +71,7 @@ class APISetting implements IAPISetting {
     historyUrl = `${this.gateway}/${this.historyServiceName}/history`
 
     sentSmsCodeUrl = `${this.gateway}/${this.smsServiceName}/sms/send/`
+    sentEmailCodeUrl = `${this.gateway}/${this.smsServiceName}/email/signup`
 
     favoriteRoleUrl = `${this.gateway}/${this.userServiceName}/favorite/roles`
     fetFavoriteChatUrl = `${this.gateway}/${this.userServiceName}/favorite/chats`

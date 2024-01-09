@@ -4,6 +4,7 @@ import { Tabs } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { observer } from "mobx-react-lite";
 import QRCode from '../wx-qr-code/QRCode';
+import appConfig from '../../store/AppConfig';
 
 type IProps={
   loginForm:any;
@@ -13,7 +14,7 @@ const AccountManageTab:React.FC<IProps> = observer(({loginForm,signUpForm})=>{
 
     const {t} =useTranslation();
     const items: TabsProps['items'] = [
-      {
+      appConfig.textLanguage==='zh'&& {
         key: '1',
         label: t("WeChat Login"),
         children:<QRCode/>  
