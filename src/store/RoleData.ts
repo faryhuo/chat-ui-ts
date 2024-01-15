@@ -32,11 +32,13 @@ class RoleData implements IRoleData {
     roles: IRole[] = [];
     currentTag = favorite;
 
+    loading=true;
     
 
     constructor() {
         makeObservable(this, {
             roles: observable,
+            loading: observable,
             filterBy: observable,
             currentTag: observable,
             search: action,
@@ -220,7 +222,11 @@ class RoleData implements IRoleData {
                 if (data.data) {
                     this.setRoles(data.data);
                     this.fetchFavorite();
+                }else{
+                    this.loading=false;
                 }
+            }else{
+                this.loading=false;
             }
         });
     }
@@ -248,6 +254,8 @@ class RoleData implements IRoleData {
                     })
                 }
             }
+        }).finally(()=>{
+            this.loading=false;
         });
     }
 

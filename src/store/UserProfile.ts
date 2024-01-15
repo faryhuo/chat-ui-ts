@@ -191,6 +191,7 @@ class UserProflie implements IUserProflie {
         this.userId = "";
         this.userName = "";
         localStorage[USER_TOKEN_KEY] = "";
+        window.location.reload();
     }
 
     get currentUser() {

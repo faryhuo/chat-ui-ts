@@ -10,6 +10,7 @@ import {IMessage} from '../../store/MessageData';
 import './Chat.css'
 import { observer } from "mobx-react-lite"
 import { useParams } from 'react-router-dom';
+import Loading from '../../component/loading/Loading';
 
 type IProps={
   config:IAppConfig;
@@ -30,19 +31,21 @@ const Chat: React.FC<IProps> = ({store,config})=>{
       }, []);
 
     return (
-    <div className="message-page">
-    <div className="message-list" style={{bottom:btnHeight}}>                
-        <MessageList  config={config} store={store}></MessageList>
-        {store.needStream && <div className="message-stop-btn"
-        style={{bottom:btnHeight+28}}>
-            <Button type="primary" danger onClick={()=>{store.endStream(store.activeSession+"")}}>Stop Response</Button>
-        </div>}
+<div className="message-page">
 
-    </div>
-    <div className="send-button" >
-        <SendButton store={store}  config={config} setBtnHeight={setBtnHeight}></SendButton>
-    </div>
-</div>)
+        <div className="message-list" style={{bottom:btnHeight}}>                
+            <MessageList  config={config} store={store}></MessageList>
+            {store.needStream && <div className="message-stop-btn"
+            style={{bottom:btnHeight+28}}>
+                <Button type="primary" danger onClick={()=>{store.endStream(store.activeSession+"")}}>Stop Response</Button>
+            </div>}
+        </div>
+        <div className="send-button" >
+            <SendButton store={store}  config={config} setBtnHeight={setBtnHeight}></SendButton>
+        </div>
+        {store.loading && <Loading></Loading>}
+</div>
+)
 }
 
 export default observer(Chat);

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import {Button, Modal} from 'antd';
+import {Button, Modal, Spin} from 'antd';
 import './NewChat.css';
 import {IAppConfig} from '../../store/AppConfig';
 import {IMessage} from '../../store/MessageData';
@@ -13,6 +13,8 @@ import { faQuestion } from '@fortawesome/free-solid-svg-icons';
 import ModelDesc from '../../component/model-description/ModelDesc';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Loading from '../../component/loading/Loading';
+import roleData from '../../store/RoleData';
 type IProps={
   config:IAppConfig;
   store:IMessage;
@@ -33,6 +35,7 @@ const NewChat: React.FC<IProps> = ({store,config})=>{
   useEffect(() => {
     document.title = "AI Chat";
   }, []);
+
 
   const addChat=()=>{
     store.changeType("chat");
@@ -69,8 +72,11 @@ const NewChat: React.FC<IProps> = ({store,config})=>{
           <Button onClick={addRole} size="large">{t('Go to Role Management')}</Button>
         </div>
         <div className="role-list">
+          <Spin spinning={roleData.loading} size='large'>
           <RoleConfigPage all={true} readonly={true} config={config} store={store}></RoleConfigPage>
+          </Spin>
         </div>
+        {store.loading && <Loading></Loading>}
     </div>)
 }
 

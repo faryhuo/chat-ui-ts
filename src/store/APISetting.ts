@@ -28,7 +28,7 @@ class APISetting implements IAPISetting {
 
     version = "3.0"
     host = "https://fary.chat";
-    gateway = process.env.REACT_APP_PROFILE==='dev'?"https://fary.chat:8555":"https://fary.chat/gateway"
+    gateway = process.env.REACT_APP_PROFILE==='dev'?"https://api.fary.chat":"https://fary.chat/gateway"
     chatServiceName = "chat-service"
     chatConfigServiceName = "chat-config-service"
     userServiceName = "chat-user-service"

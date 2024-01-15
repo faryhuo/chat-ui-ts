@@ -106,6 +106,7 @@ export interface IMessage {
     addData: (newChat: any, chatId: string) => void;
     clear: (chatId: string) => void;
     isType: boolean;
+    loading: boolean;
     files:any[];
     setFiles:(files:any)=>void;
     changeType: (type: string) => void;
@@ -124,6 +125,7 @@ export interface IMessage {
     updateChatStatus: (status: boolean, chatId: string) => void;
     currentChatName: string;
     saveDataToFile: () => void;
+    setLoading: (loading:boolean) => void;
     loadDataFromFile: (file: Blob) => void;
     reSentMsg: (index: number, msg: string) => void;
     callChatAPI: (chatId: string) => void;
@@ -194,11 +196,14 @@ class MessageData implements IMessage {
     type = "chat"
     activeSession = "chat_" + new Date().getTime()
     session: Array<ISession> = [];
-
+    loading = false;
     files=[];
 
     setFiles(files){
         this.files=files;
+    }
+    setLoading(loading){
+        this.loading=loading;
     }
 
     historyResult:Promise<void> | null=null;
@@ -209,6 +214,7 @@ class MessageData implements IMessage {
             files: observable,
             session: observable,
             activeSession: observable,
+            loading: observable,
             data: computed,
             role: computed,
             sessionList: computed,
@@ -229,6 +235,7 @@ class MessageData implements IMessage {
             changeRole: action,
             hasHistory: action,
             changeMessage: action,
+            setLoading: action,
             deleteMessage:action,
             checkChatId: action,
             setFiles:action,
@@ -245,14 +252,17 @@ class MessageData implements IMessage {
             window.location.pathname="/chat";
             return;
         }
+        this.loading=true;
         if (localStorage[USER_TOKEN_KEY]) {
             userProflie.token = localStorage[USER_TOKEN_KEY];
             userProflie.loginByToken().then(() => {
                 this.getChatHistory().then(() => {
+                    this.loading=false;
                     this.addSharingData();
                 });
             })
         } else {
+            this.loading=false;
             this.loadDataFromlocalStore();
             this.addSharingData();
         }
@@ -686,9 +696,11 @@ class MessageData implements IMessage {
     }
 
     selectChat(chatId: string) {
+        this.setLoading(true);
         if(userProflie.token){
             this.getChatHistory().then(()=>{
                 this.getChatHistoryByChatId(chatId).then(()=>{
+                    this.setLoading(false);
                     this.activeSession = chatId;
                     const currentData=this.getChatInfoByChatId(chatId);
                     userModelLimit.getModelUsage(currentData?.chatConfig?.model as string);
@@ -696,6 +708,7 @@ class MessageData implements IMessage {
                 });
             })
         }else{
+            this.setLoading(false);
             this.activeSession = chatId;
             this.hideLastData(chatId);
         }
