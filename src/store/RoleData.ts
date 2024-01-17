@@ -228,6 +228,8 @@ class RoleData implements IRoleData {
             }else{
                 this.loading=false;
             }
+        }).catch(()=>{
+            this.loading=false;
         });
     }
 
@@ -235,6 +237,7 @@ class RoleData implements IRoleData {
     fetchFavorite() {
         let token = userProflie.token;
         if (!token) {
+            this.loading=false;
             return;
         }
         axios({
