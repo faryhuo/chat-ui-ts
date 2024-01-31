@@ -1,12 +1,16 @@
 .message-item-system .msg-action-btn {
-    text-align: right;
     margin-top: 10px;
 }
 .msg-audio-btn{
     margin:0;
     padding-top: 10px;
 }
-
+.message-item-system .msg-action-btn .msg-page-btn{
+    text-align: center;
+}
+.message-item-system .msg-action-btn .msg-sent-btn{
+    text-align: right;
+}
 @media only screen and (min-width: 768px) {
     .message-item-system .msg-action-btn {
         display: flex;
@@ -23,7 +27,15 @@
         margin: auto;
         padding-top: 0px;
     }
-    
+    .msg-sent-btn button{
+        opacity: 0;
+    }
+    .msg-sent-btn button.msg-sent-btn-show{
+        opacity: 1;
+    }
+    .msg-action-btn:hover .msg-sent-btn button{
+        opacity: 1;
+    }
 }
 .msg-link-btn{
     float: right;
@@ -32,4 +44,11 @@
 }
 .msg-item-buttons button{
     margin-right:5px;
+}
+.msg-sent-btn-line{
+    margin-top: 8px;
+    border-top:1px solid #f0f0f0;
+}
+.msg-sent-btn-title{
+    flex:1;
 }

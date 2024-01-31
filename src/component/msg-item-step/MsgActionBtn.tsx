@@ -113,6 +113,7 @@ const MsgActionBtn: React.FC<IProps> = observer(({ store, item, index }) => {
 
   return (
     <>
+      <div className="msg-sent-btn-line"></div>
       <div className="msg-action-btn">
         <div className="msg-page-btn">
           {(store.hasHistory(item.history)) ? <Pagination
@@ -122,11 +123,6 @@ const MsgActionBtn: React.FC<IProps> = observer(({ store, item, index }) => {
             current={(item.currentIndex ? item.currentIndex : 0) + 1} onChange={(page) => { store.changeMessage(index, page - 1) }} />
             : <></>}</div><div className="msg-sent-btn">
           <div className='msg-item-buttons'>
-            {isSlowRegenerateBtn() &&<Tooltip placement="top" title={t("Regenerate")}>
-              <Button onClick={store.regenerateResponse} shape='circle' size='small'
-                icon={<FontAwesomeIcon icon={faRefresh}></FontAwesomeIcon>}>
-              </Button>
-            </Tooltip>}
             {isShowBtn() && <>
             <Tooltip placement="top" title={t("Copy message")}>
               <Button onClick={copyText} shape='circle' size='small'
@@ -159,6 +155,11 @@ const MsgActionBtn: React.FC<IProps> = observer(({ store, item, index }) => {
            </Tooltip> }
             </>
             }
+            {isSlowRegenerateBtn() &&<Tooltip placement="top" title={t("Regenerate")}>
+              <Button className='msg-sent-btn-show' onClick={store.regenerateResponse} shape='circle' size='small'
+                icon={<FontAwesomeIcon icon={faRefresh}></FontAwesomeIcon>}>
+              </Button>
+            </Tooltip>}
            <Tooltip placement="top" title={t("Delete message")}>
            <Popconfirm
               placement="bottom"
@@ -168,7 +169,7 @@ const MsgActionBtn: React.FC<IProps> = observer(({ store, item, index }) => {
               onCancel={(e) => e?.stopPropagation()}
               okText={t("Yes")}
               cancelText={t("No")}>
-              <Button shape='circle' size='small' 
+              <Button shape='circle' size='small'  className='msg-sent-btn-show' 
                 icon={<FontAwesomeIcon icon={faDeleteLeft}></FontAwesomeIcon>}>
               </Button>
             </Popconfirm>

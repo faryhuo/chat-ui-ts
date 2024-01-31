@@ -5,6 +5,7 @@ import JSEncrypt from 'jsencrypt';
 import i18n from 'i18next';
 import apiSetting from "./APISetting";
 import { isPhoneNumber4China } from "../utils/CommonUtils";
+import loadingObj from "./Loading";
 
 const USER_TOKEN_KEY = "user-token"
 
@@ -258,6 +259,8 @@ class UserProflie implements IUserProflie {
             } else {
                 //alert('The login token is expired. Please login it again if need.')
                 localStorage[USER_TOKEN_KEY] = "";
+                this.openPage();
+                loadingObj.closeLoading();
             }
         });
     }

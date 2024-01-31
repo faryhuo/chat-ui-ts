@@ -28,7 +28,7 @@ class APISetting implements IAPISetting {
 
     version = "3.0"
     host = "https://fary.chat";
-    gateway = process.env.REACT_APP_PROFILE==='dev'?"https://api.fary.chat":"https://fary.chat/gateway"
+    gateway = process.env.REACT_APP_PROFILE==='dev'?"https://api.fary.chat":"/gateway"
     chatServiceName = "chat-service"
     chatConfigServiceName = "chat-config-service"
     userServiceName = "chat-user-service"
@@ -67,7 +67,7 @@ class APISetting implements IAPISetting {
 
     publicKeyUrl = `${this.gateway}/${this.userServiceName}/user/rsapubkey`
     userInfoUrl = `${this.gateway}/${this.userServiceName}/user/user-info`
-    userWsUrl = `${this.gateway}/${this.userServiceName}/user/ws/login`
+    userWsUrl = `${this.host}/${this.gateway}/${this.userServiceName}/user/ws/login`
     historyUrl = `${this.gateway}/${this.historyServiceName}/history`
 
     sentSmsCodeUrl = `${this.gateway}/${this.smsServiceName}/sms/send/`

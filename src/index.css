@@ -17,6 +17,7 @@ code {
     bottom: 0;
     font-size: 12px;
     left: 50%;
+    transform: translateX(-50%);
     text-decoration: none;
     color: #000;
 }

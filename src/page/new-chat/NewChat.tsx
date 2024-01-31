@@ -15,6 +15,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Loading from '../../component/loading/Loading';
 import roleData from '../../store/RoleData';
+import loadingObj from '../../store/Loading';
 type IProps={
   config:IAppConfig;
   store:IMessage;
@@ -76,7 +77,7 @@ const NewChat: React.FC<IProps> = ({store,config})=>{
           <RoleConfigPage all={true} readonly={true} config={config} store={store}></RoleConfigPage>
           </Spin>
         </div>
-        {store.loading && <Loading></Loading>}
+        {loadingObj.loading && <Loading></Loading>}
     </div>)
 }
 

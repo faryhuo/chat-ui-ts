@@ -6,7 +6,6 @@ import apiSetting from '../../store/APISetting'
 import { ISession } from '../../store/MessageData'
 import './ChatShare.css'
 import '../../component/message-list/MessageList.css'
-import '../../component/message-list-chat/main.css'
 
 type IProps={
 }

@@ -83,10 +83,10 @@ const MessageItem: React.FC<IProps> = observer(({ content, title, type, text, in
                         <div className={classNames({ "chat-row": true, "chat-row-hide": item?.isDetails === false && item?.hasShowDetails === true })}>
                             <pre style={{ margin: 0 }}>{content}</pre>
                         </div>)}</div>
-                <div className="rce-mbox-time non-copiable"></div></div>
+                </div>
             <svg className="rce-mbox-right-notch" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" ><path style={{ fill: config.colorPrimary + "a3", fillOpacity: 1 }} d="M0 0v20L20 0"></path></svg></div>
         {readonly !== true && <div style={{ float: 'right',width:40 }}>
-            {!isEdit && <Button style={{marginBottom: 5 }} onClick={() => { editInput() }} shape='circle' icon={<FontAwesomeIcon icon={faPaintbrush} />}  ></Button>}
+            {!isEdit && <Button className='msg-user-action-btn' style={{marginBottom: 5 }} onClick={() => { editInput() }} shape='circle' icon={<FontAwesomeIcon icon={faPaintbrush} />}  ></Button>}
             {!isEdit && <Tooltip placement="bottom" title={t("Delete message")}>
                        <Popconfirm
                           placement="bottom"
@@ -96,7 +96,7 @@ const MessageItem: React.FC<IProps> = observer(({ content, title, type, text, in
                           onCancel={(e) => e?.stopPropagation()}
                           okText={t("Yes")}
                           cancelText={t("No")}>
-                          <Button shape='circle'
+                          <Button shape='circle' className='msg-user-action-btn' 
                             icon={<FontAwesomeIcon icon={faDeleteLeft}></FontAwesomeIcon>}>
                           </Button>
                         </Popconfirm>
@@ -114,7 +114,7 @@ const MessageItem: React.FC<IProps> = observer(({ content, title, type, text, in
             <div className="rce-mbox-text left">{content}
                 {store && item && <MsgStep store={store} index={index} item={item}></MsgStep>}
             </div>
-            <div className="rce-mbox-time non-copiable"></div></div>
+            </div>
             <div><svg className="rce-mbox-left-notch" xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 20 20"><defs><filter id="filter1" x="0" y="0">
                     <feOffset result="offOut" in="SourceAlpha" dx="-2" dy="-5"></feOffset>

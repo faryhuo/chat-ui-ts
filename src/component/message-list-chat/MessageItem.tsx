@@ -1,4 +1,3 @@
-import './main.css'
 import './MessageItem.css'
 import React, { useEffect,useRef,useState } from 'react';
 import {MessageItem} from '../index';

@@ -1,0 +1,97 @@
+.rce-container-mbox {
+    display: block;
+    flex-direction: column;
+    min-width: 300px;
+    overflow-x: hidden
+}
+
+.rce-container-mbox:hover {
+    opacity: 1;
+    visibility: visible
+}
+
+.rce-mbox {
+    background: #fff;
+    border-radius: 5px;
+    border-top-left-radius: 0;
+    box-shadow: 1px 1px 1px 1px #0003;
+    flex-direction: column;
+    float: left;
+    margin: 3px 5px 3px 20px;
+    min-width: 140px;
+    padding: 6px 9px 8px;
+    position: relative
+}
+
+
+.rce-mbox-body {
+    margin: 0;
+    padding: 0;
+    position: relative
+}
+
+.rce-mbox.rce-mbox-right {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 0;
+    float: right;
+    margin-left: 5px;
+    margin-right: 20px
+}
+
+
+.rce-mbox-text {
+    font-size: 13.6px;
+    word-break: break-word
+}
+
+.rce-mbox-text-retracted {
+    align-items: center;
+    display: flex;
+    font-style: italic;
+    user-select: none
+}
+
+
+.rce-mbox--clear-padding {
+    padding-bottom: 3px
+}
+
+.rce-mbox.rce-mbox--clear-notch {
+    border-radius: 5px 5px 5px 5px !important
+}
+
+.rce-mbox-right-notch {
+    fill: #fff;
+    filter: drop-shadow(2px 0 1px rgba(0, 0, 0, .2));
+    height: 15px;
+    position: absolute;
+    right: -14px;
+    top: 0;
+    width: 15px
+}
+
+
+.rce-mbox-left-notch {
+    fill: #fff;
+    height: 15px;
+    left: -14px;
+    position: absolute;
+    top: 0;
+    width: 15px
+}
+
+.rce-mbox-title {
+    align-items: center;
+    color: #4f81a1;
+    cursor: pointer;
+    display: flex;
+    font-size: 13px;
+    font-weight: 500;
+    margin: 0 0 8px;
+    user-select: none
+}
+
+
+.rce-mbox-title--clear {
+    margin-bottom: 5px
+}

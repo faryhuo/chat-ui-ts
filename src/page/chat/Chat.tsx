@@ -1,6 +1,5 @@
 import {useEffect, useState} from 'react';
 import {
-
     MessageList,
     SendButton
 } from '../../component';
@@ -11,6 +10,7 @@ import './Chat.css'
 import { observer } from "mobx-react-lite"
 import { useParams } from 'react-router-dom';
 import Loading from '../../component/loading/Loading';
+import loadingObj from '../../store/Loading';
 
 type IProps={
   config:IAppConfig;
@@ -43,7 +43,7 @@ const Chat: React.FC<IProps> = ({store,config})=>{
         <div className="send-button" >
             <SendButton store={store}  config={config} setBtnHeight={setBtnHeight}></SendButton>
         </div>
-        {store.loading && <Loading></Loading>}
+        {loadingObj.loading && <Loading></Loading>}
 </div>
 )
 }
