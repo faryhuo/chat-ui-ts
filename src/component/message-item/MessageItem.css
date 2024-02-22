@@ -9,11 +9,9 @@
 .message-item-system .chat-row{
     min-width: 280px;
 }
-@media only screen and (min-width: 768px) {
-    .msg-user-action-btn{
-        opacity: 0;
-    }
-    .message-item-user:hover .msg-user-action-btn{
-        opacity: 1;
-    }
+.msg-user-action-btn{
+    opacity: 0;
+}
+.message-item-user:hover .msg-user-action-btn{
+    opacity: 1;
 }

@@ -16,6 +16,10 @@
             "gpt-4-vision-preview": {
                 "name": "GPT 4.0 ビジョン",
                 "description": "コンテキスト: 128K\n最新の GPT-4 モデルで、すべての GPT-4 モデルの中で最も長いコンテキストを持っています\n画像認識機能を備えています"
+            },
+            "free-gpt-4":{
+                "name":"GPT 4.0 Free",
+                "description":"Context: 8K\nGithub copilot GPT 4 model."
             }
         },
         "google": {

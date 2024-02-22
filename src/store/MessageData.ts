@@ -778,7 +778,7 @@ class MessageData implements IMessage {
     setChatApiConfig<K extends keyof IChatAPIConfig>(key: K, value: IChatAPIConfig[K]) {
         if(key === "model" && value){
             if (!userProflie.token) {
-                if((value as string).startsWith("gpt-4")){
+                if((value as string).startsWith("gpt-4") || (value==="free-gpt-4")){
                     userProflie.openPage();
                     return;
                 }

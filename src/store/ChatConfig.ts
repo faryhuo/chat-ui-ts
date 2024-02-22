@@ -181,7 +181,7 @@ class ChatConfig implements IChatConfig {
         const newChannel=this.getModelChange(model);
         const oldChannel=this.getModelChange(this.apiConfig.model);
         userModelLimit.getModelUsage(model);
-        if(newChannel==='gpt' && model.startsWith('gpt-4')){
+        if(newChannel==='gpt' && (model.startsWith('gpt-4') || model==='free-gpt-4')){
             if (userProflie.token) {
                 this.apiConfig.model = model;
             } else {

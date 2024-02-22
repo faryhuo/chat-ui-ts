@@ -16,6 +16,10 @@
             "gpt-4-vision-preview":{
                 "name":"GPT 4.0 图像版",
                 "description":"上下文：128K\n最新的 GPT-4 模型，拥有 GPT-4 模型中最长的上下文.\n拥有图像识别功能"
+            },
+            "free-gpt-4":{
+                "name":"GPT 4.0 免费版",
+                "description":"上下文：8K\nGithub copilot GPT 4 模型.\n可能会不稳定，不保证可用性."
             }
         },
         "google":{
@@ -360,6 +364,7 @@
     "gpt-4-1106-preview":"GPT 4.0 Turbo",
     "gpt-4-vision-preview":"GPT 4.0 图像版",
     "gpt-3.5-turbo":"GPT 3.5",
+    "free-gpt-4":"GPT 4.0 免費版",
     "gemini-pro":"Gemini Pro",
     "gemini-pro-vision":"Gemini 图像版",
     "Must be upload one image in current model.":"当前模型必须上传一张图片",

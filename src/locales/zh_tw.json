@@ -16,6 +16,10 @@
         "gpt-4-vision-preview": {
           "name": "GPT 4.0 圖像版",
           "description": "內容：128K\n最新的 GPT-4 模型，在所有 GPT-4 模型中內容最長\n具備圖像辨識功能"
+        },
+        "free-gpt-4":{
+            "name":"GPT 4.0 免費版",
+            "description":"內容：128K8K\nGithub copilot GPT 4 模型.\n不保证可用性."
         }
       },
       "google": {

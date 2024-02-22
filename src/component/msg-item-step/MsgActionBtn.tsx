@@ -175,7 +175,7 @@ const MsgActionBtn: React.FC<IProps> = observer(({ store, item, index }) => {
             </Popconfirm>
            </Tooltip> 
           </div> 
-          {!isSlowRegenerateBtn() && <Button style={item.hasShowDetails === true ? {} : { "display": "none" }} type="link" className="msg-link-btn" onClick={showDetails}>
+          {!isSlowRegenerateBtn() && <Button style={item.hasShowDetails === true ? {} : { "display": "none" }} type="link" className="msg-link-btn msg-sent-btn-show" onClick={showDetails}>
             {item.isDetails === false ? t('Show All') : t("Hide")}
           </Button>}
         </div>
