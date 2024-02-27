@@ -1,0 +1,14 @@
+.gpts-pages-container{
+    height:auto;
+    max-height: 600px;
+    overflow: auto;
+}
+
+.gpts-pages-container .ant-list-item{
+    cursor: pointer;
+}
+
+.gpts-pages-container .gtps-search-input{
+    max-width: 260px;
+    margin-bottom: 15px;
+}

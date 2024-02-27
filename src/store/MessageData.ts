@@ -97,16 +97,19 @@ export interface IMessage {
     session: Array<ISession>;
     localSessionName: string;
     activeSession: string;
-    addChat: () => string;
+    isGPTs: boolean;
+    addChat: () => Promise<string>;
+    addChatWithGPTs:(gptsId: string,description:string,gptsName:string) => Promise<string>;
     deleteMessage:(chatId:string,index:number)=>void;
     newChat: (navigate:NavigateFunction)=>void;
-    addChatWithRole: (role: IRole) => string;
+    addChatWithRole: (role: IRole) => Promise<string>;
     endStream: (chatId: string) => void;
     triggerFavorite: (chatId: string) => void;
     appendData: (text: any, chatId: string) => void;
     addData: (newChat: any, chatId: string) => void;
     clear: (chatId: string) => void;
     isType: boolean;
+    currentModel:string;
     files:any[];
     setFiles:(files:any)=>void;
     changeType: (type: string) => void;
@@ -214,10 +217,13 @@ class MessageData implements IMessage {
             role: computed,
             sessionList: computed,
             isType: computed,
+            isGPTs: computed,
+            currentModel: computed,
             needStream: computed,
             latestMessage: computed,
             addData: action,
             addChatWithRole: action,
+            addChatWithGPTs: action,
             changeType: action,
             clear: action,
             selectChat: action,
@@ -428,7 +434,7 @@ class MessageData implements IMessage {
         }
     }
 
-    addChat() {
+    async addChat() {
         const data: Array<ISessiondata> = [];
         const modelConfig=Object.assign({},chatConfig.apiConfig);
         let chatId = this.type + new Date().getTime();
@@ -454,11 +460,44 @@ class MessageData implements IMessage {
         };
         this.session.push(sessionData);
         this.activeSession = chatId;
-        this.save(chatId);
+        await this.save(chatId);
         return chatId;
     }
 
-    addChatWithRole(role: IRole) {
+    async addChatWithGPTs(gptsId: string,description:string,gptsName:string) {
+        const data: Array<ISessiondata> = [];
+
+        let chatId = "gpts_" + new Date().getTime();
+        if (config.isSlowMsg4AddChat) {
+            let tmp: ISessiondata = {
+                isSys: true,
+                isError:false,
+                isDefault: true
+            };
+            tmp.text = description;
+            data.push(tmp)
+        }
+        let gptsConfig=Object.assign({},chatConfig.apiConfig);
+        gptsConfig.model=gptsId;
+        gptsConfig.channel="gpt";
+        const sessionData: ISession = {
+            chatId: chatId,
+            chatName: gptsName,
+            data: data,
+            isType: true,
+            edit: false,
+            favorite: false,
+            updateDate: new Date(),
+            isDone:true,
+            chatConfig: gptsConfig
+        };
+        console.log(sessionData)
+        this.session.push(sessionData);
+        await this.save(chatId);
+        return chatId;
+    }
+
+    async addChatWithRole(role: IRole) {
         const data: Array<ISessiondata> = [];
 
         let chatId = "chat" + new Date().getTime();
@@ -484,7 +523,7 @@ class MessageData implements IMessage {
             chatConfig: role.setting ? role.setting :  Object.assign({},chatConfig.apiConfig)
         };
         this.session.push(sessionData);
-        this.save(chatId);
+        await this.save(chatId);
         return chatId;
     }
 
@@ -497,6 +536,11 @@ class MessageData implements IMessage {
             }
         });
         return isType;
+    }
+
+    
+    get isGPTs() {
+        return this.activeSession.startsWith("gpts_")
     }
 
     get needStream() {
@@ -755,6 +799,17 @@ class MessageData implements IMessage {
             sessionMatch.data = [];
         }
     }
+
+    get currentModel(): string {
+        let { session } = this;
+        const sessionMatch = i18n.t(session.find(item => item.chatId === this.activeSession)?.chatConfig?.model as any);
+        if (sessionMatch) {
+            return sessionMatch
+        } else {
+            return "gpt-3.5-turbo";
+        }
+    }
+
     getModelNameByChatId(chatId: string): string {
         let { session } = this;
         const sessionMatch = i18n.t(session.find(item => item.chatId === chatId)?.chatConfig?.model as any);
@@ -893,7 +948,7 @@ class MessageData implements IMessage {
             });
     }
 
-    supportModels=["gemini-pro-vision","gpt-4-vision-preview"]
+    supportModels=["gemini-pro-vision","gpt-4-vision-preview",'gpt-4-all']
 
     getSupportModelsText(){
         return `( ${this.supportModels.map(item=>i18n.t(item))} )`
@@ -901,7 +956,7 @@ class MessageData implements IMessage {
 
     checkIsImageModel(chatId: string) {
         const model=this.getChatInfoByChatId(chatId)?.chatConfig?.model;
-        return this.supportModels.includes(model);
+        return this.supportModels.includes(model) || this.isGPTs;
     }
 
     checkChatId(chatId: string) {
@@ -916,10 +971,10 @@ class MessageData implements IMessage {
             if (ret) {
                 return chatId;
             } else {
-                return this.addChat();
+                this.addChat();
             }
         } else {
-            return this.addChat();
+            this.addChat();
         }
     }
 

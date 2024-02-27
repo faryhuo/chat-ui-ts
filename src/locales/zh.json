@@ -11,15 +11,18 @@
             },
             "gpt-4-1106-preview":{
                 "name":"GPT 4.0 Turbo",
-                "description":"上下文：128K\n最新的 GPT-4 模型，拥有 GPT-4 模型中最长的上下文"
+                "description":"上下文：128K\n最新的 GPT-4 模型，生成速度比GPT 3.5 要慢，拥有 GPT-4 模型中最长的上下文"
             },
             "gpt-4-vision-preview":{
                 "name":"GPT 4.0 图像版",
-                "description":"上下文：128K\n最新的 GPT-4 模型，拥有 GPT-4 模型中最长的上下文.\n拥有图像识别功能"
+                "description":"上下文：128K\n最新的 GPT-4 模型，生成速度比GPT 3.5 要慢,拥有 GPT-4 模型中最长的上下文.\n拥有图像识别功能"
             },
             "free-gpt-4":{
                 "name":"GPT 4.0 免费版",
-                "description":"上下文：8K\nGithub copilot GPT 4 模型.\n可能会不稳定，不保证可用性."
+                "description":"上下文：8K\nGithub copilot GPT 4 模型，生成速度比GPT 3.5 要慢.\n可能会不稳定，不保证可用性."
+            },"gpt-4-all":{
+                "name":"GPT 4.0 全功能版",
+                "description":"上下文：32K\n官方GPT-4、联网，多模态（gpt-4v），绘图功能.，生成速度比GPT 3.5 要慢\n 可以完成数据分析和文件生成。"
             }
         },
         "google":{
@@ -367,6 +370,7 @@
     "free-gpt-4":"GPT 4.0 免費版",
     "gemini-pro":"Gemini Pro",
     "gemini-pro-vision":"Gemini 图像版",
+    "gpt-4-all":"GPT 4.0 全功能版",
     "Must be upload one image in current model.":"当前模型必须上传一张图片",
     "Are you want to delete the message?":"你确定要删除这条消息吗?",
     "Audio Style":"音频风格",

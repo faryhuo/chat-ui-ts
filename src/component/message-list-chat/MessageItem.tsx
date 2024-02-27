@@ -48,7 +48,7 @@ const MessageItemChat : React.FC<IProps> = observer(({store,config,renderMessage
 
   return (<div className="message-list-wrapper-chat" style={{height:'100%'}}>
       <Card title={store.currentChatName}   className="antd-card-wrapper"
-      extra={<ActionBtnList onOpen={onOpen} store={store} config={config}></ActionBtnList>} style={{ width: '100%',height:'100%'}}>
+      extra={store.isGPTs?<></>:<ActionBtnList onOpen={onOpen} store={store} config={config}></ActionBtnList>} style={{ width: '100%',height:'100%'}}>
       <ScrollToBottom >
         <div>
           {store.data.map((item,key)=>{

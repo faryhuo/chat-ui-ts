@@ -107,21 +107,33 @@ const SendButton: React.FC<IProps> = observer(({ store, config, setBtnHeight }) 
           messageApi.error(t('please wait all files be uploaded'));
           return;
         }
+        if((store.isGPTs || store.currentChatName==='gpt-4-all')){
+          msgArr.push(file.response.data);
+        }else{
           msgArr.push({
               image_url:{
                   url:file.response.data
               },
               type:"image_url"
           });
+        }
       });
-      msgArr.push({
-        type:"text",
-        text:message
-      })
-      store.addData({
-        messageContent: msgArr
-      }, chatId);
-      store.setFiles([]);
+      if((store.isGPTs || store.currentChatName==='gpt-4-all')){
+        message=msgArr.join("\n")+"\n"+message;
+        store.addData({
+          text: message
+        }, chatId)
+        store.setFiles([]);
+      }else{
+        msgArr.push({
+          type:"text",
+          text:message
+        })
+        store.addData({
+          messageContent: msgArr
+        }, chatId);
+        store.setFiles([]);
+      }
     }else{
       store.addData({
         text: message
@@ -264,7 +276,7 @@ const SendButton: React.FC<IProps> = observer(({ store, config, setBtnHeight }) 
 
     <Space.Compact style={{ width: '100%' }}>
       {inputModel === 'keyboard' &&    <div className="upload-btn-wrapper">
-        <Upload store={store} config={config}>
+        <Upload  accept="image/*" store={store} config={config}> 
         <Tooltip placement="top" title={t('Only support those models.') + store.getSupportModelsText()}>
           <Button className='upload-btn' disabled={store.isType === false || !store.checkIsImageModel(store.activeSession)} shape="circle"
           onClick={(e)=>{console.log(e)}}

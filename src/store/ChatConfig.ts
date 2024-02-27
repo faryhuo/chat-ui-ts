@@ -75,11 +75,17 @@ class ChatConfig implements IChatConfig {
 
 
     getMaxTokenByModel(model: string):number {
+        if(model.startsWith("gpt-4-gizmo")){
+            model="gpt-4-all";
+        }
         const maxToken= this.chatModelList.find((item)=>item.value===model)?.maxToken;
         return maxToken?maxToken:4*1024;
     }
 
     isMaxTokenModel(model: string) {
+        if(model.startsWith("gpt-4-gizmo")){
+            model="gpt-4-all";
+        }
         const maxTokenModel= this.chatModelList.find((item)=>item.value===model)?.maxModelId;
         if (!maxTokenModel) {
             return true;
@@ -96,6 +102,9 @@ class ChatConfig implements IChatConfig {
     }
 
     getMaxTokenModel(model: string): string {
+        if(model.startsWith("gpt-4-gizmo")){
+            model="gpt-4-all";
+        }
         const maxTokenModel= this.chatModelList.find((item)=>item.value===model)?.maxModelId;
         return maxTokenModel?maxTokenModel:"";
     }

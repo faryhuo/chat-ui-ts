@@ -47,9 +47,10 @@ const DraggableUploadListItem = ({ originNode, file,index }: DraggableUploadList
 type IProps = {
   config: IAppConfig;
   store: IMessage;
-  children:any
+  children:any;
+  accept?:string;
 }
-const AppUpload : React.FC<IProps> = observer(({store, config,children}) => {
+const AppUpload : React.FC<IProps> = observer(({store, config,children,accept}) => {
   const {t} = useTranslation();
 
   const checkModel = () => { 
@@ -103,7 +104,7 @@ const AppUpload : React.FC<IProps> = observer(({store, config,children}) => {
   return (<div style={{ display: "inline-block" }}>
     <Upload
       method="post"
-      accept="image/*"
+      accept={accept}
       fileList={store.files}
       action={apiSetting.imageUploadUrl}
       onChange={handleChange}

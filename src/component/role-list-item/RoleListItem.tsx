@@ -26,8 +26,9 @@ const RoleList: React.FC<IProps> = observer(({ config, role, store, edit, readon
   const navigate = useNavigate();
 
   const useRole = (role: IRole) => {
-    const chatId = store.addChatWithRole(role);
-    navigate(`/chat/${chatId}`);
+    store.addChatWithRole(role).then((chatId)=>{
+      navigate(`/chat/${chatId}`);
+    });
   }
 
   const onDelete = (roleId: number) => {

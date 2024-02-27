@@ -19,8 +19,24 @@ export const renderMessage=(item: ISessiondata)=> {
     if (item.translateText && item.showTranslateText) {
         return <div className={classs}><Markdown content={item.translateText}></Markdown></div>
     }else if (item.text) {
-        return <div className={classs}><pre style={{ maxWidth: 700, margin: 0, whiteSpace: 'break-spaces' }}>{item.text}</pre>
-        </div>
+        let arr=item.text.split("\n");
+        let fileIndex=0;
+        let files=[];
+        let displayText;
+        if(arr.length){
+            arr.forEach(arrItem=>{
+                if(arrItem.startsWith("https://mj.fary.chat")){
+                    fileIndex++;
+                    displayText=item.text.replace(arrItem,"");
+                    files.push(<a href={arrItem} target="_blank" rel="noreferrer" >file {fileIndex}</a>);
+                }
+            })
+        }
+        if(fileIndex>0 && files.length){
+            return <div className={classs}>{files.map(file=>file)}<pre style={{ maxWidth: 700, margin: 0, whiteSpace: 'break-spaces' }}>{displayText}</pre></div>
+        }else{
+            return <div className={classs}><pre style={{ maxWidth: 700, margin: 0, whiteSpace: 'break-spaces' }}>{item.text}</pre></div>
+        }
     }if (item.content) {
         return renderSysChat4Content(item.content, classs);
     }if (item.messageContent) {

@@ -78,6 +78,9 @@ class UserModelLimit implements IUserModelLimit {
         if(!userProflie.token){
             return;
         }
+        if(model.startsWith("gpt-4-gizmo")){
+            model="gpt-4-all";
+        }
         const queryUrl = apiSetting.modelAmountUrl+model+"?uuid"+new Date().getTime();
         axios({
             method: "get",

@@ -16,6 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import Loading from '../../component/loading/Loading';
 import roleData from '../../store/RoleData';
 import loadingObj from '../../store/Loading';
+import GPTs from '../gpts/gpts';
 type IProps={
   config:IAppConfig;
   store:IMessage;
@@ -25,6 +26,8 @@ const NewChat: React.FC<IProps> = ({store,config})=>{
 
 
   const [isModalOpen,setModalOpen]= useState(false);
+  const [isGPTsOpen,setIsGPTsOpen]= useState(false);
+
   const navigate = useNavigate(); // 获取 navigate 函数
 
   const questionBtn = (<Button
@@ -40,11 +43,17 @@ const NewChat: React.FC<IProps> = ({store,config})=>{
 
   const addChat=()=>{
     store.changeType("chat");
-    const chatId=store.addChat();
-    navigate(`/chat/${chatId}`);
+    store.addChat().then((chatId)=>{
+      navigate(`/chat/${chatId}`);
+  });
   }
   const addRole=()=>{
     navigate("/config/4");
+  }
+
+
+  const showGPTs=()=>{
+    setIsGPTsOpen(true);
   }
   const {t} = useTranslation();
 
@@ -70,6 +79,7 @@ const NewChat: React.FC<IProps> = ({store,config})=>{
       </div>
         <div className="just-start">
           <Button onClick={addChat} type="primary"   size="large">{t('Just Start')}</Button>
+          <Button onClick={showGPTs} size="large">{t('GPTs')}</Button>
           <Button onClick={addRole} size="large">{t('Go to Role Management')}</Button>
         </div>
         <div className="role-list">
@@ -78,6 +88,12 @@ const NewChat: React.FC<IProps> = ({store,config})=>{
           </Spin>
         </div>
         {loadingObj.loading && <Loading></Loading>}
+        <Modal open={isGPTsOpen}  width={window.innerWidth}
+        title={"选择一个GPTs"} 
+              onCancel={()=>setIsGPTsOpen(false)}
+              footer={false}>
+          <GPTs></GPTs>
+        </Modal>
     </div>)
 }
 
