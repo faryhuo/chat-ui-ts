@@ -20,6 +20,9 @@
             "free-gpt-4":{
                 "name":"GPT 4.0 Free",
                 "description":"Context: 8K\nGithub copilot GPT 4."
+            },"gpt-4-all":{
+                "name":"GPT 4.0 Full",
+                "description": "Context: 32K\nThe latest GPT-4 model with the longest context of all GPT-4 models"
             }
         },
         "google": {

@@ -80,7 +80,7 @@ const NewChat: React.FC<IProps> = ({store,config})=>{
         <div className="just-start">
           <Button onClick={addChat} type="primary"   size="large">{t('Just Start')}</Button>
           <Button onClick={showGPTs} size="large">{t('GPTs')}</Button>
-          <Button onClick={addRole} size="large">{t('Go to Role Management')}</Button>
+          {/* <Button onClick={addRole} size="large">{t('Go to Role Management')}</Button> */}
         </div>
         <div className="role-list">
           <Spin spinning={roleData.loading} size='large'>

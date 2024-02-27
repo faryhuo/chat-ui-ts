@@ -14,13 +14,6 @@ const data =[
         "title": "DALL·E"
     },
     {
-        "icon": "https://cos.aitutu.cc/gpts/3.5net.png",
-        "description": "官网的gpt-3.5 相对与api的3.5更聪明些，限制不支持function等",
-        "gptsId": "gpt-3.5-net",
-        "author_name": "",
-        "title": "gpt-3.5-net"
-    },
-    {
         "icon": "https://files.oaiusercontent.com/file-8KwDUWXMXpDSQlChsEyT9nd2?se=2123-10-18T15%3A49%3A33Z&sp=r&sv=2021-08-06&sr=b&rscc=max-age%3D31536000%2C%20immutable&rscd=attachment%3B%20filename%3Dcf2adbac-0a40-41de-8450-4d28fa2918ea.png&sig=9xLeHuk6JSCt43wxvQ%2BgC76pVtS2az7Cl%2Buuo8tQFio%3D",
         "description": "优化学术论文，按句提供编辑和说明",
         "gptsId": "gpt-4-gizmo-g-UPuGbvUJn",
