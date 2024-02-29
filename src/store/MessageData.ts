@@ -86,9 +86,8 @@ export interface IMessageListData {
     role: string;
     content: MessageContent[] | string;
     name?: string;
-    file_ids?:string[]
+    file_ids?:string[];
 }
-
 
 export interface IMessage {
     handleAPIError: (error: any, chatId: string) => void;
@@ -465,8 +464,11 @@ class MessageData implements IMessage {
     }
 
     async addChatWithGPTs(gptsId: string,description:string,gptsName:string) {
+        if (!userProflie.token) {
+            userProflie.openPage();
+            return;
+        }
         const data: Array<ISessiondata> = [];
-
         let chatId = "gpts_" + new Date().getTime();
         if (config.isSlowMsg4AddChat) {
             let tmp: ISessiondata = {
