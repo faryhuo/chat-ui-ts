@@ -1,4 +1,4 @@
-import { Button, Divider, Popconfirm, Dropdown } from 'antd';
+import { Button, Divider, Popconfirm, Dropdown, Radio } from 'antd';
 import type { MenuProps } from 'antd';
 import './ChatList.css';
 import { observer } from "mobx-react-lite";
@@ -14,6 +14,7 @@ import QueueAnim from 'rc-queue-anim';
 import { formatShortDate, isSameDay } from '../../utils/dateUtils';
 import {IUserProflie} from '../../store/UserProfile';
 import ModelAmount from '../model-amount/ModelAmount';
+import InfiniteScroll from 'react-infinite-scroll-component';
 type IProps = {
   store: IMessage;
   userProflie:IUserProflie
@@ -110,7 +111,7 @@ const ChatList: React.FC<IProps> = ({ store,userProflie }) => {
   const renderItem = (item: ISessionMenu) => {
     return item && (<li key={item.key} className={(item.select ? "selected" : "") + " session-list-item"}>
       {!item.edit ? (
-        <Link className="session-item-link" to={`/${store.type}/${item.key}`}>
+        <Link className="session-item-link" to={`/chat/${item.key}`}>
           <div className="icon">
             {/* <Avatar src={icon} /> */}
           </div>
@@ -181,19 +182,34 @@ const ChatList: React.FC<IProps> = ({ store,userProflie }) => {
       &nbsp; {t('Clear all history')}
   </Button>
   </Popconfirm>)
-
+  
+  console.log(store.sessionTotal)
 
   return (<div className="session-list-wrapper">
-      <div className="session-list">
-        <Divider>{t('Recent')}</Divider>
-        {renderList(recnetDataSouce)}
-        <Divider>{t('Favorite')}</Divider>
-        {renderList(favoriteDataSouce)}
-        <Divider>{t('History')}</Divider>
+      <div className="session-list" id='chat-session-list'>
+        <div className="chat-type">
+        <Radio.Group  style={{ marginBottom: 16 }}>
+          <Radio.Button value="small">History</Radio.Button>
+          <Radio.Button value="middle">Favorite</Radio.Button>
+        </Radio.Group>
+        </div>
           <div style={{padding:5}}>
                     {clearHistoryButton}
           </div>
-        {renderList(historyDataSouce)}
+        {<InfiniteScroll
+          dataLength={store.sessionTotal} //This is important field to render the next data
+          next={store.getChatHistory}
+          hasMore={dataSouce.length<store.sessionTotal}
+          loader={<h4>Loading...</h4>}
+          scrollableTarget="chat-session-list"
+          endMessage={
+            <p style={{ textAlign: 'center' }}>
+              <b>Yay! You have seen it all</b>
+            </p>
+          }
+        >
+         {dataSouce.map((item: ISessionMenu) => renderItem(item))}
+        </InfiniteScroll>}
       </div>
       <ModelAmount></ModelAmount>
       <Modal

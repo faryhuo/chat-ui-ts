@@ -93,6 +93,7 @@ export interface IMessage {
     handleAPIError: (error: any, chatId: string) => void;
     version: string
     type: string;
+    sessionTotal:number;
     session: Array<ISession>;
     localSessionName: string;
     activeSession: string;
@@ -211,6 +212,7 @@ class MessageData implements IMessage {
             type: observable,
             files: observable,
             session: observable,
+            sessionTotal: observable,
             activeSession: observable,
             data: computed,
             role: computed,
@@ -1351,9 +1353,11 @@ class MessageData implements IMessage {
         return promise;
     }
 
-    getChatHistory() {
-        if(this.historyResult){
-            return this.historyResult;
+   sessionTotal=0;
+
+   getChatHistory () {
+        if(this.sessionTotal>0 && this.sessionTotal===this.sessionData.length){
+            return new Promise<void>(resolve=>resolve());
         }
         const queryUrl = config.api.historyUrl;
         this.historyResult= axios({
@@ -1362,27 +1366,14 @@ class MessageData implements IMessage {
             headers: {
                 'token': userProflie.token,
                 'Content-Type': 'application/json;charset=UTF-8'
+            },params:{
+                startAt:this.sessionData.length
             }
         }
         ).then((response) => {
             const data = response.data.data;
-            this.setSession(data);
-            axios({
-                method: "get",
-                url: config.api.fetFavoriteChatUrl,
-                headers: {
-                    'Content-Type': 'application/json;charset=UTF-8',
-                    "token": userProflie.token
-                }
-            }).then((favoriteResponse) => {
-                const favoriteData = favoriteResponse.data;
-                if (favoriteData.data) {
-                    const arr: string[] = favoriteData.data;
-                    this.sessionData.forEach(item => {
-                        item.favorite = arr.includes(item.chatId);
-                    });
-                }
-            })
+            this.sessionTotal=response.data.total;
+            this.appendSession(data);
         });
         return this.historyResult;
     }
@@ -1664,6 +1655,17 @@ class MessageData implements IMessage {
 
     setSession(session: ISession[]) {
         this.session = session;
+    }
+
+    appendSession(session: ISession[]) {
+        session.forEach(item=>{
+            let sessionItem=this.session.find((subItem)=>item.chatId===subItem.chatId);
+            if(sessionItem){
+                sessionItem=item;
+            }else{
+                this.session.push(item);
+            }
+        })
     }
 
     isDone(chatId:string){
