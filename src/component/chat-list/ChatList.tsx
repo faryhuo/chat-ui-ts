@@ -6,7 +6,7 @@ import { Input, Modal } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { IMessage, ISessionMenu } from '../../store/MessageData';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPaintbrush, faTrashCan, faCheck, faShare, faStar, faTools } from '@fortawesome/free-solid-svg-icons'
+import { faPaintbrush, faTrashCan, faCheck, faShare, faStar, faTools, faStore, faSplotch, faCheckDouble } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import ChatShareSteps from '../chat-share-steps/ChatShareSteps';
@@ -21,7 +21,7 @@ type IProps = {
 }
 
 
-const ChatList: React.FC<IProps> = ({ store,userProflie }) => {
+const ChatList: React.FC<IProps> = ({ store }) => {
 
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
@@ -139,18 +139,10 @@ const ChatList: React.FC<IProps> = ({ store,userProflie }) => {
     );
   }
 
-
-  const recnetDataSouce = dataSouce.filter(item => {
-    return isSameDay(item.date);
-  });
-
   const historyDataSouce = dataSouce.filter(item => {
     return !!!item.favorite && !isSameDay(item.date);
   })
 
-  const favoriteDataSouce = dataSouce.filter(item => {
-    return !!item.favorite;
-  })
 
   const renderList = (source: ISessionMenu[]) => {
     return <QueueAnim delay={300} interval={0} className="session-list-items" component="ul" type={['right', 'left']} leaveReverse>
@@ -183,23 +175,22 @@ const ChatList: React.FC<IProps> = ({ store,userProflie }) => {
   </Button>
   </Popconfirm>)
   
-  console.log(store.sessionTotal)
-
   return (<div className="session-list-wrapper">
       <div className="session-list" id='chat-session-list'>
         <div className="chat-type">
-        <Radio.Group  style={{ marginBottom: 16 }}>
-          <Radio.Button value="small">History</Radio.Button>
-          <Radio.Button value="middle">Favorite</Radio.Button>
+        <Radio.Group  style={{ width: '100%' }} value={store.type} onChange={(e)=>{store.changeType(e.target.value)}}>
+          <Radio.Button value="all"><FontAwesomeIcon icon={faCheckDouble} bounce/> All </Radio.Button>
+          <Radio.Button value="favorite"><FontAwesomeIcon icon={faSplotch}/> Favorite </Radio.Button>
+          <Radio.Button value="gpts"><FontAwesomeIcon icon={faStore}/> GPTs </Radio.Button>
         </Radio.Group>
         </div>
           <div style={{padding:5}}>
                     {clearHistoryButton}
           </div>
-        {<InfiniteScroll
-          dataLength={store.sessionTotal} //This is important field to render the next data
+        <InfiniteScroll
+          dataLength={dataSouce.length} //This is important field to render the next data
           next={store.getChatHistory}
-          hasMore={dataSouce.length<store.sessionTotal}
+          hasMore={store.hashMore}
           loader={<h4>Loading...</h4>}
           scrollableTarget="chat-session-list"
           endMessage={
@@ -208,8 +199,9 @@ const ChatList: React.FC<IProps> = ({ store,userProflie }) => {
             </p>
           }
         >
-         {dataSouce.map((item: ISessionMenu) => renderItem(item))}
-        </InfiniteScroll>}
+         {renderList(dataSouce)}
+         
+        </InfiniteScroll>
       </div>
       <ModelAmount></ModelAmount>
       <Modal

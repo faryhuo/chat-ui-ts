@@ -94,6 +94,7 @@ export interface IMessage {
     version: string
     type: string;
     sessionTotal:number;
+    hashMore:boolean
     session: Array<ISession>;
     localSessionName: string;
     activeSession: string;
@@ -214,6 +215,7 @@ class MessageData implements IMessage {
             session: observable,
             sessionTotal: observable,
             activeSession: observable,
+            hashMore: computed,
             data: computed,
             role: computed,
             sessionList: computed,
@@ -1354,6 +1356,13 @@ class MessageData implements IMessage {
     }
 
    sessionTotal=0;
+
+   get hashMore(){
+    if(this.sessionTotal===0){
+        return true;
+    }
+    return this.sessionTotal>this.sessionData.length
+   }
 
    getChatHistory () {
         if(this.sessionTotal>0 && this.sessionTotal===this.sessionData.length){
