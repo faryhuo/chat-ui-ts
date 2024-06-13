@@ -39,7 +39,7 @@ const ModelAmount: React.FC<IProps> = observer(() => {
           </div>
           <div className="amount-value">
             {userModelLimit.usage.remainingAmount}
-            <Button onClick={() => { setPaymentOpen(true) }} style={{ marginLeft: 5 }} size='small' icon={<FontAwesomeIcon icon={faAdd}></FontAwesomeIcon>} />
+            {/* <Button onClick={() => { setPaymentOpen(true) }} style={{ marginLeft: 5 }} size='small' icon={<FontAwesomeIcon icon={faAdd}></FontAwesomeIcon>} /> */}
           </div>
         </div>
       </div>

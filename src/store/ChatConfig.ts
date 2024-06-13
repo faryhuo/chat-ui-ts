@@ -18,6 +18,7 @@ export interface IModelOptions {
 }
 export interface IChatConfig {
     apiConfig: IChatAPIConfig;
+    enableSpeciousModel: boolean;
     saveAPIConfig: (config: IChatAPIConfig) => void;
     switchStream: () => void;
     getAPIConfig: () => IChatAPIConfig;
@@ -54,16 +55,16 @@ class ChatConfig implements IChatConfig {
 
     version = "2.4"
     localConfigName = `chat_config_${this.version}`;
-
+    enableSpeciousModel=(window.location.hostname==="ai.fary.chat");
     apiConfig: IChatAPIConfig = {
-        model: "gpt-3.5-turbo",
+        model: this.enableSpeciousModel?"gpt-3.5-turbo":"spark-desk-3",
         temperature: 1,
         top_p: 1,
         presence_penalty: 0,
         frequency_penalty: 0,
         max_tokens: 1024,
         stream: true,
-        channel:"gpt"
+        channel: this.enableSpeciousModel?"xunfei":"gpt"
     }
 
     chatModelList: IModelOptions[] = [];

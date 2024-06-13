@@ -45,6 +45,20 @@
                 "description": "Baidu's knowledge-enhanced large language model, providing comprehensive, accurate, and fast responses"
             }
         },
+        "claude":{
+            "claude-3-opus-20240229":{
+                "name":"Claude Opus",
+                "description":"Opus 模型是目前市场上最智能的模型，擅长处理极其复杂的任务。它能够流畅应对开放式问题和全新场景，显示出类似人类的高度理解能力"
+            },
+            "claude-3-haiku-20240307":{
+                "name":"Claude Haiku",
+                "description":"Haiku 模型反应迅速，是Claude所有模型中最快的，特别适合需要即时反应的简单任务。"
+            }
+            ,"claude-3-sonnet-20240229":{
+                "name":"Claude Sonnet",
+                "description":"Sonnet 模型在智能与速度之间找到了完美的平衡点，特别适合承担企业级任务，性价比高"
+            }
+        },
         "aliyun": {
             "qwen-plus": {
                 "name": "Qwen Plus",
@@ -114,7 +128,11 @@
     "xunfei":"XUN FEI",
     "baidu":"BAI DU",
     "aliyun":"ALI YUN",
+    "claude":"Claude",
     "google":"Google",
+    "claude-3-opus-20240229":"Claude Opus",
+    "claude-3-haiku-20240307":"Claude Haiku",
+    "claude-3-sonnet-20240229":"Claude Sonnet",
     "mj.sample.input.message":"For example: A cut little cat.",
     "1:1 Avatar":"1:1",
     "1:2 Mobile Wallpaper":"1:2",

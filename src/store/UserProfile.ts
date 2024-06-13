@@ -250,19 +250,31 @@ class UserProflie implements IUserProflie {
         ).then((response) => {
             const data = response.data;
             if (data.statusCode === 0) {
-                this.isLogin = true;
-                this.userName = data.data.name;
-                this.userId = data.data.userId
-                this.premission.push("image");
-                this.premission.push("person");
-                //this.premission.push("image_edit");
+                try{
+                    this.isLogin = true;
+                    if(!data.data){
+                        this.relogin();
+                        return;
+                    }
+                    this.userName = data.data.name;
+                    this.userId = data.data.userId
+                    this.premission.push("image");
+                    this.premission.push("person");
+                    //this.premission.push("image_edit");
+                }catch(e){
+                    this.relogin();
+                }
             } else {
                 //alert('The login token is expired. Please login it again if need.')
-                localStorage[USER_TOKEN_KEY] = "";
-                this.openPage();
-                loadingObj.closeLoading();
+                this.relogin();
             }
         });
+    }
+
+    relogin(){
+        localStorage[USER_TOKEN_KEY] = "";
+        this.openPage();
+        loadingObj.closeLoading();
     }
 
     getPulicKey() {

@@ -181,12 +181,12 @@ const ChatList: React.FC<IProps> = ({ store }) => {
         <Radio.Group  style={{ width: '100%' }} value={store.type} onChange={(e)=>{store.changeType(e.target.value)}}>
           <Radio.Button value="all"><FontAwesomeIcon icon={faCheckDouble} bounce/> All </Radio.Button>
           <Radio.Button value="favorite"><FontAwesomeIcon icon={faSplotch}/> Favorite </Radio.Button>
-          <Radio.Button value="gpts"><FontAwesomeIcon icon={faStore}/> GPTs </Radio.Button>
+          {/* <Radio.Button value="gpts"><FontAwesomeIcon icon={faStore}/> GPTs </Radio.Button> */}
         </Radio.Group>
         </div>
-          <div style={{padding:5}}>
+          {/* <div style={{padding:5}}>
                     {clearHistoryButton}
-          </div>
+          </div> */}
         <InfiniteScroll
           dataLength={dataSouce.length} //This is important field to render the next data
           next={store.getChatHistory}

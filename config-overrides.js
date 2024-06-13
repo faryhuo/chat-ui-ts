@@ -38,8 +38,7 @@ const addProxy = () => (configFunction) => {
 module.exports = {
   webpack: override(
       addEntry(),
-      replaceConfig(),
-      //setWebpackPublicPath('https://mj.fary.chat')
+      replaceConfig()
   ),
   devServer: overrideDevServer(
       addProxy()

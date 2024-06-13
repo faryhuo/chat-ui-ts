@@ -47,15 +47,17 @@ const ModelSelector:React.FC<IProps> = observer(({store,onChange,value,isPayment
           }
         });
       }
-      const options=[{
+      const speciousModel=[{
         label:getIcon(t('gpt'),gptIcon),
         options: datasource.filter(item=>item.channel==="gpt")
       },{
-        label:getIcon(t('baidu'),baiduIcon),
-        options: datasource.filter(item=>item.channel==="baidu")
-      },{
         label:getIcon(t('google'),googleIcon),
         options: datasource.filter(item=>item.channel==="google")
+      }];
+
+      const options=[{
+        label:getIcon(t('baidu'),baiduIcon),
+        options: datasource.filter(item=>item.channel==="baidu")
       },{
         label:getIcon(t('xunfei'),xunfeiIcon),
         options: datasource.filter(item=>item.channel==="xunfei")
@@ -63,7 +65,11 @@ const ModelSelector:React.FC<IProps> = observer(({store,onChange,value,isPayment
         label:getIcon(t('aliyun'),aliyunIcon),
         options: datasource.filter(item=>item.channel==="aliyun")
       }]
-      return options;
+      if(chatConfig.enableSpeciousModel){
+        return speciousModel.concat(options);
+      }else{
+        return options;
+      }
     }
 
 

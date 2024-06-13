@@ -73,13 +73,13 @@ const NewChat: React.FC<IProps> = ({store,config})=>{
       <Modal title="Model Description" open={isModalOpen} 
       onCancel={()=>setModalOpen(false)}
       footer={false}>
-        <ModelDesc/>
+        {chatConfig.enableSpeciousModel && <ModelDesc/>}
       </Modal>
         </div>
       </div>
         <div className="just-start">
           <Button onClick={addChat} type="primary"   size="large">{t('Just Start')}</Button>
-          <Button onClick={showGPTs} size="large">{t('GPTs')}</Button>
+          {chatConfig.enableSpeciousModel && <Button onClick={showGPTs} size="large">{t('GPTs')}</Button>}
           {/* <Button onClick={addRole} size="large">{t('Go to Role Management')}</Button> */}
         </div>
         <div className="role-list">

@@ -1135,11 +1135,10 @@ class MessageData implements IMessage {
                     body: JSON.stringify(params),
                     onmessage(msg) {
                         let data = msg.data;
-                        try {
-                            if (!data) {
-                                return true;
-                            }
-                            if (data === "[DONE]") {
+                        if (!data) {
+                            return true;
+                        }
+                        if (data === "[DONE]") {
                                 resolve(true);
                                 if (errorMsg) {
                                     try {
@@ -1153,7 +1152,8 @@ class MessageData implements IMessage {
                                 self.endStream(chatId);
                                 self.enableType(chatId);
                                 return;
-                            }
+                        }
+                        try {
                             if (!self.isNeedStream(chatId)) {
                                 resolve(true);
                                 ctrl.abort();
