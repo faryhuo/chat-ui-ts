@@ -31,9 +31,20 @@ const addProxy = () => (configFunction) => {
   configFunction.historyApiFallback = {
       disableDotRule: true
       // 指明哪些路径映射到哪个html
-};
-
-  return configFunction;
+  };
+  return {
+    ...configFunction,
+    proxy:{
+      "/gateway2": {             // 匹配到 '/api' 前缀的请求，就会触发该代理配置
+        target: 'https://gateway2.fary.chat',  // 请求转发地址
+        changeOrigin: true,                             // 是否跨域
+        pathRewrite: {
+          '^/gateway2': ''                                   // 重写请求路径
+        },
+        secure: false
+      }
+  }
+  }
 } 
 module.exports = {
   webpack: override(
