@@ -4,8 +4,8 @@ import { ReactElement, useEffect, useState } from 'react'
 import SharePage from '../../component/chat-history-sharer-page/ChatHistorySharerPage'
 import apiSetting from '../../store/APISetting'
 import { ISession } from '../../store/MessageData'
-import './ChatShare.css'
-import '../../component/message-list/MessageList.css'
+import './ChatShare.less'
+import '../../component/message-list/MessageList.less'
 
 type IProps={
 }

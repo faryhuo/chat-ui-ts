@@ -3,7 +3,7 @@ import {
     MessageList,
     SendInput
 } from '../../component';
-import './Code.css'
+import './Code.less'
 import {IAppConfig} from '../../store/AppConfig';
 import {IMessage} from '../../store/MessageData';
 type IProps={

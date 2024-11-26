@@ -1,0 +1,57 @@
+.chat-row {
+  max-width: 800px;
+  position: relative;
+}
+
+.message-list-wrapper {
+  .ant-card-head {
+    border: 1px solid #f0f0f0;
+    background: #fff;
+
+    .ant-segmented-item-selected {
+      color: #fff;
+      background-color: var(--color-primary);
+    }
+  }
+
+  .ant-card-body,
+  .antd-card-wrapper {
+    background-color: #f0f2f5;
+    border-top: 1px solid #f0f0f0;
+  }
+}
+
+.cursor {
+  content: '';
+  width: 10px;
+  height: 16px;
+  background-color: #18191a;
+  opacity: 1;
+  animation: blink 0.6s infinite;
+  transform: translateY(3px);
+  display: inline-block;
+}
+
+.blink-span {
+  animation: blink 2s infinite;
+}
+
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.element-show {
+  display: inline-block;
+}
+
+.element-hide {
+  display: none;
+}

@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite"
 import { Card, Collapse } from 'antd';
 import { BaseConfigForm, ChatConfigForm, ConfigActionBtn } from '../../component';
 import { useTranslation } from 'react-i18next';
-import "./Config.css";
+import "./Config.less";
 import { IAppConfig } from '../../store/AppConfig';
 import { IMessage } from '../../store/MessageData';
 import { useParams } from 'react-router-dom';

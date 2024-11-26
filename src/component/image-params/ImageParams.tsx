@@ -4,7 +4,7 @@ import { observer } from "mobx-react-lite";
 import { InboxOutlined } from '@ant-design/icons';
 
 import { Button, InputNumber, message, Radio, Select, Tooltip, Upload, Image, Slider, Row, Col, Switch, Modal } from 'antd';
-import './ImageParams.css'
+import './ImageParams.less'
 import imageData from '../../store/ImageData';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAdd, faQuestion, faTrashCan, faWallet } from '@fortawesome/free-solid-svg-icons';

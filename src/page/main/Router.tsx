@@ -31,64 +31,65 @@ const AsyncPersonInfoPage= asyncComponent(() => import ('../person-info/PersonIn
 
 
 
-const AppRoutes:React.FC<IProps> = ({messageData,appConfig,messageApi})=>{
+// 定义路由组件的类型
+type RouteItem = {
+  path: string;
+  component: React.ComponentType<any>;
+  props?: Record<string, unknown>;
+  exact?: boolean;
+}
 
+// 将URL定义为常量
+const TIPS_BASE_URL = "https://aishort.top/";
+const SD_URL = "http://sd.fc-stable-diffusion-plus.1730559332177295.cn-shenzhen.fc.devsapp.net/?spm=5176.fcnext.0.0.406c78c8xNTZfY";
+
+const AppRoutes: React.FC<IProps> = ({ messageData, appConfig, messageApi }) => {
     const location = useLocation();
 
-    const pageList=[{
-        path:"/chat/:chatId",
-        component:Chat
-    },{
-        path:"/image",
-        component:AsyncImage
-    },{
-        path:"/image",
-        component:AsyncImage
-    },{
-        path:"/image/:chatId",
-        component:AsyncImage
-    },
-    {
-        path:"/painting_square",
-        component:AsyncPaintingSquare
-    },
-    // {
-    //     path:"/code",
-    //     component:AsyncCode
-    // },
-    {
-        path:"/config/:id",
-        component:AsyncConfigPage
-    },{
-        path:"/tips",
-        component:AsyncFrame,
-        props:{
-            src:"https://aishort.top/"+(appConfig.isChinese?'':(appConfig.textLanguage+"/"))
+    const pageList: RouteItem[] = [{
+        path: "/chat/:chatId",
+        component: Chat
+    }, {
+        path: "/image",
+        component: AsyncImage
+    }, {
+        path: "/image/:chatId",
+        component: AsyncImage
+    }, {
+        path: "/painting_square",
+        component: AsyncPaintingSquare
+    }, {
+        path: "/config/:id",
+        component: AsyncConfigPage
+    }, {
+        path: "/tips",
+        component: AsyncFrame,
+        props: {
+            src: `${TIPS_BASE_URL}${appConfig.isChinese ? '' : `${appConfig.textLanguage}/`}`
         },
-    },{
-        path:"/sd",
-        component:AsyncFrame,
-        props:{
-            src:"http://sd.fc-stable-diffusion-plus.1730559332177295.cn-shenzhen.fc.devsapp.net/?spm=5176.fcnext.0.0.406c78c8xNTZfY"
+    }, {
+        path: "/sd",
+        component: AsyncFrame,
+        props: {
+            src: SD_URL
         },
-    },{
-        path:"/",
-        component:NewChat,
-        exact:true
-    },{
-        path:"/chat",
-        component:NewChat,
-        exact:true
-    },{
-        path:"/person",
-        component:AsyncPersonInfoPage,
-        exact:true
-    },{
-        path:"/feedback",
-        component:AsyncFeedback,
-        exact:true
+    }, {
+        path: "/",
+        component: NewChat,
+        exact: true
+    }, {
+        path: "/chat",
+        component: NewChat,
+        exact: true
+    }, {
+        path: "/person",
+        component: AsyncPersonInfoPage,
+        exact: true
+    }, {
+        path: "/feedback",
+        component: AsyncFeedback,
+        exact: true
     }];
-    
 
     useEffect(()=>{
         if(location.pathname==="/" || location.pathname.startsWith("/chat")){
@@ -103,8 +104,7 @@ const AppRoutes:React.FC<IProps> = ({messageData,appConfig,messageApi})=>{
   return (<Routes>
     {
         pageList.map((item,index)=>{
-            const AppComponent:any=item.component;
-            return (<Route  key={index} path={item.path} Component={(props)=><AppComponent key={index} {...item.props}{...props} globalMessageApi={messageApi} userProflie={userProflie} store={messageData} config={appConfig}></AppComponent>} >
+            return (<Route  key={index} path={item.path} Component={(props)=><item.component key={index} {...item.props}{...props} globalMessageApi={messageApi} userProflie={userProflie} store={messageData} config={appConfig}></item.component>} >
                 </Route>)
         })
     }

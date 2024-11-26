@@ -48,7 +48,7 @@ const RoleList:React.FC<IProps> = observer(({config,store,readonly,all})=>{
       return;
     }
     roleData.getToken().then((response)=>{
-      const token=response.data.data;
+      const token=response?.data?.data;
       setToken(token);
       setRoleDetails(role)
       setOpen(true);
@@ -61,7 +61,7 @@ const RoleList:React.FC<IProps> = observer(({config,store,readonly,all})=>{
       return;
     }
     roleData.getToken().then((response)=>{
-      const token=response.data.data;
+      const token=response?.data?.data;
       setToken(token);
       setRoleDetails(undefined)
       setOpen(true);

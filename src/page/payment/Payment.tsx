@@ -1,5 +1,4 @@
 import React from 'react';
-import './Payment.css';
 import { Button, Card, Form, InputNumber, message, Radio } from 'antd';
 import { useEffect } from 'react';
 import apiSetting from '../../store/APISetting';

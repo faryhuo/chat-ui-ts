@@ -5,7 +5,7 @@ import { observer } from "mobx-react-lite";
 import imageData, { ImageResponse } from '../../store/ImageData';
 import { faBroom, faDownload, faRefresh, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import './ImageDetailItem.css'
+import './ImageDetailItem.less'
 import { MessageInstance } from 'antd/es/message/interface';
 import copy from 'copy-to-clipboard';
 import dayjs from 'dayjs'

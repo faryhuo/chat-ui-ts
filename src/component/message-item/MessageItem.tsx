@@ -1,6 +1,6 @@
 import { Button,Input, Popconfirm, Tooltip } from 'antd'
 import config from '../../store/AppConfig';
-import './MessageItem.css';
+import './MessageItem.less';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPaintbrush, faTrashCan, faCheck,  faDeleteLeft } from '@fortawesome/free-solid-svg-icons';
 import { IMessage, ISessiondata } from '../../store/MessageData';

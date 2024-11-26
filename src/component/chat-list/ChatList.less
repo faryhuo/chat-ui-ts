@@ -1,0 +1,87 @@
+.session-list-wrapper {
+    padding: 0 5px;
+    position: absolute;
+    bottom: 0;
+    top: 0;
+    right: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    
+    .session-list-items{
+        padding: 0 5px;
+    }
+    .chat-type {
+        text-align: center;
+        padding: 16px 16px 2px 16px;
+    }
+
+    .session-list-item {
+        border: 1px solid #ccc;
+        margin: 2px;
+        box-shadow: none !important;
+        border-radius: 5px;
+        padding: 3px;
+        display: flex;
+
+        &.selected {
+            color: #fff;
+            background-color: var(--color-primary);
+            box-shadow: 0 2px 0 rgba(5, 145, 255, 0.1);
+
+            .content {
+                color: #fff;
+            }
+        }
+
+        &:hover {
+            color: #fff;
+            background-color: var(--color-primary);
+            box-shadow: 0 2px 0 rgba(5, 145, 255, 0.1);
+        }
+    }
+
+    .icon {
+        padding-left: 7px;
+        padding-top: 7px;
+    }
+
+    button {
+        margin-right: 2px;
+    }
+
+    .session-list {
+        flex: 1;
+        height: 100%;
+        overflow: auto;
+    }
+}
+
+.session-item-link {
+    flex: 1;
+    display: flex;
+    text-decoration: none;
+    color: #000;
+
+    .content {
+        padding: 3px;
+    }
+
+    .session-name {
+        font-weight: 600;
+        font-size: 14px;
+        margin-bottom: 3px;
+    }
+
+    .session-date {
+        font-size: 11px;
+    }
+}
+
+.session-action-btn {
+    flex: 0 0 20px;
+}
+
+.chat-session-action-button {
+    width: 100px;
+}

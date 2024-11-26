@@ -1,9 +1,10 @@
 {
   "name": "ai-chat-ui",
-  "version": "0.4.1",
+  "version": "1.2.1",
   "private": false,
   "license": "mit",
   "dependencies": {
+    "@craco/craco": "^7.1.0",
     "@dnd-kit/sortable": "^8.0.0",
     "@dnd-kit/utilities": "^3.2.2",
     "@fortawesome/fontawesome-svg-core": "^6.4.0",
@@ -14,6 +15,7 @@
     "axios": "^1.6.2",
     "classnames": "^2.3.2",
     "copy-to-clipboard": "^3.3.3",
+    "craco-less": "^3.0.1",
     "crypto-js": "^4.1.1",
     "dayjs": "^1.11.10",
     "file-saver": "^2.0.5",
@@ -49,10 +51,10 @@
     "web-vitals": "^3.5.0"
   },
   "scripts": {
-    "start": "react-app-rewired start",
-    "start_node17": "set NODE_OPTIONS=--openssl-legacy-provider && react-app-rewired start",
-    "build": "react-app-rewired build",
-    "test": "react-scripts test",
+    "start": "craco start",
+    "start_node17": "set NODE_OPTIONS=--openssl-legacy-provider && craco start",
+    "build": "craco build",
+    "test": "craco  test",
     "eject": "react-scripts eject",
     "analyze": "source-map-explorer 'build/static/js/*.js'"
   },
@@ -87,10 +89,6 @@
     "@types/react-dom": "^18.2.0",
     "@types/react-scroll-to-bottom": "^4.2.0",
     "@types/react-syntax-highlighter": "^15.5.11",
-    "customize-cra": "^1.0.0",
-    "react-app-rewire-compression-plugin": "^1.0.0",
-    "react-app-rewire-multiple-entry": "^2.2.3",
-    "react-app-rewired": "^2.2.1",
     "react-scripts": "^5.0.1",
     "source-map-explorer": "^2.5.3",
     "typescript": "^4.9.5"

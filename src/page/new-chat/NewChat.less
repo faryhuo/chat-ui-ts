@@ -1,0 +1,57 @@
+.new-chat-page {
+    /* background-image:url("../../../public/home_bg.png"); */
+    overflow: auto;
+
+    .new-chat-title {
+        text-align: center;
+        margin-top: 50px;
+        margin-bottom: 20px;
+    }
+
+    .input-wrapper,
+    .label-wrapper {
+        display: inline-block;
+    }
+
+    .label-wrapper {
+        font-size: 16px;
+        margin-right: 20px;
+    }
+
+    .new-chat-model {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .just-start {
+        text-align: center;
+        margin-bottom: 20px;
+
+        button {
+            width: 200px;
+            margin-left: 20px;
+        }
+    }
+
+    .role-config-page {
+        background-image: none;
+
+        .role-list-wrapper {
+            background-color: rgba(0, 0, 0, 0);
+        }
+    }
+}
+
+@media only screen and (max-width: 430px) {
+    .new-chat-page {
+        .just-start {
+            padding: 20px;
+
+            button {
+                width: 100%;
+                margin-bottom: 10px;
+                margin-left: 0;
+            }
+        }
+    }
+}

@@ -5,14 +5,15 @@ import Fuse from 'fuse.js';
 import userProflie from "./UserProfile";
 import i18n from "../utils/i18n";
 import { IChatAPIConfig } from "./ChatConfig";
-//import prompts from '../data/prompt';
+
 export interface IRoleData {
     currentRoles: IRole[];
     allRoles: IRole[];
-    getContentByRole: (role: number) => string;
+    getContentByRole: (roleId: number) => string;
     checkRoleIsExisting: (name: string) => boolean;
     getToken: () => Promise<any>;
 }
+
 export interface IRole {
     roleId: number;
     description: string;
@@ -26,14 +27,14 @@ export interface IRole {
     isGlobal: boolean;
 }
 
-const favorite = "favorite";
+const FAVORITE_TAG = "favorite";
+const ALL_TAG = "all";
 
 class RoleData implements IRoleData {
     roles: IRole[] = [];
-    currentTag = favorite;
-
-    loading=true;
-    
+    currentTag = FAVORITE_TAG;
+    filterBy = "";
+    loading = true;
 
     constructor() {
         makeObservable(this, {
@@ -42,81 +43,71 @@ class RoleData implements IRoleData {
             filterBy: observable,
             currentTag: observable,
             search: action,
-            setRoles:action,
-            setRole:action,
+            setRoles: action,
+            setRole: action,
             fetchData: action.bound
-        })
-        //this.loadRolesInLocal();
+        });
         this.fetchData();
     }
 
-    setRoles(roles:IRole[]){
-        this.roles=roles;
+    setRoles(roles: IRole[]) {
+        this.roles = roles;
     }
 
-    setRole<K extends keyof IRole>(index:number,key: K, value: IRole[K]){
-        if(this.roles[index]){
-            this.roles[index][key]=value;
+    setRole<K extends keyof IRole>(index: number, key: K, value: IRole[K]) {
+        if (this.roles[index]) {
+            this.roles[index][key] = value;
         }
     }
-
-    filterBy = "";
 
     triggerFavorite(item: IRole) {
-        item.favorite = !!!item.favorite;
-        this.roles.push(item);
-        this.roles.pop();
-        const self = this;
+        item.favorite = !item.favorite;
+        this.roles = [...this.roles]; // Trigger mobx update
+        
         if (userProflie.token) {
-            self.triggerFavorateAPI(item.roleId, item.favorite, userProflie.token);
+            this.triggerFavorateAPI(item.roleId, item.favorite, userProflie.token);
         }
     }
-
 
     search(name: string) {
         this.filterBy = name;
-        this.currentTag = "all";
+        this.currentTag = ALL_TAG;
     }
-
 
     changeTag(tag: string) {
         this.currentTag = tag;
     }
 
     get allRoles() {
-        const filteredRoles = this.roles.filter((role) => {
-            const roleName = this.getRoleName(role);
-            const description = this.getDescription(role);
-            return roleName && description
-        });
-
-        return filteredRoles;
+        return this.roles.filter(role => this.getRoleName(role) && this.getDescription(role));
     }
 
     get currentRoles() {
-        const filteredRoles = this.roles.filter((role) => {
-            const roleName = this.getRoleName(role);
-            const description = this.getDescription(role);
+        const filteredRoles = this.roles.filter(role => {
+            const hasName = this.getRoleName(role);
+            const hasDesc = this.getDescription(role);
             const hasMatchingTag = this.hasMatchingTag(role);
 
-            return roleName && description && (hasMatchingTag || this.currentTag === 'all');
+            return hasName && hasDesc && (hasMatchingTag || this.currentTag === ALL_TAG);
         });
-        if (this.filterBy) {
-            const options = {
-                keys: [{ name: 'roleNameCN', weight: 1 }, { name: 'roleName', weight: 1 }
-                    , { name: 'description', weight: 0.5 }, { name: 'descriptionCN', weight: 0.5 }],
-                includeMatches: true
-            } // 搜索配置，可以配置多个查找字段
-            const fuse = new Fuse(filteredRoles, options);
-            const result = fuse.search(this.filterBy);
-            const list: IRole[] = [];
-            result.forEach((item) => {
-                list.push(item.item);
-            })
-            return list;
-        } else {
+
+        if (!this.filterBy) {
             return filteredRoles;
         }
+
+        const fuseOptions = {
+            keys: [
+                { name: 'roleNameCN', weight: 1 },
+                { name: 'roleName', weight: 1 },
+                { name: 'description', weight: 0.5 },
+                { name: 'descriptionCN', weight: 0.5 }
+            ],
+            includeMatches: true,
+            threshold: 0.3 // Add threshold for better matching
+        };
+
+        const fuse = new Fuse(filteredRoles, fuseOptions);
+        return fuse.search(this.filterBy).map(result => result.item);
     }
 
     getRoleName(role: IRole) {
@@ -128,200 +119,133 @@ class RoleData implements IRoleData {
     }
 
     hasMatchingTag(role: IRole) {
-        if (this.currentTag === favorite) {
+        if (this.currentTag === FAVORITE_TAG) {
             return role.favorite === true;
         }
-        return role.tags && role.tags.includes(this.currentTag);
+        return role.tags?.includes(this.currentTag);
     }
 
-    keywordMatchesFilter(role: IRole) {
-        const filterBy = this.filterBy && this.filterBy.toLowerCase();
+    getCurrentTags(all: boolean) {
+        const tags = new Set([ALL_TAG, FAVORITE_TAG]);
 
-        return !filterBy || this.getRoleName(role).toLowerCase().includes(filterBy);
-    }
-
-
-    getCurrentTags(all:boolean) {
-        const tags: string[] = [];
-        tags.push("all");
-        tags.push(favorite);
-        this.roles.forEach((role) => {
-            if (!!(role.roleName) && !!(role.description)) {
-                if (role.tags && role.tags.length) {
-                    if(!all){
-                        if(role.isGlobal){
-                            return;
-                        }
-                    }
-                    role.tags.forEach(tag => {
-                        if (!tags.includes(tag)) {
-                            tags.push(tag);
-                        }
-                    })
+        this.roles.forEach(role => {
+            if (role.roleName && role.description && role.tags?.length) {
+                if (!all && role.isGlobal) {
+                    return;
                 }
+                role.tags.forEach(tag => tags.add(tag));
             }
         });
-        return tags;
+
+        return Array.from(tags);
     }
-
-
-    // loadRolesInLocal(){
-    //     prompts.forEach((item)=>{
-    //         let role:IRole={
-    //             roleId:"",
-    //             description:"",
-    //             descriptionCN:"",
-    //             roleNameCN:"",
-    //             roleName:"",
-    //             tags:[]
-    //         };
-    //         role.roleId=item.id+"";
-    //         role.description=item.desc_en;
-    //         role.descriptionCN=item.desc_cn;
-    //         role.roleName=item.title_en;
-    //         role.roleNameCN=item.title;
-    //         role.tags=item.tags;
-    //         this.roles.push(role);
-    //     })
-    // }
 
     checkRoleIsExisting(name: string) {
-        let result = false;
-        for (let i = 0; i < this.currentRoles.length; i++) {
-            const currentRoleName = this.currentRoles[i].roleName;
-            if (name === currentRoleName) {
-                result = true;
-                break;
-            }
-        }
-        return result;
+        return this.currentRoles.some(role => role.roleName === name);
     }
 
-
-    getContentByRole(role: number) {
-        for (let i = 0; i < this.roles.length; i++) {
-            if (this.roles[i].roleId === role) {
-                return this.roles[i]?.description;
-            }
-        }
-        return "";
+    getContentByRole(roleId: number) {
+        return this.roles.find(role => role.roleId === roleId)?.description || "";
     }
 
-    fetchData() {
-        axios({
-            method: "get",
-            url: config.api.chatRoleUrl + `?language=${config.textLanguage}&uuid=${new Date().getTime()}`,
-            headers: {
-                'Content-Type': 'application/json;charset=UTF-8',
-                'token': localStorage['user-token'],
+    private async makeRequest<T>(config: {
+        method: string;
+        url: string;
+        headers?: Record<string, string>;
+        data?: any;
+    }): Promise<T> {
+        try {
+            const response = await axios(config);
+            const data = response.data;
+            
+            if (data.message) {
+                throw new Error(i18n.t(`api.${data.message}`));
             }
+            
+            return data.data;
+        } catch (error) {
+            console.error(`API request failed: ${config.url}`, error);
+            throw error;
         }
-        ).then((response) => {
-            if (response.data) {
-                const data = response.data;
-                if (data.data) {
-                    this.setRoles(data.data);
-                    this.fetchFavorite();
-                }else{
-                    this.loading=false;
+    }
+
+    async fetchData() {
+        try {
+            const response = await this.makeRequest<IRole[]>({
+                method: "get",
+                url: `${config.api.chatRoleUrl}?language=${config.textLanguage}&uuid=${Date.now()}`,
+                headers: {
+                    'Content-Type': 'application/json;charset=UTF-8',
+                    'token': localStorage['user-token'],
                 }
-            }else{
-                this.loading=false;
+            });
+
+            if (response) {
+                this.setRoles(response);
+                await this.fetchFavorite();
             }
-        }).catch(()=>{
-            this.loading=false;
-        });
+        } catch (error) {
+            console.error('Failed to fetch roles:', error);
+        } finally {
+            this.loading = false;
+        }
     }
 
-
-    fetchFavorite() {
-        let token = userProflie.token;
+    async fetchFavorite() {
+        const token = userProflie.token;
         if (!token) {
-            this.loading=false;
+            this.loading = false;
             return;
         }
-        axios({
-            method: "get",
-            url: config.api.favoriteRoleUrl + "?uuid=" + new Date().getTime(),
+
+        try {
+            const favoriteIds = await this.makeRequest<number[]>({
+                method: "get",
+                url: `${config.api.favoriteRoleUrl}?uuid=${Date.now()}`,
+                headers: {
+                    'Content-Type': 'application/json;charset=UTF-8',
+                    'token': token
+                }
+            });
+
+            this.roles.forEach((item, index) => {
+                this.setRole(index, "favorite", favoriteIds.includes(item.roleId));
+            });
+        } finally {
+            this.loading = false;
+        }
+    }
+
+    async triggerFavorateAPI(roleId: number, type: boolean, token: string) {
+        return this.makeRequest({
+            method: type ? "post" : "delete",
+            url: `${config.api.favoriteRoleUrl}/${roleId}`,
             headers: {
                 'Content-Type': 'application/json;charset=UTF-8',
-                'token': token
+                "token": token
             }
-        }).then((response) => {
-            if (response.data) {
-                const data = response.data;
-                if (data.data) {
-                    const arr: number[] = data.data;
-                    this.roles.forEach((item,index) => {
-                        this.setRole(index,"favorite",arr.includes(item.roleId));
-                    })
-                }
-            }
-        }).finally(()=>{
-            this.loading=false;
         });
     }
 
-    triggerFavorateAPI(roleId: number, type: boolean, token: string) {
-        return new Promise((resolve, reject) => {
-            axios({
-                method: type ? "post" : "delete",
-                url: config.api.favoriteRoleUrl + "/" + roleId,
-                headers: {
-                    'Content-Type': 'application/json;charset=UTF-8',
-                    "token": token
-                }
-            }).then((response) => {
-                const data = response.data;
-                if (data.message) {
-                    reject(data.message)
-                    return;
-                }
-                if (data && data.data) {
-                    resolve(data);
-                } else {
-                    reject(data);
-                }
-            })
+    async saveRole(role: IRole, token: string) {
+        return this.makeRequest({
+            method: "post",
+            url: config.api.chatRoleUrl,
+            headers: {
+                'Content-Type': 'application/json;charset=UTF-8',
+                "token": userProflie.token
+            },
+            data: JSON.stringify({ ...role, token })
         });
     }
 
-    saveRole(role: IRole, token: string) {
-        role.token = token;
-        return new Promise((resolve, reject) => {
-            axios({
-                method: "post",
-                url: config.api.chatRoleUrl,
-                headers: {
-                    'Content-Type': 'application/json;charset=UTF-8',
-                    "token":userProflie.token
-                },
-                data: JSON.stringify(role)
-            }).then((response) => {
-                const data = response.data;
-                if (data.message) {
-                    reject(i18n.t("api." + data.message));
-                    return;
-                }
-                if (data && data.data) {
-                    resolve(data);
-                } else {
-                    reject(data);
-                }
-            })
-        });
+    async addRole(role: IRole, token: string) {
+        await this.saveRole(role, token);
+        await this.fetchData();
     }
 
-
-
-    addRole(role: IRole, token: string) {
-        return this.saveRole(role, token).then(() => {
-            this.fetchData();
-        })
-    }
-
-    getToken() {
-        return axios({
+    getToken(): Promise<any> {
+        return this.makeRequest({
             method: "get",
             url: `${config.api.chatRoleUrl}/token`,
             headers: {
@@ -330,26 +254,23 @@ class RoleData implements IRoleData {
         });
     }
 
-    deleteRole(roleId: number) {
-        return new Promise((resolve, reject) => {
-            axios({
-                method: "delete",
-                url: `${config.api.chatRoleUrl}/${roleId}`,
-                headers: {
-                    'Content-Type': 'application/json;charset=UTF-8',
-                    "token":userProflie.token
-                }
-            }).then((response) => {
-                const data = response.data;
-                if (data && data.data) {
-                    this.fetchData();
-                    resolve(true);
-                } else {
-                    reject(data);
-                }
-            })
+    async deleteRole(roleId: number) {
+        const response = await this.makeRequest<boolean>({
+            method: "delete",
+            url: `${config.api.chatRoleUrl}/${roleId}`,
+            headers: {
+                'Content-Type': 'application/json;charset=UTF-8',
+                "token": userProflie.token
+            }
         });
+
+        if (response) {
+            await this.fetchData();
+            return true;
+        }
+        throw new Error('Delete failed');
     }
 }
-const roleData = new RoleData()
+
+const roleData = new RoleData();
 export default roleData;
