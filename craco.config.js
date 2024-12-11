@@ -1,6 +1,7 @@
 const HtmlPlugin = require('html-webpack-plugin');
 const CracoLessPlugin = require('craco-less');
 const path = require('path');
+const CompressionWebpackPlugin = require('compression-webpack-plugin');
 
 module.exports = {
   webpack: {
@@ -10,10 +11,6 @@ module.exports = {
         entry: {
           main: path.resolve(__dirname, './src/index.tsx'),
           share: path.resolve(__dirname, './src/share.tsx'),
-        },
-        output: {
-          filename: '[name].[contenthash:8].chunk.js',
-          path: path.resolve(__dirname, 'build'),
         }
       };
     }
@@ -32,13 +29,19 @@ module.exports = {
     {
       plugin: {
         overrideWebpackConfig: ({ webpackConfig }) => {
+          webpackConfig.plugins.push(new CompressionWebpackPlugin({
+            filename: '[path][base].gz', // 生成的文件名
+            algorithm: 'gzip',          // 使用 gzip 压缩
+            test: /\.(js|css|html|svg)$/, // 匹配需要压缩的文件类型
+            threshold: 10240,           // 只有大小超过 10KB 的文件会被压缩
+            minRatio: 0.8,              // 压缩比例阈值
+          }))
           webpackConfig.plugins= webpackConfig.plugins.filter(plugin => !(plugin instanceof HtmlPlugin));
           webpackConfig.plugins.push(
             new HtmlPlugin({
               filename: 'index.html',
               template: path.resolve(__dirname, './public/index.html'),
               chunks: ['main'],
-              inject: true,
               minify: {
                 removeComments: true,
                 collapseWhitespace: true
@@ -50,7 +53,6 @@ module.exports = {
               filename: 'share.html',
               template: path.resolve(__dirname, './public/share.html'),
               chunks: ['share'],
-              inject: true,
               minify: {
                 removeComments: true,
                 collapseWhitespace: true
@@ -61,17 +63,18 @@ module.exports = {
         }
       }
     }
-  ],
-  devServer: {
-    proxy: {
-      '/gateway2': {
-        target: 'https://gateway2.fary.chat',
-        changeOrigin: true,
-        pathRewrite: {
-          '^/gateway2': ''
-        },
-        secure: false
-      }
-    }
-  }
+  ]
+  // ,
+  // devServer: {
+  //   proxy: {
+  //     '/gateway2': {
+  //       target: 'https://gateway2.fary.chat',
+  //       changeOrigin: true,
+  //       pathRewrite: {
+  //         '^/gateway2': ''
+  //       },
+  //       secure: false
+  //     }
+  //   }
+  // }
 };

@@ -16,13 +16,18 @@
             "gpt-4-vision-preview": {
                 "name": "GPT 4.0 Vision",
                 "description": "Context: 128K\nThe latest GPT-4 model with the longest context of all GPT-4 models.\nWith image recognition capabilities"
-            },
-            "free-gpt-4":{
-                "name":"GPT 4.0 Free",
-                "description":"Context: 8K\nGithub copilot GPT 4."
             },"gpt-4-all":{
                 "name":"GPT 4.0 Full",
                 "description": "Context: 32K\nThe latest GPT-4 model with the longest context of all GPT-4 models"
+            },"gpt-4o-mini":{
+                "name":"GPT 4.0 Mini",
+                "description": "Context: 128K\n"               
+            },"o1-mini-all":{
+                "name":"GPT o1 Mini",
+                "description": "Context: 128K\n（官网 plus 版本，有思考过程显示）o1-mini 是一个快速、高性价比的推理模型，专为编码、数学和科学用例而设计。该模型具有 128K 的上下文和截至 2023 年 10 月的知识截止."               
+            },"o1-pro-all":{
+                "name":"GPT o1 Pro",
+                "description": "Context: 128K\n（官网 200刀 plus 版本，有思考过程显示）o1-pro 是OpenAI针对复杂任务的新推理模型，该任务需要广泛的常识。该模型具有 200k 上下文，目前全球最强模型，支持图片识别"               
             }
         },
         "google": {

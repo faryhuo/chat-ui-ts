@@ -48,31 +48,31 @@ class APISetting implements IAPISetting {
     }
 
 
-    // chatUrl = `${this.gateway}/${this.chatServiceName}/chat/v2/info`;
-    // assistantsUrl=`${this.gateway}/${this.chatServiceName}/assistants`;
-    // chatStreamUrl = `${this.gateway}/${this.chatServiceName}/chat/v2/stream`;
-    // audioUrl = `${this.gateway}/${this.chatServiceName}/audio/speech`;
-    // transcriptionsUrl = `${this.gateway}/${this.chatServiceName}/audio/transcriptions`;
-    // translateUrl= `${this.gateway}/${this.chatServiceName}/translate/deepl`;
+    chatUrl = `${this.gateway}/${this.chatServiceName}/chat/v2/info`;
+    assistantsUrl=`${this.gateway}/${this.chatServiceName}/assistants`;
+    chatStreamUrl = `${this.gateway}/${this.chatServiceName}/chat/v2/stream`;
+    audioUrl = `${this.gateway}/${this.chatServiceName}/audio/speech`;
+    transcriptionsUrl = `${this.gateway}/${this.chatServiceName}/audio/transcriptions`;
+    translateUrl= `${this.gateway}/${this.chatServiceName}/translate/deepl`;
 
-    // imageUrl = `${this.gateway}/${this.chatServiceName}/image/v2/info`;
-    // editsUrl = `${this.gateway}/${this.chatServiceName}/edits/v2/info`;
-    // imageEditUrl = `${this.gateway}/${this.chatServiceName}/image/v2/edit`;
-    // variationsImageUrl = `${this.gateway}/${this.chatServiceName}/image/v2/variations`;
-//    imageUploadUrl = `${this.gateway}/${this.historyServiceName}/image/upload`
+    imageUrl = `${this.gateway}/${this.chatServiceName}/image/v2/info`;
+    editsUrl = `${this.gateway}/${this.chatServiceName}/edits/v2/info`;
+    imageEditUrl = `${this.gateway}/${this.chatServiceName}/image/v2/edit`;
+    variationsImageUrl = `${this.gateway}/${this.chatServiceName}/image/v2/variations`;
+    //imageUploadUrl = `${this.gateway}/${this.historyServiceName}/image/upload`
 
-    chatUrl = `${this.gateway2}/chat/v2/info`;
-    assistantsUrl=`${this.gateway2}}/assistants`;
-    chatStreamUrl = `${this.gateway2}/chat/v2/stream`;
-    audioUrl = `${this.gateway2}/audio/speech`;
-    transcriptionsUrl = `${this.gateway2}/audio/transcriptions`;
-    translateUrl= `${this.gateway2}/translate/deepl`;
+    // chatUrl = `${this.gateway2}/chat/v2/info`;
+    // assistantsUrl=`${this.gateway2}}/assistants`;
+    // chatStreamUrl = `${this.gateway2}/chat/v2/stream`;
+    // audioUrl = `${this.gateway2}/audio/speech`;
+    // transcriptionsUrl = `${this.gateway2}/audio/transcriptions`;
+    // translateUrl= `${this.gateway2}/translate/deepl`;
 
-    imageUrl = `${this.gateway2}/image/v2/info`;
-    editsUrl = `${this.gateway2}/edits/v2/info`;
-    imageEditUrl = `${this.gateway2}/image/v2/edit`;
-    variationsImageUrl = `${this.gateway2}/image/v2/variations`;
-    imageUploadUrl = `${this.gateway2}/file/upload`
+    // imageUrl = `${this.gateway2}/image/v2/info`;
+    // editsUrl = `${this.gateway2}/edits/v2/info`;
+    // imageEditUrl = `${this.gateway2}/image/v2/edit`;
+    // variationsImageUrl = `${this.gateway2}/image/v2/variations`;
+    imageUploadUrl = `${this.gateway}/${this.chatServiceName}/file/upload`
 
     chatRoleUrl = `${this.gateway}/${this.chatConfigServiceName}/config/chat-roles`
     moduleUrl = `${this.gateway}/${this.chatConfigServiceName}/config/modules`

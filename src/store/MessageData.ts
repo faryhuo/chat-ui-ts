@@ -839,7 +839,7 @@ class MessageData implements IMessage {
     setChatApiConfig<K extends keyof IChatAPIConfig>(key: K, value: IChatAPIConfig[K]) {
         if(key === "model" && value){
             if (!userProflie.token) {
-                if((value as string).startsWith("gpt-4") || (value==="free-gpt-4")){
+                if((value as string).startsWith("gpt-4") && (value!=="gpt-4o-mini")){
                     userProflie.openPage();
                     return;
                 }
@@ -954,7 +954,7 @@ class MessageData implements IMessage {
             });
     }
 
-    supportModels=["gemini-pro-vision","gpt-4-vision-preview",'gpt-4-all']
+    supportModels=["gemini-pro-vision",'gpt-4-all','gpt-4o-mini','o1-mini-all','o1-pro-all']
 
     getSupportModelsText(){
         return `( ${this.supportModels.map(item=>i18n.t(item))} )`

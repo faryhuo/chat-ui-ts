@@ -57,7 +57,7 @@ class ChatConfig implements IChatConfig {
     localConfigName = `chat_config_${this.version}`;
     enableSpeciousModel=(window.location.hostname==="ai.fary.chat" || window.location.hostname === "localhost");
     apiConfig: IChatAPIConfig = {
-        model: this.enableSpeciousModel?"gpt-3.5-turbo":"spark-desk-3",
+        model: this.enableSpeciousModel?"gpt-4o-mini":"spark-desk-3",
         temperature: 1,
         top_p: 1,
         presence_penalty: 0,
@@ -191,7 +191,7 @@ class ChatConfig implements IChatConfig {
         const newChannel=this.getModelChange(model);
         const oldChannel=this.getModelChange(this.apiConfig.model);
         userModelLimit.getModelUsage(model);
-        if(newChannel==='gpt' && (model.startsWith('gpt-4') || model==='free-gpt-4')){
+        if(newChannel==='gpt' && (model.startsWith('gpt-4') && model!=='gpt-4o-mini')){
             if (userProflie.token) {
                 this.apiConfig.model = model;
             } else {
