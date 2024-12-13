@@ -62,15 +62,6 @@ class AppConfig implements IAppConfig {
         this.currentPath=currentPath
     }
 
-    // get weChatQRCode() {
-    //     const redirectUri = encodeURIComponent('fary.chat');
-    //     const scope = 'snsapi_login'; // 或者snsapi_base
-    //     const appId="wx9c2b92a723dc3e4b";
-    //     const d="42297595ac4caa542e92c5a0a1773cc0"
-    //     const url = `https://open.weixin.qq.com/connect/qrconnect?appid=${appId}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}#wechat_redirect`;
-    //     return url;
-    // }
-
     get formLayout():FormLayout {
         return isMobile ? "vertical" : "horizontal"
     }

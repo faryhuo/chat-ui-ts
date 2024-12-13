@@ -29,13 +29,15 @@ module.exports = {
     {
       plugin: {
         overrideWebpackConfig: ({ webpackConfig }) => {
-          webpackConfig.plugins.push(new CompressionWebpackPlugin({
+          if(process.env.REACT_APP_PROFILE==="prod"){
+            webpackConfig.plugins.push(new CompressionWebpackPlugin({
             filename: '[path][base].gz', // 生成的文件名
             algorithm: 'gzip',          // 使用 gzip 压缩
             test: /\.(js|css|html|svg)$/, // 匹配需要压缩的文件类型
             threshold: 10240,           // 只有大小超过 10KB 的文件会被压缩
             minRatio: 0.8,              // 压缩比例阈值
           }))
+        }
           webpackConfig.plugins= webpackConfig.plugins.filter(plugin => !(plugin instanceof HtmlPlugin));
           webpackConfig.plugins.push(
             new HtmlPlugin({
@@ -64,17 +66,17 @@ module.exports = {
       }
     }
   ]
-  // ,
-  // devServer: {
-  //   proxy: {
-  //     '/gateway2': {
-  //       target: 'https://gateway2.fary.chat',
-  //       changeOrigin: true,
-  //       pathRewrite: {
-  //         '^/gateway2': ''
-  //       },
-  //       secure: false
-  //     }
-  //   }
-  // }
+  ,
+ devServer:  (process.env.REACT_APP_PROFILE==="dev"?{
+    proxy: {
+      '/gateway': {
+        target: 'https://api.fary.chat',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/gateway': ''
+        },
+        secure: false
+      }
+    }
+  }:null)
 };

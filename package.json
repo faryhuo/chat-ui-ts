@@ -1,10 +1,9 @@
 {
   "name": "ai-chat-ui",
-  "version": "1.2.1",
+  "version": "1.2.3",
   "private": false,
   "license": "mit",
   "dependencies": {
-    "@craco/craco": "^7.1.0",
     "@dnd-kit/sortable": "^8.0.0",
     "@dnd-kit/utilities": "^3.2.2",
     "@fortawesome/fontawesome-svg-core": "^6.4.0",
@@ -77,6 +76,7 @@
     ]
   },
   "devDependencies": {
+    "@craco/craco": "^7.1.0",
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@testing-library/jest-dom": "^6.1.5",
     "@testing-library/react": "^14.1.2",

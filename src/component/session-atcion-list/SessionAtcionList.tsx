@@ -24,13 +24,13 @@ const SessionAtcionList: React.FC<IProps> = observer(({ store, config, onOpen })
   ];
 
 
-  const roleList: any[] = [{ label: "", value: "" }];
-  store.roleData.allRoles.forEach(item => {
-    roleList.push({
-      label: item.roleName,
-      value: item.roleId
-    });
-  })
+  // const roleList: any[] = [{ label: "", value: "" }];
+  // store.roleData.allRoles.forEach(item => {
+  //   roleList.push({
+  //     label: item.roleName,
+  //     value: item.roleId
+  //   });
+  // })
   const clear = (e: any) => {
     store.clear(store.activeSession);
     e.stopPropagation();
@@ -61,7 +61,7 @@ const SessionAtcionList: React.FC<IProps> = observer(({ store, config, onOpen })
     const list = [];
     list.push(<Button className="option-btn" key={1} onClick={onOpen}>{t("More")}</Button>);
     !config.isMobile && list.push(<Segmented key={2} value={getSelectedItem()} onChange={changeType} style={{ marginRight: 10 }} options={options} />);
-    !config.isMobile && list.push(<RoleSelector key={3} store={store} roleList={roleList}></RoleSelector>);
+    // !config.isMobile && list.push(<RoleSelector key={3} store={store} roleList={roleList}></RoleSelector>);
     list.push(<ModelSelector key={4} store={store}></ModelSelector> );
     
     list.push(<Popconfirm

@@ -115,8 +115,6 @@ export interface IMessage {
     setFiles:(files:any)=>void;
     changeType: (type: string) => void;
     selectChat: (chatId: string) => void;
-    changeRole: (chatId: string, role: number | undefined) => void;
-    role: number | undefined | null;
     data: Array<ISessiondata>;
     getChatInfoByChatId: (chatId: string) => ISession | null;
     sessionData: Array<ISession>;
@@ -217,7 +215,6 @@ class MessageData implements IMessage {
             activeSession: observable,
             hashMore: computed,
             data: computed,
-            role: computed,
             sessionList: computed,
             isType: computed,
             isGPTs: computed,
@@ -236,7 +233,6 @@ class MessageData implements IMessage {
             disableType: action,
             appendData: action,
             endStream: action,
-            changeRole: action,
             hasHistory: action,
             changeMessage: action,
             deleteMessage:action,
@@ -511,7 +507,7 @@ class MessageData implements IMessage {
             let tmp: ISessiondata = {
                 isSys: false,
                 isError:false,
-                isDefault: true
+                isDefault: false
             };
             tmp.text = role.description;
             data.push(tmp)
@@ -522,7 +518,6 @@ class MessageData implements IMessage {
             data: data,
             isType: true,
             edit: false,
-            role: role.roleId,
             favorite: false,
             updateDate: new Date(),
             isDone:true,
@@ -761,43 +756,6 @@ class MessageData implements IMessage {
         }
     }
 
-    changeRole(chatId: string, role: number | undefined) {
-        let { session } = this;
-        for (let i = 0; i < session.length; i++) {
-            let item = session[i];
-            if (item.chatId === chatId) {
-                item.role = role;
-                if (!role) {
-                    item.chatName = "New Chat";
-                    this.data[0].text = this.systemText;
-                    this.data[0].isSys = true;
-                }
-                let chatName;
-                roleData.roles.forEach((sItem) => {
-                    if (role === sItem.roleId) {
-                        chatName = sItem.roleName;
-                        if (this.data && this.data.length && config.isSlowMsg4AddChat) {
-                            this.data[0].text = this.systemText;
-                            this.data[0].isSys = false;
-                        }
-                    }
-                })
-                item.chatName = chatName;
-                break;
-            }
-        }
-    }
-
-    get role() {
-        const { activeSession, session } = this;
-        const sessionMatch = session.find(item => item.chatId === activeSession);
-        if (sessionMatch) {
-            return sessionMatch.role;
-        } else {
-            return null;
-        }
-    }
-
     clearCurrentData() {
         const { activeSession, session } = this;
         const sessionMatch = session.find(item => item.chatId === activeSession);
@@ -954,7 +912,7 @@ class MessageData implements IMessage {
             });
     }
 
-    supportModels=["gemini-pro-vision",'gpt-4-all','gpt-4o-mini','o1-mini-all','o1-pro-all']
+    supportModels=["gemini-pro-vision",'gpt-4o-all','gpt-4o-mini','o1-mini-all','o1-pro-all']
 
     getSupportModelsText(){
         return `( ${this.supportModels.map(item=>i18n.t(item))} )`
@@ -1388,22 +1346,8 @@ class MessageData implements IMessage {
     }
 
     
-
-    get systemText() {
-        return this.role ? roleData.getContentByRole(this.role) : i18n.t("Type something to search on ChatGPT")
-    }
-
     getMessageListData4Assistant(): IMessageListData[] {
         const messages = [];
-        if (this.role) {
-            const contentSys = roleData.getContentByRole(this.role);
-            if (contentSys) {
-                messages.push({
-                    role: "user",
-                    content: contentSys
-                })
-            }
-        }
         this.data.forEach((item) => {
             if (item.isDefault) {
                 return true;
@@ -1552,18 +1496,6 @@ class MessageData implements IMessage {
 
     getMessageListData(): IMessageListData[] {
         const messages = [];
-        if (this.role) {
-            const contentSys = roleData.getContentByRole(this.role);
-            if (contentSys) {
-                messages.push({
-                    role: "system",
-                    content:  [{
-                        text:contentSys,
-                        type:"text"
-                    }]
-                })
-            }
-        }
         this.data.forEach((item) => {
             if (item.isDefault) {
                 return true;

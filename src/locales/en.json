@@ -16,9 +16,9 @@
             "gpt-4-vision-preview": {
                 "name": "GPT 4.0 Vision",
                 "description": "Context: 128K\nThe latest GPT-4 model with the longest context of all GPT-4 models.\nWith image recognition capabilities"
-            },"gpt-4-all":{
-                "name":"GPT 4.0 Full",
-                "description": "Context: 32K\nThe latest GPT-4 model with the longest context of all GPT-4 models"
+            },"gpt-4o-all":{
+                "name":"GPT 4o Pro",
+                "description": "Context: 128K\nThe latest GPT-4 model with the longest context of all GPT-4 models"
             },"gpt-4o-mini":{
                 "name":"GPT 4.0 Mini",
                 "description": "Context: 128K\n"               
@@ -31,13 +31,13 @@
             }
         },
         "google": {
-            "gemini-pro": {
+            "gemini-1.5-pro": {
                 "name": "Gemini Pro",
-                "description": "Context: 32K\nGoogle's latest Gemini model, Pro version"
+                "description": "Context: 1000K\nGoogle's latest Gemini model, Pro version"
             },
-            "gemini-pro-vision": {
-                "name": "Gemini Vision",
-                "description": "Context: 12K\nGoogle's latest Gemini model, Pro version\nWith image recognition capabilities, but doesn't support multi-turn conversations"
+            "gemini-1.5-flash": {
+                "name": "Gemini Flash",
+                "description": "Context: 2000K\nGoogle's latest Gemini model, Pro version\nWith image recognition capabilities, but doesn't support multi-turn conversations"
             }
         },
         "baidu": {

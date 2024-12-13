@@ -20,9 +20,9 @@
             "free-gpt-4":{
                 "name":"GPT 4.0 免费版",
                 "description":"上下文：8K\nGithub copilot GPT 4 模型，生成速度比GPT 3.5 要慢.\n可能会不稳定，不保证可用性."
-            },"gpt-4-all":{
-                "name":"GPT 4.0 全功能版",
-                "description":"上下文：32K\n官方GPT-4、联网，多模态（gpt-4v），绘图功能.，生成速度比GPT 3.5 要慢\n 可以完成数据分析和文件生成。"
+            },"gpt-4o-all":{
+                "name":"GPT 4o Pro",
+                "description": "Context: 128K\nThe latest GPT-4 model with the longest context of all GPT-4 models"
             },"gpt-4o-mini":{
                 "name":"GPT 4.0 Mini",
                 "description": "Context: 128K\n"               
