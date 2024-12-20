@@ -6,7 +6,6 @@ import { IAppConfig } from '../../store/AppConfig';
 import { IMessage } from '../../store/MessageData';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
-import RoleSelector from '../role-selector/RoleSelector';
 import './SessionActionList.css';
 import ModelSelector from '../model-selector/ModelSelector';
 type IProps = {
@@ -24,13 +23,6 @@ const SessionAtcionList: React.FC<IProps> = observer(({ store, config, onOpen })
   ];
 
 
-  // const roleList: any[] = [{ label: "", value: "" }];
-  // store.roleData.allRoles.forEach(item => {
-  //   roleList.push({
-  //     label: item.roleName,
-  //     value: item.roleId
-  //   });
-  // })
   const clear = (e: any) => {
     store.clear(store.activeSession);
     e.stopPropagation();

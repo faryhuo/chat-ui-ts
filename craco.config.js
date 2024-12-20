@@ -2,13 +2,12 @@ const HtmlPlugin = require('html-webpack-plugin');
 const CracoLessPlugin = require('craco-less');
 const path = require('path');
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
-
 module.exports = {
   webpack: {
     configure: (webpackConfig) => {
       return {
         ...webpackConfig,
-        entry: {
+        entry: process.env.REACT_APP_PROFILE==="dev"?webpackConfig.entry:{
           main: path.resolve(__dirname, './src/index.tsx'),
           share: path.resolve(__dirname, './src/share.tsx'),
         }
@@ -70,7 +69,7 @@ module.exports = {
  devServer:  (process.env.REACT_APP_PROFILE==="dev"?{
     proxy: {
       '/gateway': {
-        target: 'https://api.fary.chat',
+        target: 'https://api2.fary.chat',
         changeOrigin: true,
         pathRewrite: {
           '^/gateway': ''

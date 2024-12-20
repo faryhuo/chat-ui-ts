@@ -28,7 +28,7 @@ class APISetting implements IAPISetting {
 
     version = "3.0"
     host = "https://fary.chat";
-    gateway = "/gateway"
+    gateway = process.env.REACT_APP_PROFILE==='dev'?"https://api2.fary.chat":"/gateway"
     gateway2 ="/gateway2"
     chatServiceName = "chat-service"
     chatConfigServiceName = "chat-config-service"
@@ -42,7 +42,6 @@ class APISetting implements IAPISetting {
         "404":"https://mj.fary.chat/error/404.png",
         "500":"https://mj.fary.chat/error/404.png"
     }
-
     thridWebSite:{
 
     }

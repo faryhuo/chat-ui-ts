@@ -11,7 +11,7 @@ export interface IRoleData {
     allRoles: IRole[];
     getContentByRole: (roleId: number) => string;
     checkRoleIsExisting: (name: string) => boolean;
-    getToken: () => Promise<any>;
+    getToken: () => Promise<string>;
 }
 
 export interface IRole {
@@ -139,6 +139,7 @@ class RoleData implements IRoleData {
 
         return Array.from(tags);
     }
+    
 
     checkRoleIsExisting(name: string) {
         return this.currentRoles.some(role => role.roleName === name);
@@ -244,7 +245,7 @@ class RoleData implements IRoleData {
         await this.fetchData();
     }
 
-    getToken(): Promise<any> {
+    getToken(): Promise<string> {
         return this.makeRequest({
             method: "get",
             url: `${config.api.chatRoleUrl}/token`,

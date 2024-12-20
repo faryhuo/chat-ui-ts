@@ -77,8 +77,10 @@ const RoleDetails: React.FC<IProps> = observer(({ store, config, role, handleCan
           description: "",
           tags: tags,
           isCustomSetting: false,
-          language:config.textLanguage
+          language:config.textLanguage,
+          token:token
         };
+        console.log(token);
         newRole.description = description;
         newRole.roleName = name;
         newRole.isCustomSetting=isCustomSetting;
@@ -104,7 +106,8 @@ const RoleDetails: React.FC<IProps> = observer(({ store, config, role, handleCan
         description: role.description,
         tags: role.tags,
         isCustomSetting: role.isCustomSetting,
-        setting: role.setting?role.setting:chatConfig.apiConfig
+        setting: role.setting?role.setting:chatConfig.apiConfig,
+        token:token
       }
     } else {
       return {
@@ -112,7 +115,8 @@ const RoleDetails: React.FC<IProps> = observer(({ store, config, role, handleCan
         description: "",
         tags: ["latest"],
         isCustomSetting: false,
-        setting: chatConfig.apiConfig
+        setting: chatConfig.apiConfig,
+        token:token
       }
     }
   }

@@ -47,9 +47,8 @@ const RoleList:React.FC<IProps> = observer(({config,store,readonly,all})=>{
       userProfile.openPage();
       return;
     }
-    roleData.getToken().then((response)=>{
-      const token=response?.data?.data;
-      setToken(token);
+    roleData.getToken().then((tokenRep)=>{
+      setToken(tokenRep);
       setRoleDetails(role)
       setOpen(true);
     })
@@ -60,9 +59,8 @@ const RoleList:React.FC<IProps> = observer(({config,store,readonly,all})=>{
       userProfile.openPage();
       return;
     }
-    roleData.getToken().then((response)=>{
-      const token=response?.data?.data;
-      setToken(token);
+    roleData.getToken().then((tokenRep)=>{
+      setToken(tokenRep);
       setRoleDetails(undefined)
       setOpen(true);
     })
