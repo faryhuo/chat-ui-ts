@@ -273,8 +273,9 @@ class MessageData implements IMessage {
 
     createSpeech(msg:string,voice:string ):Promise<string>{
         const params={
-            input:msg,
-            voice:voice?voice:'alloy'
+            model:"cosyvoice-v1",
+            text:msg,
+            voice:'longxiaoxia'
         };
         const apiUrl = `${apiSetting.audioUrl}`;
         return fetch(apiUrl,{

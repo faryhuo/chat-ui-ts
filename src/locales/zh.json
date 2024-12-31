@@ -35,13 +35,13 @@
             }
         },
         "google":{
-            "gemini-pro":{
-                "name":"Gemini Pro",
-                "description":"上下文：32K\nGoogle 最新的 Gemini 模型，Pro 版本"
+            "gemini-1.5-pro": {
+                "name": "Gemini Pro",
+                "description": "Context: 1000K\nGoogle's latest Gemini model, Pro version"
             },
-            "gemini-pro-vision":{
-                "name":"Gemini 图像版",
-                "description":"上下文：12K\nGoogle 最新的 Gemini 模型，Pro 版本\n拥有图像识别功能,但是不支持多轮对话"
+            "gemini-1.5-flash": {
+                "name": "Gemini Flash",
+                "description": "Context: 2000K\nGoogle's latest Gemini model, Pro version\nWith image recognition capabilities"
             }
         },
         "baidu":{
@@ -90,6 +90,12 @@
             ,"claude-3-sonnet-20240229":{
                 "name":"Claude Sonnet",
                 "description":"Sonnet 模型在智能与速度之间找到了完美的平衡点，特别适合承担企业级任务，性价比高"
+            }
+        },
+        "deepseek":{
+            "deepseek-chat":{
+                "name":"DeepSeek V3",
+                "description":"Context: 128K\n"
             }
         }
     },
@@ -342,6 +348,7 @@
     "aliyun":"阿里巴巴",
     "claude":"Claude",
     "google":"Google",
+    "deepseek":"DeepSeek",
     "Max Support Lenght":"最大支持字数",
     "Training Date":"知识库截止时间",
     "Feedback":"反馈",

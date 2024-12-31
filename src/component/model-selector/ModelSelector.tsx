@@ -11,6 +11,7 @@ import baiduIcon from '../../icon/baidu-icon.png';
 import xunfeiIcon from '../../icon/xunfei-icon.png';
 import aliyunIcon from '../../icon/aliyun-icon.svg';
 import googleIcon from '../../icon/google-icon.png';
+import deepseekIcon from '../../icon/deepseek-icon.svg';
 
 interface IProps {
   store?: IMessage;
@@ -51,9 +52,13 @@ const ModelSelector: React.FC<IProps> = observer(({ store, onChange, value, isPa
         label: getIcon(t('baidu'), baiduIcon),
         options: filterModels.filter(item => item.channel === "baidu")
       },
+      // {
+      //   label: getIcon(t('xunfei'), xunfeiIcon),
+      //   options: filterModels.filter(item => item.channel === "xunfei")
+      // },
       {
-        label: getIcon(t('xunfei'), xunfeiIcon),
-        options: filterModels.filter(item => item.channel === "xunfei")
+        label: getIcon(t('deepseek'), deepseekIcon),
+        options: filterModels.filter(item => item.channel === "deepseek")
       },
       {
         label: getIcon(t('aliyun'), aliyunIcon),
