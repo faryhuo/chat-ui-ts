@@ -278,7 +278,7 @@ const SendButton: React.FC<IProps> = observer(({ store, config, setBtnHeight }) 
       {inputModel === 'keyboard' &&    <div className="upload-btn-wrapper">
         <Upload  accept="image/*" store={store} config={config}> 
         <Tooltip placement="top" title={t('Only support those models.') + store.getSupportModelsText()}>
-          <Button className='upload-btn' disabled={store.isType === false || !store.checkIsImageModel(store.activeSession)} shape="circle"
+          <Button className='upload-btn' disabled={store.isType === false || !store.checkIsImageModel(store.activeSession)} 
           onClick={(e)=>{console.log(e)}}
           icon={<FontAwesomeIcon icon={faUpload}></FontAwesomeIcon>}></Button>
          </Tooltip>

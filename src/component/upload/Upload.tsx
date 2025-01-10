@@ -1,14 +1,16 @@
-import { Upload, UploadFile, message } from 'antd';
+import { Button, Upload, UploadFile, message } from 'antd';
 import apiSetting from '../../store/APISetting';
 import {
   useSortable,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import React from 'react';
+import React, { useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { IMessage } from '../../store/MessageData';
 import { IAppConfig } from '../../store/AppConfig';
 import { useTranslation } from 'react-i18next';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faDesktop} from '@fortawesome/free-solid-svg-icons';
 
 interface DraggableUploadListItemProps {
   originNode: React.ReactElement<any, string | React.JSXElementConstructor<any>>;
@@ -61,19 +63,17 @@ const AppUpload : React.FC<IProps> = observer(({store, config,children,accept}) 
     return true;
   };
 
+  const [buttonEnable,setButtonEnable]= useState(true);
+
 
   const checkFileType = (file) => {
-    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-    if (!isJpgOrPng) {
-      message.error('You can only upload JPG/PNG file!');
+    const maxSizeMB = 10;
+    const isLtMaxSize = file.size / 1024 / 1024 < maxSizeMB;
+    if (!isLtMaxSize) {
+      message.error(`File must be smaller than ${maxSizeMB}MB!`);
       return false;
     }
-    const isLt10M = file.size / 1024 / 1024 < 10;
-    if (!isLt10M) {
-      message.error('Image must smaller than 10MB!');
-      return false;
-    }
-    return isJpgOrPng && isLt10M;
+    return isLtMaxSize;
   };
 
 
@@ -86,20 +86,71 @@ const AppUpload : React.FC<IProps> = observer(({store, config,children,accept}) 
     if(checkModel() && checkFileType(info.file)===true){
       store.setFiles(info.fileList);
     }
-    // if (info.file.status === 'uploading') {
-    //   return;
-    // }
-    // if (info.file.status === 'done') {
-    //   // Get this url from response in real world.
-    //   console.log(info.file.response.data);
-    //   store.setFiles([...store.files,info.file]);
-    //   console.log(store.files);
-    // }else if (info.file.status === 'removed') {
-    //   store.files.splice(store.files.indexOf(info.file),1)
-    //   store.setFiles(store.files);
-    // }
   };
 
+
+  const captureScreen = async () => {
+    try {
+      if (!checkModel()) return;
+      
+      const stream = await navigator.mediaDevices.getDisplayMedia({ video: true });
+      const video = document.createElement('video');
+      video.srcObject = stream;
+      await video.play();
+      
+      const canvas = document.createElement('canvas');
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      const ctx = canvas.getContext('2d');
+      ctx?.drawImage(video, 0, 0, canvas.width, canvas.height);
+      
+      stream.getTracks().forEach(track => track.stop());
+      setButtonEnable(false);
+      canvas.toBlob(async (blob) => {
+        if (blob) {
+          const file = new File([blob], `screenshot-${Date.now()}.png`, {
+            type: 'image/png',
+          });
+          
+          if (checkFileType(file)) {
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            try {
+              const response = await fetch(apiSetting.imageUploadUrl, {
+                method: 'POST',
+                body: formData
+              });
+              setButtonEnable(true);
+              if (response.ok) {
+                const data = await response.json();
+                const newFile = {
+                  uid: Date.now().toString(),
+                  name: file.name,
+                  status: 'done',
+                  url: data.url,
+                  originFileObj: file,
+                  response:data
+                };
+              const newFileList = [...store.files, newFile];
+              store.setFiles(newFileList);
+              } else {
+                throw new Error('Upload failed');
+              }
+            } catch (error) {
+              setButtonEnable(true);
+              console.error('Upload error:', error);
+              message.error('Failed to upload screenshot');
+            }
+          }
+        }
+      }, 'image/png');
+    } catch (error) {
+      console.error('Error capturing screen:', error);
+      message.error('Failed to capture screen');
+      setButtonEnable(true);
+    }
+  };
 
   return (<div style={{ display: "inline-block" }}>
     <Upload
@@ -110,14 +161,17 @@ const AppUpload : React.FC<IProps> = observer(({store, config,children,accept}) 
       onChange={handleChange}
       maxCount={3}
       
-      style={{ width: 20 }}
+      style={{ width: 20,height:20 }}
       itemRender={(originNode, file,fileList) => (
         <DraggableUploadListItem originNode={originNode} file={file} index={fileList.indexOf(file)}/>
       )}
     >
       {children}
-    </Upload></div>)
+    </Upload>
+    <Button  disabled={!buttonEnable}
+      icon={<FontAwesomeIcon icon={faDesktop} onClick={captureScreen}></FontAwesomeIcon>}>
+    </Button>
+    </div>)
 })
 
 export default AppUpload;
-

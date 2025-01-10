@@ -28,7 +28,7 @@ const AsyncPersonInfoPage= asyncComponent(() => import ('../person-info/PersonIn
  const AsyncImage= asyncComponent(() => import ('../image/Image'));
  const AsyncPaintingSquare= asyncComponent(() => import ('../painting-square/PaintingSquare'));
  const AsyncFeedback= asyncComponent(() => import ('../feedback/Feedback'));
-
+ const AsyncKnowledge= asyncComponent(() => import ('../knowledge/Knowledge'));
 
 
 // 定义路由组件的类型
@@ -49,6 +49,9 @@ const AppRoutes: React.FC<IProps> = ({ messageData, appConfig, messageApi }) => 
     const pageList: RouteItem[] = [{
         path: "/chat/:chatId",
         component: Chat
+    }, {
+        path: "/knowledge",
+        component: AsyncKnowledge
     }, {
         path: "/image",
         component: AsyncImage

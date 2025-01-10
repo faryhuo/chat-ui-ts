@@ -12,12 +12,12 @@
    left:0;
    bottom: 0;
 }
-
+/* 
 .upload-btn{
-    height: 65px;
+    height: 30px;
     margin-right: 3px;
     border-radius: 30px 20px 20px 60px;
-}
+} */
 
 .recorder-input-wrapper{
     position: relative;
@@ -57,6 +57,12 @@
     left: 0;
     right: 0;
     text-align: center;
+}
+.upload-btn-wrapper{
+    margin-right: 7px;
+}
+.upload-btn-wrapper button{
+    margin-bottom: 2px;
 }
 .audio-wrapper .audio-inputs button{
     width: 80px;

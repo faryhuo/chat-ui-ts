@@ -10,7 +10,7 @@ import {IAppConfig} from '../../store/AppConfig';
 import {IMessage} from '../../store/MessageData';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faComments,faGear,faOutdent, faLinesLeaning,faImages,faPerson,faSignOut } from '@fortawesome/free-solid-svg-icons'
+import { faComments,faGear,faOutdent, faLinesLeaning,faImages,faPerson,faSignOut,faBook } from '@fortawesome/free-solid-svg-icons'
 import userProflie from '../../store/UserProfile';
 import Notice from '../notice/Notice';
 
@@ -31,11 +31,11 @@ const Header: React.FC<IProps> = observer(({store,config}) => {
       key: 'chat',
       icon: <FontAwesomeIcon icon={faComments} />
     },
-    // {
-    //   label: <a href="http://sd.fary.chat" target="_blank" rel="noreferrer">{t('Stable Diffusion')}</a>,
-    //   key: 'sd',
-    //   icon: <FontAwesomeIcon icon={faImages} />
-    // },
+    {
+      label: <Link to="/knowledge">{t('Knowledge Repo')}</Link>,
+      key: 'knowledge',
+      icon: <FontAwesomeIcon icon={faBook} />
+    },
     {
       label: <Link to="/image">{t('Image')}</Link>,
       key: 'image',
